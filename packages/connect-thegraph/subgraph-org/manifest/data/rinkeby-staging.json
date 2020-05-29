@@ -1,0 +1,21 @@
+{
+  "network": "rinkeby",
+  "description": "Development subgraph for Aragon organizations.",
+  "repository": "https://github.com/aragon/plumbery",
+  "ens": "0x98df287b6c145399aaa709692c8d308357bc085d",
+  "DAOFactoryDataSources": [],
+  "RegistryDataSources": [
+    {
+      "name": "aragonpm.eth",
+      "address": "0xda897630fa0f1902f99623bc00e18acd12657d4f",
+      "startBlock": "3224177"
+    }
+  ],
+  "KernelDataSources": [
+    {
+      "name": "SomeOrg",
+      "address": "0x059bCFBC477C46AB39D76c05B7b40f3A42e7DE3B",
+      "startBlock": "6430210"
+    }
+  ]
+}

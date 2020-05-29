@@ -1,0 +1,32 @@
+{
+  "network": "ropsten",
+  "description": "Subgraph for Aragon organizations.",
+  "repository": "https://github.com/aragon/plumbery",
+  "ens": "0x6afe2cacee211ea9179992f89dc61ff25c61e923",
+  "DAOFactoryDataSources": [
+    {
+      "name": "DAOFactory",
+      "address": "0x233c587095d066bafe44b543a719c93ff16423f3",
+      "startBlock": "6320898"
+    },
+    {
+      "name": "DAOFactory1",
+      "address": "0x3f2aa9dd22e97070518ba7988fe9b8724129d497",
+      "startBlock": "5968539"
+    },
+    {
+      "name": "DAOFactory2",
+      "address": "0xf5174528211211a667243edc8579f2042124895c",
+      "startBlock": "5968565"
+    }
+  ],
+  "APMFactoryDataSources": [
+    {
+      "name": "ApmRegistryFactory",
+      "address": "0x47c0BEB14860Eed8f9d83388F9B2c66fe50d848C",
+      "startBlock": "3224175"
+    }
+  ],
+  "RegistryDataSources": [],
+  "KernelDataSources": []
+}

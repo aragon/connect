@@ -1,0 +1,37 @@
+{
+  "network": "rinkeby",
+  "description": "Subgraph for Aragon organizations.",
+  "repository": "https://github.com/aragon/plumbery",
+  "ens": "0xfe03625ea880a8cba336f9b5ad6e15b0a3b5a939",
+  "DAOFactoryDataSources": [
+    {
+      "name": "DAOFactory",
+      "address": "0xf834966eb868ace8be9807a3d78ca410a1a4dc83",
+      "startBlock": "5922830"
+    },
+    {
+      "name": "DAOFactory1",
+      "address": "0xf959e8953e2fe03782a7b86a7a5d948cb511ef5d",
+      "startBlock": "5026157"
+    },
+    {
+      "name": "DAOFactory2",
+      "address": "0xbca2c99aa7018edcde60e6c5744f68003112535d",
+      "startBlock": "4219712"
+    },
+    {
+      "name": "DAOFactory3",
+      "address": "0x10e1fcca61798cae1e1bcddcbc0cf3e8c03418a6",
+      "startBlock": "3216198"
+    }
+  ],
+  "APMFactoryDataSources": [
+    {
+      "name": "ApmRegistryFactory",
+      "address": "0x93cc98cfb650bf644361bcd8d24cec24ef7dccbd",
+      "startBlock": "3216220"
+    }
+  ],
+  "RegistryDataSources": [],
+  "KernelDataSources": []
+}
