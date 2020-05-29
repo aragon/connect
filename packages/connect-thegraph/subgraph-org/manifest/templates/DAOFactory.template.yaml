@@ -1,0 +1,23 @@
+- kind: ethereum/contract
+  name: {{name}}
+  network: {{network}}
+  source:
+    abi: DAOFactory
+    address: '{{address}}'
+    startBlock: {{startBlock}}
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.1
+    language: wasm/assemblyscript
+    entities:
+      - OrgFactory
+      - Organization
+    abis:
+      - name: DAOFactory
+        file: ./abis/DAOFactory.json
+      - name: Kernel
+        file: ./abis/Kernel.json
+    eventHandlers:
+      - event: DeployDAO(address)
+        handler: handleDeployDAO
+    file: ./src/mappings/orgFactory.ts

@@ -1,0 +1,21 @@
+- kind: ethereum/contract
+  name: {{name}}
+  network: {{network}}
+  source:
+    abi: APMRegistryFactory
+    address: '{{address}}'
+    startBlock: {{startBlock}}
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.1
+    language: wasm/assemblyscript
+    entities:
+      - RegistryFactory
+      - Registry
+    abis:
+      - name: APMRegistryFactory
+        file: ./abis/APMRegistryFactory.json
+    eventHandlers:
+      - event: DeployAPM(indexed bytes32,address)
+        handler: handleDeployAPM
+    file: ./src/mappings/registryFactory.ts

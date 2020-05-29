@@ -1,0 +1,27 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": {
+    "packages": ["packages/*", "examples/*"],
+    "nohoist": [
+      "**/@graphprotocol/graph-ts",
+      "**/@graphprotocol/graph-ts/**",
+      "**/@graphprotocol/graph-cli",
+      "**/@graphprotocol/graph-cli/**"
+    ]
+  },
+  "scripts": {
+    "connect": "yarn workspace @aragon/connect",
+    "connect-react": "yarn workspace @aragon/connect-react",
+    "connect-ethereum": "yarn workspace @aragon/connect-ethereum",
+    "connect-thegraph": "yarn workspace @aragon/connect-thegraph",
+    "connect-thegraph-voting": "yarn workspace @aragon/connect-thegraph-voting",
+    "connect-thegraph-token-manager": "yarn workspace @aragon/connect-thegraph-token-manager",
+    "build": "./scripts/build.sh",
+    "clean": "./scripts/clean.sh",
+    "postinstall": "./scripts/first-build.sh"
+  },
+  "devDependencies": {
+    "oao": "^1.8.0"
+  }
+}

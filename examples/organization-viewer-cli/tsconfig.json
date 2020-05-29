@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "include": ["./src/**/*", "./src/**/*.json"],
+  "references": [
+    { "path": "../../packages/connect" },
+    { "path": "../../packages/connect-thegraph" },
+    { "path": "../../packages/connect-thegraph-token-manager" },
+    { "path": "../../packages/connect-thegraph-voting" }
+  ]
+}

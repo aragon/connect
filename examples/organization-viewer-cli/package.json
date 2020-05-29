@@ -1,0 +1,24 @@
+{
+  "name": "organization-viewer-cli",
+  "main": "dist/index.js",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "yarn clean && yarn compile",
+    "dev": "yarn build --watch",
+    "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
+    "start": "node dist/src/index.js",
+    "compile": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@aragon/connect": "*",
+    "@aragon/connect-thegraph": "*",
+    "@aragon/connect-thegraph-token-manager": "*",
+    "@aragon/connect-thegraph-voting": "*",
+    "ethers": "^5.0.0-beta.188",
+    "graphql-tag": "^2.10.3"
+  },
+  "devDependencies": {
+    "typescript": "^3.8.3"
+  }
+}

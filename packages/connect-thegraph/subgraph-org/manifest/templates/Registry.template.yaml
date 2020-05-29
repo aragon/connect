@@ -1,0 +1,30 @@
+- kind: ethereum/contract
+  {{#name}}
+  name: {{name}}
+  {{/name}}
+  {{^name}}
+  name: Registry
+  {{/name}}
+  network: {{network}}
+  source:
+    abi: APMRegistry
+    {{#address}}
+    address: '{{address}}'
+    {{/address}}
+    {{#startBlock}}
+    startBlock: {{startBlock}}
+    {{/startBlock}}
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.1
+    language: wasm/assemblyscript
+    entities:
+      - Registry
+      - Repo
+    abis:
+      - name: APMRegistry
+        file: ./abis/APMRegistry.json
+    eventHandlers:
+      - event: NewRepo(bytes32,string,address)
+        handler: handleNewRepo
+    file: ./src/mappings/registry.ts
