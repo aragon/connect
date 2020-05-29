@@ -1,0 +1,33 @@
+- kind: ethereum/contract
+  {{#name}}
+  name: {{name}}
+  {{/name}}
+  {{^name}}
+  name: Kernel
+  {{/name}}
+  network: {{network}}
+  source:
+    abi: Kernel
+    {{#address}}
+    address: '{{address}}'
+    {{/address}}
+    {{#startBlock}}
+    startBlock: {{startBlock}}
+    {{/startBlock}}
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.1
+    language: wasm/assemblyscript
+    entities:
+      - NoEnt
+    abis:
+      - name: Kernel
+        file: ./abis/Kernel.json
+      - name: TokenManager
+        file: ./abis/TokenManager.json
+      - name: MiniMeToken
+        file: ./abis/MiniMeToken.json
+    eventHandlers:
+      - event: NewAppProxy(address,bool,bytes32)
+        handler: handleNewAppProxy
+    file: ./src/base/Kernel.ts

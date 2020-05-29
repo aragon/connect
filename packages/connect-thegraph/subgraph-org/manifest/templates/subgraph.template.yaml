@@ -1,0 +1,65 @@
+specVersion: 0.0.2
+description: {{description}}
+repository: {{repository}}
+schema:
+  file: ./schema.graphql
+dataSources:
+{{#DAOFactoryDataSources}}
+  {{> DAOFactory.template.yaml}}
+{{/DAOFactoryDataSources}}
+{{#APMFactoryDataSources}}
+  {{> APMFactory.template.yaml}}
+{{/APMFactoryDataSources}}
+{{#KernelDataSources}}
+  {{> Kernel.template.yaml}}
+{{/KernelDataSources}}
+{{#RegistryDataSources}}
+  {{> Registry.template.yaml}}
+{{/RegistryDataSources}}
+templates:
+  {{> Registry.template.yaml}}
+  {{> Kernel.template.yaml}}
+  - kind: ethereum/contract
+    name: Acl
+    network: {{network}}
+    source:
+      abi: ACL
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.1
+      language: wasm/assemblyscript
+      entities:
+        - Organization
+        - Permission
+        - Role
+        - Param
+      abis:
+        - name: ACL
+          file: ./abis/ACL.json
+      eventHandlers:
+        - event: SetPermission(indexed address,indexed address,indexed bytes32,bool)
+          handler: handleSetPermission
+        - event: SetPermissionParams(indexed address,indexed address,indexed bytes32,bytes32)
+          handler: handleSetPermissionParams
+        - event: ChangePermissionManager(indexed address,indexed bytes32,indexed address)
+          handler: handleChangePermissionManager
+      file: ./src/mappings/acl.ts
+  - kind: ethereum/contract
+    name: Repo
+    network: {{network}}
+    source:
+      abi: Repo
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.1
+      language: wasm/assemblyscript
+      entities:
+        - Repo
+        - Version
+      abis:
+        - name: Repo
+          file: ./abis/Repo.json
+      eventHandlers:
+        - event: NewVersion(uint256,uint16[3])
+          handler: handleNewVersion
+      file: ./src/mappings/repo.ts

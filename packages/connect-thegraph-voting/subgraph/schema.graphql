@@ -1,0 +1,28 @@
+type Vote @entity {
+  id: ID!
+  orgAddress: Bytes!
+  appAddress: Bytes!
+  creator: Bytes!
+  metadata: String!
+  open: Boolean!
+  executed: Boolean!
+  startDate: BigInt!
+  snapshotBlock: BigInt!
+  supportRequiredPct: BigInt!
+  minAcceptQuorum: BigInt!
+  yea: BigInt!
+  nay: BigInt!
+  votingPower: BigInt!
+  script: Bytes!
+  voteNum: BigInt!
+  casts: [Cast!]!
+}
+
+type Cast @entity {
+  id: ID!
+  voteNum: BigInt!
+  voter: Bytes!
+  supports: Boolean!
+  voterStake: BigInt!
+  vote: Vote! @derivedFrom(field: "casts")
+}

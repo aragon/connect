@@ -1,0 +1,18 @@
+{
+  "name": "@aragon/connect-react",
+  "version": "1.0.0",
+  "license": "AGPL-3.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "yarn clean && yarn compile",
+    "dev": "yarn build --watch",
+    "clean": "rm -rf ./dist",
+    "compile": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@aragon/connect": "*"
+  }
+}

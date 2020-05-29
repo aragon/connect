@@ -1,0 +1,21 @@
+node_modules/
+
+# Compilation output
+build/
+dist/
+packages/dao-subgraph/src/helpers/ens.ts
+
+# Production subgraph
+generated
+subgraph.yaml
+
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+.pnp.*
+
+tsconfig.tsbuildinfo
+
+# IDE specific
+.graphqlconfig
+.vscode

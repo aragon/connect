@@ -1,0 +1,13 @@
+{
+  "network": "rinkeby",
+  "description": "Development subgraph for all Aragon voting apps in Rinkeby",
+  "repository": "https://github.com/aragon/plumbery",
+  "DAOFactoryDataSources": [],
+  "KernelDataSources": [
+    {
+      "name": "SomeOrg",
+      "address": "0x059bCFBC477C46AB39D76c05B7b40f3A42e7DE3B",
+      "startBlock": "6430210"
+    }
+  ]
+}

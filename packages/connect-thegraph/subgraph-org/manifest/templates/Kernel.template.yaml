@@ -1,0 +1,41 @@
+- kind: ethereum/contract
+  {{#name}}
+  name: {{name}}
+  {{/name}}
+  {{^name}}
+  name: Kernel
+  {{/name}}
+  network: {{network}}
+  source:
+    abi: Kernel
+    {{#address}}
+    address: '{{address}}'
+    {{/address}}
+    {{#startBlock}}
+    startBlock: {{startBlock}}
+    {{/startBlock}}
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.1
+    language: wasm/assemblyscript
+    entities:
+      - Organization
+      - App
+      - Implementation
+    abis:
+      - name: Kernel
+        file: ./abis/Kernel.json
+      - name: ACL
+        file: ./abis/ACL.json
+      - name: AppProxyForwarder
+        file: ./abis/IForwarder.json
+      - name: ENS
+        file: ./abis/ENS.json
+      - name: PublicResolver
+        file: ./abis/PublicResolver.json
+    eventHandlers:
+      - event: SetApp(indexed bytes32,indexed bytes32,address)
+        handler: handleSetApp
+      - event: NewAppProxy(address,bool,bytes32)
+        handler: handleNewProxyApp
+    file: ./src/mappings/organization.ts
