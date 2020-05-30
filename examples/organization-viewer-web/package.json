@@ -3,9 +3,11 @@
   "main": "dist/index.js",
   "version": "1.0.0",
   "private": true,
+  "sideEffects": false,
   "scripts": {
     "dev": "yarn clean && webpack-dev-server",
-    "build": "yarn clean && webpack",
+    "build": "yarn clean && webpack --env production",
+    "build:stats": "yarn clean && webpack --env production --json > webpack-stats.json",
     "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
     "compile": "tsc -p tsconfig.json"
   },
@@ -22,6 +24,7 @@
     "ts-loader": "^7.0.2",
     "typescript": "^3.8.3",
     "webpack": "^5.0.0-beta.15",
+    "webpack-bundle-analyzer": "^3.8.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
   }
