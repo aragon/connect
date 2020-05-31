@@ -1,9 +1,7 @@
 node_modules/
 
 # Compilation output
-build/
 dist/
-packages/dao-subgraph/src/helpers/ens.ts
 
 # Production subgraph
 generated
@@ -19,3 +17,6 @@ tsconfig.tsbuildinfo
 # IDE specific
 .graphqlconfig
 .vscode
+
+# packages README files
+packages/*/README.md
