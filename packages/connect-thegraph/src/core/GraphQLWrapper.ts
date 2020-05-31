@@ -1,3 +1,4 @@
+import fetch from 'isomorphic-unfetch'
 import { Client } from '@urql/core'
 import { DocumentNode } from 'graphql'
 import { ParseFunction, QueryResult } from '../types'
@@ -10,6 +11,7 @@ export default class GraphQLWrapper {
     this.#client = new Client({
       maskTypename: true,
       url: subgraphUrl,
+      fetch,
     })
 
     this.#verbose = verbose

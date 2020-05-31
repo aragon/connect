@@ -1,6 +1,6 @@
+import { QueryResult } from '@aragon/connect-thegraph'
 import { Vote as VoteDataGql } from '../queries/types'
 import { VoteData } from '../entities/Vote'
-import { QueryResult } from '@aragon/connect-thegraph'
 
 export function parseVotes(result: QueryResult): VoteData[] {
   const votes = result.data.votes
