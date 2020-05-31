@@ -7,8 +7,8 @@
   "scripts": {
     "build": "yarn clean && yarn compile",
     "dev": "yarn build --watch",
-    "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
-    "compile": "tsc -p tsconfig.json",
+    "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo",
+    "compile": "tsc",
     "lint": "eslint --ext .ts ./src"
   },
   "devDependencies": {
@@ -20,7 +20,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@aragon/connect": "*",
+    "@aragon/connect-core": "*",
     "@aragon/connect-thegraph": "*",
     "graphql-tag": "^2.10.3"
   }

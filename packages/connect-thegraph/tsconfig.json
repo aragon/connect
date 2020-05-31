@@ -1,11 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "composite": true,
-    "declaration": true,
     "outDir": "dist",
     "rootDir": "src"
   },
-  "include": ["src"],
-  "references": [{ "path": "../connect" }]
+  "include": ["./src/**/*.ts"],
+  "exclude": ["dist"],
+  "references": [{ "path": "../connect-core" }]
 }

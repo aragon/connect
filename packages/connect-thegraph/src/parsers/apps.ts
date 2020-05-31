@@ -1,4 +1,4 @@
-import { AppData } from '@aragon/connect'
+import { AppData } from '@aragon/connect-core'
 import { App as AppDataGql } from '../queries/types'
 import { Organization as OrganizationDataGql } from '../queries/types'
 import { QueryResult } from '../types'

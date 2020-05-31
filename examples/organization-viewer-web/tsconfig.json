@@ -2,8 +2,10 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
+    "rootDir": "src",
     "jsx": "react"
   },
-  "include": ["./src/**/*"],
+  "include": ["src"],
+  "exclude": ["dist"],
   "references": [{ "path": "../../packages/connect" }]
 }

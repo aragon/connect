@@ -1,4 +1,4 @@
-import { ConnectorInterface, Permission } from '@aragon/connect'
+import { ConnectorInterface, Permission } from '@aragon/connect-core'
 
 export type ConnectorEthereumConfig = object
 

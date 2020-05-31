@@ -12,14 +12,17 @@
   },
   "scripts": {
     "connect": "yarn workspace @aragon/connect",
+    "connect-core": "yarn workspace @aragon/connect-core",
     "connect-react": "yarn workspace @aragon/connect-react",
     "connect-ethereum": "yarn workspace @aragon/connect-ethereum",
     "connect-thegraph": "yarn workspace @aragon/connect-thegraph",
     "connect-thegraph-voting": "yarn workspace @aragon/connect-thegraph-voting",
     "connect-thegraph-token-manager": "yarn workspace @aragon/connect-thegraph-token-manager",
-    "build": "./scripts/build.sh",
-    "clean": "./scripts/clean.sh",
-    "postinstall": "./scripts/first-build.sh"
+    "clean": "yarn clean && oao clean",
+    "build": "MODE=libs-only ./scripts/rebuild-packages.sh",
+    "build:examples": "MODE=all ./scripts/rebuild-packages.sh",
+    "status": "oao status",
+    "postinstall": "yarn build"
   },
   "devDependencies": {
     "oao": "^1.8.0"
