@@ -1,8 +1,11 @@
 {
-  "name": "root",
+  "name": "@aragon/connect",
   "private": true,
   "workspaces": {
-    "packages": ["packages/*", "examples/*"],
+    "packages": [
+      "packages/*",
+      "examples/*"
+    ],
     "nohoist": [
       "**/@graphprotocol/graph-ts",
       "**/@graphprotocol/graph-ts/**",
@@ -26,5 +29,6 @@
   },
   "devDependencies": {
     "oao": "^1.8.0"
-  }
+  },
+  "version": "0.0.0"
 }
