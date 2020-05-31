@@ -1,5 +1,5 @@
 {
-  "name": "@connect/thegraph-app-template",
+  "name": "@aragon/connect-thegraph-app-template",
   "private": true,
   "version": "1.0.0",
   "license": "AGPL-3.0",
