@@ -7,7 +7,7 @@ import {
   Repo,
   Role,
   RoleData,
-} from '@aragon/connect'
+} from '@aragon/connect-core'
 import * as queries from './queries'
 import GraphQLWrapper from './core/GraphQLWrapper'
 import {

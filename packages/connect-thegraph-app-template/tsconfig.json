@@ -7,5 +7,5 @@
     "rootDir": "src"
   },
   "include": ["src"],
-  "references": [{ "path": "../connect" }]
+  "references": [{ "path": "../connect-core" }]
 }

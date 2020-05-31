@@ -6,10 +6,10 @@
   "sideEffects": false,
   "scripts": {
     "dev": "yarn clean && webpack-dev-server",
-    "build": "yarn clean && webpack --env production",
+    "build": "yarn clean && NODE_ENV=production webpack",
     "build:stats": "yarn clean && webpack --env production --json > webpack-stats.json",
-    "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
-    "compile": "tsc -p tsconfig.json"
+    "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo",
+    "compile": "tsc"
   },
   "dependencies": {
     "@aragon/connect": "*",

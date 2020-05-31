@@ -7,7 +7,7 @@ module.exports = {
   entry: './src/index.tsx',
   devtool: 'inline-source-map',
   target: 'web',
-  mode: process.env.NODE_ENV,
+  mode: process.env.NODE_ENV || 'development',
   stats: {
     preset: process.env.NODE_ENV === 'production' ? 'errors-only' : 'normal',
   },
@@ -19,7 +19,7 @@ module.exports = {
         use: [
           {
             loader: 'ts-loader',
-            // options: { projectReferences: true }, // TODO: investigate why circular dependencies are not allowed (for types)
+            options: { projectReferences: true },
           },
         ],
       },
@@ -38,7 +38,7 @@ module.exports = {
     port: 1234,
   },
   plugins: [
-    new BundleAnalyzerPlugin(),
+    ...(process.env.BUNDLE_STATS === '1' ? [new BundleAnalyzerPlugin()] : []),
     new HtmlWebpackPlugin({ title: 'Org Viewer' }),
   ],
 }

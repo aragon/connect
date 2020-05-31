@@ -1,4 +1,4 @@
-import { RepoData } from '@aragon/connect'
+import { RepoData } from '@aragon/connect-core'
 import { App as AppDataGql } from '../queries/types'
 import { Repo as RepoDataGql } from '../queries/types'
 import { QueryResult } from '../types'

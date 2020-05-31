@@ -1,4 +1,4 @@
-import { RoleData, PermissionData } from '@aragon/connect'
+import { RoleData, PermissionData } from '@aragon/connect-core'
 import { App as AppDataGql } from '../queries/types'
 import { Param as ParamDataGql } from '../queries/types'
 import { Permission as PermissionDataGql } from '../queries/types'

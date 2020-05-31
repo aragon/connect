@@ -6,9 +6,9 @@
   "scripts": {
     "build": "yarn clean && yarn compile",
     "dev": "yarn build --watch",
-    "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
+    "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo",
     "start": "node dist/src/index.js",
-    "compile": "tsc -p tsconfig.json"
+    "compile": "tsc"
   },
   "dependencies": {
     "@aragon/connect": "*",

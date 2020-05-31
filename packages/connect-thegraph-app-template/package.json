@@ -1,5 +1,5 @@
 {
-  "name": "connect-thegraph-app-template",
+  "name": "@connect/thegraph-app-template",
   "private": true,
   "version": "1.0.0",
   "license": "AGPL-3.0",
@@ -8,8 +8,8 @@
   "scripts": {
     "build": "yarn clean && yarn compile",
     "dev": "yarn build --watch",
-    "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
-    "compile": "tsc -p tsconfig.json",
+    "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo",
+    "compile": "tsc",
     "lint": "eslint --ext .ts ./src"
   },
   "devDependencies": {
@@ -21,12 +21,12 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "@aragon/connect-core": "*",
     "@types/node-fetch": "^2.5.7",
     "@urql/core": "^1.11.7",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",
     "isomorphic-unfetch": "^3.0.0",
-    "node-fetch": "^2.6.0",
-    "@aragon/connect": "*"
+    "node-fetch": "^2.6.0"
   }
 }
