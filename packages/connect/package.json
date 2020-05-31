@@ -5,10 +5,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "yarn clean && yarn compile",
+    "build": "yarn compile",
     "dev": "yarn build --watch",
-    "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
-    "compile": "tsc -p tsconfig.json",
+    "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo",
+    "compile": "tsc --build",
     "lint": "eslint --ext .ts ./src"
   },
   "devDependencies": {
@@ -19,8 +19,8 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "@aragon/connect-core": "*",
     "@aragon/connect-ethereum": "*",
-    "@aragon/connect-thegraph": "*",
-    "ethers": "^5.0.0-beta.188"
+    "@aragon/connect-thegraph": "*"
   }
 }

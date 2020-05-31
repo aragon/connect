@@ -7,7 +7,7 @@
     "build": "yarn clean && yarn compile",
     "dev": "yarn build --watch",
     "clean": "rm -rf ./dist",
-    "compile": "tsc -p tsconfig.json"
+    "compile": "tsc"
   },
   "devDependencies": {
     "typescript": "^3.8.3"

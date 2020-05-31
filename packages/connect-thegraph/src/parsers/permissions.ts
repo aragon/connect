@@ -1,4 +1,4 @@
-import { PermissionData } from '@aragon/connect'
+import { PermissionData } from '@aragon/connect-core'
 import { Organization as OrganizationDataGql } from '../queries/types'
 import { Permission as PermissionDataGql } from '../queries/types'
 import { Param as ParamDataGql } from '../queries/types'

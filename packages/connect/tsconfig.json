@@ -1,13 +1,13 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "declaration": true,
-    "composite": true,
     "outDir": "dist",
     "rootDir": "src"
   },
   "include": ["src"],
+  "exclude": ["dist"],
   "references": [
+    { "path": "../connect-core" },
     { "path": "../connect-ethereum" },
     { "path": "../connect-thegraph" }
   ]

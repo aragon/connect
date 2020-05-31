@@ -1,4 +1,4 @@
-import { App } from '@aragon/connect'
+import { App } from '@aragon/connect-core'
 import TokenManagerConnectorTheGraph from '../connector'
 import Entity from './Entity'
 import Token from './Token'
