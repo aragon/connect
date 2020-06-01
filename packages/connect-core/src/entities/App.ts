@@ -99,7 +99,18 @@ export default class App extends Entity implements AppData {
       this.sourceUrl = sourceUrl
     }
 
-    Object.assign(this, data)
+    this.address = data.address
+    this.appId = data.appId
+    this.codeAddress = data.codeAddress
+    this.contentUri = data.contentUri
+    this.isForwarder = data.isForwarder
+    this.isUpgradeable = data.isUpgradeable
+    this.kernelAddress = data.kernelAddress
+    this.name = data.name
+    this.registry = data.registry
+    this.registryAddress = data.registryAddress
+    this.repoAddress = data.repoAddress
+    this.version = data.version
   }
 
   async repo(): Promise<Repo> {
