@@ -1,7 +1,7 @@
 {
   "network": "mainnet",
   "description": "Development subgraph for all Aragon token-manager apps",
-  "repository": "https://github.com/aragon/plumbery",
+  "repository": "https://github.com/aragon/connect",
   "DAOFactoryDataSources": [],
   "KernelDataSources": [
     {

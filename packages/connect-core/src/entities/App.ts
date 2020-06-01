@@ -11,7 +11,7 @@ import {
 import { parseMetadata } from '../utils/parseMetadata'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 
-// TODO: Implement all properties and methods from the API spec (https://github.com/aragon/plumbery/blob/master/docs/app.md).
+// TODO: Implement all properties and methods from the API spec (https://github.com/aragon/connect/blob/master/docs/app.md).
 // [ ] (ipfs) contentUrl 	String 	The HTTP URL of the app content. Uses the IPFS HTTP provider. E.g. http://gateway.ipfs.io/ipfs/QmdLEDDfi…/ (ContentUri passing through the resolver)
 
 export interface AppData {

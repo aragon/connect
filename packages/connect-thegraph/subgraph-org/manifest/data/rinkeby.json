@@ -1,7 +1,7 @@
 {
   "network": "rinkeby",
   "description": "Subgraph for Aragon organizations.",
-  "repository": "https://github.com/aragon/plumbery",
+  "repository": "https://github.com/aragon/connect",
   "ens": "0x98df287b6c145399aaa709692c8d308357bc085d",
   "DAOFactoryDataSources": [
     {
