@@ -1,7 +1,7 @@
 {
   "network": "mainnet",
   "description": "Subgraph for all Aragon voting apps",
-  "repository": "https://github.com/aragon/plumbery",
+  "repository": "https://github.com/aragon/connect",
   "DAOFactoryDataSources": [
     {
       "name": "DAOFactory",
