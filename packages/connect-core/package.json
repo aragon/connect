@@ -20,5 +20,17 @@
   },
   "dependencies": {
     "ethers": "^5.0.0-beta.188"
-  }
+  },
+  "description": "Access and interact with Aragon Organizations and their apps.",
+  "keywords": [
+    "ethereum",
+    "javascript",
+    "web3",
+    "dapp",
+    "aragon"
+  ],
+  "author": "Aragon Association <legal@aragon.org>",
+  "homepage": "https://github.com/aragon/connect",
+  "bugs": "https://github.com/aragon/connect/issues",
+  "repository": "https://github.com/aragon/connect"
 }
