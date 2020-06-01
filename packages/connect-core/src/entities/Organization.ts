@@ -6,7 +6,7 @@ import Permission from './Permission'
 import Role from './Role'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 
-// TODO: Implement all properties and methods from the API spec (https://github.com/aragon/plumbery/blob/master/docs/organization.md).
+// TODO: Implement all properties and methods from the API spec (https://github.com/aragon/connect/blob/master/docs/organization.md).
 // [x] Organization#apps()
 // [x] Organization#app(appAddress)
 // [ ] Organization#addApp(repoName, options)
