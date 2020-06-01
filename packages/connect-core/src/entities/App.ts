@@ -102,12 +102,12 @@ export default class App extends Entity implements AppData {
     this.address = data.address
     this.appId = data.appId
     this.codeAddress = data.codeAddress
-    this.contentUri = data.contentUri
-    this.isForwarder = data.isForwarder
-    this.isUpgradeable = data.isUpgradeable
+    this.contentUri = data.contentUri ?? undefined
+    this.isForwarder = data.isForwarder ?? undefined
+    this.isUpgradeable = data.isUpgradeable ?? undefined
     this.kernelAddress = data.kernelAddress
     this.name = data.name
-    this.registry = data.registry
+    this.registry = data.registry ?? undefined
     this.registryAddress = data.registryAddress
     this.repoAddress = data.repoAddress
     this.version = data.version
