@@ -1,9 +1,9 @@
 import { ethers } from 'ethers'
 import {
-  Organization,
   ConnectorInterface,
   ConnectorJson,
   ConnectorJsonConfig,
+  Organization,
 } from '@aragon/connect-core'
 import ConnectorEthereum, {
   ConnectorEthereumConfig,
