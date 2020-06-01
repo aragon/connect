@@ -1,7 +1,7 @@
 {
   "name": "organization-viewer-web",
   "main": "dist/index.js",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "sideEffects": false,
   "scripts": {
