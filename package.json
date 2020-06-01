@@ -1,11 +1,15 @@
 {
   "name": "@aragon/connect",
+  "description": "Access and interact with Aragon Organizations and their apps.",
+  "keywords": ["ethereum", "javascript", "web3", "dapp", "aragon"],
+  "author": "Aragon Association <legal@aragon.org>",
+  "license": "AGPL-3.0",
+  "homepage": "https://github.com/aragon/connect",
+  "repository": "https://github.com/aragon/connect",
+  "bugs": "https://github.com/aragon/connect/issues",
   "private": true,
   "workspaces": {
-    "packages": [
-      "packages/*",
-      "examples/*"
-    ],
+    "packages": ["packages/*", "examples/*"],
     "nohoist": [
       "**/@graphprotocol/graph-ts",
       "**/@graphprotocol/graph-ts/**",
