@@ -28,4 +28,4 @@ mustache \
   -p manifest/templates/contracts/MiniMeToken.template.yaml \
   -p manifest/templates/contracts/MiniMeTokenFactory.template.yaml \
   $DATA \
-  manifest/subgraph.template.yaml > subgraph.yaml
+  subgraph.template.yaml > subgraph.yaml

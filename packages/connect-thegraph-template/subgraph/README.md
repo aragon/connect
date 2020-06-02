@@ -10,6 +10,7 @@ TODO: Remove this
 * Introduce Voting mappings
 * Connect Voting in aragon-hooks
 * Modify user and subgraph name in package.json
+* Deploy and test subgraph in thegraph playground
 
 ## What can I do if an organization or app is not showing up?
 TODO
