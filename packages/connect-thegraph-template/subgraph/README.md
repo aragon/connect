@@ -1,66 +1,80 @@
-# Example subgraph for an Aragon app
+# TheGraph template for Aragon subgraphs
 
-Fork this code to create a subgraph that indexes all data in a given network, for a given type of Aragon app, e.g. all voting apps in mainnet.
+Making a subgraph for an aragon app is not much different from making any other kind of subgraph. To learn how to do that, check out TheGraphs's docs: https://thegraph.com/docs
 
-## NOTE: Steps to convert to voting:
-TODO: Remove this
-* Introduce Voting data source template in subgraph.template.yaml
-* Introduce Voting abi
-* Introduce Voting schema
-* Introduce Voting mappings
-* Connect Voting in aragon-hooks
-* Modify user and subgraph name in package.json
-* Deploy and test subgraph in thegraph playground
-
-## What can I do if an organization or app is not showing up?
-TODO
-
-## What do I need to know to make Aragon app subgraphs?
-
-Making a subgraph for an aragon app is not much different than making a general subgraph. To learn how to do that, check out TheGraphs's docs: https://thegraph.com/docs
-
-In this subgraph template, we merely hook up a bunch of Aragon related data sources that will detect any installed app in the Aragon universe. This is hidden from you so that writting the subgraph is as similar as possible as writting a general subgraph.
+In this subgraph template, we merely hook up a bunch of Aragon related data sources that will detect any installed organization, app, token, etc in Aragon deployments. This is hidden from you, so that writting the subgraph is as similar as possible as writting a normal subgraph.
 
 ## Step by step guide for using this template
 
-1. Fork this repo.
-2. Replace all instances of "voting" in package.json with the name of your app.
-3. Replace all instances of "ajsantander" in package.json with your github username. This is required by TheGraph, and should match your TheGraph username.
-4. Build the manifest file as described in "Setting up the subgraph.yaml manifest" section.
-5. Create your mappings as described in "Setting up the app's reducers".
-6. Define your entities in schema.graphql as usual.
-7. Define your data sources as described in "Defining your data sources".
-8. Deploy and test your graph as described in "Deploying and testing your graph".
+The template is initially set up to connect to all Aragon voting apps. Next, you'll find instructions for how to modify it to index information for another Aragon app, or any specific needs you may have.
 
-## Setting up the subgraph.yaml manifest
+### 1. Modify package.json with your username and subgraph name
 
-The way we handle data sources in these subgraphs is a bit sophisticated, so the subgraph.yaml file at the root is actually a generated file and should not be edited.
+In "package.json", you'll find a bunch of scripts that reference the user "ajsantander" and the app name "voting". Change these to your user or Github organization name.
 
-Instead, edit manifest/subgraph.template.yaml. You'll notice that there's a bunch of mustache tags all over the place. This is stuff that you shouldn't have to worry about. The part that matters to you is whatever is not a mustache tag. Here, you can define static data sources in the "dataSources" section, and dynamic datasources in the "templates" section. Your app's data source specification should go in the latter, since it's instances will be detected dynamically.
+### 2. Create your subgraphs in the TheGraph dashboard
 
-## Setting up the app's reducers
+The scripts in "package.json" will generate your "subgraph.yaml" manifest file and deploy your subgraph with a very specific nomenclature. For example, if you run `yarn deploy-mainnet`, you'll be deploying to a subgraph named "Aragon Voting Mainnet". If you run `yarn deploy-mainnet-staging`, you'll be deploying to a subgraph named "Aragon Voting Mainnet Staging". Make sure these subgraphs are created in your dashboard.
 
-In src/hooks.ts, you need to define the appId (hash of the ens name of the app, e.g. "voting.aragonpm.eth") and the name of the template you set up in "Setting up the subgraph.yaml manifest". Whenever we detect that an app proxy was created, we check if the proxy's appId matches what you specified, and if it does, we instantiate the data source template that you specified. This hooks file also allows you to call a function whenever your apps data source template is created, which is handy for example in case you wanted to instantiate second data source. See the token-manager subgraph for an example.
+The specification for the nomenclature is: `Aragon <AppName> <Network> [Staging]`.
 
-To define the reducers for this data source, simply replace src/Voting.ts with a file, as specified in your template's file path in config/manifest/subgraph.template.yaml.
+Staging subgraphs are intended for development, and are subgraphs that index very quickly. More info on this below.
 
-## Defining your data sources
+### 3. Set up the subgraph manifest files
 
-When generating the final subgraph.yaml manifest file, mustache uses the data views specified in manifest/data. Here, we specify 2 files per network. For example, in mainnet.json, we define all the known DAOFactories, and hence catch every single app instantiation. When using these data sources, expect subgraphs to take > 10hs to sync.
+The way we handle data sources in these subgraphs is a bit sophisticated, so the "subgraph.yaml" file at the root is actually a generated file and should not be edited. This is way you may not find this file at the root of the project until it is generated first.
 
-In mainnet-staging.json, we only define a single org as a data source. This is ideal for development, since subgraphs take ~1m to sync if you pick the targets right.
+Instead, edit "subgraph.template.yaml". You'll notice that there's a bunch of mustache tags in this file. This is stuff that you shouldn't have to worry about. Initially, the part that matters to you is whatever is not a mustache tag. Here, you can define static data sources in the "dataSources" section, and dynamic datasources in the "templates" section.
 
-## Deploying and testing your graph
+If your writting a subgraph for an Aragon app, its data source specification should go in the latter, since it's instances will be generated dynamically. As an example, this template declares the "Voting" data source template. This data source will be hooked up to any instances of voting apps found in all deployed Aragon organizations.
 
-To deploy your subgraph, simply run `yarn deploy`. This will generate the subgraph.yaml file, and deploy the graph. If you want to deploy a staging version, run `yarn deploy-staging` instead. If you want to target a network other than mainnet, use `yarn deploy-<network>` and `yarn deploy-<network>-staging`.
+If you'd like to disable a specific injected data source, such as for example the OrganizationTemplates data sources, you may do so by using an exclamation symbol:
 
-Keep in mind that you need to have a graph created in your TheGraph dashboard, and that its naming must comply with: "Aragon AppName NetworkName [Staging]". For instance, running `yarn deploy-rinkeby-staging` will target the subgraph "your_username/aragon-app_name-rinkeby-staging", named "Aragon AppName Rinkeby Staging".
+```yaml
+{{!> OrganizationTemplates.yaml}}
+```
 
-## Getting Aragon ABIs
+### 4. Provide the ABIs defined in your data source
 
-// TODO
+As with an TheGraph subgraph, ABIs referenced in your manifest should be provided in the "abis" folder.
+
+You may obtain such ABI files using etherscan. Simply find the address of an instance of what you're looking for using an Aragon subgraph such as https://thegraph.com/explorer/subgraph/aragon/aragon-mainnet, and search for that address in Etherscan. Since all Aragon deployments are verified, you should be able to see the contract code an ABI, then copy it for usage in your subgraph code.
+
+### 5. Define the subgraph schema
+
+This is not different from defining schema for any TheGraph or GraphQL subgraph. Simply start with high level entities that you think your subgraph should generate, and iterate.
+
+In the case of the example voting app, we're defining the Vote and Cast entities. The entities are usually defined with just an ID, and its properties are added as the subgraph is developed.
+
+### 6. Define the subgraph mappings
+
+The data sources defined in "subgraph.template.yaml" reference mapping files in "src" that need to be implemented. In this example, you'll find such definitions in "src/Voting.ts". These mappings specify what the subgraph should do whenever a voting app that has been detected triggers an event.
+
+### 7. Hook up your mappings
+
+In "src/aragon-hooks", you'll find a series of hooks that you can use to react to specific events that occur behind the scenes in the templates data source management. For example, you can react to when an organization was detected by creating some entity that you may require on your subgraph.
+
+Most importantly, the "getTemplateForApp(...)" hook allows you to specify the name of a data source template that you'd like to create for a given detected app proxy. See the example provided in "aragon-hooks", for how to create templates only for voting apps.
+
+### 8. Test your subgraph with few data sources
+
+At this point, you're ready to take your subgraph for a spin. For this, run any of the deploy commands with "-staging". This will use data which you can provide in the json files in "manifest/data" to determine which data sources to use when indexing your subgraph.
+
+For example, if you run `yarn deploy-mainnet-staging`, "manifest/data/mainnet-staging.json" will be used to generate your subgraph manifest. This json file defines a single data source with the PieDAO organization. The resulting deployment will effectively sync very quickly, which should allow you to iterate on your subgraph without having to wait for long periods of time before you find an error in the subgraph.
+
+### 9. Deploy your subgraph with all data sources
+
+Once you are confident that your subgraph will behave as expected, you may run `yarn deploy-mainnet` (without "-staging"). This will use "manifest/data/mainnet.json", which contains many Aragon data sources, such as the templates used when creating an organization. This will allow your subgraph to find all the organizations out there, and as in the example, index all voting apps.
+
+Of course, this deployment will take much more time to index, potentially days.
 
 ## Troubleshooting
 
+* Some data is missing in my subgraph
+Even though the way in which this template collects many data sources, there are some cases in which a contract is deployed in a way that isolates it from the general data sources. For example, you may deploy an organization manually, without using the official templates or factories. If this is the case, such organization will not be detected by the bootstrapped data sources. Also, there may be a bug in which this template scans the data sources. If you find missing information in your subgraph, lets discuss your case to see if there's a bug in the template. If a bug is not the case, you may have to manually insert specific data sources in the subgraph, such as isolated organizations, apps or tokens.
+
 * I'm getting errors about missing ABIs when the subgraph is indexing
 When a reducer is run, it's run in the context of the data source that defined it. For example, hooks are triggered by src/base/Kernel.ts when the NewAppProxy event is detected in an Organization. You need to include the missing ABI in manifest/templates/Kernel.template.yaml for it to be available in this reducer.
+
+* My callHandlers aren't working
+Unfortunately, TheGraph does not support callHandlers in Rinkeby. For this reason, this template avoids them altoghether. In general, we prefer to code subgraphs in a way that is compatible with all networks. Alternatively, if you by all means need to use this feature, consider hosting your own subgraph.

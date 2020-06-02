@@ -1,7 +1,6 @@
 import VotingEntity from './Entity'
 import Vote from './Vote'
 import VotingConnectorTheGraph from '../connector'
-import { App } from '@aragon/connect-core'
 
 export default class Voting extends VotingEntity {
   readonly appAddress: string

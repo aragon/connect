@@ -10,7 +10,11 @@ import { Address } from '@graphprotocol/graph-ts'
  * which must have the same name.
  */
 export function getTemplateForApp(appId: string): string | null {
-  return 'Voting'
+  if (appId == '0x9fa3927f639745e587912d4b0fea7ef9013bf93fb907d29faeab57417ba6e1d4') {
+    return 'Voting'
+  } else {
+    return null
+  }
 }
 
 export function onOrgTemplateCreated(orgAddress: Address): void {}
