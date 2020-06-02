@@ -1,3 +1,4 @@
+# DAOFactory
 - kind: ethereum/contract
   name: {{name}}
   network: {{network}}
@@ -17,4 +18,4 @@
     eventHandlers:
       - event: DeployDAO(address)
         handler: handleDeployDAO
-    file: ./src/base/Kernel.ts
+    file: ./src/aragon/mappings/DAOFactory.ts

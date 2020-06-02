@@ -15,7 +15,17 @@ echo 'Generating manifest from data file: '$DATA
 cat $DATA
 
 mustache \
-  -p manifest/templates/DAOFactory.template.yaml \
-  -p manifest/templates/Kernel.template.yaml \
+  -p manifest/templates/sources/LegacyOrganizationTemplates.yaml \
+  -p manifest/templates/sources/OrganizationFactories.yaml \
+  -p manifest/templates/sources/Organizations.yaml \
+  -p manifest/templates/sources/OrganizationTemplates.yaml \
+  -p manifest/templates/sources/TokenFactories.yaml \
+  -p manifest/templates/sources/Tokens.yaml \
+  -p manifest/templates/contracts/DAOKit.template.yaml \
+  -p manifest/templates/contracts/DAOTemplate.template.yaml \
+  -p manifest/templates/contracts/DAOFactory.template.yaml \
+  -p manifest/templates/contracts/Kernel.template.yaml \
+  -p manifest/templates/contracts/MiniMeToken.template.yaml \
+  -p manifest/templates/contracts/MiniMeTokenFactory.template.yaml \
   $DATA \
-  manifest/templates/subgraph.template.yaml > subgraph.yaml
+  manifest/subgraph.template.yaml > subgraph.yaml
