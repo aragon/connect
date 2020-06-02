@@ -2,6 +2,18 @@
 
 Fork this code to create a subgraph that indexes all data in a given network, for a given type of Aragon app, e.g. all voting apps in mainnet.
 
+## NOTE: Steps to convert to voting:
+TODO: Remove this
+* Introduce Voting data source template in subgraph.template.yaml
+* Introduce Voting abi
+* Introduce Voting schema
+* Introduce Voting mappings
+* Connect Voting in aragon-hooks
+* Modify user and subgraph name in package.json
+
+## What can I do if an organization or app is not showing up?
+TODO
+
 ## What do I need to know to make Aragon app subgraphs?
 
 Making a subgraph for an aragon app is not much different than making a general subgraph. To learn how to do that, check out TheGraphs's docs: https://thegraph.com/docs

@@ -8,10 +8,10 @@
     "manifest-staging": "env STAGING=true scripts/build-manifest.sh mainnet",
     "manifest-rinkeby": "scripts/build-manifest.sh rinkeby",
     "manifest-rinkeby-staging": "env STAGING=true scripts/build-manifest.sh rinkeby",
-    "deploy": "scripts/deploy.sh ajsantander template mainnet",
-    "deploy-staging": "env STAGING=true scripts/deploy.sh ajsantander template mainnet",
-    "deploy-rinkeby": "scripts/deploy.sh ajsantander template rinkeby",
-    "deploy-rinkeby-staging": "env STAGING=true scripts/deploy.sh ajsantander template rinkeby"
+    "deploy": "scripts/deploy.sh ajsantander voting mainnet",
+    "deploy-staging": "env STAGING=true scripts/deploy.sh ajsantander voting mainnet",
+    "deploy-rinkeby": "scripts/deploy.sh ajsantander voting rinkeby",
+    "deploy-rinkeby-staging": "env STAGING=true scripts/deploy.sh ajsantander voting rinkeby"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.18.0",
