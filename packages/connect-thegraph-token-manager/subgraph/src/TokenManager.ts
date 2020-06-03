@@ -32,6 +32,7 @@ function _getTokenManagerEntity(proxyAddress: Address): TokenManagerEntity {
   return tokenManagerEntity!
 }
 
+// These are commented out to improve sync performance
 // export function handleNewVesting(event: NewVestingEvent): void {}
 // export function handleRevokeVesting(event: RevokeVestingEvent): void {}
 // export function handleScriptResult(event: ScriptResultEvent): void {}

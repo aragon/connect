@@ -31,6 +31,7 @@ export function handleTransfer(event: TransferEvent): void {
   }
 }
 
+// These are commented out to improve sync performance
 // export function handleApproval(event: ApprovalEvent): void {}
 // export function handleClaimedTokens(event: ClaimedTokensEvent): void {}
 // export function handleNewCloneToken(event: NewCloneTokenEvent): void {}

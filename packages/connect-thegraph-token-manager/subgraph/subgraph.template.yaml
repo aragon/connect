@@ -33,7 +33,7 @@ templates:
           file: ./abis/MiniMeToken.json
         - name: TokenManager
           file: ./abis/TokenManager.json
-      # eventHandlers:
+      # eventHandlers: # These are commented out to improve sync performance
         # - event: NewVesting(indexed address,uint256,uint256)
         #   handler: handleNewVesting
         # - event: RevokeVesting(indexed address,uint256,uint256)
