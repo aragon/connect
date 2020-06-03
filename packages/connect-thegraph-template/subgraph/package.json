@@ -1,5 +1,5 @@
 {
-  "name": "aragon-template-subgraph",
+  "name": "@aragon/subgraph-template",
   "version": "0.1.0",
   "scripts": {
     "codegen": "rm -rf generated; graph codegen",
