@@ -1,15 +1,15 @@
 {
   "name": "@aragon/subgraph-voting",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scripts": {
     "codegen": "rm -rf generated; graph codegen",
     "build": "rm -rf build; graph build",
-    "manifest": "scripts/build-manifest.sh mainnet",
-    "manifest-staging": "env STAGING=true scripts/build-manifest.sh mainnet",
+    "manifest-mainnet": "scripts/build-manifest.sh mainnet",
+    "manifest-mainnet-staging": "env STAGING=true scripts/build-manifest.sh mainnet",
     "manifest-rinkeby": "scripts/build-manifest.sh rinkeby",
     "manifest-rinkeby-staging": "env STAGING=true scripts/build-manifest.sh rinkeby",
-    "deploy": "scripts/deploy.sh aragon voting mainnet",
-    "deploy-staging": "env STAGING=true scripts/deploy.sh aragon voting mainnet",
+    "deploy-mainnet": "scripts/deploy.sh aragon voting mainnet",
+    "deploy-mainnet-staging": "env STAGING=true scripts/deploy.sh aragon voting mainnet",
     "deploy-rinkeby": "scripts/deploy.sh aragon voting rinkeby",
     "deploy-rinkeby-staging": "env STAGING=true scripts/deploy.sh aragon voting rinkeby"
   },

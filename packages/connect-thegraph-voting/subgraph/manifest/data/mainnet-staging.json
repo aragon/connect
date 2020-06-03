@@ -1,14 +1,18 @@
 {
   "network": "mainnet",
-  "description": "Development subgraph for all Aragon voting apps",
-  "repository": "https://github.com/aragon/connect",
-  "DAOFactoryDataSources": [],
-  "KernelDataSources": [
-    {
-      "name": "PieDAO",
-      "address": "0x0c188B183FF758500D1D18B432313d10e9F6b8a4",
-      "startBlock": "9593674"
-    }
-  ]
+  "dataSources": {
+    "Organizations": [
+      {
+        "name": "PieDAO",
+        "address": "0x0c188B183FF758500D1D18B432313d10e9F6b8a4",
+        "startBlock": "9593674"
+      }
+    ],
+    "OrganizationFactories": [],
+    "OrganizationTemplates": [],
+    "LegacyOrganizationTemplates": [],
+    "TokenFactories": [],
+    "Tokens": []
+  }
 }
 
