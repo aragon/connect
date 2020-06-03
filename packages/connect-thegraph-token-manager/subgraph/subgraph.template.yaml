@@ -1,0 +1,45 @@
+# Do not edit subgraph.yaml, this is a generated file.
+# Instead, edit subgraph.template.yaml and run `yarn manifest-<network>-[staging]`
+specVersion: 0.0.2
+description: A template for Aragon subgraphs
+repository: https://github.com/aragon/connect
+schema:
+  file: ./schema.graphql
+dataSources:
+{{> Organizations.yaml}}
+{{> OrganizationFactories.yaml}}
+{{> OrganizationTemplates.yaml}}
+{{> LegacyOrganizationTemplates.yaml}}
+{{> TokenFactories.yaml}}
+{{> Tokens.yaml}}
+templates:
+  {{> Kernel.template.yaml}}
+  {{> MiniMeToken.template.yaml}}
+  - kind: ethereum/contract
+    name: TokenManager
+    network: {{network}}
+    source:
+      abi: TokenManager
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Token
+        - TokenHolder
+        - Approval
+      abis:
+        - name: MiniMeToken
+          file: ./abis/MiniMeToken.json
+        - name: TokenManager
+          file: ./abis/TokenManager.json
+      # eventHandlers: # These are commented out to improve sync performance
+        # - event: NewVesting(indexed address,uint256,uint256)
+        #   handler: handleNewVesting
+        # - event: RevokeVesting(indexed address,uint256,uint256)
+        #   handler: handleRevokeVesting
+        # - event: ScriptResult(indexed address,bytes,bytes,bytes)
+        #   handler: handleScriptResult
+        # - event: RecoverToVault(indexed address,indexed address,uint256)
+        #   handler: handleRecoverToVault
+      file: ./src/TokenManager.ts

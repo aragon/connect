@@ -1,27 +1,12 @@
-import { BigInt, Address } from '@graphprotocol/graph-ts'
+import { Address } from '@graphprotocol/graph-ts'
 import { Transfer as TransferEvent } from '../generated/templates/MiniMeToken/MiniMeToken'
 import { TokenHolder as TokenHolderEntity } from '../generated/schema'
-import { MiniMeToken as MiniMeTokenTemplate } from '../generated/templates'
 import { MiniMeToken as MiniMeTokenEntity } from '../generated/schema'
 import { MiniMeToken as MiniMeTokenContract } from '../generated/templates/MiniMeToken/MiniMeToken'
 // import { ClaimedTokens as ClaimedTokensEvent } from '../generated/templates/MiniMeToken/MiniMeToken'
 // import { NewCloneToken as NewCloneTokenEvent } from '../generated/templates/MiniMeToken/MiniMeToken'
-
-export function createMiniMeTokenTemplateAndEntity(
-  tokenManagerId: string,
-  tokenManagerAddress: Address,
-  orgAddress: Address,
-  tokenAddress: Address
-): void {
-  MiniMeTokenTemplate.create(tokenAddress)
-
-  let miniMeTokenEntity = _getMiniMeTokenEntity(tokenAddress)
-  miniMeTokenEntity.tokenManager = tokenManagerId
-  miniMeTokenEntity.orgAddress = orgAddress
-  miniMeTokenEntity.appAddress = tokenManagerAddress
-
-  miniMeTokenEntity.save()
-}
+import { getTokenManagerId } from './TokenManager'
+import { TokenManager as TokenManagerContract } from '../generated/templates/TokenManager/TokenManager'
 
 export function handleTransfer(event: TransferEvent): void {
   let tokenAddress = event.address
@@ -46,6 +31,7 @@ export function handleTransfer(event: TransferEvent): void {
   }
 }
 
+// These are commented out to improve sync performance
 // export function handleApproval(event: ApprovalEvent): void {}
 // export function handleClaimedTokens(event: ClaimedTokensEvent): void {}
 // export function handleNewCloneToken(event: NewCloneTokenEvent): void {}
@@ -65,6 +51,13 @@ function _getMiniMeTokenEntity(tokenAddress: Address): MiniMeTokenEntity {
     miniMeTokenEntity.totalSupply = tokenContract.totalSupply()
     miniMeTokenEntity.transferable = tokenContract.transfersEnabled()
     miniMeTokenEntity.holders = new Array<string>()
+
+    let tokenManagerAddress = tokenContract.controller()
+    miniMeTokenEntity.tokenManager = getTokenManagerId(tokenManagerAddress)
+    miniMeTokenEntity.appAddress = tokenManagerAddress
+
+    let tokenManagerContract = TokenManagerContract.bind(tokenManagerAddress)
+    miniMeTokenEntity.orgAddress = tokenManagerContract.kernel()
 
     miniMeTokenEntity.save()
   }

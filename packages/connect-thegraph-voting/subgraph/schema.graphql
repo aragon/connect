@@ -26,3 +26,10 @@ type Cast @entity {
   voterStake: BigInt!
   vote: Vote! @derivedFrom(field: "casts")
 }
+
+type AragonInfo @entity {
+  id: ID!
+  orgs: [Bytes!]!
+  apps: [Bytes!]!
+  tokens: [Bytes!]!
+}

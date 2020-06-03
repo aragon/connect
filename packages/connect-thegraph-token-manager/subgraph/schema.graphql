@@ -24,3 +24,11 @@ type TokenHolder @entity {
   tokenAddress: Bytes!
   balance: BigInt!
 }
+
+type AragonInfo @entity {
+  id: ID!
+  orgs: [Bytes!]!
+  apps: [Bytes!]!
+  tokens: [Bytes!]!
+}
+
