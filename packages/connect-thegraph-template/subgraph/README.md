@@ -22,9 +22,9 @@ Staging subgraphs are intended for development, and are subgraphs that index ver
 
 ### 3. Set up the subgraph manifest files
 
-The way we handle data sources in these subgraphs is a bit sophisticated, so the "subgraph.yaml" file at the root is actually a generated file and should not be edited. This is way you may not find this file at the root of the project until it is generated first.
+The way we handle data sources in these subgraphs is a bit sophisticated, so the "subgraph.yaml" file at the root is actually a generated file and should not be edited. This is why you may not find this file at the root of the project until it is generated first.
 
-Instead, edit "subgraph.template.yaml". You'll notice that there's a bunch of mustache tags in this file. This is stuff that you shouldn't have to worry about. Initially, the part that matters to you is whatever is not a mustache tag. Here, you can define static data sources in the "dataSources" section, and dynamic datasources in the "templates" section.
+Instead, edit "subgraph.template.yaml". You'll notice that there are a bunch of [Mustache](https://mustache.github.io) tags in this file. This is stuff that you shouldn't have to worry about. Initially, the part that matters to you is whatever is not a mustache tag. Here, you can define static data sources in the "dataSources" section, and dynamic datasources in the "templates" section.
 
 If your writting a subgraph for an Aragon app, its data source specification should go in the latter, since it's instances will be generated dynamically. As an example, this template declares the "Voting" data source template. This data source will be hooked up to any instances of voting apps found in all deployed Aragon organizations.
 

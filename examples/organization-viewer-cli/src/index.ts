@@ -12,12 +12,12 @@ const DAO_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-mainnet-staging'
 const ALL_VOTING_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/ajsantander/aragon-voting'
-const SINGLE_TOKEN_MANAGER_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/ajsantander/token-manager'
+const ALL_TOKEN_MANAGER_SUBGRAPH_URL =
+  'https://api.thegraph.com/subgraphs/name/ajsantander/aragon-token-mainnet'
 
 const ORG_ADDRESS = '0x0c188b183ff758500d1d18b432313d10e9f6b8a4'
 const VOTING_APP_ADDRESS = '0x8012a3f8632870e64994751f7e0a6da2a287eda3'
-const TOKENS_APP_ADDRESS = '0x8db3b9d93275ed6de3351846487117da02ab4e96'
+const TOKENS_APP_ADDRESS = '0x0021b622f112f6328886e8aa757a16952c94b130'
 
 async function main() {
   const org = await initAndGetOrg()
@@ -89,11 +89,12 @@ async function inspectOrg(org: Organization): Promise<void> {
 }
 
 async function trySimplePath(org: Organization): Promise<void> {
-  const financeAddress = '0x34ca726d39eae3c8007d18220da99a3a328cba35'
+  const apps = await org.apps()
+  const finance = apps.find((app: App) => app.name == 'finance')!
 
-  const account = '0xB24b54FE5a3ADcB4cb3B27d31B6C7f7E9F6A73a7'
+  const account = '0xf76604Ce7e7F0134a5310bCfc9C34cAEddf15873'
 
-  const intent = org.appIntent(financeAddress, 'newImmediatePayment', [
+  const intent = org.appIntent(finance.address, 'newImmediatePayment', [
     ethers.constants.AddressZero,
     account,
     ethers.utils.parseEther('1'),
@@ -111,7 +112,7 @@ async function inspectTokenManager(appAddress: string): Promise<void> {
 
   const tokenManager = new TokenManager(
     appAddress,
-    SINGLE_TOKEN_MANAGER_SUBGRAPH_URL
+    ALL_TOKEN_MANAGER_SUBGRAPH_URL
   )
 
   console.log(tokenManager.toString())
@@ -177,7 +178,7 @@ async function inspectVotingLowLevel(appAddress: string): Promise<void> {
 
 main()
   .then(() => process.exit(0))
-  .catch(err => {
+  .catch((err) => {
     console.log(`err`, err)
     process.exit(1)
   })
