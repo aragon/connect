@@ -7,8 +7,8 @@ import { createMiniMeTokenTemplateAndEntity } from './MiniMeToken'
 // import { ScriptResult as ScriptResultEvent } from '../generated/templates/TokenManager/TokenManager'
 // import { RecoverToVault as RecoverToVaultEvent } from '../generated/templates/TokenManager/TokenManager'
 
-export function onTokenManagerTemplateCreated(orgAddress: Address, proxyAddress: Address): void {
-  let tokenManagerEntity = _getTokenManagerEntity(proxyAddress, orgAddress)
+export function onTokenManagerTemplateCreated(proxyAddress: Address): void {
+  let tokenManagerEntity = _getTokenManagerEntity(proxyAddress)
 
   _createMiniMeTokenTemplate(tokenManagerEntity)
 }
@@ -28,15 +28,17 @@ function _createMiniMeTokenTemplate(tokenManagerEntity: TokenManagerEntity): voi
   }
 }
 
-function _getTokenManagerEntity(proxyAddress: Address, orgAddress: Address): TokenManagerEntity {
+function _getTokenManagerEntity(proxyAddress: Address): TokenManagerEntity {
   let tokenManagerId = 'proxyAddress-' + proxyAddress.toHexString()
 
   let tokenManagerEntity = TokenManagerEntity.load(tokenManagerId)
   if (!tokenManagerEntity) {
     let tokenManagerEntity = new TokenManagerEntity(tokenManagerId)
 
+    let tokenManagerContract = TokenManagerContract.bind(proxyAddress)
+
     tokenManagerEntity.address = proxyAddress
-    tokenManagerEntity.orgAddress = orgAddress
+    tokenManagerEntity.orgAddress = tokenManagerContract.kernel()
 
     tokenManagerEntity.save()
   }
