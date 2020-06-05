@@ -20,17 +20,18 @@ const VOTING_APP_ADDRESS = '0xc73e86aab9d232495399d62fc80a36ae52952b81'
 const TOKENS_APP_ADDRESS = '0x0021b622f112f6328886e8aa757a16952c94b130'
 
 async function main() {
-  // const org = await initAndGetOrg()
+  const org = await initAndGetOrg()
 
-  // await inspectOrg(org)
+  await inspectOrg(org)
 
-  // await trySimplePath(org)
+  await trySimplePath(org)
 
-  // await inspectVotingHighLevel(VOTING_APP_ADDRESS)
-  // await inspectVotingLowLevel(VOTING_APP_ADDRESS)
+  await inspectVotingHighLevel(VOTING_APP_ADDRESS)
+  await inspectVotingLowLevel(VOTING_APP_ADDRESS)
+
+  await inspectTokenManager(TOKENS_APP_ADDRESS)
+
   await inspectVotingLowLevelSubscription(VOTING_APP_ADDRESS)
-
-  // await inspectTokenManager(TOKENS_APP_ADDRESS)
 }
 
 async function initAndGetOrg(): Promise<Organization> {

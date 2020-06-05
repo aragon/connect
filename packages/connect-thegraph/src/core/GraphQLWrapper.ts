@@ -50,8 +50,15 @@ export default class GraphQLWrapper {
     return pipe(
       this.#client.executeSubscription(request),
       subscribe((result: any) => {
-        console.log(`NEW RESULTS...`)
-        // TODO: parse and describe here
+        if (this.#verbose) {
+          console.log(this.describeQueryResult(result))
+        }
+
+        if (result.error) {
+          throw new Error(
+            `Error performing subscription.${this.describeQueryResult(result)}`
+          )
+        }
 
         callback(result)
       })
@@ -65,7 +72,7 @@ export default class GraphQLWrapper {
     const result = await this.#client.query(query, args).toPromise()
 
     if (this.#verbose) {
-      console.log(this.describeQueryResult(result)) // Uncomment for debugging.
+      console.log(this.describeQueryResult(result))
     }
 
     if (result.error) {
