@@ -18,10 +18,10 @@ export const TOKEN = gql`
 `
 
 export const TOKEN_HOLDERS = gql`
-  query TokenHolders($tokenAddress: String!) {
+  query TokenHolders($tokenAddress: String!, $first: Int!, $skip: Int!) {
     tokenHolders(where: {
       tokenAddress: $tokenAddress
-    }) {
+    }, first: $first, skip: $skip) {
       id
       address
       balance
