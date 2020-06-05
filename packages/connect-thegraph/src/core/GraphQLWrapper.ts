@@ -1,20 +1,61 @@
 import fetch from 'isomorphic-unfetch'
-import { Client } from '@urql/core'
+import ws from 'ws'
+import { Client, defaultExchanges, subscriptionExchange, createRequest } from '@urql/core'
+import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { DocumentNode } from 'graphql'
 import { ParseFunction, QueryResult } from '../types'
+import { pipe, subscribe } from 'wonka'
+
+type SubscriptionCallback = (result: any) => void
+type Subscription = {
+  unsubscribe: () => void
+}
 
 export default class GraphQLWrapper {
   #client: Client
   #verbose: boolean
 
   constructor(subgraphUrl: string, verbose = false) {
+    const subscriptionClient = new SubscriptionClient(
+      subgraphUrl.replace('http', 'ws'),
+      {
+        reconnect: true,
+        timeout: 20000
+      },
+      ws
+    )
+
     this.#client = new Client({
       maskTypename: true,
       url: subgraphUrl,
       fetch,
+      exchanges: [
+        ...defaultExchanges,
+        subscriptionExchange({
+          forwardSubscription: (operation: any) => subscriptionClient.request(operation)
+        })
+      ]
     })
 
     this.#verbose = verbose
+  }
+
+  subscribeToQuery(
+    query: DocumentNode,
+    args: any = {},
+    callback: SubscriptionCallback
+  ): Subscription {
+    const request = createRequest(query, args)
+
+    return pipe(
+      this.#client.executeSubscription(request),
+      subscribe((result: any) => {
+        console.log(`NEW RESULTS...`)
+        // TODO: parse and describe here
+
+        callback(result)
+      })
+    )
   }
 
   async performQuery(
