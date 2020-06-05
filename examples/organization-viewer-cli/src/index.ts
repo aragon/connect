@@ -134,7 +134,7 @@ async function inspectVotingHighLevel(appAddress: string): Promise<void> {
   console.log(voting.toString())
 
   console.log('\nVotes:')
-  const votes = await voting.votes()
+  const votes = await voting.votes(2, 1)
   votes.map((vote: VotingVote) => console.log(vote.toString()))
 
   if (votes.length == 0) {
