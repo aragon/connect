@@ -7,11 +7,6 @@ import { DocumentNode } from 'graphql'
 import { ParseFunction, QueryResult } from '../types'
 import { pipe, subscribe } from 'wonka'
 
-type SubscriptionCallback = (result: any) => void
-type Subscription = {
-  unsubscribe: () => void
-}
-
 export default class GraphQLWrapper {
   #client: Client
   #verbose: boolean
@@ -44,8 +39,8 @@ export default class GraphQLWrapper {
   subscribeToQuery(
     query: DocumentNode,
     args: any = {},
-    callback: SubscriptionCallback
-  ): Subscription {
+    callback: Function
+  ): { unsubscribe: Function } {
     const request = createRequest(query, args)
 
     return pipe(
