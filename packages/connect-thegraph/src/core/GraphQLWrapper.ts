@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-unfetch'
 import ws from 'ws'
 import { Client, defaultExchanges, subscriptionExchange, createRequest } from '@urql/core'
+import { SubscriptionOperation } from '@urql/core/dist/types/exchanges/subscription'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { DocumentNode } from 'graphql'
 import { ParseFunction, QueryResult } from '../types'
@@ -32,7 +33,7 @@ export default class GraphQLWrapper {
       exchanges: [
         ...defaultExchanges,
         subscriptionExchange({
-          forwardSubscription: (operation: any) => subscriptionClient.request(operation)
+          forwardSubscription: (operation: SubscriptionOperation) => subscriptionClient.request(operation)
         })
       ]
     })
@@ -49,7 +50,7 @@ export default class GraphQLWrapper {
 
     return pipe(
       this.#client.executeSubscription(request),
-      subscribe((result: any) => {
+      subscribe((result: QueryResult) => {
         if (this.#verbose) {
           console.log(this.describeQueryResult(result))
         }
