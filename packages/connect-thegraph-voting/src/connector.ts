@@ -5,8 +5,8 @@ import Cast, { CastData } from './entities/Cast'
 import { parseVotes, parseCasts } from './parsers'
 
 export default class VotingConnectorTheGraph extends GraphQLWrapper {
-  async votesForApp(appAddress: string): Promise<Vote[]> {
-    const result = await this.performQuery(queries.ALL_VOTES, { appAddress })
+  async votesForApp(appAddress: string, first: number, skip: number): Promise<Vote[]> {
+    const result = await this.performQuery(queries.ALL_VOTES, { appAddress, first, skip })
 
     const datas = this.parseQueryResult(parseVotes, result)
 
@@ -15,8 +15,8 @@ export default class VotingConnectorTheGraph extends GraphQLWrapper {
     })
   }
 
-  async castsForVote(voteId: string): Promise<Cast[]> {
-    const result = await this.performQuery(queries.CASTS_FOR_VOTE, { voteId })
+  async castsForVote(voteId: string, first: number, skip: number): Promise<Cast[]> {
+    const result = await this.performQuery(queries.CASTS_FOR_VOTE, { voteId, first, skip })
 
     const datas = this.parseQueryResult(parseCasts, result)
 

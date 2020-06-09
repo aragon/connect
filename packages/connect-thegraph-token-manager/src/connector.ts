@@ -15,9 +15,11 @@ export default class TokenManagerConnectorTheGraph extends GraphQLWrapper {
     return new Token(data, this)
   }
 
-  async tokenHolders(tokenAddress: string): Promise<TokenHolder[]> {
+  async tokenHolders(tokenAddress: string, first: number, skip: number): Promise<TokenHolder[]> {
     const result = await this.performQuery(queries.TOKEN_HOLDERS, {
       tokenAddress,
+      first,
+      skip
     })
 
     const datas = this.parseQueryResult(parseTokenHolders, result)

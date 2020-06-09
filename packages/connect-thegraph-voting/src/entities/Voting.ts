@@ -1,7 +1,6 @@
 import VotingEntity from './Entity'
 import Vote from './Vote'
 import VotingConnectorTheGraph from '../connector'
-import { App } from '@aragon/connect-core'
 
 export default class Voting extends VotingEntity {
   readonly appAddress: string
@@ -12,7 +11,11 @@ export default class Voting extends VotingEntity {
     this.appAddress = appAddress
   }
 
-  async votes(): Promise<Vote[]> {
-    return this._connector.votesForApp(this.appAddress)
+  async votes({ first = 1000, skip = 0 } = {}): Promise<Vote[]> {
+    return this._connector.votesForApp(
+      this.appAddress,
+      first,
+      skip
+    )
   }
 }
