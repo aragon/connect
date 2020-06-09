@@ -61,6 +61,24 @@ export default class GraphQLWrapper {
     )
   }
 
+  subscribeToQueryWithParser(
+    query: DocumentNode,
+    args: any = {},
+    callback: Function,
+    parser: ParseFunction
+  ): { unsubscribe: Function } {
+    return this.subscribeToQuery(
+      query,
+      args,
+      (result: QueryResult) => {
+        callback(this.parseQueryResult(
+          parser,
+          result
+        ))
+      }
+    )
+  }
+
   async performQuery(
     query: DocumentNode,
     args: any = {}
@@ -80,9 +98,20 @@ export default class GraphQLWrapper {
     return result
   }
 
+  async performQueryWithParser(
+    query: DocumentNode,
+    args: any = {},
+    parser: ParseFunction
+  ): Promise<any> {
+    return this.parseQueryResult(
+      parser,
+      await this.performQuery(query, args)
+    )
+  }
+
   parseQueryResult(parser: ParseFunction, result: QueryResult): any {
     try {
-      return parser(result)
+      return parser(result, this)
     } catch (error) {
       throw new Error(`${error.message}${this.describeQueryResult(result)}`)
     }

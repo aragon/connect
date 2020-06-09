@@ -73,10 +73,14 @@ export default class Organization {
 
   ///////// PERMISSIONS ///////////
   async permissions(): Promise<Permission[]> {
-    const allPermissions = await this.#connector.permissionsForOrg(
-      this.#address
+    return await this.#connector.permissionsForOrg(this.#address)
+  }
+
+  onPermissions(callback: Function): { unsubscribe: Function } {
+    return this.#connector.onPermissionsForOrg!(
+      this.#address,
+      callback
     )
-    return allPermissions.filter((permission) => permission.allowed === true)
   }
 
   // async addPermissions(

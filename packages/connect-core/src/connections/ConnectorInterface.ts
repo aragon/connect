@@ -11,6 +11,7 @@ import Role from '../entities/Role'
 export interface ConnectorInterface {
   chainId?: number
   permissionsForOrg(orgAddress: string): Promise<Permission[]>
+  onPermissionsForOrg?(orgAddress: string, callback: Function): { unsubscribe: Function }
   appsForOrg?(orgAddress: string): Promise<App[]>
   repoForApp?(appAddress: string): Promise<Repo>
   appByAddress?(appAddress: string): Promise<App>

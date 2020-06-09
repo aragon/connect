@@ -1,11 +1,15 @@
-import { RoleData, PermissionData } from '@aragon/connect-core'
+import { Role, RoleData, PermissionData } from '@aragon/connect-core'
 import { App as AppDataGql } from '../queries/types'
 import { Param as ParamDataGql } from '../queries/types'
 import { Permission as PermissionDataGql } from '../queries/types'
 import { Role as RoleDataGql } from '../queries/types'
 import { QueryResult } from '../types'
 
-function _parseRole(role: RoleDataGql, artifact?: string | null): RoleData {
+function _parseRole(
+  role: RoleDataGql,
+  connector: any,
+  artifact?: string | null
+): Role {
   const grantees =
     role?.grantees &&
     role?.grantees.map(
@@ -27,26 +31,34 @@ function _parseRole(role: RoleDataGql, artifact?: string | null): RoleData {
       }
     )
 
-  return {
+  const roleData: RoleData = {
     appAddress: role.appAddress,
     manager: role.manager,
     hash: role.roleHash,
     grantees,
     artifact,
   }
+
+  return new Role(roleData, connector)
 }
 
-export function parseRole(result: QueryResult): RoleData {
+export function parseRole(
+  result: QueryResult,
+  connector: any
+): Role {
   const role = result.data.role as RoleDataGql
 
   if (!role) {
     throw new Error('Unable to parse role.')
   }
 
-  return _parseRole(role)
+  return _parseRole(role, connector)
 }
 
-export function parseRoles(result: QueryResult): RoleData[] {
+export function parseRoles(
+  result: QueryResult,
+  connector: any
+): Role[] {
   const app = result.data.app as AppDataGql
   const roles = app?.roles
 
@@ -55,6 +67,10 @@ export function parseRoles(result: QueryResult): RoleData[] {
   }
 
   return roles.map((role: RoleDataGql) => {
-    return _parseRole(role, app.version?.artifact)
+    return _parseRole(
+      role,
+      connector,
+      app.version?.artifact
+    )
   })
 }

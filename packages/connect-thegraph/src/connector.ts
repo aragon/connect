@@ -17,6 +17,7 @@ import {
   parseRepo,
   parseRoles,
 } from './parsers'
+import { QueryResult } from '../types'
 
 export type ConnectorTheGraphConfig = {
   daoSubgraphUrl?: string
@@ -39,58 +40,56 @@ export default class ConnectorTheGraph extends GraphQLWrapper
   }
 
   async rolesForAddress(appAddress: string): Promise<Role[]> {
-    const result = await this.performQuery(queries.ROLE_BY_APP_ADDRESS, {
-      appAddress: appAddress.toLowerCase(),
-    })
+    const query = queries.ROLE_BY_APP_ADDRESS
+    const args = {
+      appAddress: appAddress.toLowerCase()
+    }
 
-    const datas = this.parseQueryResult(parseRoles, result)
-
-    return datas.map((data: RoleData) => {
-      return new Role(data, this)
-    })
+    return this.performQueryWithParser(query, args, parseRoles)
   }
 
   async permissionsForOrg(orgAddress: string): Promise<Permission[]> {
-    const result = await this.performQuery(queries.ORGANIZATION_PERMISSIONS, {
-      orgAddress: orgAddress.toLowerCase(),
-    })
+    const query = queries.ORGANIZATION_PERMISSIONS
+    const args = {
+      orgAddress: orgAddress.toLowerCase()
+    }
 
-    const datas = this.parseQueryResult(parsePermissions, result)
+    return this.performQueryWithParser(query, args, parsePermissions)
+  }
 
-    return datas.map((data: PermissionData) => {
-      return new Permission(data, this)
-    })
+  onPermissionsForOrg(orgAddress: string, callback: Function): { unsubscribe: Function } {
+    return this.subscribeToQueryWithParser(
+      queries.ORGANIZATION_PERMISSIONS,
+      { orgAddress: orgAddress.toLowerCase() },
+      callback,
+      parsePermissions
+    )
   }
 
   async appsForOrg(orgAddress: string): Promise<App[]> {
-    const result = await this.performQuery(queries.ORGANIZATION_APPS, {
-      orgAddress: orgAddress.toLowerCase(),
-    })
+    const query = queries.ORGANIZATION_APPS
+    const args = {
+      orgAddress: orgAddress.toLowerCase()
+    }
 
-    const datas = this.parseQueryResult(parseApps, result)
-
-    return datas.map((data: AppData) => {
-      return new App(data, this)
-    })
+    return this.performQueryWithParser(query, args, parseApps)
   }
 
   async appByAddress(appAddress: string): Promise<App> {
-    const result = await this.performQuery(queries.APP_BY_ADDRESS, {
-      appAddress: appAddress.toLowerCase(),
-    })
+    const query = queries.APP_BY_ADDRESS
+    const args = {
+      appAddress: appAddress.toLowerCase()
+    }
 
-    const data = this.parseQueryResult(parseApp, result)
-
-    return new App(data, this)
+    return this.performQueryWithParser(query, args, parseApp)
   }
 
   async repoForApp(appAddress: string): Promise<Repo> {
-    const result = await this.performQuery(queries.REPO_BY_APP_ADDRESS, {
-      appAddress: appAddress.toLowerCase(),
-    })
+    const query = queries.REPO_BY_APP_ADDRESS
+    const args = {
+      appAddress: appAddress.toLowerCase()
+    }
 
-    const data = this.parseQueryResult(parseRepo, result)
-
-    return new Repo(data, this)
+    return this.performQueryWithParser(query, args, parseRepo)
   }
 }
