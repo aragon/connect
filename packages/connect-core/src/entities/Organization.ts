@@ -48,6 +48,10 @@ export default class Organization {
     return this.#connector.appsForOrg!(this.#address)
   }
 
+  onApps(callback: Function): { unsubscribe: Function } {
+    return this.#connector.onAppsForOrg!(this.#address, callback)
+  }
+
   async app(appAddress: string): Promise<App> {
     return this.#connector.appByAddress!(appAddress)
   }

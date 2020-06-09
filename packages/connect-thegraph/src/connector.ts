@@ -68,6 +68,15 @@ export default class ConnectorTheGraph extends GraphQLWrapper
     )
   }
 
+  onAppsForOrg(orgAddress: string, callback: Function): { unsubscribe: Function } {
+    return this.subscribeToQueryWithParser(
+      queries.ORGANIZATION_APPS('query'),
+      { orgAddress: orgAddress.toLowerCase() },
+      callback,
+      parseApps
+    )
+  }
+
   async appByAddress(appAddress: string): Promise<App> {
     return this.performQueryWithParser(
       queries.APP_BY_ADDRESS('query'),
