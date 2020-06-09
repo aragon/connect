@@ -39,7 +39,7 @@ export default class Vote extends Entity implements VoteData {
     Object.assign(this, data)
   }
 
-  async casts(first = 1000, skip = 0): Promise<Cast[]> {
+  async casts({ first = 1000, skip = 0 } = {}): Promise<Cast[]> {
     return this._connector.castsForVote(
       this.id,
       first,

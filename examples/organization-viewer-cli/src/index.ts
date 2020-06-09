@@ -134,7 +134,7 @@ async function inspectVotingHighLevel(appAddress: string): Promise<void> {
   console.log(voting.toString())
 
   console.log('\nVotes:')
-  const votes = await voting.votes(2, 1)
+  const votes = await voting.votes({ first: 2, skip: 1 })
   votes.map((vote: VotingVote) => console.log(vote.toString()))
 
   if (votes.length == 0) {
@@ -150,7 +150,7 @@ async function inspectVotingHighLevel(appAddress: string): Promise<void> {
   )
 
   console.log('\nCasts:')
-  const casts = await vote.casts()
+  const casts = await vote.casts({ skip: 1 })
   casts.map((cast: VotingCast) => console.log(cast.toString()))
 
   const voters = casts.map((cast: VotingCast) => cast.voter)
