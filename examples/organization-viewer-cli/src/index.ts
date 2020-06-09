@@ -11,12 +11,12 @@ const network = 'mainnet'
 const DAO_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-mainnet-staging'
 const ALL_VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/ajsantander/aragon-voting'
+  'https://api.thegraph.com/subgraphs/name/ajsantander/aragon-voting-rinkeby'
 const ALL_TOKEN_MANAGER_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/ajsantander/aragon-token-mainnet'
 
 const ORG_ADDRESS = '0x0c188b183ff758500d1d18b432313d10e9f6b8a4'
-const VOTING_APP_ADDRESS = '0x8012a3f8632870e64994751f7e0a6da2a287eda3'
+const VOTING_APP_ADDRESS = '0xc73e86aab9d232495399d62fc80a36ae52952b81'
 const TOKENS_APP_ADDRESS = '0x0021b622f112f6328886e8aa757a16952c94b130'
 
 async function main() {
@@ -30,6 +30,8 @@ async function main() {
   await inspectVotingLowLevel(VOTING_APP_ADDRESS)
 
   await inspectTokenManager(TOKENS_APP_ADDRESS)
+
+  await inspectVotingLowLevelSubscription(VOTING_APP_ADDRESS)
 }
 
 async function initAndGetOrg(): Promise<Organization> {
@@ -174,6 +176,38 @@ async function inspectVotingLowLevel(appAddress: string): Promise<void> {
   `)
 
   console.log(JSON.stringify(results.data, null, 2))
+}
+
+async function inspectVotingLowLevelSubscription(appAddress: string): Promise<void> {
+  console.log('\nLow-level inspection of a voting app using subscriptions:')
+  const wrapper = new GraphQLWrapper(ALL_VOTING_SUBGRAPH_URL)
+
+  const subscription = wrapper.subscribeToQuery(
+    gql`
+      subscription {
+        votes(where:{
+          appAddress: "${appAddress}"
+        }) {
+          id
+          metadata
+          creator
+        }
+      }
+    `,
+    {},
+    (results: any) => {
+      console.log(JSON.stringify(results.data, null, 2))
+    }
+  )
+
+  // Keep the program running
+  await new Promise(resolve => {
+    setTimeout(() => {
+      resolve()
+
+      subscription.unsubscribe()
+    }, 1000000000)
+  })
 }
 
 main()
