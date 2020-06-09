@@ -1,12 +1,9 @@
 import {
   ConnectorInterface,
   Permission,
-  PermissionData,
   App,
-  AppData,
   Repo,
   Role,
-  RoleData,
 } from '@aragon/connect-core'
 import * as queries from './queries'
 import GraphQLWrapper from './core/GraphQLWrapper'
@@ -17,7 +14,6 @@ import {
   parseRepo,
   parseRoles,
 } from './parsers'
-import { QueryResult } from '../types'
 
 export type ConnectorTheGraphConfig = {
   daoSubgraphUrl?: string
@@ -49,17 +45,16 @@ export default class ConnectorTheGraph extends GraphQLWrapper
   }
 
   async permissionsForOrg(orgAddress: string): Promise<Permission[]> {
-    const query = queries.ORGANIZATION_PERMISSIONS
-    const args = {
-      orgAddress: orgAddress.toLowerCase()
-    }
-
-    return this.performQueryWithParser(query, args, parsePermissions)
+    return this.performQueryWithParser(
+      queries.ORGANIZATION_PERMISSIONS('query'),
+      { orgAddress: orgAddress.toLowerCase() },
+      parsePermissions
+    )
   }
 
   onPermissionsForOrg(orgAddress: string, callback: Function): { unsubscribe: Function } {
     return this.subscribeToQueryWithParser(
-      queries.ORGANIZATION_PERMISSIONS,
+      queries.ORGANIZATION_PERMISSIONS('subscription'),
       { orgAddress: orgAddress.toLowerCase() },
       callback,
       parsePermissions

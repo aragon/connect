@@ -36,8 +36,8 @@ export const REPO_BY_APP_ADDRESS = gql`
   ${fragments.VERSION_FRAGMENT}
 `
 
-export const ORGANIZATION_PERMISSIONS = gql`
-  query Organization($orgAddress: String!) {
+export const ORGANIZATION_PERMISSIONS = (type: string) => gql`
+  ${type} Organization($orgAddress: String!) {
     organization(id: $orgAddress) {
       permissions {
         ...Permission_permission
