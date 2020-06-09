@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 import * as fragments from './fragments'
 
-export const ORGANIZATION_APPS = gql`
-  query Organization($orgAddress: String!) {
+export const ORGANIZATION_APPS = (type: string) => gql`
+  ${type} Organization($orgAddress: String!) {
     organization(id: $orgAddress) {
       apps {
         ...App_app
@@ -12,8 +12,8 @@ export const ORGANIZATION_APPS = gql`
   ${fragments.APP_FRAGMENT}
 `
 
-export const APP_BY_ADDRESS = gql`
-  query App($appAddress: String!) {
+export const APP_BY_ADDRESS = (type: string) => gql`
+  ${type} App($appAddress: String!) {
     app(id: $appAddress) {
       ...App_app
     }
@@ -21,8 +21,8 @@ export const APP_BY_ADDRESS = gql`
   ${fragments.APP_FRAGMENT}
 `
 
-export const REPO_BY_APP_ADDRESS = gql`
-  query App($appAddress: String!) {
+export const REPO_BY_APP_ADDRESS = (type: string) => gql`
+  ${type} App($appAddress: String!) {
     app(id: $appAddress) {
       repo {
         ...Repo_repo
@@ -47,8 +47,8 @@ export const ORGANIZATION_PERMISSIONS = (type: string) => gql`
   ${fragments.PERMISSION_FRAGMENT}
 `
 
-export const ROLE_BY_APP_ADDRESS = gql`
-  query App($appAddress: String!) {
+export const ROLE_BY_APP_ADDRESS = (type: string) => gql`
+  ${type} App($appAddress: String!) {
     app(id: $appAddress) {
       version{
         ...Version_version

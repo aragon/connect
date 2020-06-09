@@ -36,12 +36,11 @@ export default class ConnectorTheGraph extends GraphQLWrapper
   }
 
   async rolesForAddress(appAddress: string): Promise<Role[]> {
-    const query = queries.ROLE_BY_APP_ADDRESS
-    const args = {
-      appAddress: appAddress.toLowerCase()
-    }
-
-    return this.performQueryWithParser(query, args, parseRoles)
+    return this.performQueryWithParser(
+      queries.ROLE_BY_APP_ADDRESS('query'),
+      { appAddress: appAddress.toLowerCase() },
+      parseRoles
+    )
   }
 
   async permissionsForOrg(orgAddress: string): Promise<Permission[]> {
@@ -62,29 +61,26 @@ export default class ConnectorTheGraph extends GraphQLWrapper
   }
 
   async appsForOrg(orgAddress: string): Promise<App[]> {
-    const query = queries.ORGANIZATION_APPS
-    const args = {
-      orgAddress: orgAddress.toLowerCase()
-    }
-
-    return this.performQueryWithParser(query, args, parseApps)
+    return this.performQueryWithParser(
+      queries.ORGANIZATION_APPS('query'),
+      { orgAddress: orgAddress.toLowerCase() },
+      parseApps
+    )
   }
 
   async appByAddress(appAddress: string): Promise<App> {
-    const query = queries.APP_BY_ADDRESS
-    const args = {
-      appAddress: appAddress.toLowerCase()
-    }
-
-    return this.performQueryWithParser(query, args, parseApp)
+    return this.performQueryWithParser(
+      queries.APP_BY_ADDRESS('query'),
+      { appAddress: appAddress.toLowerCase() },
+      parseApp
+    )
   }
 
   async repoForApp(appAddress: string): Promise<Repo> {
-    const query = queries.REPO_BY_APP_ADDRESS
-    const args = {
-      appAddress: appAddress.toLowerCase()
-    }
-
-    return this.performQueryWithParser(query, args, parseRepo)
+    return this.performQueryWithParser(
+      queries.REPO_BY_APP_ADDRESS('query'),
+      { appAddress: appAddress.toLowerCase() },
+      parseRepo
+    )
   }
 }
