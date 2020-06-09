@@ -9,13 +9,16 @@ async function main() {
     ['thegraph', { daoSubgraphUrl: DAO_SUBGRAPH_URL }]
   )) as Organization
 
-  org.onPermissions((permissions: Permission[]) => {
+  const subscription = org.onPermissions((permissions: Permission[]) => {
     permissions.map((permission: Permission) =>
       console.log(permission.toString())
     )
   })
 
   await keepRunning()
+
+  // Simply to illustrate how to close a subscription
+  subscription.unsubscribe()
 }
 
 async function keepRunning() {
