@@ -1,4 +1,4 @@
-import Entity from "./Entity";
+import TokensEntity from "./TokensEntity";
 import TokenManagerConnectorTheGraph from "../connector";
 
 export interface TokenHolderData {
@@ -7,7 +7,7 @@ export interface TokenHolderData {
   balance: string
 }
 
-export default class TokenHolder extends Entity implements TokenHolderData {
+export default class TokenHolder extends TokensEntity implements TokenHolderData {
   readonly id!: string
   readonly address!: string
   readonly balance!: string

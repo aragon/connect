@@ -9,15 +9,14 @@ async function main() {
     ALL_TOKEN_MANAGER_SUBGRAPH_URL
   )
 
-  console.log(tokenManager.toString())
+  console.log(tokenManager)
 
-  console.log('\nToken:')
   const token = await tokenManager.token()
   console.log(token)
 
   console.log('\nHolders:')
   const holders = await token.holders()
-  console.log(holders)
+  holders.map(console.log)
 }
 
 main()
