@@ -7,7 +7,13 @@
     "build": "yarn clean && yarn compile",
     "dev": "yarn build --watch",
     "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo",
-    "start": "node dist/src/index.js",
+    "start-org": "yarn build; node dist/src/org.js",
+    "start-simple-path": "yarn build; node dist/src/simple-path.js",
+    "start-tokens": "yarn build; node dist/src/tokens.js",
+    "start-voting": "yarn build; node dist/src/voting.js",
+    "start-voting-low-level": "yarn build; node dist/src/voting-low-level.js",
+    "start-subscriptions-low-level": "yarn build; node dist/src/subscriptions-low-level.js",
+    "start-subscriptions-org": "yarn build; node dist/src/subscriptions-org.js",
     "compile": "tsc"
   },
   "dependencies": {

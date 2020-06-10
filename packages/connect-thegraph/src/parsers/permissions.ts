@@ -1,10 +1,13 @@
-import { PermissionData } from '@aragon/connect-core'
+import { Permission, PermissionData } from '@aragon/connect-core'
 import { Organization as OrganizationDataGql } from '../queries/types'
 import { Permission as PermissionDataGql } from '../queries/types'
 import { Param as ParamDataGql } from '../queries/types'
 import { QueryResult } from '../types'
 
-export function parsePermissions(result: QueryResult): PermissionData[] {
+export function parsePermissions(
+  result: QueryResult,
+  connector: any
+): Permission[] {
   const org = result.data.organization as OrganizationDataGql
   const permissions = org?.permissions as PermissionDataGql[]
 
@@ -12,7 +15,7 @@ export function parsePermissions(result: QueryResult): PermissionData[] {
     throw new Error('Unable to parse permissions.')
   }
 
-  return permissions.map(
+  const datas = permissions.map(
     (permission: PermissionDataGql): PermissionData => {
       return {
         appAddress: permission.appAddress,
@@ -30,4 +33,10 @@ export function parsePermissions(result: QueryResult): PermissionData[] {
       }
     }
   )
+
+  const allowedPermissions = datas.filter((data: PermissionData) => data.allowed)
+
+  return allowedPermissions.map((data: PermissionData) => {
+    return new Permission(data, connector)
+  })
 }
