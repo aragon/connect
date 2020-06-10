@@ -10,9 +10,7 @@ async function main() {
   )) as Organization
 
   const subscription = org.onPermissions((permissions: Permission[]) => {
-    permissions.map((permission: Permission) =>
-      console.log(permission.toString())
-    )
+    permissions.map(console.log)
   })
 
   await keepRunning()
