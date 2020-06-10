@@ -26,8 +26,9 @@ import { ConnectorInterface } from '../connections/ConnectorInterface'
 
 export default class Organization {
   #address: string
-  #connector: ConnectorInterface
   #provider: ethers.providers.Provider
+
+  private _connector: ConnectorInterface
 
   constructor(
     address: string,
@@ -36,23 +37,24 @@ export default class Organization {
     chainId?: number
   ) {
     this.#address = address
-    this.#connector = connector
     this.#provider =
       provider ||
       new ethers.providers.InfuraProvider(chainId || connector.chainId || 1)
+
+    this._connector = connector
   }
 
   ///////// APPS ///////////
   async apps(): Promise<Application[]> {
-    return this.#connector.appsForOrg(this.#address)
+    return this._connector.appsForOrg(this.#address)
   }
 
   onApps(callback: Function): { unsubscribe: Function } {
-    return this.#connector.onAppsForOrg(this.#address, callback)
+    return this._connector.onAppsForOrg(this.#address, callback)
   }
 
   async app(appAddress: string): Promise<Application> {
-    return this.#connector.appByAddress(appAddress)
+    return this._connector.appByAddress(appAddress)
   }
 
   // async addApp(
@@ -76,11 +78,11 @@ export default class Organization {
 
   ///////// PERMISSIONS ///////////
   async permissions(): Promise<Permission[]> {
-    return await this.#connector.permissionsForOrg(this.#address)
+    return await this._connector.permissionsForOrg(this.#address)
   }
 
   onPermissions(callback: Function): { unsubscribe: Function } {
-    return this.#connector.onPermissionsForOrg(
+    return this._connector.onPermissionsForOrg(
       this.#address,
       callback
     )
