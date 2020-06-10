@@ -5,8 +5,8 @@ import VotingConnectorTheGraph from '../connector'
 export default class Voting extends VotingEntity {
   readonly appAddress: string
 
-  constructor(appAddress: string, subgraphUrl: string) {
-    super(new VotingConnectorTheGraph(subgraphUrl))
+  constructor(appAddress: string, subgraphUrl: string, verbose = false) {
+    super(new VotingConnectorTheGraph(subgraphUrl, verbose))
 
     this.appAddress = appAddress
   }
@@ -16,6 +16,13 @@ export default class Voting extends VotingEntity {
       this.appAddress,
       first,
       skip
+    )
+  }
+
+  onVotes(callback: Function): { unsubscribe: Function } {
+    return this._connector.onVotesForApp!(
+      this.appAddress,
+      callback
     )
   }
 }

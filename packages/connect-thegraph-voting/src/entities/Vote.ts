@@ -46,4 +46,11 @@ export default class Vote extends Entity implements VoteData {
       skip
     )
   }
+
+  onCasts(callback: Function): { unsubscribe: Function } {
+    return this._connector.onCastsForVote(
+      this.id,
+      callback
+    )
+  }
 }

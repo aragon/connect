@@ -1,15 +1,18 @@
 import { QueryResult } from '@aragon/connect-thegraph'
 import { Cast as CastDataGql } from '../queries/types'
-import { CastData } from '../entities/Cast'
+import Cast, { CastData } from '../entities/Cast'
 
-export function parseCasts(result: QueryResult): CastData[] {
+export function parseCasts(
+  result: QueryResult,
+  connector: any
+): Cast[] {
   const casts = result.data.casts
 
   if (!casts) {
     throw new Error('Unable to parse casts.')
   }
 
-  return casts.map(
+  const datas = casts.map(
     (cast: CastDataGql): CastData => {
       return {
         id: cast.id,
@@ -19,4 +22,8 @@ export function parseCasts(result: QueryResult): CastData[] {
       }
     }
   )
+
+  return datas.map((data: CastData) => {
+    return new Cast(data, connector)
+  })
 }

@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
-export const ALL_VOTES = gql`
-  query Votes($appAddress: String!, $first: Int!, $skip: Int!) {
+export const ALL_VOTES = (type: string) => gql`
+  ${type} Votes($appAddress: String!, $first: Int!, $skip: Int!) {
     votes(where: {
       appAddress: $appAddress
     }, first: $first, skip: $skip) {
@@ -24,8 +24,8 @@ export const ALL_VOTES = gql`
   }
 `
 
-export const CASTS_FOR_VOTE = gql`
-  query Casts($voteId: ID!, $first: Int!, $skip: Int!) {
+export const CASTS_FOR_VOTE = (type: string) => gql`
+  ${type} Casts($voteId: ID!, $first: Int!, $skip: Int!) {
     casts(where: {
       voteId: $voteId
     }, first: $first, skip: $skip) {
