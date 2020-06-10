@@ -10,9 +10,7 @@ async function main() {
   )
 
   const votesSubscription = voting.onVotes((votes: VotingVote[]) => {
-    votes.map((vote: VotingVote) =>
-      console.log(vote.toString())
-    )
+    votes.map(console.log)
   })
 
   const votes = await voting.votes()
@@ -21,9 +19,7 @@ async function main() {
 
   const castsSubscription = lastVote.onCasts((casts: VotingCast[]) => {
     console.log(`\nCasts:`)
-    casts.map((cast: VotingCast) =>
-      console.log(cast.toString())
-    )
+    casts.map(console.log)
   })
 
   await keepRunning()
