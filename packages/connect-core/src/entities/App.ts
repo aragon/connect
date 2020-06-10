@@ -114,10 +114,10 @@ export default class App extends CoreEntity implements AppData {
   }
 
   async repo(): Promise<Repo> {
-    return this._connector.repoForApp!(this.address)
+    return this._connector.repoForApp(this.address)
   }
 
   async roles(): Promise<Role[]> {
-    return this._connector.rolesForAddress!(this.address)
+    return this._connector.rolesForAddress(this.address)
   }
 }

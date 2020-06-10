@@ -45,15 +45,15 @@ export default class Organization {
 
   ///////// APPS ///////////
   async apps(): Promise<App[]> {
-    return this.#connector.appsForOrg!(this.#address)
+    return this.#connector.appsForOrg(this.#address)
   }
 
   onApps(callback: Function): { unsubscribe: Function } {
-    return this.#connector.onAppsForOrg!(this.#address, callback)
+    return this.#connector.onAppsForOrg(this.#address, callback)
   }
 
   async app(appAddress: string): Promise<App> {
-    return this.#connector.appByAddress!(appAddress)
+    return this.#connector.appByAddress(appAddress)
   }
 
   // async addApp(
@@ -81,7 +81,7 @@ export default class Organization {
   }
 
   onPermissions(callback: Function): { unsubscribe: Function } {
-    return this.#connector.onPermissionsForOrg!(
+    return this.#connector.onPermissionsForOrg(
       this.#address,
       callback
     )

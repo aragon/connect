@@ -31,11 +31,11 @@ export default class Permission extends CoreEntity implements PermissionData {
   }
 
   async getApp(): Promise<App> {
-    return this._connector.appByAddress!(this.appAddress)
+    return this._connector.appByAddress(this.appAddress)
   }
 
   async getRole(): Promise<Role | undefined> {
-    const roles = await this._connector.rolesForAddress!(this.appAddress)
+    const roles = await this._connector.rolesForAddress(this.appAddress)
     return roles.find((role) => role.hash === this.roleHash)
   }
 }
