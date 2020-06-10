@@ -1,3 +1,8 @@
+// TODO: Remove these linting exceptions after implementation.
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
 import { ConnectorInterface } from './ConnectorInterface'
 import Permission from '../entities/Permission'
 import { Application, Repository, Role } from '..'

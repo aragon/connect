@@ -1,9 +1,14 @@
+// TODO: Remove these linting exceptions after implementation.
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
 import { ConnectorInterface, Permission, Application, Repository, Role } from '@aragon/connect-core'
 
 export type ConnectorEthereumConfig = object
 
 class ConnectorEthereum implements ConnectorInterface {
-  constructor({}: ConnectorEthereumConfig) {}
+  constructor(config: ConnectorEthereumConfig = {}) {}
 
   async permissionsForOrg(): Promise<Permission[]> {
     return new Promise((resolve) => {
