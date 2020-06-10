@@ -1,4 +1,4 @@
-import { Voting, VotingVote, VotingCast } from '@aragon/connect-thegraph-voting'
+import { Voting, Vote, Cast } from '@aragon/connect-thegraph-voting'
 
 const VOTING_APP_ADDRESS = '0xc73e86aab9d232495399d62fc80a36ae52952b81'
 const ALL_VOTING_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby-staging'
@@ -9,7 +9,7 @@ async function main() {
     ALL_VOTING_SUBGRAPH_URL
   )
 
-  const votesSubscription = voting.onVotes((votes: VotingVote[]) => {
+  const votesSubscription = voting.onVotes((votes: Vote[]) => {
     votes.map(console.log)
   })
 
@@ -17,7 +17,7 @@ async function main() {
   const lastVote = votes[votes.length - 1]
   console.log(`last`, lastVote)
 
-  const castsSubscription = lastVote.onCasts((casts: VotingCast[]) => {
+  const castsSubscription = lastVote.onCasts((casts: Cast[]) => {
     console.log(`\nCasts:`)
     casts.map(console.log)
   })

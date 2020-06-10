@@ -1,4 +1,4 @@
-import { Voting, VotingVote, VotingCast } from '@aragon/connect-thegraph-voting'
+import { Voting, Cast } from '@aragon/connect-thegraph-voting'
 
 const VOTING_APP_ADDRESS = '0xc73e86aab9d232495399d62fc80a36ae52952b81'
 const ALL_VOTING_SUBGRAPH_URL =
@@ -33,7 +33,7 @@ async function main() {
   const casts = await vote.casts()
   casts.map(console.log)
 
-  const voters = casts.map((cast: VotingCast) => cast.voter)
+  const voters = casts.map((cast: Cast) => cast.voter)
   console.log('Voters:', voters)
 }
 
