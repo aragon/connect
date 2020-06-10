@@ -1,4 +1,4 @@
-import { App, AppData } from '@aragon/connect-core'
+import { Application, AppData } from '@aragon/connect-core'
 import { App as AppDataGql } from '../queries/types'
 import { Organization as OrganizationDataGql } from '../queries/types'
 import { QueryResult } from '../types'
@@ -6,7 +6,7 @@ import { QueryResult } from '../types'
 function _parseApp(
   app: AppDataGql,
   connector: any
-): App {
+): Application {
   const data: AppData = {
     address: app.address,
     appId: app.appId,
@@ -24,7 +24,7 @@ function _parseApp(
     version: app.version?.semanticVersion.replace(/,/g, '.'),
   }
 
-  return new App(data, connector)
+  return new Application(data, connector)
 }
 
 export function parseApp(

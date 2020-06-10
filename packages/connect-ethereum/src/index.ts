@@ -1,4 +1,4 @@
-import { ConnectorInterface, Permission, App, Repo, Role } from '@aragon/connect-core'
+import { ConnectorInterface, Permission, Application, Repository, Role } from '@aragon/connect-core'
 
 export type ConnectorEthereumConfig = object
 
@@ -17,7 +17,7 @@ class ConnectorEthereum implements ConnectorInterface {
     }
   }
 
-  appsForOrg(orgAddress: string): Promise<App[]> {
+  appsForOrg(orgAddress: string): Promise<Application[]> {
     return new Promise((resolve) => {
       resolve([])
     })
@@ -29,13 +29,13 @@ class ConnectorEthereum implements ConnectorInterface {
     }
   }
 
-  repoForApp(appAddress: string): Promise<Repo> {
+  repoForApp(appAddress: string): Promise<Repository> {
     return new Promise((resolve) => {
       resolve()
     })
   }
 
-  appByAddress(appAddress: string): Promise<App> {
+  appByAddress(appAddress: string): Promise<Application> {
     return new Promise((resolve) => {
       resolve()
     })

@@ -1,15 +1,15 @@
 import TransactionRequest from './TransactionRequest'
-import App from '../entities/App'
+import Application from '../entities/Application'
 
 export interface TransactionPathData {
-  apps: App[]
-  destination: App
+  apps: Application[]
+  destination: Application
   transactions: TransactionRequest[]
 }
 
 export default class TransactionPath {
-  readonly apps!: App[]
-  readonly destination!: App
+  readonly apps!: Application[]
+  readonly destination!: Application
   readonly transactions!: TransactionRequest[]
 
   constructor(data: TransactionPathData) {

@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 
 import { AppIntent } from '../types'
-import App from '../entities/App'
+import Application from '../entities/Application'
 import { TransactionRequestData } from '../transactions/TransactionRequest'
 import {
   addressesEqual,
@@ -24,7 +24,7 @@ import {
 function validateMethod(
   destination: string,
   methodSignature: string,
-  destinationApp: App
+  destinationApp: Application
 ): AppIntent {
   const methods = destinationApp.intents
   if (!methods) {
@@ -200,7 +200,7 @@ export async function calculateTransactionPath(
   destination: string,
   methodSignature: string,
   params: any[],
-  apps: App[],
+  apps: Application[],
   provider: ethers.providers.Provider,
   finalForwarder?: string //Address of the final forwarder that can perfom the action. Needed for actions that aren't in the ACL but whose execution depends on other factors
 ): Promise<TransactionRequestData[]> {

@@ -1,4 +1,4 @@
-import Repo from './Repo'
+import Repository from './Repository'
 import Role from './Role'
 import CoreEntity from './CoreEntity'
 import {
@@ -14,7 +14,7 @@ import { ConnectorInterface } from '../connections/ConnectorInterface'
 // TODO: Implement all properties and methods from the API spec (https://github.com/aragon/connect/blob/master/docs/app.md).
 // [ ] (ipfs) contentUrl 	String 	The HTTP URL of the app content. Uses the IPFS HTTP provider. E.g. http://gateway.ipfs.io/ipfs/QmdLEDDfi…/ (ContentUri passing through the resolver)
 
-export interface AppData {
+export interface ApplicationData {
   address: string
   appId: string
   artifact?: string | null
@@ -31,7 +31,7 @@ export interface AppData {
   version?: string
 }
 
-export default class App extends CoreEntity implements AppData {
+export default class Application extends CoreEntity implements ApplicationData {
   readonly abi?: Abi
   readonly address!: string
   readonly appId!: string
@@ -60,7 +60,7 @@ export default class App extends CoreEntity implements AppData {
   readonly version?: string
 
   constructor(
-    { artifact, manifest, ...data }: AppData,
+    { artifact, manifest, ...data }: ApplicationData,
     connector: ConnectorInterface
   ) {
     super(connector)
@@ -113,7 +113,7 @@ export default class App extends CoreEntity implements AppData {
     this.version = data.version
   }
 
-  async repo(): Promise<Repo> {
+  async repo(): Promise<Repository> {
     return this._connector.repoForApp(this.address)
   }
 

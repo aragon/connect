@@ -1,4 +1,4 @@
-import { connect, Permission, App, Role, Organization } from '@aragon/connect'
+import { connect, Application, Organization } from '@aragon/connect'
 
 const DAO_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-mainnet-staging'
@@ -23,7 +23,7 @@ async function main() {
   apps.map(console.log)
 
   console.log('\nA voting app:')
-  const votingApp = apps.find((app: App) => app.name == 'dandelion-voting')!
+  const votingApp = apps.find((app: Application) => app.name == 'dandelion-voting')!
   console.log(votingApp)
 
   console.log('\nRoles of an app:')

@@ -1,9 +1,8 @@
 import { ethers } from 'ethers'
 
-import App from './App'
+import Application from './Application'
 import TransactionIntent from '../transactions/TransactionIntent'
 import Permission from './Permission'
-import Role from './Role'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 
 // TODO: Implement all properties and methods from the API spec (https://github.com/aragon/connect/blob/master/docs/organization.md).
@@ -44,7 +43,7 @@ export default class Organization {
   }
 
   ///////// APPS ///////////
-  async apps(): Promise<App[]> {
+  async apps(): Promise<Application[]> {
     return this.#connector.appsForOrg(this.#address)
   }
 
@@ -52,7 +51,7 @@ export default class Organization {
     return this.#connector.onAppsForOrg(this.#address, callback)
   }
 
-  async app(appAddress: string): Promise<App> {
+  async app(appAddress: string): Promise<Application> {
     return this.#connector.appByAddress(appAddress)
   }
 

@@ -2,7 +2,7 @@ import { ethers } from 'ethers'
 
 import TransactionPath from './TransactionPath'
 import TransactionRequest from './TransactionRequest'
-import App from '../entities/App'
+import Application from '../entities/Application'
 import Organization from '../entities/Organization'
 import { calculateTransactionPath } from '../utils/calculatePath'
 
@@ -62,7 +62,7 @@ export default class TransactionIntent {
       apps: apps.filter((app) =>
         appsOnPath.some((address) => address === app.address)
       ),
-      destination: apps.find((app) => app.address == destination) as App,
+      destination: apps.find((app) => app.address == destination) as Application,
       transactions: transactionsRequests,
     })
   }

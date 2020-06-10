@@ -1,4 +1,4 @@
-import { connect, Permission, App, Role, Organization } from '@aragon/connect'
+import { connect, Permission, Application, Role, Organization } from '@aragon/connect'
 
 const DAO_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-rinkeby'
 const ORG_ADDRESS = '0x059bCFBC477C46AB39D76c05B7b40f3A42e7DE3B'

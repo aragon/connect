@@ -1,4 +1,4 @@
-import { Repo, RepoData } from '@aragon/connect-core'
+import { Repository, RepoData } from '@aragon/connect-core'
 import { App as AppDataGql } from '../queries/types'
 import { Repo as RepoDataGql } from '../queries/types'
 import { QueryResult } from '../types'
@@ -6,7 +6,7 @@ import { QueryResult } from '../types'
 export function parseRepo(
   result: QueryResult,
   connector: any
-): Repo {
+): Repository {
   const app = result.data.app as AppDataGql
   const repo = app.repo as RepoDataGql
 
@@ -23,5 +23,5 @@ export function parseRepo(
     registry: repo.registry?.name
   }
 
-  return new Repo(data, connector)
+  return new Repository(data, connector)
 }
