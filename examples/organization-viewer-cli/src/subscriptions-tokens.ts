@@ -1,4 +1,4 @@
-import { TokenManager } from '@aragon/connect-thegraph-token-manager'
+import { TokenManager, TokenHolder } from '@aragon/connect-thegraph-token-manager'
 
 const TOKENS_APP_ADDRESS = '0xb5146c785a64fefc17bcbae1f07ad0000e300442'
 const ALL_TOKEN_MANAGER_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-tokens-rinkeby-staging'
@@ -9,15 +9,29 @@ async function main() {
     ALL_TOKEN_MANAGER_SUBGRAPH_URL
   )
 
-  console.log(tokenManager.toString())
-
   console.log('\nToken:')
   const token = await tokenManager.token()
   console.log(token)
 
-  console.log('\nHolders:')
-  const holders = await token.holders()
-  console.log(holders)
+  const subscription = token.onHolders((holders: TokenHolder[]) => {
+    console.log(`\nHolders:`)
+    holders.map((holder: TokenHolder) =>
+      console.log(holder.toString())
+    )
+  })
+
+  await keepRunning()
+
+  // Simply to illustrate how to close a subscription
+  subscription.unsubscribe()
+}
+
+async function keepRunning() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve()
+    }, 1000000000)
+  })
 }
 
 main()

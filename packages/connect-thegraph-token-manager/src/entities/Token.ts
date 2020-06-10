@@ -32,4 +32,11 @@ export default class Token extends Entity implements TokenData {
       skip
     )
   }
+
+  onHolders(callback: Function): { unsubscribe: Function } {
+    return this._connector.onTokenHolders(
+      this.address,
+      callback
+    )
+  }
 }
