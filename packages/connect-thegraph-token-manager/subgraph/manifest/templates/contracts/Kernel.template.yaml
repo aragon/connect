@@ -24,6 +24,8 @@
     abis:
       - name: Kernel
         file: ./abis/Kernel.json
+      - name: TokenManager
+        file: ./abis/TokenManager.json
     eventHandlers:
       - event: NewAppProxy(address,bool,bytes32)
         handler: handleNewAppProxy

@@ -5,16 +5,13 @@ import { TokenManager as TokenManagerEntity } from '../generated/schema'
 // import { RevokeVesting as RevokeVestingEvent } from '../generated/templates/TokenManager/TokenManager'
 // import { ScriptResult as ScriptResultEvent } from '../generated/templates/TokenManager/TokenManager'
 // import { RecoverToVault as RecoverToVaultEvent } from '../generated/templates/TokenManager/TokenManager'
-
-export function onTokenManagerTemplateCreated(proxyAddress: Address): void {
-  _getTokenManagerEntity(proxyAddress)
-}
+import * as aragon from './aragon/aragon'
 
 export function getTokenManagerId(proxyAddress: Address): string {
   return 'proxyAddress-' + proxyAddress.toHexString()
 }
 
-function _getTokenManagerEntity(proxyAddress: Address): TokenManagerEntity {
+export function getTokenManagerEntity(proxyAddress: Address): TokenManagerEntity {
   let tokenManagerId = getTokenManagerId(proxyAddress)
 
   let tokenManagerEntity = TokenManagerEntity.load(tokenManagerId)
@@ -25,6 +22,9 @@ function _getTokenManagerEntity(proxyAddress: Address): TokenManagerEntity {
 
     tokenManagerEntity.address = proxyAddress
     tokenManagerEntity.orgAddress = tokenManagerContract.kernel()
+
+    let tokenAddress = tokenManagerContract.token()
+    aragon.processToken(tokenAddress)
 
     tokenManagerEntity.save()
   }

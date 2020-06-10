@@ -1,31 +1,32 @@
 import { GraphQLWrapper } from '@aragon/connect-thegraph'
 import * as queries from './queries'
 import Token from './entities/Token'
-import TokenHolder, { TokenHolderData } from './entities/TokenHolder'
+import TokenHolder from './entities/TokenHolder'
 import { parseToken, parseTokenHolders } from './parsers'
 
 export default class TokenManagerConnectorTheGraph extends GraphQLWrapper {
   async token(tokenManagerAddress: string): Promise<Token> {
-    const result = await this.performQuery(queries.TOKEN, {
-      tokenManagerAddress,
-    })
-
-    const data = this.parseQueryResult(parseToken, result)
-
-    return new Token(data, this)
+    return this.performQueryWithParser(
+      queries.TOKEN('query'),
+      { tokenManagerAddress },
+      parseToken
+    )
   }
 
   async tokenHolders(tokenAddress: string, first: number, skip: number): Promise<TokenHolder[]> {
-    const result = await this.performQuery(queries.TOKEN_HOLDERS, {
-      tokenAddress,
-      first,
-      skip
-    })
+    return this.performQueryWithParser(
+      queries.TOKEN_HOLDERS('query'),
+      { tokenAddress, first, skip },
+      parseTokenHolders
+    )
+  }
 
-    const datas = this.parseQueryResult(parseTokenHolders, result)
-
-    return datas.map((data: TokenHolderData) => {
-      return new TokenHolder(data, this)
-    })
+  onTokenHolders(tokenAddress: string, callback: Function): { unsubscribe: Function } {
+    return this.subscribeToQueryWithParser(
+      queries.TOKEN_HOLDERS('subscription'),
+      { tokenAddress, first: 1000, skip: 0 },
+      callback,
+      parseTokenHolders
+    )
   }
 }

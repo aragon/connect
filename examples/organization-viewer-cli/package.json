@@ -15,6 +15,7 @@
     "start-voting-low-level": "yarn build; node dist/src/voting-low-level.js",
     "start-subscriptions-low-level": "yarn build; node dist/src/subscriptions-low-level.js",
     "start-subscriptions-org": "yarn build; node dist/src/subscriptions-org.js",
+    "start-subscriptions-tokens": "yarn build; node dist/src/subscriptions-tokens.js",
     "compile": "tsc"
   },
   "dependencies": {
