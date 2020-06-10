@@ -1,4 +1,4 @@
-import { Address, BigInt, ethereum } from '@graphprotocol/graph-ts'
+import { Address, BigInt } from '@graphprotocol/graph-ts'
 import {
   StartVote as StartVoteEvent,
   CastVote as CastVoteEvent,
@@ -27,7 +27,9 @@ export function handleCastVote(event: CastVoteEvent): void {
   let castId = _getCastEntityId(vote, numCasts)
   let cast = new CastEntity(castId)
 
-  _populateCastDataFromEvent(cast, event, vote.voteNum)
+  _populateCastDataFromEvent(cast, event)
+  cast.voteNum = vote.voteNum
+  cast.voteId = vote.id
 
   let casts = vote.casts
   casts.push(castId)
@@ -92,8 +94,7 @@ function _populateVoteDataFromEvent(vote: VoteEntity, event: StartVoteEvent): vo
   vote.metadata = event.params.metadata
 }
 
-function _populateCastDataFromEvent(cast: CastEntity, event: CastVoteEvent, voteNum: BigInt): void {
-  cast.voteNum = voteNum
+function _populateCastDataFromEvent(cast: CastEntity, event: CastVoteEvent): void {
   cast.voter = event.params.voter
   cast.supports = event.params.supports
   cast.voterStake = event.params.stake

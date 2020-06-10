@@ -20,6 +20,7 @@ type Vote @entity {
 
 type Cast @entity {
   id: ID!
+  voteId: ID!
   voteNum: BigInt!
   voter: Bytes!
   supports: Boolean!
