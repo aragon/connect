@@ -29,4 +29,13 @@ export default class VotingConnectorTheGraph extends GraphQLWrapper {
       parseCasts
     )
   }
+
+  onCastsForVote(voteId: string, callback: Function): { unsubscribe: Function } {
+    return this.subscribeToQueryWithParser(
+      queries.CASTS_FOR_VOTE('subscription'),
+      { voteId, first: 1000, skip: 0 },
+      callback,
+      parseCasts
+    )
+  }
 }

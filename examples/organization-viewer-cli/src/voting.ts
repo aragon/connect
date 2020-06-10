@@ -2,17 +2,19 @@ import { Voting, VotingVote, VotingCast } from '@aragon/connect-thegraph-voting'
 
 const VOTING_APP_ADDRESS = '0xc73e86aab9d232495399d62fc80a36ae52952b81'
 const ALL_VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/ajsantander/aragon-voting-rinkeby'
+  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby-staging'
 
 async function main() {
   console.log('\nVoting:')
 
-  const voting = new Voting(VOTING_APP_ADDRESS, ALL_VOTING_SUBGRAPH_URL)
-
+  const voting = new Voting(
+    VOTING_APP_ADDRESS,
+    ALL_VOTING_SUBGRAPH_URL
+  )
   console.log(voting.toString())
 
   console.log('\nVotes:')
-  const votes = await voting.votes({ first: 2, skip: 1 })
+  const votes = await voting.votes()
   votes.map((vote: VotingVote) => console.log(vote.toString()))
 
   if (votes.length == 0) {
@@ -28,7 +30,7 @@ async function main() {
   )
 
   console.log('\nCasts:')
-  const casts = await vote.casts({ skip: 1 })
+  const casts = await vote.casts()
   casts.map((cast: VotingCast) => console.log(cast.toString()))
 
   const voters = casts.map((cast: VotingCast) => cast.voter)
