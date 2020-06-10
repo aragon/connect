@@ -11,11 +11,11 @@ async function main() {
     VOTING_APP_ADDRESS,
     ALL_VOTING_SUBGRAPH_URL
   )
-  console.log(voting.toString())
+  console.log(voting)
 
   console.log('\nVotes:')
   const votes = await voting.votes()
-  votes.map((vote: VotingVote) => console.log(vote.toString()))
+  votes.map(console.log)
 
   if (votes.length == 0) {
     return
@@ -31,7 +31,7 @@ async function main() {
 
   console.log('\nCasts:')
   const casts = await vote.casts()
-  casts.map((cast: VotingCast) => console.log(cast.toString()))
+  casts.map(console.log)
 
   const voters = casts.map((cast: VotingCast) => cast.voter)
   console.log('Voters:', voters)
