@@ -18,4 +18,11 @@ export default class Voting extends VotingEntity {
       skip
     )
   }
+
+  onVotes(callback: Function): { unsubscribe: Function } {
+    return this._connector.onVotesForApp!(
+      this.appAddress,
+      callback
+    )
+  }
 }

@@ -1,27 +1,32 @@
 import { GraphQLWrapper } from '@aragon/connect-thegraph'
 import * as queries from './queries'
-import Vote, { VoteData } from './entities/Vote'
-import Cast, { CastData } from './entities/Cast'
+import Vote from './entities/Vote'
+import Cast from './entities/Cast'
 import { parseVotes, parseCasts } from './parsers'
 
 export default class VotingConnectorTheGraph extends GraphQLWrapper {
   async votesForApp(appAddress: string, first: number, skip: number): Promise<Vote[]> {
-    const result = await this.performQuery(queries.ALL_VOTES, { appAddress, first, skip })
+    return this.performQueryWithParser(
+      queries.ALL_VOTES('query'),
+      { appAddress, first, skip },
+      parseVotes
+    )
+  }
 
-    const datas = this.parseQueryResult(parseVotes, result)
-
-    return datas.map((data: VoteData) => {
-      return new Vote(data, this)
-    })
+  onVotesForApp(appAddress: string, callback: Function): { unsubscribe: Function } {
+    return this.subscribeToQueryWithParser(
+      queries.ALL_VOTES('subscription'),
+      { appAddress, first: 1000, skip: 0 },
+      callback,
+      parseVotes
+    )
   }
 
   async castsForVote(voteId: string, first: number, skip: number): Promise<Cast[]> {
-    const result = await this.performQuery(queries.CASTS_FOR_VOTE, { voteId, first, skip })
-
-    const datas = this.parseQueryResult(parseCasts, result)
-
-    return datas.map((data: CastData) => {
-      return new Cast(data, this)
-    })
+    return this.performQueryWithParser(
+      queries.CASTS_FOR_VOTE('query'),
+      { voteId, first, skip },
+      parseCasts
+    )
   }
 }

@@ -1,19 +1,24 @@
 import { QueryResult } from '@aragon/connect-thegraph'
 import { Vote as VoteDataGql } from '../queries/types'
-import { VoteData } from '../entities/Vote'
+import Vote, { VoteData } from '../entities/Vote'
 
-export function parseVotes(result: QueryResult): VoteData[] {
+export function parseVotes(
+  result: QueryResult,
+  connector: any
+): Vote[] {
   const votes = result.data.votes
 
   if (!votes) {
     throw new Error('Unable to parse votes.')
   }
 
-  // Note, this may seem redundant, but it makes sure
-  // types are enforced.
-  return votes.map(
+  const datas = votes.map(
     (vote: VoteDataGql): VoteData => {
       return vote
     }
   )
+
+  return datas.map((data: VoteData) => {
+    return new Vote(data, connector)
+  })
 }
