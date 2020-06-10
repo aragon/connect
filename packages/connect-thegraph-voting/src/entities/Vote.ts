@@ -1,4 +1,4 @@
-import Entity from "./Entity";
+import Entity from "./VotingEntity";
 import Cast from './Cast'
 import VotingConnectorTheGraph from "../connector";
 

@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import { connect, App, Organization } from '@aragon/connect'
+import { connect, Application, Organization } from '@aragon/connect'
 
 const network = 'mainnet'
 
@@ -17,7 +17,7 @@ async function main() {
   )) as Organization
 
   const apps = await org.apps()
-  const finance = apps.find((app: App) => app.name == 'finance')!
+  const finance = apps.find((app: Application) => app.name == 'finance')!
 
   const account = '0xf76604Ce7e7F0134a5310bCfc9C34cAEddf15873'
 

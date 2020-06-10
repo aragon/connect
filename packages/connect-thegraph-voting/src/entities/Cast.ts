@@ -1,4 +1,4 @@
-import VotingEntity from "./Entity";
+import VotingEntity from "./VotingEntity";
 import VotingConnectorTheGraph from "../connector";
 
 export interface CastData {

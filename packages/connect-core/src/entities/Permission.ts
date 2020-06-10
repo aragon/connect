@@ -1,5 +1,5 @@
-import Entity from './Entity'
-import App from './App'
+import CoreEntity from './CoreEntity'
+import Application from './Application'
 import Role from './Role'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 
@@ -17,7 +17,7 @@ export interface PermissionData {
   roleHash: string
 }
 
-export default class Permission extends Entity implements PermissionData {
+export default class Permission extends CoreEntity implements PermissionData {
   readonly allowed!: boolean
   readonly appAddress!: string
   readonly granteeAddress!: string
@@ -30,12 +30,12 @@ export default class Permission extends Entity implements PermissionData {
     Object.assign(this, data)
   }
 
-  async getApp(): Promise<App> {
-    return this._connector.appByAddress!(this.appAddress)
+  async getApp(): Promise<Application> {
+    return this._connector.appByAddress(this.appAddress)
   }
 
   async getRole(): Promise<Role | undefined> {
-    const roles = await this._connector.rolesForAddress!(this.appAddress)
+    const roles = await this._connector.rolesForAddress(this.appAddress)
     return roles.find((role) => role.hash === this.roleHash)
   }
 }

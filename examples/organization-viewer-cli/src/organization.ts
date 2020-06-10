@@ -1,4 +1,4 @@
-import { connect, Permission, App, Role, Organization } from '@aragon/connect'
+import { connect, Application, Organization } from '@aragon/connect'
 
 const DAO_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-mainnet-staging'
@@ -12,43 +12,35 @@ async function main() {
 
   console.log('\nPermissions:')
   const permissions = await org.permissions()
-  permissions.map((permission: Permission) =>
-    console.log(permission.toString())
-  )
+  permissions.map(console.log)
 
   console.log('\nA role from a permission:')
   const role = await permissions[4].getRole()
-  console.log(role?.toString())
+  console.log(role)
 
   console.log('\nApps:')
   const apps = await org.apps()
-  apps.map((app: App) => {
-    console.log(app.toString())
-  })
+  apps.map(console.log)
 
   console.log('\nA voting app:')
-  const votingApp = apps.find((app: App) => app.name == 'dandelion-voting')!
-  console.log(votingApp.toString())
+  const votingApp = apps.find((app: Application) => app.name == 'dandelion-voting')!
+  console.log(votingApp)
 
   console.log('\nRoles of an app:')
   const roles = await votingApp.roles()
-  roles.map((role: Role) => {
-    console.log(role.toString())
-  })
+  roles.map(console.log)
 
   console.log('\nA repo from an app:')
   const repo = await apps[2].repo()
-  console.log(repo.toString())
+  console.log(repo)
 
   console.log('\nAn app by address:')
   const appByAddress = await org.app(apps[1].address)
-  console.log(appByAddress.toString())
+  console.log(appByAddress)
 
   console.log('\nAn app from a permission:')
   const appFromPermission = await permissions[1].getApp()
-  if (appFromPermission) {
-    console.log(appFromPermission.toString())
-  }
+  console.log(appFromPermission)
 }
 
 main()

@@ -9,15 +9,12 @@ async function main() {
     ALL_TOKEN_MANAGER_SUBGRAPH_URL
   )
 
-  console.log('\nToken:')
   const token = await tokenManager.token()
   console.log(token)
 
   const subscription = token.onHolders((holders: TokenHolder[]) => {
     console.log(`\nHolders:`)
-    holders.map((holder: TokenHolder) =>
-      console.log(holder.toString())
-    )
+    holders.map(console.log)
   })
 
   await keepRunning()

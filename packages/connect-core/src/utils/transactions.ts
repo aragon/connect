@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import { erc20ABI, forwarderAbi, forwarderFeeAbi } from './abis'
 import { isFullMethodSignature } from './isFullMethodSignature'
 import { Abi, FunctionFragment } from '../types'
-import App from '../entities/App'
+import Application from '../entities/Application'
 import { TransactionRequestData } from '../transactions/TransactionRequest'
 
 const DEFAULT_GAS_FUZZ_FACTOR = '1.5'
@@ -108,7 +108,7 @@ export async function createDirectTransaction(
 
 export async function createDirectTransactionForApp(
   sender: string,
-  app: App,
+  app: Application,
   methodSignature: string,
   params: any[],
   provider: ethers.providers.Provider

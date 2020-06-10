@@ -1,4 +1,4 @@
-import VotingEntity from './Entity'
+import VotingEntity from './VotingEntity'
 import Vote from './Vote'
 import VotingConnectorTheGraph from '../connector'
 

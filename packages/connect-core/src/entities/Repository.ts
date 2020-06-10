@@ -1,4 +1,4 @@
-import Entity from './Entity'
+import CoreEntity from './CoreEntity'
 import {
   AragonArtifact,
   AragonManifest,
@@ -8,7 +8,7 @@ import {
 import { parseMetadata } from '../utils/parseMetadata'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 
-export interface RepoData {
+export interface RepositoryData {
   address: string
   artifact?: string | null
   contentUri?: string | null
@@ -17,7 +17,7 @@ export interface RepoData {
   registry?: string | null
 }
 
-export default class Repo extends Entity implements RepoData {
+export default class Repository extends CoreEntity implements RepositoryData {
   readonly address!: string
   readonly author?: string
   readonly changelogUrl?: string
@@ -32,7 +32,7 @@ export default class Repo extends Entity implements RepoData {
   readonly sourceUrl?: string
 
   constructor(
-    { artifact, manifest, ...data }: RepoData,
+    { artifact, manifest, ...data }: RepositoryData,
     connector: ConnectorInterface
   ) {
     super(connector)
