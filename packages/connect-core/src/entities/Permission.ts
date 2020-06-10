@@ -1,4 +1,4 @@
-import Entity from './Entity'
+import CoreEntity from './CoreEntity'
 import App from './App'
 import Role from './Role'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
@@ -17,7 +17,7 @@ export interface PermissionData {
   roleHash: string
 }
 
-export default class Permission extends Entity implements PermissionData {
+export default class Permission extends CoreEntity implements PermissionData {
   readonly allowed!: boolean
   readonly appAddress!: string
   readonly granteeAddress!: string

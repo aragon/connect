@@ -1,4 +1,4 @@
-import Entity from './Entity'
+import CoreEntity from './CoreEntity'
 import {
   AragonArtifact,
   AragonManifest,
@@ -17,7 +17,7 @@ export interface RepoData {
   registry?: string | null
 }
 
-export default class Repo extends Entity implements RepoData {
+export default class Repo extends CoreEntity implements RepoData {
   readonly address!: string
   readonly author?: string
   readonly changelogUrl?: string

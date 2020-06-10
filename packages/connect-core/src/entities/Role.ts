@@ -1,4 +1,4 @@
-import Entity from './Entity'
+import CoreEntity from './CoreEntity'
 import { PermissionData } from './Permission'
 import { AragonArtifact } from '../types'
 import { parseMetadata } from '../utils/parseMetadata'
@@ -12,7 +12,7 @@ export interface RoleData {
   grantees?: PermissionData[] | null
 }
 
-export default class Role extends Entity implements RoleData {
+export default class Role extends CoreEntity implements RoleData {
   readonly appAddress!: string
   readonly description?: string
   readonly grantees?: PermissionData[]

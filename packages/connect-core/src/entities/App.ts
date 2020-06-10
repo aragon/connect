@@ -1,6 +1,6 @@
 import Repo from './Repo'
 import Role from './Role'
-import Entity from './Entity'
+import CoreEntity from './CoreEntity'
 import {
   AragonArtifact,
   AppIntent,
@@ -31,7 +31,7 @@ export interface AppData {
   version?: string
 }
 
-export default class App extends Entity implements AppData {
+export default class App extends CoreEntity implements AppData {
   readonly abi?: Abi
   readonly address!: string
   readonly appId!: string
