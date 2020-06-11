@@ -38,7 +38,7 @@ To create a new TheGraph connector for Aragon, start off by creating a copy of o
 
 #### A1. Modify package.json with your username and subgraph name
 
-In "package.json", you'll find a bunch of scripts that reference the user "ajsantander" and the app name "voting". Change these to your user or Github organization name.
+In "package.json", you'll find a bunch of scripts that reference the user "aragon" and the app name "voting". Change these to your user or Github organization name.
 
 #### A2. Create your subgraphs in the TheGraph dashboard
 
