@@ -39,7 +39,7 @@ export async function postprocessRadspecDescription(
     .map((token) => token.trim())
     .filter((token) => token)
 
-  if (tokens.length <= 1) {
+  if (tokens.length < 1) {
     return { description }
   }
 
@@ -53,7 +53,7 @@ export async function postprocessRadspecDescription(
     if (addressesEqual(input, ANY_ENTITY)) {
       return [
         input,
-        "'Any account'",
+        '"Any account"',
         { type: 'any-account', value: ANY_ENTITY },
       ]
     }
@@ -61,7 +61,7 @@ export async function postprocessRadspecDescription(
     const app = apps.find(({ address }) => addressesEqual(address, input))
     if (app) {
       const replacement = `${app.name}${app.appId ? ` (${app.appId})` : ''}`
-      return [input, `'${replacement}'`, { type: 'app', value: app }]
+      return [input, `“${replacement}”`, { type: 'app', value: app }]
     }
 
     return [input, input, { type: 'address', value: input }]
@@ -71,21 +71,21 @@ export async function postprocessRadspecDescription(
     const role = roles.find(({ hash }) => hash === input)
 
     if (role && role.name) {
-      return [input, `'${role.name}'`, { type: 'role', value: role }]
+      return [input, `“${role.name}”`, { type: 'role', value: role }]
     }
 
     const app = apps.find(({ appId }) => appId === input)
 
     if (app) {
       // return the entire app as it contains APM package details
-      return [input, `'${app.appName}'`, { type: 'apmPackage', value: app }]
+      return [input, `“${app.appName}”`, { type: 'apmPackage', value: app }]
     }
 
     const namespace = getKernelNamespace(input)
     if (namespace) {
       return [
         input,
-        `'${namespace.name}'`,
+        `“${namespace.name}”`,
         { type: 'kernelNamespace', value: namespace },
       ]
     }
