@@ -3,8 +3,7 @@ import { connect, Application, Organization } from '@aragon/connect'
 
 const network = 'mainnet'
 
-const DAO_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-mainnet-staging'
+const DAO_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-mainnet'
 const ORG_ADDRESS = '0x0c188b183ff758500d1d18b432313d10e9f6b8a4'
 
 async function main() {

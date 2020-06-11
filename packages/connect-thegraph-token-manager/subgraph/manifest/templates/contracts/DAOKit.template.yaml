@@ -13,8 +13,20 @@
     entities:
       - NoEnt
     abis:
+      - name: DAOFactory
+        file: ./abis/DAOFactory.json
       - name: DAOKit
         file: ./abis/DAOKit.json
+      - name: DAOTemplate
+        file: ./abis/DAOTemplate.json
+      - name: Kernel
+        file: ./abis/Kernel.json
+      - name: MiniMeToken
+        file: ./abis/MiniMeToken.json
+      - name: MiniMeTokenFactory
+        file: ./abis/MiniMeTokenFactory.json
+      - name: TokenManager
+        file: ./abis/TokenManager.json
     eventHandlers:
       - event: DeployInstance(address,indexed address)
         handler: handleDeployInstance

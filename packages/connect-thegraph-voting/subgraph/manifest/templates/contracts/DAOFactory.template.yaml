@@ -15,6 +15,16 @@
     abis:
       - name: DAOFactory
         file: ./abis/DAOFactory.json
+      - name: DAOKit
+        file: ./abis/DAOKit.json
+      - name: DAOTemplate
+        file: ./abis/DAOTemplate.json
+      - name: Kernel
+        file: ./abis/Kernel.json
+      - name: MiniMeToken
+        file: ./abis/MiniMeToken.json
+      - name: MiniMeTokenFactory
+        file: ./abis/MiniMeTokenFactory.json
     eventHandlers:
       - event: DeployDAO(address)
         handler: handleDeployDAO

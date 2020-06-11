@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-unfetch'
-import ws from 'ws'
+import ws from 'isomorphic-ws'
 import { Client, defaultExchanges, subscriptionExchange, createRequest } from '@urql/core'
 import { SubscriptionOperation } from '@urql/core/dist/types/exchanges/subscription'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
