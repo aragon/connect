@@ -1,23 +1,23 @@
 import { ethers } from 'ethers'
 
-import { AppIntent } from '../types'
-import Application from '../entities/Application'
-import { TransactionRequestData } from '../transactions/TransactionRequest'
+import { AppIntent } from '../../types'
+import Application from '../../entities/Application'
+import { TransactionRequestData } from '../../transactions/TransactionRequest'
 import {
   addressesEqual,
   includesAddress,
   isAddress,
   ANY_ENTITY,
-} from '../utils/address'
-import { canForward } from '../utils/canForward'
-import { encodeCallScript } from '../utils/encodeCallScript'
-import { isFullMethodSignature } from '../utils/isFullMethodSignature'
+} from '../address'
+import { canForward } from '../canForward'
+import { encodeCallScript } from '../encodeCallScript'
+import { isFullMethodSignature } from '../app'
 import {
   createDirectTransactionForApp,
   createForwarderTransactionBuilder,
   applyForwardingFeePretransaction,
   applyTransactionGas,
-} from '../utils/transactions'
+} from '../transactions'
 
 // type queue = [DirectTransaction[], string[]][]
 

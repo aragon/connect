@@ -7,10 +7,17 @@ export interface TransactionRequestData {
     from: string
     data: string
   }
+  description?: string
+  annotatedDescription?: Annotation[]
+  chainId?: number
   gas?: string
   gasPrice?: string
   gasLimit?: string
-  chainId?: number
+}
+
+export interface Annotation {
+  type: string
+  value: any
 }
 
 export default class TransactionRequest {
@@ -22,6 +29,8 @@ export default class TransactionRequest {
     from: string
     data: string
   }
+  readonly description?: string
+  readonly annotatedDescription?: Annotation[]
   readonly gas?: string
   readonly gasPrice?: string
   readonly gasLimit?: string

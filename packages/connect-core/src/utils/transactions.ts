@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 
 import { erc20ABI, forwarderAbi, forwarderFeeAbi } from './abis'
-import { isFullMethodSignature } from './isFullMethodSignature'
+import { isFullMethodSignature } from './app'
 import { Abi, FunctionFragment } from '../types'
 import Application from '../entities/Application'
 import { TransactionRequestData } from '../transactions/TransactionRequest'
@@ -100,7 +100,10 @@ export async function createDirectTransaction(
     ...transactionOptions, // Options are overwriten by the values below
     from: sender,
     to: destination,
-    data: ethersInterface.encodeFunctionData(methodJsonDescription.name, params),
+    data: ethersInterface.encodeFunctionData(
+      methodJsonDescription.name,
+      params
+    ),
   }
 
   return applyPretransaction(directTransaction, provider)
@@ -123,7 +126,7 @@ export async function createDirectTransactionForApp(
     throw new Error(`No ABI specified in artifact for ${destination}`)
   }
 
-  const methodJsonDescription = app.abi.find(method => {
+  const methodJsonDescription = app.abi.find((method) => {
     // If the full signature isn't given, just find the first overload declared
     if (!isFullMethodSignature(methodSignature)) {
       return method.name === methodSignature
