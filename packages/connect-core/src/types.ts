@@ -1,31 +1,9 @@
 import { ethers } from 'ethers'
 
-export type ParamType = {
-  name?: string
-  type: string
-  indexed?: boolean
-  components?: Array<any>
-}
+// Type definition: https://github.com/ethers-io/ethers.js/blob/ethers-v5-beta/packages/abi/lib/fragments.d.ts#L68
+export type FunctionFragment = ethers.utils.FunctionFragment
 
-export type EventFragment = {
-  type: string
-  name: string
-  anonymous: boolean
-  inputs: Array<ParamType>
-}
-
-export type FunctionFragment = {
-  type: string
-  name: string
-  constant: boolean
-  inputs: Array<ParamType>
-  outputs: Array<ParamType>
-  payable: boolean
-  stateMutability: string
-  gas?: string
-}
-
-export type Abi = (EventFragment | FunctionFragment)[]
+export type Abi = (ethers.utils.EventFragment | ethers.utils.FunctionFragment)[]
 
 export interface AppIntent {
   roles: string[]

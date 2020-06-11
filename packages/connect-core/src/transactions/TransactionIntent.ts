@@ -4,7 +4,8 @@ import TransactionPath from './TransactionPath'
 import TransactionRequest from './TransactionRequest'
 import Application from '../entities/Application'
 import Organization from '../entities/Organization'
-import { calculateTransactionPath } from '../utils/calculatePath'
+import { calculateTransactionPath } from '../utils/path/calculatePath'
+import { describeTransactionPath } from '../utils/path/describePath'
 
 export interface TransactionIntentData {
   contractAddress: string
@@ -47,16 +48,22 @@ export default class TransactionIntent {
       this.#provider
     )
 
+    const describedTransactions = await describeTransactionPath(
+      transactions,
+      apps,
+      this.#provider
+    )
+
     // Include chainId and create Transaction Request objects
     const chainId = (await this.#provider.getNetwork()).chainId
-    const transactionsRequests = transactions.map((tx) => {
+    const transactionsRequests = describedTransactions.map((transaction) => {
       return new TransactionRequest({
-        ...tx,
+        ...transaction,
         chainId,
       })
     })
 
-    const appsOnPath = transactions.map((tx) => tx.to)
+    const appsOnPath = transactions.map((transaction) => transaction.to)
 
     return new TransactionPath({
       apps: apps.filter((app) =>

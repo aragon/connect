@@ -15,7 +15,7 @@ export interface RoleData {
 export default class Role extends CoreEntity implements RoleData {
   readonly appAddress!: string
   readonly description?: string
-  readonly grantees?: PermissionData[]
+  readonly grantees?: PermissionData[] | null
   readonly hash!: string
   readonly name?: string
   readonly manager?: string
@@ -35,6 +35,9 @@ export default class Role extends CoreEntity implements RoleData {
       this.description = role?.name
     }
 
-    Object.assign(this, data)
+    this.appAddress = data.appAddress
+    this.grantees = data.grantees
+    this.hash = data.hash
+    this.manager = data.manager
   }
 }
