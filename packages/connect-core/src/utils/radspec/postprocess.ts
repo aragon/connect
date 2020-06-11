@@ -4,7 +4,7 @@ import Application from '../../entities/Application'
 import Role from '../../entities/Role'
 import { Annotation } from '../../transactions/TransactionRequest'
 
-export interface PostProcesDescription {
+export interface PostProcessDescription {
   description: string
   annotatedDescription?: Annotation[]
 }
@@ -25,7 +25,7 @@ type ProcessToken = [string, string, Annotation]
 export async function postprocessRadspecDescription(
   description: string,
   apps: Application[]
-): Promise<PostProcesDescription> {
+): Promise<PostProcessDescription> {
   const addressRegexStr = '0x[a-fA-F0-9]{40}'
   const addressRegex = new RegExp(`^${addressRegexStr}$`)
   const bytes32RegexStr = '0x[a-f0-9]{64}'
