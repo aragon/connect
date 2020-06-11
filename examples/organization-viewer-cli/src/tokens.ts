@@ -1,7 +1,7 @@
 import { TokenManager } from '@aragon/connect-thegraph-token-manager'
 
 const TOKENS_APP_ADDRESS = '0xb5146c785a64fefc17bcbae1f07ad0000e300442'
-const ALL_TOKEN_MANAGER_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-tokens-rinkeby-staging'
+const ALL_TOKEN_MANAGER_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-tokens-rinkeby'
 
 async function main() {
   const tokenManager = new TokenManager(
