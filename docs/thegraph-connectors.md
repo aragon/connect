@@ -6,7 +6,7 @@ All existing connectors target all instances of a specific app, and can be deplo
 
 ## Architecture
 
-The connectors are composed of a root project which implements the base TheGraph connector, and an underlaying subgraph. Both components are specified below.
+The connectors are composed of a root project which implements the base TheGraph connector, and an underlying subgraph. Both components are specified below.
 
 ### The connector
 
