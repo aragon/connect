@@ -1,31 +1,8 @@
 import { ethers } from 'ethers'
 
-export type ParamType = {
-  name?: string
-  type: string
-  indexed?: boolean
-  components?: Array<any>
-}
+export type FunctionFragment = ethers.utils.FunctionFragment
 
-export type EventFragment = {
-  type: string
-  name: string
-  anonymous: boolean
-  inputs: Array<ParamType>
-}
-
-export type FunctionFragment = {
-  type: string
-  name: string
-  constant: boolean
-  inputs: Array<ParamType>
-  outputs: Array<ParamType>
-  payable: boolean
-  stateMutability: string
-  gas?: string
-}
-
-export type Abi = (EventFragment | FunctionFragment)[]
+export type Abi = (ethers.utils.EventFragment | ethers.utils.FunctionFragment)[]
 
 export interface AppIntent {
   roles: string[]
@@ -40,7 +17,7 @@ export interface AppIntent {
    * The function's ABI element is included for convenience of the client
    * null if ABI is not found for this signature
    */
-  abi: FunctionFragment | null
+  abi: ethers.utils.FunctionFragment | null
 }
 
 // The aragon manifest requires the use of camelcase for some names

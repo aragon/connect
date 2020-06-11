@@ -26,7 +26,7 @@ export default class Repository extends CoreEntity implements RepositoryData {
   readonly environments?: AragonEnvironments
   readonly icons?: { src: string; sizes: string }[]
   readonly name!: string
-  readonly registry!: string
+  readonly registry?: string | null
   readonly roles?: AragonArtifactRole[]
   readonly screenshots?: { src: string }[]
   readonly sourceUrl?: string
@@ -69,6 +69,8 @@ export default class Repository extends CoreEntity implements RepositoryData {
       this.sourceUrl = sourceUrl
     }
 
-    Object.assign(this, data)
+    this.address = data.address
+    this.name = data.name
+    this.registry = data.registry
   }
 }

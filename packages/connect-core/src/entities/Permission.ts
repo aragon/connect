@@ -27,7 +27,12 @@ export default class Permission extends CoreEntity implements PermissionData {
   constructor(data: PermissionData, connector: ConnectorInterface) {
     super(connector)
 
-    Object.assign(this, data)
+
+    this.allowed = data.allowed
+    this.appAddress = data.appAddress
+    this.granteeAddress = data.granteeAddress
+    this.params = data.params
+    this.roleHash = data.roleHash
   }
 
   async getApp(): Promise<Application> {
