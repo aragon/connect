@@ -9,8 +9,8 @@ type OrgInfoProps = {
   orgAddress: string
 }
 
-export default function OrgApps({ org, orgAddress }: OrgInfoProps) {
-  if (!org) {
+export default function OrgApps({ orgAddress }: OrgInfoProps) {
+  if (!orgAddress) {
     return null
   }
 
@@ -18,14 +18,7 @@ export default function OrgApps({ org, orgAddress }: OrgInfoProps) {
     <Group name="Organization">
       <Table
         headers={['Name', 'Value']}
-        rows={Object.entries({ ...org, address: orgAddress }).map(
-          ([name, value]) => {
-            if (value.startsWith('0x')) {
-              value = value.slice(0, 10) + '…'
-            }
-            return [name, value]
-          }
-        )}
+        rows={[[ 'address', orgAddress.slice(0, 10) + '…' ]]}
       />
     </Group>
   )
