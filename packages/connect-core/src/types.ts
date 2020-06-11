@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
 
+// Type definition: https://github.com/ethers-io/ethers.js/blob/ethers-v5-beta/packages/abi/lib/fragments.d.ts#L68
 export type FunctionFragment = ethers.utils.FunctionFragment
 
 export type Abi = (ethers.utils.EventFragment | ethers.utils.FunctionFragment)[]
@@ -17,7 +18,7 @@ export interface AppIntent {
    * The function's ABI element is included for convenience of the client
    * null if ABI is not found for this signature
    */
-  abi: ethers.utils.FunctionFragment | null
+  abi: FunctionFragment | null
 }
 
 // The aragon manifest requires the use of camelcase for some names

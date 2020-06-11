@@ -48,7 +48,7 @@ export default class TransactionIntent {
       this.#provider
     )
 
-    const transactionsDescibed = await describeTransactionPath(
+    const describedTransactions = await describeTransactionPath(
       transactions,
       apps,
       this.#provider
@@ -56,7 +56,7 @@ export default class TransactionIntent {
 
     // Include chainId and create Transaction Request objects
     const chainId = (await this.#provider.getNetwork()).chainId
-    const transactionsRequests = transactionsDescibed.map((transaction) => {
+    const transactionsRequests = describedTransactions.map((transaction) => {
       return new TransactionRequest({
         ...transaction,
         chainId,
