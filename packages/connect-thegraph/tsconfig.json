@@ -5,6 +5,6 @@
     "rootDir": "src"
   },
   "include": ["./src/**/*.ts"],
-  "exclude": ["dist"],
+  "exclude": ["dist", "**/__test__/**"],
   "references": [{ "path": "../connect-core" }]
 }
