@@ -81,7 +81,6 @@ function _populateVoteDataFromContract(vote: VoteEntity, appAddress: Address, vo
 
   let voteData = voting.getVote(voteNum)
 
-  vote.open = voteData.value0
   vote.executed = voteData.value1
   vote.startDate = voteData.value2
   vote.snapshotBlock = voteData.value3
