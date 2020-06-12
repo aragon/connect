@@ -9,7 +9,6 @@
     "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo",
     "compile": "tsc",
     "start-organization": "yarn build; node dist/src/organization.js",
-    "start-simple-path": "yarn build; node dist/src/simple-path.js",
     "start-tokens": "yarn build; node dist/src/tokens.js",
     "start-voting": "yarn build; node dist/src/voting.js",
     "start-subscriptions-voting": "yarn build; node dist/src/subscriptions-voting.js",
