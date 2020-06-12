@@ -1,4 +1,4 @@
-import { VotingConnectorTheGraph, Vote } from '../../src'
+import { VotingConnectorTheGraph, Vote, Cast } from '../../src'
 
 const VOTING_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby'
 const VOTING_APP_ADDRESS = '0xc73e86aab9d232495399d62fc80a36ae52952b81'
@@ -76,6 +76,18 @@ describe('when connecting to a voting app', () => {
 
       test('should have a valid startDate', () => {
         expect(vote.startDate).toEqual('1588958283')
+      })
+
+      describe('when querying for the casts of a vote', () => {
+        let casts: Cast[]
+
+        beforeAll(async () => {
+          casts = await vote.casts()
+        })
+
+        test('retrieves casts', () => {
+          expect(casts.length).toBeGreaterThan(0)
+        })
       })
     })
   })
