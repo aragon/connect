@@ -1,4 +1,4 @@
-import { Address, BigInt } from '@graphprotocol/graph-ts'
+import { Address, BigInt, log } from '@graphprotocol/graph-ts'
 import { Transfer as TransferEvent } from '../../../generated/templates/MiniMeToken/MiniMeToken'
 import { TokenHolder as TokenHolderEntity } from '../../../generated/schema'
 import { MiniMeToken as MiniMeTokenEntity } from '../../../generated/schema'
@@ -15,7 +15,7 @@ export function handleTransfer(event: TransferEvent): void {
 
   let miniMeTokenEntity = _getMiniMeTokenEntity(tokenAddress)
 
-  let previousBlock = event.block.number.minus(BigInt.fromI32(1))
+  let previousBlock = event.block.number.minus(new BigInt(1))
 
   let sendingHolderAddress = event.params._from
   let sendingHolder = _getTokenHolder(previousBlock, miniMeTokenEntity, sendingHolderAddress)
@@ -82,7 +82,17 @@ function _getTokenHolder(previousBlock: BigInt, miniMeTokenEntity: MiniMeTokenEn
     tokenHolder.tokenAddress = tokenAddress as Address
 
     let tokenContract = MiniMeTokenContract.bind(tokenAddress)
-    tokenHolder.balance = tokenContract.balanceOfAt(holderAddress, previousBlock)
+    let callResult = tokenContract.try_balanceOfAt(holderAddress, previousBlock)
+    if (callResult.reverted) {
+      log.info('balanceOfAt reverted - token {}, holder {}, block {}', [
+        tokenAddress.toHexString(),
+        holderAddress.toHexString(),
+        previousBlock.toString()
+      ])
+      tokenHolder.balance = new BigInt(0)
+    } else {
+      tokenHolder.balance = callResult.value
+    }
 
     let holders = miniMeTokenEntity.holders
     holders.push(tokenHolder.id)
