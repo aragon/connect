@@ -3,6 +3,9 @@ node_modules/
 # Compilation output
 dist/
 
+# Tests
+coverage
+
 # Production subgraph
 generated
 subgraph.yaml

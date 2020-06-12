@@ -3,12 +3,7 @@ import { ethers } from 'ethers'
 import { AppIntent } from '../../types'
 import Application from '../../entities/Application'
 import { TransactionRequestData } from '../../transactions/TransactionRequest'
-import {
-  addressesEqual,
-  includesAddress,
-  isAddress,
-  ANY_ENTITY,
-} from '../address'
+import { addressesEqual, includesAddress, ANY_ENTITY } from '../address'
 import { canForward } from '../canForward'
 import { encodeCallScript } from '../encodeCallScript'
 import { isFullMethodSignature } from '../app'
@@ -216,7 +211,7 @@ export async function calculateTransactionPath(
   const method = validateMethod(destination, methodSignature, destinationApp)
 
   const finalForwarderProvided = finalForwarder
-    ? isAddress(finalForwarder)
+    ? ethers.utils.isAddress(finalForwarder)
     : false
   const directTransaction = await createDirectTransactionForApp(
     sender,

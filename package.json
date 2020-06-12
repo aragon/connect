@@ -34,6 +34,10 @@
     "connect-thegraph": "yarn workspace @aragon/connect-thegraph",
     "connect-thegraph-voting": "yarn workspace @aragon/connect-thegraph-voting",
     "connect-thegraph-token-manager": "yarn workspace @aragon/connect-thegraph-token-manager",
+    "test": "is-ci \"test:coverage\" \"test:watch\"",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:debug": "node --inspect-brk node_modules/jest/bin/jest.js --runInBand --watch",
     "clean": "yarn clean && oao clean",
     "build": "MODE=libs-only ./scripts/rebuild-packages.sh",
     "build:examples": "MODE=all ./scripts/rebuild-packages.sh",
@@ -41,7 +45,11 @@
     "postinstall": "yarn build"
   },
   "devDependencies": {
-    "oao": "^1.8.0"
+    "@types/jest": "^26.0.0",
+    "is-ci-cli": "^2.1.1",
+    "jest": "^26.0.1",
+    "oao": "^1.8.0",
+    "ts-jest": "^26.1.0"
   },
   "version": "0.1.0"
 }
