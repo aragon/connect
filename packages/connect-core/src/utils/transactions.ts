@@ -159,10 +159,13 @@ export async function createDirectTransactionForApp(
 export function createForwarderTransactionBuilder(
   sender: string,
   directTransaction: TransactionRequestData
-) {
+): Function {
   const forwarder = new ethers.utils.Interface(forwarderAbi)
 
-  return (forwarderAddress: string, script: string) => ({
+  return (
+    forwarderAddress: string,
+    script: string
+  ): TransactionRequestData => ({
     ...directTransaction, // Options are overwriten by the values below
     from: sender,
     to: forwarderAddress,
@@ -173,7 +176,7 @@ export function createForwarderTransactionBuilder(
 export async function applyForwardingFeePretransaction(
   forwardingTransaction: TransactionRequestData,
   provider: ethers.providers.Provider
-) {
+): Promise<TransactionRequestData> {
   const { to: forwarderAddress, from } = forwardingTransaction
 
   const forwarderFee = new ethers.Contract(
@@ -215,7 +218,7 @@ export async function getRecommendedGasLimit(
   estimatedGasLimit: ethers.BigNumber,
   provider: ethers.providers.Provider,
   { gasFuzzFactor = DEFAULT_GAS_FUZZ_FACTOR } = {}
-) {
+): Promise<ethers.BigNumber> {
   const latestBlockNumber = await provider.getBlockNumber()
   const latestBlock = await provider.getBlock(latestBlockNumber)
   const latestBlockGasLimit = latestBlock.gasLimit
@@ -251,7 +254,7 @@ export async function applyTransactionGas(
   transaction: TransactionRequestData,
   provider: ethers.providers.Provider,
   isForwarding = false
-) {
+): Promise<TransactionRequestData> {
   // If a pretransaction is required for the main transaction to be performed,
   // performing web3.eth.estimateGas could fail until the pretransaction is mined
   // Example: erc20 approve (pretransaction) + deposit to vault (main transaction)`

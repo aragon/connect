@@ -108,6 +108,7 @@ export async function postprocessRadspecDescription(
   })
 
   const compiled: CompiledTokens = annotatedTokens.reduce(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (acc, [_, replacement, annotation]) => {
       acc.description.push(replacement)
       acc.annotatedDescription.push(annotation)

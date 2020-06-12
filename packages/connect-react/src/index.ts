@@ -1,3 +1,7 @@
-export function useAragon() {}
+export function useAragon(): void {
+  return
+}
 
-export function AragonConnector() {}
+export function AragonConnector(): void {
+  return
+}

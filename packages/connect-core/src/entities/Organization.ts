@@ -82,10 +82,7 @@ export default class Organization {
   }
 
   onPermissions(callback: Function): { unsubscribe: Function } {
-    return this._connector.onPermissionsForOrg(
-      this.#address,
-      callback
-    )
+    return this._connector.onPermissionsForOrg(this.#address, callback)
   }
 
   // async addPermissions(
