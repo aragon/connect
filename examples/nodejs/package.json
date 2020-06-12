@@ -1,5 +1,5 @@
 {
-  "name": "organization-viewer-cli",
+  "name": "organization-viewer-nodejs",
   "main": "dist/index.js",
   "version": "0.1.0",
   "private": true,
