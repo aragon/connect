@@ -5,7 +5,7 @@
     "rootDir": "src"
   },
   "include": ["src"],
-  "exclude": ["dist"],
+  "exclude": ["dist", "**/__test__/**"],
   "references": [
     { "path": "../connect-core" },
     { "path": "../connect-ethereum" },

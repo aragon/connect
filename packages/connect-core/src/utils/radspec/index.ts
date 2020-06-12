@@ -74,5 +74,5 @@ export async function tryEvaluatingRadspec(
 
 export {
   postprocessRadspecDescription,
-  PostProcesDescription,
+  PostProcessDescription,
 } from './postprocess'

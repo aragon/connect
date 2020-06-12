@@ -27,7 +27,7 @@ export function handleDeployDAO(event: DeployDAOEvent): void {
   const orgId = event.params.dao.toHexString()
   const orgAddress = event.params.dao
 
-  let kernel = KernelContract.bind(orgAddress)
+  const kernel = KernelContract.bind(orgAddress)
 
   // create new org
   const org = new OrganizationEntity(orgId)

@@ -31,7 +31,7 @@ export function handleNewProxyApp(event: NewAppProxyEvent): void {
   const orgId = orgAddress.toHex()
   let org = OrganizationEntity.load(orgId)
 
-  let kernel = KernelContract.bind(orgAddress)
+  const kernel = KernelContract.bind(orgAddress)
 
   if (org == null) {
     org = new OrganizationEntity(orgId)
@@ -58,7 +58,7 @@ export function handleNewProxyApp(event: NewAppProxyEvent): void {
     // Check if app is forwarder
     let isForwarder: boolean
     const appForwarder = AppProxyForwarderContract.bind(event.params.proxy)
-    let callForwarderResult = appForwarder.try_isForwarder()
+    const callForwarderResult = appForwarder.try_isForwarder()
     if (callForwarderResult.reverted) {
       isForwarder = false
     } else {

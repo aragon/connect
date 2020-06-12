@@ -34,6 +34,7 @@ export default class TransactionIntent {
 
   async paths(
     account: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     options?: { as?: string; path?: string[] }
   ): Promise<TransactionPath> {
     const apps = await this.#org.apps()
@@ -69,7 +70,9 @@ export default class TransactionIntent {
       apps: apps.filter((app) =>
         appsOnPath.some((address) => address === app.address)
       ),
-      destination: apps.find((app) => app.address == destination) as Application,
+      destination: apps.find(
+        (app) => app.address == destination
+      ) as Application,
       transactions: transactionsRequests,
     })
   }

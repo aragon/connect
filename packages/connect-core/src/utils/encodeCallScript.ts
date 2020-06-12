@@ -27,7 +27,7 @@ interface CallScriptAction {
  * @param {Array<CallScriptAction>} actions
  * @returns {string}
  */
-export function encodeCallScript(actions: CallScriptAction[]) {
+export function encodeCallScript(actions: CallScriptAction[]): string {
   return actions.reduce((script: string, { to, data }) => {
     const address = ethers.utils.defaultAbiCoder.encode(['address'], [to])
     const dataLength = ethers.utils.defaultAbiCoder.encode(

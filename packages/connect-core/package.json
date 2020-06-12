@@ -7,20 +7,27 @@
   "scripts": {
     "build": "yarn compile",
     "dev": "yarn build --watch",
+    "test": "is-ci \"test:coverage\" \"test:watch\"",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:debug": "node --inspect-brk ../../node_modules/jest/bin/jest.js --runInBand --watch",
     "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo",
     "compile": "tsc --build",
     "lint": "eslint --ext .ts ./src"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.0",
     "@typescript-eslint/eslint-plugin": "^2.29.0",
     "@typescript-eslint/parser": "^2.29.0",
     "eslint": "^6.8.0",
+    "is-ci-cli": "^2.1.1",
+    "jest": "^26.0.1",
     "prettier": "^2.0.5",
+    "ts-jest": "^26.1.0",
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "ethers": "^5.0.0-beta.188",
-    "radspec-gabi": "^2.0.1"
+    "ethers": "^5.0.0-beta.188"
   },
   "description": "Access and interact with Aragon Organizations and their apps.",
   "keywords": [
