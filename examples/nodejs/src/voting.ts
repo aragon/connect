@@ -1,21 +1,53 @@
-import { Voting, Cast } from '@aragon/connect-thegraph-voting'
+import { connect } from '@aragon/connect'
+import { Cast, Vote, Voting } from '@aragon/connect-thegraph-voting'
 
-const VOTING_APP_ADDRESS = '0xc73e86aab9d232495399d62fc80a36ae52952b81'
-const ALL_VOTING_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby'
+const ALL_VOTING_SUBGRAPH_URL =
+  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby'
+// const ALL_VOTING_SUBGRAPH_URL =
+//   'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'
+
+function voteTitle(vote: Vote) {
+  return vote.metadata
+    .split('\n')[0]
+    .replace(/\(Link[^\)]+\)/, '')
+    .replace(/\(SHA256[^\)]+\)/, '')
+}
+
+function voteId(vote: Vote) {
+  return (
+    '#' +
+    String(parseInt(vote.id.match(/voteId:(.+)$/)?.[1] || '0')).padEnd(2, ' ')
+  )
+}
 
 async function main() {
-  console.log('\nVoting:')
+  // const org = await connect('governance.aragonproject.eth', 'thegraph', {
+  //   chainId: 1,
+  // })
+  const org = await connect('mesh.aragonid.eth', 'thegraph', { chainId: 4 })
 
-  const voting = new Voting(
-    VOTING_APP_ADDRESS,
-    ALL_VOTING_SUBGRAPH_URL
-  )
-  console.log(voting)
+  const apps = await org.apps()
+  const votingApp = apps.find(app => app.appName === 'voting.aragonpm.eth')
 
-  console.log('\nVotes:')
+  console.log('\nOrganization:', org.location, `(${org.address})`)
+
+  if (!votingApp?.address) {
+    console.log('\nNo voting app found in this organization')
+    return
+  }
+
+  console.log(`\nVoting app: ${votingApp.address}`)
+
+  const voting = new Voting(votingApp.address, ALL_VOTING_SUBGRAPH_URL)
+
+  console.log(`\nVotes:`)
   const votes = await voting.votes()
-  votes.map(console.log)
 
+  console.log(
+    votes.map(vote => `\n * ${voteId(vote)} ${voteTitle(vote)}`).join('') + '\n'
+  )
+
+  return
   if (votes.length == 0) {
     return
   }
@@ -38,8 +70,10 @@ async function main() {
 
 main()
   .then(() => process.exit(0))
-  .catch((err) => {
-    console.log(`Error: `, err)
-    console.log('\nPlease report any problem to https://github.com/aragon/connect/issues')
+  .catch(err => {
+    console.error(err)
+    console.error(
+      '\nPlease report any problem to https://github.com/aragon/connect/issues'
+    )
     process.exit(1)
   })
