@@ -22,12 +22,16 @@ oao run-script --ignore-src "$glob_packages" clean --parallel
 echo 'Installing dependencies…'
 oao all --ignore-src "$glob_packages" 'yarn install' --parallel
 
-# Build connect-core first, as the other packages depend on it.
+# Building the types first.
+# Note that oao is not strictly needed here as we want to execute the command
+# on a single package, but using it results in a consistent output.
+echo 'Building @aragon/connect-types…'
+oao run-script --ignore-src '!packages/connect-types' build --parallel
+
+# Then we build connect-core, as the other packages depend on it.
 # Ideally we would only build @aragon/connect and tsc would figure out the
 # references, but it doesn’t seem to work: @aragon/connect-core doesn’t get
 # built first.
-# Note that oao is not strictly needed here as we want to execute the command
-# on a single package, but using it results in a consistent output.
 echo 'Building @aragon/connect-core…'
 oao run-script --ignore-src '!packages/connect-core' build --parallel
 
