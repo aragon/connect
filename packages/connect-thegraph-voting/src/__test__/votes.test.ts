@@ -1,7 +1,7 @@
 import { VotingConnectorTheGraph, Vote, Cast } from '../../src'
 
-const VOTING_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby'
-const VOTING_APP_ADDRESS = '0xc73e86aab9d232495399d62fc80a36ae52952b81'
+const VOTING_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'
+const VOTING_APP_ADDRESS = '0x277bfcf7c2e162cb1ac3e9ae228a3132a75f83d4'
 
 describe('when connecting to a voting app', () => {
   let connector: VotingConnectorTheGraph
@@ -33,33 +33,34 @@ describe('when connecting to a voting app', () => {
         vote = votes[0]
       })
 
-      test('should be executed', () => {
-        expect(vote.executed).toBe(true)
+      test('should not be executed', () => {
+        expect(vote.executed).toBe(false)
       })
 
-      test('should have no nays', () => {
-        expect(vote.nay).toBe('0')
+      test('should have nays', () => {
+        expect(vote.nay).toBe('89990168634229999999839')
       })
 
-      // TODO: Unskip when bug in subgraph is fixed
-      test.skip('should have yeas', () => {
-        expect(vote.yea).toBe('1000000000000000000')
+      test('should have yeas', () => {
+        expect(vote.yea).toBe('3020546281689066542494264')
       })
 
       test('has the expected script', () => {
-        expect(vote.script).toEqual('0x00000001')
+        expect(vote.script).toEqual('0x')
       })
 
       test('should have a valid creator', () => {
-        expect(vote.creator).toEqual('0xb5146c785a64fefc17bcbae1f07ad0000e300442')
+        expect(vote.creator).toEqual('0xcafe1a77e84698c83ca8931f54a755176ef75f2c')
       })
 
       test('should have valid metadata', () => {
-        expect(vote.metadata).toEqual('Vote 1')
+        expect(vote.metadata).toEqual(`Do you approve AGP-5?
+SHA256: 723fc1bab8ce83d021a1c64d78d070041b10629ea78a8b9651fd89aa9a040f9b
+Link: https://github.com/aragon/AGPs/blob/master/AGPs/AGP-5.md`)
       })
 
       test('should have a valid minAcceptQuorum', () => {
-        expect(vote.minAcceptQuorum).toEqual('150000000000000000')
+        expect(vote.minAcceptQuorum).toEqual('0')
       })
 
       test('should have a valid supportRequiredPct', () => {
@@ -67,15 +68,15 @@ describe('when connecting to a voting app', () => {
       })
 
       test('should have a valid votingPower', () => {
-        expect(vote.votingPower).toEqual('1000000000000000000')
+        expect(vote.votingPower).toEqual('39609523809523809540000000')
       })
 
       test('should have a valid snapshotBlock', () => {
-        expect(vote.snapshotBlock).toEqual('6453522')
+        expect(vote.snapshotBlock).toEqual('7116241')
       })
 
       test('should have a valid startDate', () => {
-        expect(vote.startDate).toEqual('1588958283')
+        expect(vote.startDate).toEqual('1548287965')
       })
 
       describe('when querying for the casts of a vote', () => {
