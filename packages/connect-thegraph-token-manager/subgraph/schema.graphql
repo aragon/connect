@@ -27,6 +27,7 @@ type TokenHolder @entity {
 
 type AragonInfo @entity {
   id: ID!
+  version: String!
   orgs: [Bytes!]!
   apps: [Bytes!]!
   tokens: [Bytes!]!
