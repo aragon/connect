@@ -21,7 +21,6 @@ describe('when connecting to a token manager app', () => {
         1000,
         0
       )
-      console.log(holders)
     })
 
     test('reports 3 holders', () => {
