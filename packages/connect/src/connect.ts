@@ -11,6 +11,7 @@ import ConnectorEthereum, {
 import ConnectorTheGraph, {
   ConnectorTheGraphConfig,
 } from '@aragon/connect-thegraph'
+import { Networkish } from '@aragon/connect-types'
 
 type ConnectOptions = {
   readProvider?: ethers.providers.Provider
@@ -58,17 +59,39 @@ function getConnector(connector: ConnectorDeclaration): ConnectorInterface {
   throw new Error(`Unsupported connector name: ${name}`)
 }
 
+function getNetwork(chainId?: number): Networkish {
+  if (chainId === 1 || !chainId) {
+    return {
+      chainId: 1,
+      name: 'homestead',
+      ensAddress: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
+    }
+  }
+  if (chainId === 4) {
+    return {
+      chainId: 4,
+      name: 'rinkeby',
+      ensAddress: '0x98df287b6c145399aaa709692c8d308357bc085d',
+    }
+  }
+  return chainId
+}
+
 async function connect(
   location: string,
   connector: ConnectorDeclaration,
   { readProvider, chainId }: ConnectOptions = {}
 ): Promise<Organization> {
-  return new Organization(
+  const org = new Organization(
     location,
     getConnector(connector),
     readProvider,
-    chainId
+    getNetwork(chainId)
   )
+
+  await org._connect()
+
+  return org
 }
 
 export default connect

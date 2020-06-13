@@ -1,4 +1,5 @@
 import { ethers } from 'ethers'
+import { Networkish } from '@aragon/connect-types'
 
 import Application from './Application'
 import TransactionIntent from '../transactions/TransactionIntent'
@@ -25,32 +26,49 @@ import { ConnectorInterface } from '../connections/ConnectorInterface'
 // [ ] Events...
 
 export default class Organization {
-  #address: string
+  readonly location: string
+  #address?: string
   #provider: ethers.providers.Provider
 
   private _connector: ConnectorInterface
 
   constructor(
-    address: string,
+    location: string,
     connector: ConnectorInterface,
-    provider?: ethers.providers.Provider,
-    chainId?: number
+    provider: any,
+    network: Networkish
   ) {
-    this.#address = address
-    this.#provider =
-      provider ||
-      new ethers.providers.InfuraProvider(chainId || connector.chainId || 1)
+    this.location = location
+
+    this.#provider = provider
+      ? new ethers.providers.Web3Provider(provider, network)
+      : new ethers.providers.InfuraProvider(network)
 
     this._connector = connector
   }
 
+  async _connect() {
+    this.#address = ethers.utils.isAddress(this.location)
+      ? this.location
+      : await this.#provider.resolveName(this.location)
+  }
+
+  get address() {
+    if (!this.#address) {
+      throw new Error(
+        'Please call ._connect() before using Organization and its methods.'
+      )
+    }
+    return this.#address
+  }
+
   ///////// APPS ///////////
   async apps(): Promise<Application[]> {
-    return this._connector.appsForOrg(this.#address)
+    return this._connector.appsForOrg(this.address)
   }
 
   onApps(callback: Function): { unsubscribe: Function } {
-    return this._connector.onAppsForOrg(this.#address, callback)
+    return this._connector.onAppsForOrg(this.address, callback)
   }
 
   async app(appAddress: string): Promise<Application> {
@@ -78,11 +96,11 @@ export default class Organization {
 
   ///////// PERMISSIONS ///////////
   async permissions(): Promise<Permission[]> {
-    return await this._connector.permissionsForOrg(this.#address)
+    return await this._connector.permissionsForOrg(this.address)
   }
 
   onPermissions(callback: Function): { unsubscribe: Function } {
-    return this._connector.onPermissionsForOrg(this.#address, callback)
+    return this._connector.onPermissionsForOrg(this.address, callback)
   }
 
   // async addPermissions(
