@@ -1,7 +1,8 @@
-import { connect, Permission, Application, Role, Organization } from '@aragon/connect'
+import { connect, Permission, Organization } from '@aragon/connect'
+import { keepRunning } from './helpers'
 
 const DAO_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-rinkeby'
-const ORG_ADDRESS = '0x059bCFBC477C46AB39D76c05B7b40f3A42e7DE3B'
+const ORG_ADDRESS = '0xd697d1f417c621a6a54d9a7fa2805596ca393222'
 
 async function main() {
   const org = (await connect(
@@ -11,6 +12,7 @@ async function main() {
 
   const subscription = org.onPermissions((permissions: Permission[]) => {
     permissions.map(console.log)
+    console.log(`\nTry creating or granting new permissions at https://rinkeby.aragon.org/#/${ORG_ADDRESS}/permissions/`)
   })
 
   await keepRunning()
@@ -19,17 +21,12 @@ async function main() {
   subscription.unsubscribe()
 }
 
-async function keepRunning() {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve()
-    }, 1000000000)
-  })
-}
+
 
 main()
   .then(() => process.exit(0))
   .catch((err) => {
-    console.log(`err`, err)
+    console.log(`Error: `, err)
+    console.log('\nPlease report any problem to https://github.com/aragon/connect/issues')
     process.exit(1)
   })

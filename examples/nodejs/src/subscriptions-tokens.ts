@@ -1,7 +1,8 @@
 import { TokenManager, TokenHolder } from '@aragon/connect-thegraph-token-manager'
+import { keepRunning } from './helpers'
 
-const TOKENS_APP_ADDRESS = '0xb5146c785a64fefc17bcbae1f07ad0000e300442'
-const ALL_TOKEN_MANAGER_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-tokens-rinkeby'
+const TOKENS_APP_ADDRESS = '0xb27004bf714ce2aa38f14647b38836f26df86cbf'
+const ALL_TOKEN_MANAGER_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-tokens-mainnet'
 
 async function main() {
   const tokenManager = new TokenManager(
@@ -23,17 +24,11 @@ async function main() {
   subscription.unsubscribe()
 }
 
-async function keepRunning() {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve()
-    }, 1000000000)
-  })
-}
 
 main()
   .then(() => process.exit(0))
   .catch((err) => {
-    console.log(`err`, err)
+    console.log(`Error: `, err)
+    console.log('\nPlease report any problem to https://github.com/aragon/connect/issues')
     process.exit(1)
   })
