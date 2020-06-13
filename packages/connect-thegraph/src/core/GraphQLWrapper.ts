@@ -1,6 +1,11 @@
 import fetch from 'isomorphic-unfetch'
 import ws from 'isomorphic-ws'
-import { Client, defaultExchanges, subscriptionExchange, createRequest } from '@urql/core'
+import {
+  Client,
+  defaultExchanges,
+  subscriptionExchange,
+  createRequest,
+} from '@urql/core'
 import { SubscriptionOperation } from '@urql/core/dist/types/exchanges/subscription'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { DocumentNode } from 'graphql'
@@ -16,7 +21,7 @@ export default class GraphQLWrapper {
       subgraphUrl.replace('http', 'ws'),
       {
         reconnect: true,
-        timeout: 20000
+        timeout: 20000,
       },
       ws
     )
@@ -28,9 +33,10 @@ export default class GraphQLWrapper {
       exchanges: [
         ...defaultExchanges,
         subscriptionExchange({
-          forwardSubscription: (operation: SubscriptionOperation) => subscriptionClient.request(operation)
-        })
-      ]
+          forwardSubscription: (operation: SubscriptionOperation) =>
+            subscriptionClient.request(operation),
+        }),
+      ],
     })
 
     this.#verbose = verbose
@@ -67,16 +73,9 @@ export default class GraphQLWrapper {
     callback: Function,
     parser: ParseFunction
   ): { unsubscribe: Function } {
-    return this.subscribeToQuery(
-      query,
-      args,
-      (result: QueryResult) => {
-        callback(this.parseQueryResult(
-          parser,
-          result
-        ))
-      }
-    )
+    return this.subscribeToQuery(query, args, (result: QueryResult) => {
+      callback(this.parseQueryResult(parser, result))
+    })
   }
 
   async performQuery(
@@ -91,7 +90,7 @@ export default class GraphQLWrapper {
 
     if (result.error) {
       throw new Error(
-        `Error performing query.${this.describeQueryResult(result)}`
+        this.describeQueryResultError(result) + this.describeQueryResult(result)
       )
     }
 
@@ -103,10 +102,7 @@ export default class GraphQLWrapper {
     args: any = {},
     parser: ParseFunction
   ): Promise<any> {
-    return this.parseQueryResult(
-      parser,
-      await this.performQuery(query, args)
-    )
+    return this.parseQueryResult(parser, await this.performQuery(query, args))
   }
 
   parseQueryResult(parser: ParseFunction, result: QueryResult): any {
@@ -117,12 +113,24 @@ export default class GraphQLWrapper {
     }
   }
 
+  private describeQueryResultError(result: QueryResult): string {
+    if (!result.error) {
+      return ''
+    }
+    return `${result.error.name}: ${result.error.message}\n\n`
+  }
+
   private describeQueryResult(result: QueryResult): string {
     const queryStr = result.operation.query.loc?.source.body
     const dataStr = JSON.stringify(result.data, null, 2)
     const argsStr = JSON.stringify(result.operation.variables, null, 2)
     const subgraphUrl = result.operation.context.url
 
-    return `\nSubgraph: ${subgraphUrl}\nArguments: ${argsStr}\nQuery: ${queryStr}Returned data: ${dataStr}`
+    return [
+      `Subgraph: ${subgraphUrl}`,
+      `Arguments: ${argsStr}`,
+      `Query: ${queryStr}`,
+      `Returned data: ${dataStr}`,
+    ].join('\n\n')
   }
 }
