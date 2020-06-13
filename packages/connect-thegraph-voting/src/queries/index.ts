@@ -10,7 +10,6 @@ export const ALL_VOTES = (type: string) => gql`
       orgAddress
       creator
       metadata
-      open
       executed
       startDate
       snapshotBlock

@@ -35,6 +35,12 @@ export function handleCastVote(event: CastVoteEvent): void {
   casts.push(castId)
   vote.casts = casts
 
+  if (event.params.supports == true) {
+    vote.yea = vote.yea.plus(event.params.stake)
+  } else {
+    vote.nay = vote.nay.plus(event.params.stake)
+  }
+
   vote.save()
   cast.save()
 }
@@ -75,7 +81,6 @@ function _populateVoteDataFromContract(vote: VoteEntity, appAddress: Address, vo
 
   let voteData = voting.getVote(voteNum)
 
-  vote.open = voteData.value0
   vote.executed = voteData.value1
   vote.startDate = voteData.value2
   vote.snapshotBlock = voteData.value3
