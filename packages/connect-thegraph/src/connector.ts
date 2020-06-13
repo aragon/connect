@@ -51,7 +51,10 @@ export default class ConnectorTheGraph extends GraphQLWrapper
     )
   }
 
-  onPermissionsForOrg(orgAddress: string, callback: Function): { unsubscribe: Function } {
+  onPermissionsForOrg(
+    orgAddress: string,
+    callback: Function
+  ): { unsubscribe: Function } {
     return this.subscribeToQueryWithParser(
       queries.ORGANIZATION_PERMISSIONS('subscription'),
       { orgAddress: orgAddress.toLowerCase() },
@@ -68,7 +71,10 @@ export default class ConnectorTheGraph extends GraphQLWrapper
     )
   }
 
-  onAppsForOrg(orgAddress: string, callback: Function): { unsubscribe: Function } {
+  onAppsForOrg(
+    orgAddress: string,
+    callback: Function
+  ): { unsubscribe: Function } {
     return this.subscribeToQueryWithParser(
       queries.ORGANIZATION_APPS('query'),
       { orgAddress: orgAddress.toLowerCase() },
