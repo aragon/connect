@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import * as radspec from 'radspec-gabi'
+import * as radspec from 'radspec'
 
 import { addressesEqual } from '../address'
 import { findAppMethodFromIntent } from '../app'
