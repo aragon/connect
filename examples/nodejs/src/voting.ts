@@ -1,12 +1,30 @@
 import { connect } from '@aragon/connect'
 import { Cast, Vote, Voting } from '@aragon/connect-thegraph-voting'
 
-const ALL_VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby'
-// const ALL_VOTING_SUBGRAPH_URL =
-//   'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'
+type Env = { chainId: number; org: string; votingSubgraphUrl: string }
+
+const envs = new Map(
+  Object.entries({
+    rinkeby: {
+      chainId: 4,
+      org: 'mesh.aragonid.eth',
+      votingSubgraphUrl:
+        'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby',
+    },
+    mainnet: {
+      chainId: 1,
+      org: 'governance.aragonproject.eth',
+      votingSubgraphUrl:
+        'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet',
+    },
+  })
+)
+
+const env =
+  envs.get(process.env.ETH_NETWORK || '') || (envs.get('mainnet') as Env)
 
 function voteTitle(vote: Vote) {
+  // Filtering out the extra data on governance.aragonproject.eth votes
   return vote.metadata
     .split('\n')[0]
     .replace(/\(Link[^\)]+\)/, '')
@@ -21,11 +39,7 @@ function voteId(vote: Vote) {
 }
 
 async function main() {
-  // const org = await connect('governance.aragonproject.eth', 'thegraph', {
-  //   chainId: 1,
-  // })
-  const org = await connect('mesh.aragonid.eth', 'thegraph', { chainId: 4 })
-
+  const org = await connect(env.org, 'thegraph', { chainId: env.chainId })
   const apps = await org.apps()
   const votingApp = apps.find(app => app.appName === 'voting.aragonpm.eth')
 
@@ -38,7 +52,7 @@ async function main() {
 
   console.log(`\nVoting app: ${votingApp.address}`)
 
-  const voting = new Voting(votingApp.address, ALL_VOTING_SUBGRAPH_URL)
+  const voting = new Voting(votingApp.address, env.votingSubgraphUrl)
 
   console.log(`\nVotes:`)
   const votes = await voting.votes()
