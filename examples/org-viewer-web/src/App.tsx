@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { css, jsx } from '@emotion/core'
 import { connect } from '@aragon/connect'
 import Main from './Main'
@@ -9,14 +9,6 @@ import OrgPermissions from './OrgPermissions'
 import TextButton from './TextButton'
 import { useCancellableAsync } from './generic-hooks'
 import { env } from './environment'
-
-function addressFromOrgName(orgName: string) {
-  return (
-    env.addresses.get(orgName) ||
-    env.addresses.get(`${orgName}.aragonid.eth`) ||
-    orgName
-  )
-}
 
 function useRouting() {
   const [orgName, setOrgName] = useState('')
@@ -46,16 +38,20 @@ function useRouting() {
   return { orgName, openOrg, openApp }
 }
 
+function filterOrgName(name: string): string {
+  name = name.trim()
+  if (!name.includes('.')) {
+    return name + '.aragonid.eth'
+  }
+  return name
+}
+
 export default function App() {
   const { openOrg, openApp, orgName } = useRouting()
 
-  useEffect(() => {
-    openOrg([...env.addresses.keys()][0])
-  }, [])
-
-  const [org] = useCancellableAsync(
+  const [org = null, loading] = useCancellableAsync(
     async () =>
-      connect(addressFromOrgName(orgName.trim()), [
+      connect(filterOrgName(orgName), [
         'thegraph',
         { daoSubgraphUrl: env.daoSubgraphUrl },
       ]),
@@ -64,6 +60,22 @@ export default function App() {
 
   return (
     <Main>
+      {loading && (
+        <p
+          css={css`
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0;
+            padding: 10px;
+            background: #fff;
+            border-radius: 6px;
+          `}
+        >
+          Loading org…
+        </p>
+      )}
       <label>
         <div
           css={css`
@@ -108,9 +120,14 @@ export default function App() {
         ))}
         .
       </div>
-      <OrgInfo org={org} orgAddress={addressFromOrgName(orgName)} />
-      <OrgApps org={org} onOpenApp={openApp} />
-      <OrgPermissions org={org} />
+
+      {org && (
+        <Fragment>
+          <OrgInfo org={org} />
+          <OrgApps org={org} onOpenApp={openApp} />
+          <OrgPermissions org={org} />
+        </Fragment>
+      )}
     </Main>
   )
 }

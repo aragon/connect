@@ -4,7 +4,7 @@ export function useCancellableAsync<Result>(
   asyncCall: (stop: () => void) => Promise<Result | undefined>,
   deps: any[]
 ): [Result, boolean] {
-  const [result, setResult] = useState<Result>()
+  const [result, setResult] = useState<Result | undefined>(undefined)
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
@@ -18,12 +18,20 @@ export function useCancellableAsync<Result>(
     }
 
     setLoading(true)
-    asyncCall(stop).then(result => {
-      if (!cancelled) {
-        setResult(result)
-        setLoading(false)
-      }
-    })
+
+    asyncCall(stop)
+      .then(result => {
+        if (!cancelled) {
+          setResult(result)
+          setLoading(false)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setResult(undefined)
+          setLoading(false)
+        }
+      })
 
     return cancel
   }, deps)

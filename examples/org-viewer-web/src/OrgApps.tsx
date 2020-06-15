@@ -1,5 +1,4 @@
 /** @jsx jsx */
-import { useEffect, useState } from 'react'
 import { jsx } from '@emotion/core'
 import { Application, Organization } from '@aragon/connect'
 import Group from './Group'

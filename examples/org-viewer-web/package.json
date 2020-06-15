@@ -1,5 +1,5 @@
 {
-  "name": "organization-viewer-web",
+  "name": "org-viewer-web",
   "main": "dist/index.js",
   "version": "0.1.0",
   "private": true,
