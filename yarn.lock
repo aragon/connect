@@ -5891,10 +5891,10 @@ querystringify@^2.1.1:
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.1.1.tgz#60e5a5fd64a7f8bfa4d2ab2ed6fdf4c85bad154e"
   integrity sha512-w7fLxIRCRT7U8Qu53jQnJyPkYZIaR4n5151KMfcJlO/A9397Wxb1amJvROTK6TOnp7PfoAmg/qXiNHI+08jRfA==
 
-radspec-gabi@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/radspec-gabi/-/radspec-gabi-2.0.1.tgz#99f66ac9ea07eecd5d6b4a0b4ad6d4dd3100bc15"
-  integrity sha512-mrN3Ix3zBmdtgwrV5/E0XwYSsjZOj1u5CVatAyNdZ19zmHuwzsBuyDyCEb/o1GxUXloRElwsto7dldmeOMPAEg==
+radspec@^2.0.0-rc.1:
+  version "2.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/radspec/-/radspec-2.0.0-rc.1.tgz#3688e2312bd2497f5748d58a87daeb2c33a4f98e"
+  integrity sha512-asIPa/FOJwqYLVuo14PlVcBy4WyFta3vhkUafVxQkInSF98UmZLbgBAII9jzTPqE61o0lT2wgWJBVfWqAoKJyQ==
   dependencies:
     "@babel/runtime" "^7.1.2"
     date-fns "2.0.0-alpha.22"
