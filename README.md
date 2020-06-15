@@ -1,6 +1,6 @@
 # ⚡ Aragon Connect
 
-[<img src="https://img.shields.io/npm/v/@aragon/connect" alt="" />](https://www.npmjs.com/package/@aragon/connect) [<img src="https://img.shields.io/bundlephobia/minzip/@aragon/connect" alt="" />](https://bundlephobia.com/result?p=@aragon/connect)
+[<img src="https://img.shields.io/npm/v/@aragon/connect" alt="" />](https://www.npmjs.com/package/@aragon/connect) [<img src="https://img.shields.io/bundlephobia/minzip/@aragon/connect" alt="" />](https://bundlephobia.com/result?p=@aragon/connect) [![codecov](https://codecov.io/gh/aragon/connect/branch/master/graph/badge.svg)](https://codecov.io/gh/aragon/connect)
 
 Note: Aragon Connect is still in active development and its API might change until it reaches 1.0.
 

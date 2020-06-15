@@ -6,7 +6,6 @@ export interface VoteData {
   id: string
   creator: string
   metadata: string
-  open: boolean
   executed: boolean
   startDate: string
   snapshotBlock: string
@@ -22,7 +21,6 @@ export default class Vote extends Entity implements VoteData {
   readonly id!: string
   readonly creator!: string
   readonly metadata!: string
-  readonly open!: boolean
   readonly executed!: boolean
   readonly startDate!: string
   readonly snapshotBlock!: string

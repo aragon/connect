@@ -1,5 +1,5 @@
 {
-  "name": "organization-viewer-nodejs",
+  "name": "nodejs",
   "main": "dist/index.js",
   "version": "0.1.0",
   "private": true,

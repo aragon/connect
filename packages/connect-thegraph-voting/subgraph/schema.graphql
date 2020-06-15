@@ -4,7 +4,6 @@ type Vote @entity {
   appAddress: Bytes!
   creator: Bytes!
   metadata: String!
-  open: Boolean!
   executed: Boolean!
   startDate: BigInt!
   snapshotBlock: BigInt!

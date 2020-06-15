@@ -27,7 +27,7 @@
     "connect-thegraph-token-manager": "yarn workspace @aragon/connect-thegraph-token-manager",
     "connect-types": "yarn workspace @aragon/connect-types",
     "test": "is-ci \"test:coverage\" \"test:watch\"",
-    "test:coverage": "jest --coverage",
+    "test:coverage": "jest --coverage --forceExit --detectOpenHandles",
     "test:watch": "jest --watch",
     "test:debug": "node --inspect-brk node_modules/jest/bin/jest.js --runInBand --watch",
     "clean": "yarn clean && oao clean",
