@@ -1,7 +1,9 @@
 import gql from 'graphql-tag'
 import * as fragments from './fragments'
 
-export const ORGANIZATION_APPS = (type: string) => gql`
+type Query = 'query' | 'subscription'
+
+export const ORGANIZATION_APPS = (type: Query) => gql`
   ${type} Organization($orgAddress: String!) {
     organization(id: $orgAddress) {
       apps {
@@ -12,7 +14,7 @@ export const ORGANIZATION_APPS = (type: string) => gql`
   ${fragments.APP_FRAGMENT}
 `
 
-export const APP_BY_ADDRESS = (type: string) => gql`
+export const APP_BY_ADDRESS = (type: Query) => gql`
   ${type} App($appAddress: String!) {
     app(id: $appAddress) {
       ...App_app
@@ -21,7 +23,7 @@ export const APP_BY_ADDRESS = (type: string) => gql`
   ${fragments.APP_FRAGMENT}
 `
 
-export const REPO_BY_APP_ADDRESS = (type: string) => gql`
+export const REPO_BY_APP_ADDRESS = (type: Query) => gql`
   ${type} App($appAddress: String!) {
     app(id: $appAddress) {
       repo {
@@ -36,7 +38,7 @@ export const REPO_BY_APP_ADDRESS = (type: string) => gql`
   ${fragments.VERSION_FRAGMENT}
 `
 
-export const ORGANIZATION_PERMISSIONS = (type: string) => gql`
+export const ORGANIZATION_PERMISSIONS = (type: Query) => gql`
   ${type} Organization($orgAddress: String!) {
     organization(id: $orgAddress) {
       permissions {
@@ -47,7 +49,7 @@ export const ORGANIZATION_PERMISSIONS = (type: string) => gql`
   ${fragments.PERMISSION_FRAGMENT}
 `
 
-export const ROLE_BY_APP_ADDRESS = (type: string) => gql`
+export const ROLE_BY_APP_ADDRESS = (type: Query) => gql`
   ${type} App($appAddress: String!) {
     app(id: $appAddress) {
       version{
