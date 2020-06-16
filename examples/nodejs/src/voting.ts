@@ -25,10 +25,12 @@ const env =
 
 function voteTitle(vote: Vote) {
   // Filtering out the extra data on governance.aragonproject.eth votes
-  return vote.metadata
-    .split('\n')[0]
-    .replace(/\(Link[^\)]+\)/, '')
-    .replace(/\(SHA256[^\)]+\)/, '')
+  return (
+    vote.metadata
+      .split('\n')[0]
+      .replace(/\(Link[^\)]+\)/, '')
+      .replace(/\(SHA256[^\)]+\)/, '') || 'Untitled'
+  )
 }
 
 function voteId(vote: Vote) {
