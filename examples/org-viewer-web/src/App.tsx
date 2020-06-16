@@ -51,10 +51,11 @@ export default function App() {
 
   const [org = null, loading] = useCancellableAsync(
     async () =>
-      connect(filterOrgName(orgName), [
-        'thegraph',
-        { daoSubgraphUrl: env.daoSubgraphUrl, chainId: env.chainId },
-      ]),
+      connect(
+        filterOrgName(orgName),
+        ['thegraph', { orgSubgraphUrl: env.orgSubgraphUrl }],
+        { chainId: env.chainId }
+      ),
     [orgName]
   )
 
