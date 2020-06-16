@@ -53,7 +53,7 @@ export default function App() {
     async () =>
       connect(filterOrgName(orgName), [
         'thegraph',
-        { daoSubgraphUrl: env.daoSubgraphUrl },
+        { daoSubgraphUrl: env.daoSubgraphUrl, chainId: env.chainId },
       ]),
     [orgName]
   )
@@ -110,7 +110,7 @@ export default function App() {
         `}
       >
         Or pick one:&nbsp;
-        {[...env.addresses.keys()].map((name, index) => (
+        {env.addresses.map((name, index) => (
           <span key={name}>
             {index > 0 && <span>, </span>}
             <TextButton onClick={() => openOrg(name)}>
