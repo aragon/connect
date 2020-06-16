@@ -109,7 +109,7 @@ export default class GraphQLWrapper {
     try {
       return parser(result, this)
     } catch (error) {
-      throw new Error(error.message + this.describeQueryResult(result))
+      throw new Error(error.message + '\n\n' + this.describeQueryResult(result))
     }
   }
 
