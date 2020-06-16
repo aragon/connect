@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import { Networkish } from '@aragon/connect-types'
+import { Network } from '@aragon/connect-types'
 
 import Application from './Application'
 import TransactionIntent from '../transactions/TransactionIntent'
@@ -37,13 +37,21 @@ export default class Organization {
     location: string,
     connector: ConnectorInterface,
     provider: any,
-    network: Networkish
+    network: Network | string
   ) {
     this.location = location
 
+    const getProvider = (): ethers.providers.Provider => {
+      try {
+        return new ethers.providers.Web3Provider(provider, network)
+      } catch (e) {
+        return provider
+      }
+    }
+
     this.#provider = provider
-      ? new ethers.providers.Web3Provider(provider, network)
-      : new ethers.providers.InfuraProvider(network)
+      ? getProvider()
+      : ethers.getDefaultProvider(network)
 
     this._connector = connector
     this.#connected = false

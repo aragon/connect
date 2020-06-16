@@ -11,7 +11,7 @@ import ConnectorEthereum, {
 import ConnectorTheGraph, {
   ConnectorTheGraphConfig,
 } from '@aragon/connect-thegraph'
-import { Network, Networkish } from '@aragon/connect-types'
+import { Network } from '@aragon/connect-types'
 
 type ConnectOptions = {
   readProvider?: ethers.providers.Provider
