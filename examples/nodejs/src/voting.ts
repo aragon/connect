@@ -61,8 +61,7 @@ async function main() {
     votes.map(vote => `\n * ${voteId(vote)} ${voteTitle(vote)}`).join('') + '\n'
   )
 
-  return
-  if (votes.length == 0) {
+  if (votes.length === 0) {
     return
   }
 
