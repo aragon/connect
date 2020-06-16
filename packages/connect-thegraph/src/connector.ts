@@ -5,6 +5,7 @@ import {
   Repository,
   Role,
 } from '@aragon/connect-core'
+import { Network } from '@aragon/connect-types'
 import * as queries from './queries'
 import GraphQLWrapper from './core/GraphQLWrapper'
 import {
@@ -16,23 +17,33 @@ import {
 } from './parsers'
 
 export type ConnectorTheGraphConfig = {
-  daoSubgraphUrl?: string
   verbose?: boolean
+  orgSubgraphUrl?: string
 }
 
-const DAO_SUBGRAPH_URL_DEFAULT =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-mainnet'
-
-// https://api.thegraph.com/subgraphs/name/ensdomains/ens
-// https://api.thegraph.com/subgraphs/name/ensdomains/ensrinkeby
+function getOrgSubgraphUrl(network: Network): string | null {
+  if (network.chainId === 1) {
+    return 'https://api.thegraph.com/subgraphs/name/aragon/aragon-mainnet'
+  }
+  if (network.chainId === 4) {
+    return 'https://api.thegraph.com/subgraphs/name/aragon/aragon-rinkeby'
+  }
+  return null
+}
 
 export default class ConnectorTheGraph extends GraphQLWrapper
   implements ConnectorInterface {
-  constructor({
-    daoSubgraphUrl = DAO_SUBGRAPH_URL_DEFAULT,
-    verbose = false,
-  }: ConnectorTheGraphConfig = {}) {
-    super(daoSubgraphUrl, verbose)
+  constructor(
+    network: Network,
+    { verbose = false, orgSubgraphUrl }: ConnectorTheGraphConfig = {}
+  ) {
+    const _orgSubgraphUrl = orgSubgraphUrl || getOrgSubgraphUrl(network)
+    if (!_orgSubgraphUrl) {
+      throw new Error(
+        `The chainId ${network.chainId} is not supported by the TheGraph connector.`
+      )
+    }
+    super(_orgSubgraphUrl, verbose)
   }
 
   async rolesForAddress(appAddress: string): Promise<Role[]> {
