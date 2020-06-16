@@ -7,7 +7,7 @@ const envs = new Map(
   Object.entries({
     rinkeby: {
       chainId: 4,
-      org: 'mesh.aragonid.eth',
+      org: 'gardens.aragonid.eth',
       votingSubgraphUrl:
         'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby',
     },
