@@ -6,11 +6,10 @@ import Table from './Table'
 
 type OrgInfoProps = {
   org?: Organization
-  orgAddress: string
 }
 
-export default function OrgApps({ orgAddress }: OrgInfoProps) {
-  if (!orgAddress) {
+export default function OrgApps({ org }: OrgInfoProps) {
+  if (!org) {
     return null
   }
 
@@ -18,7 +17,13 @@ export default function OrgApps({ orgAddress }: OrgInfoProps) {
     <Group name="Organization">
       <Table
         headers={['Name', 'Value']}
-        rows={[[ 'address', orgAddress.slice(0, 10) + '…' ]]}
+        rows={[
+          ['location', org.location],
+          [
+            'address',
+            <span title={org.address}>{org.address.slice(0, 10) + '…'}</span>,
+          ],
+        ]}
       />
     </Group>
   )

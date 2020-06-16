@@ -1,14 +1,13 @@
 import ConnectorTheGraph from '../connector'
-import {
-  Role
-} from '@aragon/connect-core'
-import {
-  isAddress,
-  isBytes32
-} from '../../../test-helpers'
+import { Role } from '@aragon/connect-core'
+import { isAddress, isBytes32 } from '../../../test-helpers'
 
-const DAO_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-mainnet'
 const APP_ADDRESS = '0xbce807b35dee2fbe457e4588f1c799879446eb54'
+
+const MAINNET_NETWORK = {
+  chainId: 1,
+  name: 'homestead',
+}
 
 // TODO: Test subscriptions
 
@@ -16,9 +15,7 @@ describe('when connecting to the mainnet subgraph', () => {
   let connector: ConnectorTheGraph
 
   beforeAll(() => {
-    connector = new ConnectorTheGraph({
-      daoSubgraphUrl: DAO_SUBGRAPH_URL
-    })
+    connector = new ConnectorTheGraph(MAINNET_NETWORK)
   })
 
   describe('when querying the roles associated with an app', () => {
@@ -69,4 +66,3 @@ describe('when connecting to the mainnet subgraph', () => {
     })
   })
 })
-

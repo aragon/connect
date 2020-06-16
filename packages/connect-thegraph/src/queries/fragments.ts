@@ -76,7 +76,7 @@ export const APP_FRAGMENT = gql`
       ...Role_role
     }
   }
-  ${VERSION_FRAGMENT}
+  ${/* VERSION_FRAGMENT is already included in REPO_FRAGMENT */ ''}
   ${REPO_FRAGMENT}
   ${ROLE_FRAGMENT}
 `

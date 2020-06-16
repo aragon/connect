@@ -8,7 +8,7 @@ Note: Aragon Connect is still in active development and its API might change unt
 
 ```js
 // Connects to an organization.
-const org = await connect('org.aragonid.eth')
+const org = await connect('org.aragonid.eth', 'thegraph')
 
 // Intents can be converted in a transaction.
 const intent = await org.removeApp('0x…')

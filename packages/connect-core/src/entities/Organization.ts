@@ -1,4 +1,5 @@
 import { ethers } from 'ethers'
+import { Network } from '@aragon/connect-types'
 
 import Application from './Application'
 import TransactionIntent from '../transactions/TransactionIntent'
@@ -25,35 +26,76 @@ import { ConnectorInterface } from '../connections/ConnectorInterface'
 // [ ] Events...
 
 export default class Organization {
-  #address: string
+  readonly location: string
+  #address?: string
   #provider: ethers.providers.Provider
+  #connected: boolean
 
   private _connector: ConnectorInterface
 
   constructor(
-    address: string,
+    location: string,
     connector: ConnectorInterface,
-    provider?: ethers.providers.Provider,
-    chainId?: number
+    provider: any,
+    network: Network
   ) {
-    this.#address = address
-    this.#provider =
-      provider ||
-      new ethers.providers.InfuraProvider(chainId || connector.chainId || 1)
+    this.location = location
+
+    const getEthersProvider = (): ethers.providers.Provider => {
+      try {
+        return new ethers.providers.Web3Provider(provider, network)
+      } catch (e) {
+        return provider
+      }
+    }
+
+    this.#provider = provider
+      ? getEthersProvider()
+      : ethers.getDefaultProvider(network)
 
     this._connector = connector
+    this.#connected = false
+  }
+
+  async _connect() {
+    this.#address = ethers.utils.isAddress(this.location)
+      ? this.location
+      : await this.#provider.resolveName(this.location)
+
+    if (!ethers.utils.isAddress(this.#address || '')) {
+      throw new Error('Please provide a valid address or ENS domain.')
+    }
+
+    this.#connected = true
+    return true
+  }
+
+  private checkConnected() {
+    if (!this.#connected) {
+      throw new Error(
+        'Please call ._connect() before using Organization and its methods.'
+      )
+    }
+  }
+
+  get address(): string {
+    this.checkConnected()
+    return this.#address || '' // The || '' should never happen but TypeScript requires it.
   }
 
   ///////// APPS ///////////
   async apps(): Promise<Application[]> {
-    return this._connector.appsForOrg(this.#address)
+    this.checkConnected()
+    return this._connector.appsForOrg(this.address)
   }
 
   onApps(callback: Function): { unsubscribe: Function } {
-    return this._connector.onAppsForOrg(this.#address, callback)
+    this.checkConnected()
+    return this._connector.onAppsForOrg(this.address, callback)
   }
 
   async app(appAddress: string): Promise<Application> {
+    this.checkConnected()
     return this._connector.appByAddress(appAddress)
   }
 
@@ -78,11 +120,13 @@ export default class Organization {
 
   ///////// PERMISSIONS ///////////
   async permissions(): Promise<Permission[]> {
-    return await this._connector.permissionsForOrg(this.#address)
+    this.checkConnected()
+    return await this._connector.permissionsForOrg(this.address)
   }
 
   onPermissions(callback: Function): { unsubscribe: Function } {
-    return this._connector.onPermissionsForOrg(this.#address, callback)
+    this.checkConnected()
+    return this._connector.onPermissionsForOrg(this.address, callback)
   }
 
   // async addPermissions(
@@ -142,6 +186,7 @@ export default class Organization {
     funcName: string,
     funcArgs: any[]
   ): TransactionIntent {
+    this.checkConnected()
     return new TransactionIntent(
       {
         contractAddress: appAddress,

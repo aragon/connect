@@ -1,13 +1,9 @@
 import { connect, Application, Organization } from '@aragon/connect'
 
-const DAO_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-mainnet'
 const ORG_ADDRESS = '0x0c188b183ff758500d1d18b432313d10e9f6b8a4'
 
 async function main() {
-  const org = (await connect(
-    ORG_ADDRESS,
-    ['thegraph', { daoSubgraphUrl: DAO_SUBGRAPH_URL }]
-  )) as Organization
+  const org = (await connect(ORG_ADDRESS, 'thegraph')) as Organization
 
   console.log('\nPermissions:')
   const permissions = await org.permissions()
@@ -22,7 +18,9 @@ async function main() {
   apps.map(console.log)
 
   console.log('\nA voting app:')
-  const votingApp = apps.find((app: Application) => app.name == 'dandelion-voting')!
+  const votingApp = apps.find(
+    (app: Application) => app.name == 'dandelion-voting'
+  )!
   console.log(votingApp)
 
   console.log('\nRoles of an app:')
@@ -44,8 +42,10 @@ async function main() {
 
 main()
   .then(() => process.exit(0))
-  .catch((err) => {
+  .catch(err => {
     console.log(`Error: `, err)
-    console.log('\nPlease report any problem to https://github.com/aragon/connect/issues')
+    console.log(
+      '\nPlease report any problem to https://github.com/aragon/connect/issues'
+    )
     process.exit(1)
   })

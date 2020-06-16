@@ -1,24 +1,21 @@
 import ConnectorTheGraph from '../connector'
-import {
-  Application
-} from '@aragon/connect-core'
-import {
-  isAddress,
-  isBytes32
-} from '../../../test-helpers'
+import { Application } from '@aragon/connect-core'
+import { isAddress, isBytes32 } from '../../../test-helpers'
 
-const DAO_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-mainnet'
 const ORG_ADDRESS = '0x0c188b183ff758500d1d18b432313d10e9f6b8a4'
 const APP_ADDRESS = '0xbce807b35dee2fbe457e4588f1c799879446eb54'
+
+const MAINNET_NETWORK = {
+  chainId: 1,
+  name: 'homestead',
+}
 
 describe('when connecting to the mainnet subgraph', () => {
   let app: Application
   let connector: ConnectorTheGraph
 
   beforeAll(() => {
-    connector = new ConnectorTheGraph({
-      daoSubgraphUrl: DAO_SUBGRAPH_URL
-    })
+    connector = new ConnectorTheGraph(MAINNET_NETWORK)
   })
 
   function isValidApp(): void {
@@ -121,4 +118,3 @@ describe('when connecting to the mainnet subgraph', () => {
     })
   })
 })
-
