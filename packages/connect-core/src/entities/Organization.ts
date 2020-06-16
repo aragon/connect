@@ -37,11 +37,11 @@ export default class Organization {
     location: string,
     connector: ConnectorInterface,
     provider: any,
-    network: Network | string
+    network: Network
   ) {
     this.location = location
 
-    const getProvider = (): ethers.providers.Provider => {
+    const getEthersProvider = (): ethers.providers.Provider => {
       try {
         return new ethers.providers.Web3Provider(provider, network)
       } catch (e) {
@@ -50,7 +50,7 @@ export default class Organization {
     }
 
     this.#provider = provider
-      ? getProvider()
+      ? getEthersProvider()
       : ethers.getDefaultProvider(network)
 
     this._connector = connector
