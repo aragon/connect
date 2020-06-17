@@ -15,3 +15,16 @@ A connector that fetches information from a standard Ethereum provider (EIP 1193
 ## ConnectorJson
 
 A connector that read information from a JSON string. Useful for testing / debugging purposes.
+
+## Example
+
+```js
+const myorg = await connect('myorg', {
+  connector: new ConnectorTheGraph({
+    daoSubgraphUrl: 'http://…',
+    appSubgraphUrl: (repoId) => {
+      return 'http://…'
+    },
+  }),
+})
+```
