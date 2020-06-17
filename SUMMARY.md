@@ -12,7 +12,7 @@
 - [connect()](docs/connect.md)
 - [App](docs/app.md)
 - [Connectors](docs/connectors.md)
-- [Intent](docs/intent.md)
+- [Intent](docs/transaction-intent.md)
 - [Organization](docs/organization.md)
 - [Permission](docs/permission.md)
 - [Repo](docs/repo.md)
@@ -22,4 +22,4 @@
 
 ## GUIDES
 
-- [Aragon app subgraph](docs/guides/subgraph-template.md)
+- [Aragon app subgraph](docs/subgraph-template.md)
