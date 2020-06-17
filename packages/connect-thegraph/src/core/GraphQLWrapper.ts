@@ -17,7 +17,7 @@ export default class GraphQLWrapper {
   #verbose: boolean
 
   constructor(subgraphUrl: string, verbose = false) {
-    if (!subgraphUrl || !subgraphUrl.includes('http')) {
+    if (!subgraphUrl || !subgraphUrl.startsWith('http')) {
        throw new Error('Please provide a valid subgraph URL')
     }
 
