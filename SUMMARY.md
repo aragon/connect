@@ -4,22 +4,23 @@
 
 ## TECHNOLOGIES
 
-- [Node.js Itegration](examples/nodejs/README.md)
-- [Webapp Itegration](examples/org-viewer-web/README.md)
+- [Node.js Itegration](docs/technologies/nodejs.md)
+- [Vanilla webapp Itegration](docs/technologies/webapp.md)
+<!-- - [React Itegration](docs/technologies/react.md) -->
 
 ## API REFERENCE
 
-- [connect()](docs/connect.md)
-- [App](docs/app.md)
-- [Connectors](docs/connectors.md)
-- [Intent](docs/transaction-intent.md)
-- [Organization](docs/organization.md)
-- [Permission](docs/permission.md)
-- [Repo](docs/repo.md)
-- [Role](docs/role.md)
-- [TransactionPath](docs/transaction-path.md)
-- [TransactionRequest](docs/transaction-request.md)
+- [connect()](docs/api/connect.md)
+- [App](docs/api/app.md)
+- [Connectors](docs/api/connectors.md)
+- [Intent](docs/api/transaction-intent.md)
+- [Organization](docs/api/organization.md)
+- [Permission](docs/api/permission.md)
+- [Repo](docs/api/repo.md)
+- [Role](docs/api/role.md)
+- [TransactionPath](docs/api/transaction-path.md)
+- [TransactionRequest](docs/api/transaction-request.md)
 
 ## GUIDES
 
-- [Aragon app subgraph](docs/subgraph-template.md)
+- [Aragon app subgraph](docs/guides/subgraph-template.md)
