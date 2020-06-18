@@ -41,11 +41,7 @@ Aragon Connect consists of a few parts:
 
 [A few other packages](https://github.com/aragon/connect/tree/master/packages) are also published, but they are only needed to author or extend connectors and not to use the library.
 
-## Mini cookbook
-
-What follows is a list of common tasks and how they can be achieved with Aragon Connect.
-
-### Connecting to an organization
+## Connecting to an organization
 
 As seen above, connecting to an organization can be done by calling the `connect()` function.
 
@@ -60,7 +56,7 @@ const org = await connect('example.aragonid.eth', 'thegraph')
 
 It returns an [`Organization`](https://github.com/aragon/connect/blob/master/docs/api/organization.md) instance.
 
-### Connecting to an alternative network
+## Connecting to an alternative network
 
 Aragon Connect uses the Ethereum mainnet by default, but other networks can be used instead.
 
@@ -72,11 +68,11 @@ const org = await connect('example.aragonid.eth', 'thegraph', { chainId: 4 })
 
 Note: only [Rinkeby](https://docs.ethhub.io/using-ethereum/test-networks/#rinkeby) is supported by the `thegraph` connector at the moment.
 
-### Fetching votes from the Voting app
+## Fetching votes from the Voting app
 
-### Subscribing to data updates
+## Subscribing to data updates
 
-### Generating a transaction
+## Generating a transaction
 
 ## API Reference
 
