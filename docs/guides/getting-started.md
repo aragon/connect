@@ -31,7 +31,7 @@ Aragon Connect allows to inject any type of connector, and includes two by defau
 
 A connector can be of two types: organization or app, to fetch data from one or the other. The main package of Aragon Connect only provides organization connectors: app connectors need to be imported separately.
 
-### Libraries
+### Packages
 
 Aragon Connect consists of a few parts:
 
@@ -89,7 +89,7 @@ To do so, we use the [Chain ID](https://chainid.network/) assigned to the networ
 const org = await connect('example.aragonid.eth', 'thegraph', { chainId: 4 })
 ```
 
-Note: only [Rinkeby](https://docs.ethhub.io/using-ethereum/test-networks/#rinkeby) is supported by the `thegraph` connector at the moment.
+Note: other than the Ethereum main network (default), only [Rinkeby](https://docs.ethhub.io/using-ethereum/test-networks/#rinkeby) is supported by the `thegraph` connector at the moment.
 
 ## Fetching data from an app state
 
