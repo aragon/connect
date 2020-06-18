@@ -21,7 +21,4 @@ tsconfig.tsbuildinfo
 .graphqlconfig
 .vscode
 
-# packages README files
-packages/*/README.md
-
 packages/*/yarn-error.log
