@@ -24,12 +24,14 @@ for (const transaction of transactions) {
 
 ## Documentation
 
+You might want to start by the [Getting Started](docs/guides/getting-started.md) guide.
+
 | Name                                                  | Description                                                                                 |
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | [connect()](docs/api/connect.md)                      | Connect to an organization (start here).                                                    |
 | [App](docs/api/app.md)                                | App installed in an organization.                                                           |
 | [Connectors](docs/api/connectors.md)                  | Connectors that fetch data from the chain.                                                  |
-| [Intent](docs/api/intent.md)                          | Intent to change anything on an organization or its apps.                                   |
+| [TransactionIntent](docs/api/transaction-intent.md)   | Intent to change anything on an organization or its apps.                                   |
 | [Organization](docs/api/organization.md)              | Aragon organization.                                                                        |
 | [Permission](docs/api/permission.md)                  | Permission represents the relation between an app role and an entity.                       |
 | [Repo](docs/api/repo.md)                              | App repository.                                                                             |
