@@ -1,4 +1,4 @@
-# Getting Started with ⚡️ Aragon Connect
+# Getting started
 
 ## Introduction
 
@@ -8,7 +8,7 @@ Aragon Connect is a suite of tools that allow to integrate Aragon Organizations 
 
 This is how we can connect to an organization and list its apps:
 
-```js
+```javascript
 import { connect } from '@aragon/connect'
 
 // Initiates the connection to an organization.
@@ -26,8 +26,8 @@ The idea of connectors is central to Aragon Connect. A connector is an abstracte
 
 Aragon Connect allows to inject any type of connector, and includes two by default:
 
-- **The Graph**: fetch data from [subgraphs](https://thegraph.com/docs/introduction#how-the-graph-works), hosted on [thegraph.com](https://thegraph.com/) by default.
-- **Ethereum (WIP)**: fetch data from an Ethereum node directly.
+* **The Graph**: fetch data from [subgraphs](https://thegraph.com/docs/introduction#how-the-graph-works), hosted on [thegraph.com](https://thegraph.com/) by default.
+* **Ethereum \(WIP\)**: fetch data from an Ethereum node directly.
 
 A connector can be of two types: organization or app, to fetch data from one or the other. The main package of Aragon Connect only provides organization connectors: app connectors need to be imported separately.
 
@@ -35,9 +35,9 @@ A connector can be of two types: organization or app, to fetch data from one or 
 
 Aragon Connect consists of a few parts:
 
-- `@aragon/connect`: this is the main library. It provides the main features to connect and interact with organizations, and includes connectors.
-- `@aragon/connect-thegraph-voting`: a connector that allows to fetch data from the Voting app, through The Graph.
-- `@aragon/connect-thegraph-token-manager`: a connector that allows to fetch data from the Voting app, through The Graph.
+* `@aragon/connect`: this is the main library. It provides the main features to connect and interact with organizations, and includes connectors.
+* `@aragon/connect-thegraph-voting`: a connector that allows to fetch data from the Voting app, through The Graph.
+* `@aragon/connect-thegraph-token-manager`: a connector that allows to fetch data from the Voting app, through The Graph.
 
 [A few other packages](https://github.com/aragon/connect/tree/master/packages) are also published, but they are only needed to author or extend connectors and not to use the library.
 
@@ -45,19 +45,19 @@ Aragon Connect consists of a few parts:
 
 Start by adding [`@aragon/connect`](https://www.npmjs.com/package/@aragon/connect) to your project:
 
-```console
+```text
 yarn add @aragon/connect
 ```
 
 You can now import it:
 
-```js
+```javascript
 import { connect } from '@aragon/connect'
 ```
 
 If you want to interact with the Voting or the Tokens app, you should also install their respective connectors:
 
-```console
+```text
 yarn add @aragon/connect-thegraph-voting
 yarn add @aragon/connect-thegraph-token-manager
 ```
@@ -70,10 +70,10 @@ As seen above, connecting to an organization can be done by calling the `connect
 
 It requires two parameters:
 
-- The address of the organization, which can be any valid Ethereum address (`0x…`) or [ENS name](https://ens.domains/) (`….eth`).
-- The connector we want to use.
+* The address of the organization, which can be any valid Ethereum address \(`0x…`\) or [ENS name](https://ens.domains/) \(`….eth`\).
+* The connector we want to use.
 
-```js
+```javascript
 const org = await connect('example.aragonid.eth', 'thegraph')
 ```
 
@@ -85,11 +85,11 @@ Aragon Connect uses the Ethereum mainnet by default, but other networks can be u
 
 To do so, we use the [Chain ID](https://chainid.network/) assigned to the network:
 
-```js
+```javascript
 const org = await connect('example.aragonid.eth', 'thegraph', { chainId: 4 })
 ```
 
-Note: other than the Ethereum main network (default), only [Rinkeby](https://docs.ethhub.io/using-ethereum/test-networks/#rinkeby) is supported by the `thegraph` connector at the moment.
+Note: other than the Ethereum main network \(default\), only [Rinkeby](https://docs.ethhub.io/using-ethereum/test-networks/#rinkeby) is supported by the `thegraph` connector at the moment.
 
 ## Fetching data from an app state
 
@@ -97,7 +97,7 @@ Apps can be obtained from [`Organization`](https://github.com/aragon/connect/blo
 
 Let’s see how we can retrieve all the votes from a Voting app:
 
-```js
+```javascript
 import { connect } from '@aragon/connect'
 import Voting from '@aragon/connect-thegraph-voting'
 
@@ -122,7 +122,7 @@ It is also possible to subscribe to receive data updates as they arrive.
 
 For example, this is how it can be done for the list of apps:
 
-```js
+```javascript
 import { connect } from '@aragon/connect'
 
 const org = await connect('example.aragonid.eth', 'thegraph')
@@ -134,7 +134,7 @@ const handler = org.onApps(apps => {
 
 The handler can get used to stop receive updates:
 
-```js
+```javascript
 const handler = org.onApps(apps => {
   console.log('Apps updated:', apps)
 })
@@ -145,7 +145,7 @@ handler.unsubscribe()
 
 App connectors also support subscriptions in an identical way:
 
-```js
+```javascript
 const voting = new Voting(
   votingInfo.address,
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'
@@ -165,20 +165,20 @@ Methods ending up in generating a transaction return an [`TransactionIntent`](ht
 
 Generating a transaction is done in three steps. First, we call a method resulting in a `TransactionIntent` object getting returned:
 
-```js
+```javascript
 const intent = await org.appIntent(voting, 'vote', [votes[0].id, true, true])
 ```
 
 Then we retrieve the path we want, by passing the account that will signing the transaction. Aragon Connect will go through the permissions of the organization, and return all the possible paths:
 
-```js
+```javascript
 // The first path is the shortest
 const [path] = intent.paths(wallet.account)
 ```
 
 Finally, we can sign the different transactions associated to this path. Aragon Connect doesn’t handle any signing itself, but return an object that is ready to use with the library of your choice: Web3.js, Ethers, or even a JSON-RPC connection to an Ethereum node.
 
-```js
+```javascript
 // We sign the transactions using Ethers here
 for (const transaction of path.transactions) {
   await ethers.sendTransaction(transaction)
@@ -188,3 +188,4 @@ for (const transaction of path.transactions) {
 ## Going further
 
 Once you are familiar with the basics of Aragon Connect, you may want to start exploring the [API documentation](https://github.com/aragon/connect#documentation) and the [examples](https://github.com/aragon/connect/tree/master/examples) provided in the repository.
+

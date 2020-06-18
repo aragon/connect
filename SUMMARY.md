@@ -1,27 +1,22 @@
-# Summary
+# Table of contents
 
-- [⚡ Aragon Connect](README.md)
+* [⚡ Aragon Connect](README.md)
 
 ## GUIDES
 
-- [Getting started](docs/guides/getting-started.md)
-- [Aragon app subgraph](docs/guides/subgraph-template.md)
-
-<!-- ## TECHNOLOGIES
-
-- [Node.js Itegration](docs/technologies/nodejs.md)
-- [Vanilla webapp Itegration](docs/technologies/webapp.md) -->
-<!-- - [React Itegration](docs/technologies/react.md) -->
+* [Getting started](guides/getting-started.md)
+* [Aragon app subgraph](guides/subgraph-template.md)
 
 ## API REFERENCE
 
-- [connect()](docs/api/connect.md)
-- [App](docs/api/app.md)
-- [Connectors](docs/api/connectors.md)
-- [Intent](docs/api/transaction-intent.md)
-- [Organization](docs/api/organization.md)
-- [Permission](docs/api/permission.md)
-- [Repo](docs/api/repo.md)
-- [Role](docs/api/role.md)
-- [TransactionPath](docs/api/transaction-path.md)
-- [TransactionRequest](docs/api/transaction-request.md)
+* [connect\(\)](api-reference/connect.md)
+* [App](api-reference/app.md)
+* [Connectors](api-reference/connectors.md)
+* [Intent](api-reference/transaction-intent.md)
+* [Organization](api-reference/organization.md)
+* [Permission](api-reference/permission.md)
+* [Repo](api-reference/repo.md)
+* [Role](api-reference/role.md)
+* [TransactionPath](api-reference/transaction-path.md)
+* [TransactionRequest](api-reference/transaction-request.md)
+
