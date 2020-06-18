@@ -1,4 +1,4 @@
-# <img width="40" style="vertical-align:middle" src="https://user-images.githubusercontent.com/36158/85041270-9bbd6680-b181-11ea-9dbd-0871289b63f8.png" alt="Aragon Connect"> Aragon Connect
+# Aragon Connect <img width="40" align="right" src="https://user-images.githubusercontent.com/36158/85041270-9bbd6680-b181-11ea-9dbd-0871289b63f8.png" alt="Aragon Connect">
 
 [<img src="https://img.shields.io/github/package-json/v/aragon/connect?label=npm" alt="" />](https://www.npmjs.com/package/@aragon/connect) [<img src="https://img.shields.io/bundlephobia/minzip/@aragon/connect" alt="" />](https://bundlephobia.com/result?p=@aragon/connect) [![codecov](https://codecov.io/gh/aragon/connect/branch/master/graph/badge.svg)](https://codecov.io/gh/aragon/connect)
 
