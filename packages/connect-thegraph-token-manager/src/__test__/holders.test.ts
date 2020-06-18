@@ -38,9 +38,7 @@ describe('when connecting to a token manager app', () => {
         expect(holder.address).toBe('0x23565f4f4cb3154fdc0b59a7382b7fee09ec9493')
       })
 
-      // TODO: Skipped because subgraph is currently reporting twice this value.
-      // Syncing a new version.
-      test.skip('has the correct balance', () => {
+      test('has the correct balance', () => {
         expect(holder.balance).toBe('1000000000000000000')
       })
     })
