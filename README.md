@@ -1,8 +1,8 @@
-# ⚡ Aragon Connect
+# <img width="30" align="left" src="https://user-images.githubusercontent.com/36158/85042092-b17f5b80-b182-11ea-8011-70030a7c7362.png" alt="Aragon Connect"> Aragon Connect
 
 [<img src="https://img.shields.io/github/package-json/v/aragon/connect?label=npm" alt="" />](https://www.npmjs.com/package/@aragon/connect) [<img src="https://img.shields.io/bundlephobia/minzip/@aragon/connect" alt="" />](https://bundlephobia.com/result?p=@aragon/connect) [![codecov](https://codecov.io/gh/aragon/connect/branch/master/graph/badge.svg)](https://codecov.io/gh/aragon/connect)
 
-Note: Aragon Connect is still in active development and its API might change until it reaches 1.0.
+Aragon Connect is still in active development and its API might change until it reaches 1.0.
 
 ## Usage
 
@@ -24,8 +24,8 @@ for (const transaction of transactions) {
 
 ## Documentation
 
-| Name                                              | Description                                                                                 |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Name                                                  | Description                                                                                 |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | [connect()](docs/api/connect.md)                      | Connect to an organization (start here).                                                    |
 | [App](docs/api/app.md)                                | App installed in an organization.                                                           |
 | [Connectors](docs/api/connectors.md)                  | Connectors that fetch data from the chain.                                                  |
