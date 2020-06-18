@@ -31,7 +31,7 @@ Aragon Connect allows to inject any type of connector, and includes two by defau
 
 A connector can be of two types: organization or app, to fetch data from one or the other. The main package of Aragon Connect only provides organization connectors: app connectors need to be imported separately.
 
-### Libraries
+### Packages
 
 Aragon Connect consists of a few parts:
 
