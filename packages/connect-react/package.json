@@ -2,7 +2,7 @@
   "name": "@aragon/connect-react",
   "private": true,
   "version": "0.2.0",
-  "license": "AGPL-3.0",
+  "license": "LGPL-3.0-or-later",
   "main": "dist/index.js",
   "scripts": {
     "build": "yarn clean && yarn compile",
