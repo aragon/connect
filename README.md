@@ -26,20 +26,7 @@ for (const transaction of transactions) {
 
 ## Documentation
 
-You might want to start by the [Getting Started](https://github.com/aragon/connect/tree/2e8b112b40ab4ec13c7b8ae8fa3bc26caba33d87/docs/guides/getting-started.md) guide.
-
-| Name                                                       | Description                                                                                 |
-| :--------------------------------------------------------- | :------------------------------------------------------------------------------------------ |
-| [connect\(\)](api-reference/connect.md)                    | Connect to an organization \(start here\).                                                  |
-| [App](api-reference/app.md)                                | App installed in an organization.                                                           |
-| [Connectors](api-reference/connectors.md)                  | Connectors that fetch data from the chain.                                                  |
-| [TransactionIntent](api-reference/transaction-intent.md)   | Intent to change anything on an organization or its apps.                                   |
-| [Organization](api-reference/organization.md)              | Aragon organization.                                                                        |
-| [Permission](api-reference/permission.md)                  | Permission represents the relation between an app role and an entity.                       |
-| [Repo](api-reference/repo.md)                              | App repository.                                                                             |
-| [Role](api-reference/role.md)                              | Single role, which can get assigned to create a permission.                                 |
-| [TransactionPath](api-reference/transaction-path.md)       | Single transaction path.                                                                    |
-| [TransactionRequest](api-reference/transaction-request.md) | Object describing a transaction that can get signed by a library like ethers.js or Web3.js. |
+Please have a look at the [documentation website](https://connect.aragon.org/). If you never used the library before, we recommend starting with the [Getting Started](https://connect.aragon.org/guides/getting-started) guide.
 
 ## Packages
 
