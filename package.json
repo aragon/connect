@@ -9,7 +9,7 @@
     "aragon"
   ],
   "author": "Aragon Association <legal@aragon.org>",
-  "license": "AGPL-3.0",
+  "license": "LGPL-3.0-or-later",
   "homepage": "https://github.com/aragon/connect",
   "repository": "https://github.com/aragon/connect",
   "bugs": "https://github.com/aragon/connect/issues",

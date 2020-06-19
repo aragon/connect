@@ -2,7 +2,7 @@
   "name": "@aragon/connect-types",
   "private": true,
   "version": "0.2.0",
-  "license": "MIT",
+  "license": "LGPL-3.0-or-later",
   "main": "dist/index.js",
   "module": "dist/types.esm.js",
   "typings": "dist/index.d.ts",
