@@ -1,4 +1,4 @@
-# Aragon Connect [<img width="115" align="right" alt="" src="https://user-images.githubusercontent.com/36158/85128259-d201f100-b228-11ea-9770-76ae86cc98b3.png">](https://connect.aragon.org/)
+# Aragon Connect [<img height="100" align="right" alt="" src="https://user-images.githubusercontent.com/36158/85128259-d201f100-b228-11ea-9770-76ae86cc98b3.png">](https://connect.aragon.org/)
 
 > a toolkit for developers to seamlessly integrate DAO functionality into apps.
 
