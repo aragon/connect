@@ -1,8 +1,11 @@
-# <img width="30" align="left" src="https://user-images.githubusercontent.com/36158/85042092-b17f5b80-b182-11ea-8011-70030a7c7362.png" alt="Aragon Connect"> Aragon Connect
+Aragon Connect [<img width="115" align="right" alt="" src="https://user-images.githubusercontent.com/36158/85042092-b17f5b80-b182-11ea-8011-70030a7c7362.png">](https://connect.aragon.org/)
+===
+
+> a toolkit for developers to seamlessly integrate DAO functionality into apps.
 
 [![](https://img.shields.io/github/package-json/v/aragon/connect?label=npm)](https://www.npmjs.com/package/@aragon/connect) [![](https://img.shields.io/bundlephobia/minzip/@aragon/connect)](https://bundlephobia.com/result?p=@aragon/connect) [![codecov](https://codecov.io/gh/aragon/connect/branch/master/graph/badge.svg)](https://codecov.io/gh/aragon/connect)
 
-Aragon Connect is still in active development and its API might change until it reaches 1.0.
+_Aragon Connect is still in active development and its API might change until it reaches 1.0._
 
 ## Usage
 
