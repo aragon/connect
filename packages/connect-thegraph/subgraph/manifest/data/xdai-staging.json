@@ -1,0 +1,26 @@
+{
+  "network": "xdai",
+  "description": "Development subgraph for Aragon organizations.",
+  "repository": "https://github.com/aragon/connect",
+  "ens": "0xaafca6b0c89521752e559650206d7c925fd0e530",
+  "DAOFactoryDataSources": [],
+  "RegistryDataSources": [
+    {
+      "name": "aragonpm.eth",
+      "address": "0x3c9fdcf51c3447f629fc61f6aaaf2ac3ea852040",
+      "startBlock": "10076177"
+    },
+    {
+      "name": "1hive.aragonpm.eth",
+      "address": "0x812672c031210b439a5befc8f397d639e97e3738",
+      "startBlock": "10076193"
+    }
+  ],
+  "KernelDataSources": [
+    {
+      "name": "beehive",
+      "address": "0x6a8b8891c5f6de1fcf1ab889e7a06f6b60431641",
+      "startBlock": "10546308"
+    }
+  ]
+}
