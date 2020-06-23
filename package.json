@@ -39,7 +39,7 @@
     "test:coverage": "jest --coverage --forceExit --detectOpenHandles",
     "test:watch": "jest --watch",
     "test:debug": "node --inspect-brk node_modules/jest/bin/jest.js --runInBand --watch",
-    "clean": "yarn clean && oao clean",
+    "clean": "oao clean",
     "build": "MODE=libs-only ./scripts/rebuild-packages.sh",
     "build:examples": "MODE=all ./scripts/rebuild-packages.sh",
     "status": "oao status",
