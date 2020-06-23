@@ -16,8 +16,7 @@
     "lint": "eslint --ext .ts ./src"
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "devDependencies": {
     "@types/jest": "^26.0.0",
