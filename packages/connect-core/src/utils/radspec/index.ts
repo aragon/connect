@@ -5,6 +5,7 @@ import { addressesEqual } from '../address'
 import { findAppMethodFromIntent } from '../app'
 import Application from '../../entities/Application'
 import { TransactionRequestData } from '../../transactions/TransactionRequest'
+import { TransactionDescribedData } from '../../transactions/TransactionDescribed'
 import { Abi, AppIntent } from '../../types'
 
 interface FoundMethod {
@@ -19,8 +20,8 @@ export async function tryEvaluatingRadspec(
   intent: TransactionRequestData,
   apps: Application[],
   provider?: ethers.providers.Provider // Decorated intent with description, if one could be made
-): Promise<TransactionRequestData> {
-  const app = apps.find((app) => addressesEqual(app.address, intent.to))
+): Promise<TransactionDescribedData> {
+  const app = apps.find(app => addressesEqual(app.address, intent.to))
 
   // If the intent matches an installed app, use only that app to search for a
   // method match, otherwise fallback to searching all installed apps
