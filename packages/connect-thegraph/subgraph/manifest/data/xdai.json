@@ -1,0 +1,22 @@
+{
+  "network": "xdai",
+  "description": "Subgraph for Aragon organizations.",
+  "repository": "https://github.com/aragon/connect",
+  "ens": "0xaafca6b0c89521752e559650206d7c925fd0e530",
+  "DAOFactoryDataSources": [
+    {
+      "name": "DAOFactory",
+      "address": "0x4037f97fcc94287257e50bd14c7da9cb4df18250",
+      "startBlock": "10076184"
+    }
+  ],
+  "APMFactoryDataSources": [
+    {
+      "name": "ApmRegistryFactory",
+      "address": "0x812672c031210b439a5befc8f397d639e97e3738",
+      "startBlock": "10076185"
+    }
+  ],
+  "RegistryDataSources": [],
+  "KernelDataSources": []
+}
