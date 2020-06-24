@@ -1,6 +1,6 @@
 {
   "network": "xdai",
-  "description": "Development subgraph for Aragon organizations.",
+  "description": "Subgraph for Aragon organizations.",
   "repository": "https://github.com/aragon/connect",
   "ens": "0xaafca6b0c89521752e559650206d7c925fd0e530",
   "DAOFactoryDataSources": [
