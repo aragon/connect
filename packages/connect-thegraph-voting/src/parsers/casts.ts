@@ -1,5 +1,4 @@
 import { QueryResult } from '@aragon/connect-thegraph'
-import { Cast as CastDataGql } from '../queries/types'
 import Cast, { CastData } from '../entities/Cast'
 
 export function parseCasts(
@@ -13,7 +12,7 @@ export function parseCasts(
   }
 
   const datas = casts.map(
-    (cast: CastDataGql): CastData => {
+    (cast: any): CastData => {
       return {
         id: cast.id,
         voteId: cast.voteId,

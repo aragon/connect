@@ -10,6 +10,6 @@ module.exports = {
   modulePaths: [`<rootDir>/packages/${packageName}/src/`],
   name: packageName,
   displayName: 'GRAPH',
-  testTimeout: 20000,
+  testTimeout: 30000,
   rootDir: '../..',
 }

@@ -1,10 +1,8 @@
 import { Application, AppData } from '@aragon/connect-core'
-import { App as AppDataGql } from '../queries/types'
-import { Organization as OrganizationDataGql } from '../queries/types'
 import { QueryResult } from '../types'
 
 function _parseApp(
-  app: AppDataGql,
+  app: any,
   connector: any
 ): Application {
   const data: AppData = {
@@ -31,7 +29,7 @@ export function parseApp(
   result: QueryResult,
   connector: any
 ): AppData {
-  const app = result.data.app as AppDataGql
+  const app = result.data.app
 
   if (!app) {
     throw new Error('Unable to parse app.')
@@ -44,14 +42,14 @@ export function parseApps(
   result: QueryResult,
   connector: any
 ): AppData[] {
-  const org = result.data.organization as OrganizationDataGql
+  const org = result.data.organization
   const apps = org?.apps
 
   if (!apps) {
     throw new Error('Unable to parse apps.')
   }
 
-  return apps.map((app: AppDataGql) => {
+  return apps.map((app: any) => {
     return _parseApp(app, connector)
   })
 }

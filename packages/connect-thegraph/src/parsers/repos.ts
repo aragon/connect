@@ -1,14 +1,12 @@
 import { Repository, RepoData } from '@aragon/connect-core'
-import { App as AppDataGql } from '../queries/types'
-import { Repo as RepoDataGql } from '../queries/types'
 import { QueryResult } from '../types'
 
 export function parseRepo(
   result: QueryResult,
   connector: any
 ): Repository {
-  const app = result.data.app as AppDataGql
-  const repo = app.repo as RepoDataGql
+  const app = result.data.app
+  const repo = app.repo
 
   if (!repo) {
     throw new Error('Unable to parse repo.')
