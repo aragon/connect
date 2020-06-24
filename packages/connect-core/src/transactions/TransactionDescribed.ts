@@ -5,7 +5,7 @@ export interface TransactionDescribedData extends TransactionRequestData {
   annotatedDescription?: Annotation[]
 }
 
-interface Annotation {
+export interface Annotation {
   type: string
   value: any
 }

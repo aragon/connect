@@ -2,7 +2,7 @@ import { addressesEqual, ANY_ENTITY } from '../address'
 import { getKernelNamespace } from '../kernel'
 import Application from '../../entities/Application'
 import Role from '../../entities/Role'
-import { Annotation } from '../../transactions/TransactionRequest'
+import { Annotation } from '../../transactions/TransactionDescribed'
 
 export interface PostProcessDescription {
   description: string
@@ -36,8 +36,8 @@ export async function postprocessRadspecDescription(
 
   const tokens = description
     .split(combinedRegex)
-    .map((token) => token.trim())
-    .filter((token) => token)
+    .map(token => token.trim())
+    .filter(token => token)
 
   if (tokens.length < 1) {
     return { description }
@@ -97,7 +97,7 @@ export async function postprocessRadspecDescription(
     return [input, input, { type: 'text', value: input }]
   }
 
-  const annotatedTokens = tokens.map((token) => {
+  const annotatedTokens = tokens.map(token => {
     if (addressRegex.test(token)) {
       return annotateAddress(token)
     }
