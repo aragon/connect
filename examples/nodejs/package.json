@@ -21,7 +21,7 @@
   "dependencies": {
     "@aragon/connect": "*",
     "@aragon/connect-thegraph": "*",
-    "@aragon/connect-thegraph-token-manager": "*",
+    "@aragon/connect-thegraph-tokens": "*",
     "@aragon/connect-thegraph-voting": "*",
     "ethers": "^5.0.0-beta.188",
     "graphql-tag": "^2.10.3"
