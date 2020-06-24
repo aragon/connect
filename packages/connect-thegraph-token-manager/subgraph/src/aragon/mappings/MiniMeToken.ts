@@ -15,8 +15,10 @@ export function handleTransfer(event: TransferEvent): void {
 
   let miniMeTokenEntity = _getMiniMeTokenEntity(tokenAddress)
 
+  let previousBlock = event.block.number.minus(BigInt.fromI32(1))
+
   let sendingHolderAddress = event.params._from
-  let sendingHolder = _getTokenHolder(miniMeTokenEntity, sendingHolderAddress)
+  let sendingHolder = _getTokenHolder(previousBlock, miniMeTokenEntity, sendingHolderAddress)
   if (sendingHolder) {
     sendingHolder.balance = sendingHolder.balance.minus(transferedAmount)
 
@@ -24,7 +26,7 @@ export function handleTransfer(event: TransferEvent): void {
   }
 
   let receivingHolderAddress = event.params._to
-  let receivingHolder = _getTokenHolder(miniMeTokenEntity, receivingHolderAddress)
+  let receivingHolder = _getTokenHolder(previousBlock, miniMeTokenEntity, receivingHolderAddress)
   if (receivingHolder) {
     receivingHolder.balance = receivingHolder.balance.plus(transferedAmount)
 
@@ -65,7 +67,7 @@ function _getMiniMeTokenEntity(tokenAddress: Address): MiniMeTokenEntity {
   return miniMeTokenEntity!
 }
 
-function _getTokenHolder(miniMeTokenEntity: MiniMeTokenEntity, holderAddress: Address): TokenHolderEntity | null {
+function _getTokenHolder(previousBlock: BigInt, miniMeTokenEntity: MiniMeTokenEntity, holderAddress: Address): TokenHolderEntity | null {
   if (holderAddress.toHexString() == '0x0000000000000000000000000000000000000000') {
     return null
   }
@@ -78,8 +80,20 @@ function _getTokenHolder(miniMeTokenEntity: MiniMeTokenEntity, holderAddress: Ad
     tokenHolder = new TokenHolderEntity(tokenHolderId)
     tokenHolder.address = holderAddress
     tokenHolder.tokenAddress = tokenAddress as Address
-    tokenHolder.balance = new BigInt(0)
-    
+
+    let tokenContract = MiniMeTokenContract.bind(tokenAddress)
+    let callResult = tokenContract.try_balanceOfAt(holderAddress, previousBlock)
+    if (callResult.reverted) {
+      log.info('balanceOfAt reverted - token {}, holder {}, block {}', [
+        tokenAddress.toHexString(),
+        holderAddress.toHexString(),
+        previousBlock.toString()
+      ])
+      tokenHolder.balance = BigInt.fromI32(0)
+    } else {
+      tokenHolder.balance = callResult.value
+    }
+
     let holders = miniMeTokenEntity.holders
     holders.push(tokenHolder.id)
     miniMeTokenEntity.holders = holders
