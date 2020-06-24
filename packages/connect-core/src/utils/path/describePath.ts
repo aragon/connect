@@ -7,6 +7,7 @@ import {
   postprocessRadspecDescription,
 } from '../radspec/index'
 import { TransactionRequestData } from '../../transactions/TransactionRequest'
+import { TransactionDescribedData } from '../../transactions/TransactionDescribed'
 
 /**
  * Use radspec to create a human-readable description for each transaction in the given `path`
@@ -16,9 +17,9 @@ export async function describeTransactionPath(
   path: TransactionRequestData[],
   apps: Application[],
   provider?: ethers.providers.Provider
-): Promise<TransactionRequestData[]> {
+): Promise<TransactionDescribedData[]> {
   return Promise.all(
-    path.map(async (step) => {
+    path.map(async step => {
       let decoratedStep
 
       // Evaluate via radspec normally
