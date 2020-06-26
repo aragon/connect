@@ -15,7 +15,7 @@ export function handleTransfer(event: TransferEvent): void {
 
   let miniMeTokenEntity = _getMiniMeTokenEntity(tokenAddress)
 
-  let previousBlock = event.block.number.minus(new BigInt(1))
+  let previousBlock = event.block.number.minus(BigInt.fromI32(1))
 
   let sendingHolderAddress = event.params._from
   let sendingHolder = _getTokenHolder(previousBlock, miniMeTokenEntity, sendingHolderAddress)
@@ -89,7 +89,7 @@ function _getTokenHolder(previousBlock: BigInt, miniMeTokenEntity: MiniMeTokenEn
         holderAddress.toHexString(),
         previousBlock.toString()
       ])
-      tokenHolder.balance = new BigInt(0)
+      tokenHolder.balance = BigInt.fromI32(0)
     } else {
       tokenHolder.balance = callResult.value
     }
