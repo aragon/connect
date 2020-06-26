@@ -27,11 +27,12 @@ async function main() {
 
   console.log('\nTransactions on the path:')
   txPath.transactions.map((tx: any) => console.log(tx))
+  txPath.transactionsDescribed.map((tx: any) => console.log(tx))
 }
 
 main()
   .then(() => process.exit(0))
-  .catch((err) => {
+  .catch(err => {
     console.log(`Error: `, err)
     console.log(
       '\nPlease report any problem to https://github.com/aragon/connect/issues'

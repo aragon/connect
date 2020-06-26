@@ -29,7 +29,9 @@ export default class TransactionIntent {
     this.#org = org
     this.#provider = provider
 
-    Object.assign(this, data)
+    this.contractAddress = data.contractAddress
+    this.functionArgs = data.functionArgs
+    this.functionName = data.functionName
   }
 
   async paths(
@@ -38,42 +40,36 @@ export default class TransactionIntent {
     options?: { as?: string; path?: string[] }
   ): Promise<TransactionPath> {
     const apps = await this.#org.apps()
-    const destination = this.contractAddress
 
-    const transactions = await calculateTransactionPath(
+    const {
+      forwardingFeePretransaction,
+      transactions,
+    } = await calculateTransactionPath(
       account,
-      destination,
+      this.contractAddress,
       this.functionName,
       this.functionArgs,
       apps,
       this.#provider
     )
 
-    const describedTransactions = await describeTransactionPath(
+    const transactionsDescribed = await describeTransactionPath(
       transactions,
       apps,
       this.#provider
     )
 
-    // Include chainId and create Transaction Request objects
-    const chainId = (await this.#provider.getNetwork()).chainId
-    const transactionsRequests = describedTransactions.map((transaction) => {
-      return new TransactionRequest({
-        ...transaction,
-        chainId,
-      })
-    })
-
-    const appsOnPath = transactions.map((transaction) => transaction.to)
+    const appsOnPath = transactions.map(transaction => transaction.to)
 
     return new TransactionPath({
-      apps: apps.filter((app) =>
-        appsOnPath.some((address) => address === app.address)
+      apps: apps.filter(app =>
+        appsOnPath.some(address => address === app.address)
       ),
       destination: apps.find(
-        (app) => app.address == destination
+        app => app.address == this.contractAddress
       ) as Application,
-      transactions: transactionsRequests,
+      forwardingFeePretransaction,
+      transactions: transactionsDescribed.map(tx => new TransactionRequest(tx)),
     })
   }
 
