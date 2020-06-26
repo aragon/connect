@@ -1,6 +1,5 @@
 import { ethers } from 'ethers'
 
-import TransactionDescribed from './TransactionDescribed'
 import TransactionPath from './TransactionPath'
 import TransactionRequest from './TransactionRequest'
 import Application from '../entities/Application'
@@ -66,16 +65,11 @@ export default class TransactionIntent {
       apps: apps.filter(app =>
         appsOnPath.some(address => address === app.address)
       ),
-      transactionsDescribed: transactionsDescribed.map(
-        transaction => new TransactionDescribed(transaction)
-      ),
       destination: apps.find(
         app => app.address == this.contractAddress
       ) as Application,
       forwardingFeePretransaction,
-      transactions: transactions.map(
-        transaction => new TransactionRequest(transaction)
-      ),
+      transactions: transactionsDescribed.map(tx => new TransactionRequest(tx)),
     })
   }
 
