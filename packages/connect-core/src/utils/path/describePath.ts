@@ -18,7 +18,7 @@ export async function describeTransactionPath(
   provider?: ethers.providers.Provider
 ): Promise<TransactionRequestData[]> {
   return Promise.all(
-    path.map(async (step) => {
+    path.map(async step => {
       let decoratedStep
 
       // Evaluate via radspec normally
@@ -35,7 +35,7 @@ export async function describeTransactionPath(
               apps
             )
             decoratedStep.description = processed.description
-            decoratedStep.annotatedDescription = processed.annotatedDescription
+            decoratedStep.descriptionAnnotated = processed.annotatedDescription
           } catch (err) {}
         }
       }

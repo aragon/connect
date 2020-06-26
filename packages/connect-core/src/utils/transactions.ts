@@ -6,72 +6,12 @@ import { Abi, FunctionFragment } from '../types'
 import Application from '../entities/Application'
 import { TransactionRequestData } from '../transactions/TransactionRequest'
 
-const DEFAULT_GAS_FUZZ_FACTOR = '1.5'
-const PREVIOUS_BLOCK_GAS_LIMIT_FACTOR = '0.95'
-
 export interface TransactionWithTokenData extends TransactionRequestData {
-  token?: {
+  token: {
     address: string
     value: string
     spender: string
   }
-}
-
-export async function applyPretransaction(
-  transaction: TransactionWithTokenData,
-  provider: ethers.providers.Provider
-): Promise<TransactionRequestData> {
-  if (transaction.token) {
-    // Token allowance pretransactionn
-    const {
-      from,
-      to,
-      token: { address: tokenAddress, value: tokenValue, spender },
-    } = transaction
-
-    // Approve the transaction destination unless an spender is passed to approve a different contract
-    const approveSpender = spender || to
-
-    const tokenContract = new ethers.Contract(tokenAddress, erc20ABI, provider)
-    const balance = await tokenContract.balanceOf(from)
-    const tokenValueBN = BigInt(tokenValue)
-
-    if (BigInt(balance) < tokenValueBN) {
-      throw new Error(
-        `Balance too low. ${from} balance of ${tokenAddress} token is ${balance} (attempting to send ${tokenValue})`
-      )
-    }
-
-    const allowance = await tokenContract.allowance(from, approveSpender)
-    const allowanceBN = BigInt(allowance)
-    // If allowance is already greater than or equal to amount, there is no need to do an approve transaction
-    if (allowanceBN < tokenValueBN) {
-      if (allowanceBN > BigInt(0)) {
-        // TODO: Actually handle existing approvals (some tokens fail when the current allowance is not 0)
-        console.warn(
-          `${from} already approved ${approveSpender}. In some tokens, approval will fail unless the allowance is reset to 0 before re-approving again.`
-        )
-      }
-
-      const erc20 = new ethers.utils.Interface(erc20ABI)
-
-      const tokenApproveTransaction = {
-        // TODO: should we include transaction options?
-        from,
-        to: tokenAddress,
-        data: erc20.encodeFunctionData('approve', [approveSpender, tokenValue]),
-      }
-
-      delete transaction.token
-
-      return {
-        ...transaction,
-        pretransaction: tokenApproveTransaction,
-      }
-    }
-  }
-
-  return transaction
 }
 
 export async function createDirectTransaction(
@@ -79,8 +19,7 @@ export async function createDirectTransaction(
   destination: string,
   abi: Abi,
   methodJsonDescription: FunctionFragment,
-  params: any[],
-  provider: ethers.providers.Provider
+  params: any[]
 ): Promise<TransactionRequestData> {
   let transactionOptions = {}
 
@@ -96,7 +35,7 @@ export async function createDirectTransaction(
   const ethersInterface = new ethers.utils.Interface(abi)
 
   // The direct transaction we eventually want to perform
-  const directTransaction = {
+  return {
     ...transactionOptions, // Options are overwriten by the values below
     from: sender,
     to: destination,
@@ -105,16 +44,13 @@ export async function createDirectTransaction(
       params
     ),
   }
-
-  return applyPretransaction(directTransaction, provider)
 }
 
 export async function createDirectTransactionForApp(
   sender: string,
   app: Application,
   methodSignature: string,
-  params: any[],
-  provider: ethers.providers.Provider
+  params: any[]
 ): Promise<TransactionRequestData> {
   if (!app) {
     throw new Error(`Could not create transaction due to missing app artifact`)
@@ -126,7 +62,7 @@ export async function createDirectTransactionForApp(
     throw new Error(`No ABI specified in artifact for ${destination}`)
   }
 
-  const methodJsonDescription = app.abi.find((method) => {
+  const methodJsonDescription = app.abi.find(method => {
     // If the full signature isn't given, just find the first overload declared
     if (!isFullMethodSignature(methodSignature)) {
       return method.name === methodSignature
@@ -151,8 +87,7 @@ export async function createDirectTransactionForApp(
     destination,
     app.abi,
     methodJsonDescription as FunctionFragment,
-    params,
-    provider
+    params
   )
 }
 
@@ -173,10 +108,57 @@ export function createForwarderTransactionBuilder(
   })
 }
 
-export async function applyForwardingFeePretransaction(
+export async function buildPretransaction(
+  transaction: TransactionWithTokenData,
+  provider: ethers.providers.Provider
+): Promise<TransactionRequestData | undefined> {
+  // Token allowance pretransactionn
+  const {
+    from,
+    to,
+    token: { address: tokenAddress, value: tokenValue, spender },
+  } = transaction
+
+  // Approve the transaction destination unless an spender is passed to approve a different contract
+  const approveSpender = spender || to
+
+  const tokenContract = new ethers.Contract(tokenAddress, erc20ABI, provider)
+  const balance = await tokenContract.balanceOf(from)
+  const tokenValueBN = BigInt(tokenValue)
+
+  if (BigInt(balance) < tokenValueBN) {
+    throw new Error(
+      `Balance too low. ${from} balance of ${tokenAddress} token is ${balance} (attempting to send ${tokenValue})`
+    )
+  }
+
+  const allowance = await tokenContract.allowance(from, approveSpender)
+  const allowanceBN = BigInt(allowance)
+  // If allowance is already greater than or equal to amount, there is no need to do an approve transaction
+  if (allowanceBN < tokenValueBN) {
+    if (allowanceBN > BigInt(0)) {
+      // TODO: Actually handle existing approvals (some tokens fail when the current allowance is not 0)
+      console.warn(
+        `${from} already approved ${approveSpender}. In some tokens, approval will fail unless the allowance is reset to 0 before re-approving again.`
+      )
+    }
+
+    const erc20 = new ethers.utils.Interface(erc20ABI)
+
+    return {
+      from,
+      to: tokenAddress,
+      data: erc20.encodeFunctionData('approve', [approveSpender, tokenValue]),
+    }
+  }
+
+  return undefined
+}
+
+export async function buildForwardingFeePretransaction(
   forwardingTransaction: TransactionRequestData,
   provider: ethers.providers.Provider
-): Promise<TransactionRequestData> {
+): Promise<TransactionRequestData | undefined> {
   const { to: forwarderAddress, from } = forwardingTransaction
 
   const forwarderFee = new ethers.Contract(
@@ -208,99 +190,8 @@ export async function applyForwardingFeePretransaction(
         value: feeDetails.amount.toString(),
       },
     }
-    return applyPretransaction(forwardingTxWithTokenData, provider)
+
+    return buildPretransaction(forwardingTxWithTokenData, provider)
   }
-
-  return forwardingTransaction
-}
-
-export async function getRecommendedGasLimit(
-  estimatedGasLimit: ethers.BigNumber,
-  provider: ethers.providers.Provider,
-  { gasFuzzFactor = DEFAULT_GAS_FUZZ_FACTOR } = {}
-): Promise<ethers.BigNumber> {
-  const latestBlockNumber = await provider.getBlockNumber()
-  const latestBlock = await provider.getBlock(latestBlockNumber)
-  const latestBlockGasLimit = latestBlock.gasLimit
-
-  const upperGasLimit = latestBlockGasLimit.mul(
-    ethers.BigNumber.from(PREVIOUS_BLOCK_GAS_LIMIT_FACTOR)
-  )
-
-  const bufferedGasLimit = estimatedGasLimit.mul(
-    ethers.BigNumber.from(gasFuzzFactor)
-  )
-
-  if (estimatedGasLimit.gt(upperGasLimit)) {
-    // TODO: Consider whether we should throw an error rather than returning with a high gas limit
-    return estimatedGasLimit
-  }
-  if (bufferedGasLimit.lt(upperGasLimit)) {
-    return bufferedGasLimit
-  }
-  return upperGasLimit
-}
-
-/**
- * Calculates and applies the gas limit and gas price for a transaction
- *
- * @param  {Object} transaction
- * @param  {bool} isForwarding
- * @return {Promise<Object>} The transaction with the gas limit and gas price added.
- *                           If the transaction fails from the estimateGas check, the promise will
- *                           be rejected with the error.
- */
-export async function applyTransactionGas(
-  transaction: TransactionRequestData,
-  provider: ethers.providers.Provider,
-  isForwarding = false
-): Promise<TransactionRequestData> {
-  // If a pretransaction is required for the main transaction to be performed,
-  // performing web3.eth.estimateGas could fail until the pretransaction is mined
-  // Example: erc20 approve (pretransaction) + deposit to vault (main transaction)`
-  if (transaction.pretransaction) {
-    // Calculate gas settings for pretransaction
-    transaction.pretransaction = await applyTransactionGas(
-      transaction.pretransaction,
-      provider,
-      false
-    )
-    // Note: for transactions with pretransactions gas limit and price cannot be calculated
-    return transaction
-  }
-
-  // TODO: check with ethers keep happening
-  // NOTE: estimateGas mutates the argument object and transforms the address to lowercase
-  // so this is a hack to make sure checksums are not destroyed
-  // Also, at the same time it's a hack for checking if the call will revert,
-  // since `eth_call` returns `0x` if the call fails and if the call returns nothing.
-  // So yeah...
-
-  const estimatedGasLimit = await provider.estimateGas({
-    to: transaction.to,
-    data: transaction.data,
-  })
-  // TODO: Check if we want to keep using it
-  // const recommendedGasLimit = await getRecommendedGasLimit(
-  //   estimatedGasLimit,
-  //   provider
-  // )
-
-  // If the gas provided in the intent is lower than the estimated gas, use the estimation
-  // when forwarding as it requires more gas and otherwise the transaction would go out of gas
-  if (
-    !transaction.gas ||
-    (isForwarding &&
-      ethers.BigNumber.from(transaction.gas).lt(estimatedGasLimit))
-  ) {
-    transaction.gas = estimatedGasLimit.toString()
-    transaction.gasLimit = estimatedGasLimit.toString()
-  }
-
-  if (!transaction.gasPrice) {
-    // TODO: consider supporting an estimation function like aragon wrapper does
-    transaction.gasPrice = (await provider.getGasPrice()).toString()
-  }
-
-  return transaction
+  return undefined
 }
