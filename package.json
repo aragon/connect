@@ -33,7 +33,7 @@
     "connect-ethereum": "yarn workspace @aragon/connect-ethereum",
     "connect-thegraph": "yarn workspace @aragon/connect-thegraph",
     "connect-thegraph-voting": "yarn workspace @aragon/connect-thegraph-voting",
-    "connect-thegraph-token-manager": "yarn workspace @aragon/connect-thegraph-token-manager",
+    "connect-thegraph-tokens": "yarn workspace @aragon/connect-thegraph-tokens",
     "connect-types": "yarn workspace @aragon/connect-types",
     "test": "is-ci \"test:coverage\" \"test:watch\"",
     "test:coverage": "jest --coverage --forceExit --detectOpenHandles",

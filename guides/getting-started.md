@@ -37,7 +37,7 @@ Aragon Connect consists of a few parts:
 
 * `@aragon/connect`: this is the main library. It provides the main features to connect and interact with organizations, and includes connectors.
 * `@aragon/connect-thegraph-voting`: a connector that allows to fetch data from the Voting app, through The Graph.
-* `@aragon/connect-thegraph-token-manager`: a connector that allows to fetch data from the Voting app, through The Graph.
+* `@aragon/connect-thegraph-tokens`: a connector that allows to fetch data from the Voting app, through The Graph.
 
 [A few other packages](https://github.com/aragon/connect/tree/master/packages) are also published, but they are only needed to author or extend connectors and not to use the library.
 
@@ -59,7 +59,7 @@ If you want to interact with the Voting or the Tokens app, you should also insta
 
 ```text
 yarn add @aragon/connect-thegraph-voting
-yarn add @aragon/connect-thegraph-token-manager
+yarn add @aragon/connect-thegraph-tokens
 ```
 
 See “Fetching data from an app state” below to understand how to use these app connectors.
