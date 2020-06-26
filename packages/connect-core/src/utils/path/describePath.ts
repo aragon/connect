@@ -35,7 +35,7 @@ export async function describeTransactionPath(
               apps
             )
             decoratedStep.description = processed.description
-            decoratedStep.annotatedDescription = processed.annotatedDescription
+            decoratedStep.descriptionAnnotated = processed.annotatedDescription
           } catch (err) {}
         }
       }

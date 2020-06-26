@@ -1,6 +1,6 @@
 export interface TransactionRequestData {
-  annotatedDescription?: Annotation[]
   description?: string
+  descriptionAnnotated?: Annotation[]
   data: string
   from: string
   to: string
@@ -12,15 +12,15 @@ export interface Annotation {
 }
 
 export default class TransactionRequest {
-  readonly annotatedDescription?: Annotation[]
   readonly description?: string
+  readonly descriptionAnnotated?: Annotation[]
   readonly data!: string
   readonly from!: string
   readonly to!: string
 
   constructor(data: TransactionRequestData) {
-    this.annotatedDescription = data.annotatedDescription
     this.description = data.description
+    this.descriptionAnnotated = data.descriptionAnnotated
     this.data = data.data
     this.from = data.from
     this.to = data.to
