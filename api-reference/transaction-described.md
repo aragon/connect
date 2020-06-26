@@ -1,4 +1,4 @@
-# TransactionRequest
+# TransactionDescribed
 
 An object describing a transaction that can get signed by a library like ethers.js or Web3.js, or sent via JSON-RPC.
 

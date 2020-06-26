@@ -136,7 +136,7 @@ export async function buildPretransaction(
   const allowanceBN = BigInt(allowance)
   // If allowance is already greater than or equal to amount, there is no need to do an approve transaction
   if (allowanceBN < tokenValueBN) {
-    if (allowanceBN > BigInt(0)) {
+    if (allowanceBN > 0n) {
       // TODO: Actually handle existing approvals (some tokens fail when the current allowance is not 0)
       console.warn(
         `${from} already approved ${approveSpender}. In some tokens, approval will fail unless the allowance is reset to 0 before re-approving again.`
