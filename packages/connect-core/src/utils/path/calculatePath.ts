@@ -249,7 +249,7 @@ export async function calculateTransactionPath(
       role => role.name === method.roles[0]
     )
     const allowedEntities =
-      role?.grantees?.map(permission => permission.granteeAddress) || []
+      role?.permissions?.map(permission => permission.granteeAddress) || []
 
     // No one has access, so of course we don't as well
     if (allowedEntities.length === 0) {

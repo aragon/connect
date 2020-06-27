@@ -1,10 +1,7 @@
 import { Repository, RepoData } from '@aragon/connect-core'
 import { QueryResult } from '../types'
 
-export function parseRepo(
-  result: QueryResult,
-  connector: any
-): Repository {
+export function parseRepo(result: QueryResult, connector: any): Repository {
   const app = result.data.app
   const repo = app.repo
 
@@ -18,7 +15,8 @@ export function parseRepo(
     contentUri: repo.lastVersion?.contentUri,
     manifest: repo.lastVersion?.manifest,
     name: repo.name,
-    registry: repo.registry?.name
+    registry: repo.registry?.name,
+    registryAddress: app.repo?.registry?.address,
   }
 
   return new Repository(data, connector)

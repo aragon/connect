@@ -15,6 +15,7 @@ export interface RepositoryData {
   name: string
   manifest?: string | null
   registry?: string | null
+  registryAddress?: string | null
 }
 
 export default class Repository extends CoreEntity implements RepositoryData {
@@ -27,6 +28,7 @@ export default class Repository extends CoreEntity implements RepositoryData {
   readonly icons?: { src: string; sizes: string }[]
   readonly name!: string
   readonly registry?: string | null
+  readonly registryAddress?: string | null
   readonly roles?: AragonArtifactRole[]
   readonly screenshots?: { src: string }[]
   readonly sourceUrl?: string
@@ -72,5 +74,6 @@ export default class Repository extends CoreEntity implements RepositoryData {
     this.address = data.address
     this.name = data.name
     this.registry = data.registry
+    this.registryAddress = data.registryAddress
   }
 }

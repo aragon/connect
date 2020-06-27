@@ -1,17 +1,11 @@
 import Repository from './Repository'
 import Role from './Role'
 import CoreEntity from './CoreEntity'
-import {
-  AragonArtifact,
-  AppIntent,
-  Abi,
-  AragonEnvironment,
-  AragonManifest,
-} from '../types'
+import { AragonArtifact, AppIntent, Abi, AragonManifest } from '../types'
 import { parseMetadata } from '../utils/parseMetadata'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 
-// TODO: Implement all properties and methods from the API spec (https://github.com/aragon/connect/blob/master/docs/app.md).
+// TODO:
 // [ ] (ipfs) contentUrl 	String 	The HTTP URL of the app content. Uses the IPFS HTTP provider. E.g. http://gateway.ipfs.io/ipfs/QmdLEDDfi…/ (ContentUri passing through the resolver)
 
 export interface ApplicationData {
@@ -37,16 +31,13 @@ export default class Application extends CoreEntity implements ApplicationData {
   readonly appId!: string
   readonly appName?: string
   readonly author?: string
-  readonly chainId?: AragonEnvironment
   readonly codeAddress!: string
   readonly contentUri?: string
-  readonly contentUrl?: string
   readonly contractPath?: string
+  readonly deprecatedIntents?: { [version: string]: AppIntent[] }
   readonly description?: string
-  readonly htmlPath?: string
   readonly htmlUrl?: string
   readonly intents?: AppIntent[]
-  readonly deprecatedIntents?: { [version: string]: AppIntent[] }
   readonly icons?: { src: string; sizes: string }[]
   readonly isForwarder?: boolean
   readonly isUpgradeable?: boolean
@@ -56,7 +47,6 @@ export default class Application extends CoreEntity implements ApplicationData {
   readonly registry?: string
   readonly repoAddress?: string
   readonly sourceUrl?: string
-  readonly tags?: string[]
   readonly version?: string
 
   constructor(
@@ -87,14 +77,14 @@ export default class Application extends CoreEntity implements ApplicationData {
       const {
         author,
         description,
-        start_url: htmlPath,
+        start_url: htmlUrl,
         icons,
         source_url: sourceUrl,
       }: AragonManifest = parseMetadata(manifest, 'manifest.json')
 
       this.author = author
       this.description = description
-      this.htmlPath = htmlPath
+      this.htmlUrl = htmlUrl
       this.icons = icons
       this.sourceUrl = sourceUrl
     }
