@@ -1,16 +1,16 @@
 # App Subgraphs
 
-Making a subgraph for an aragon app is not much different from making any other kind of subgraph. To learn how to do that, check out TheGraphs's docs: [https://thegraph.com/docs](https://thegraph.com/docs)
+Making a subgraph for an aragon app is not much different from making any other kind of subgraph. To learn how to do that, check out [TheGraphs's documentation](https://thegraph.com/docs).
 
 In this subgraph template, we merely hook up a bunch of Aragon related data sources that will detect any installed organization, app, token, etc in Aragon deployments. This is hidden from you, so that writting the subgraph is as similar as possible as writting a normal subgraph.
 
-## Step by step guide for using this template
+## Step by step guide for using this guide
 
-The template is initially set up to connect to all Aragon voting apps. Next, you'll find instructions for how to modify it to index information for another Aragon app, or any specific needs you may have.
+To create a new subgraph for Aragon, start off by creating a copy of one of our existing connectors, such as [`connect-thegraph-voting`](https://github.com/aragon/connect/tree/master/packages/connect-thegraph-voting). Then follow the steps below for modifying them to fit your needs.
 
 ### 1. Modify package.json with your username and subgraph name
 
-In "package.json", you'll find a bunch of scripts that reference the user "ajsantander" and the app name "voting". Change these to your user or Github organization name.
+In "package.json", you'll find a bunch of scripts that reference the user "aragon" and the app name "voting". Change these to your user or Github organization name.
 
 ### 2. Create your subgraphs in the TheGraph dashboard
 
@@ -70,7 +70,14 @@ Of course, this deployment will take much more time to index, potentially days.
 
 ## Troubleshooting
 
-* Some data is missing in my subgraph Even though the way in which this template collects many data sources, there are some cases in which a contract is deployed in a way that isolates it from the general data sources. For example, you may deploy an organization manually, without using the official templates or factories. If this is the case, such organization will not be detected by the bootstrapped data sources. Also, there may be a bug in which this template scans the data sources. If you find missing information in your subgraph, lets discuss your case to see if there's a bug in the template. If a bug is not the case, you may have to manually insert specific data sources in the subgraph, such as isolated organizations, apps or tokens.
-* I'm getting errors about missing ABIs when the subgraph is indexing When a reducer is run, it's run in the context of the data source that defined it. For example, hooks are triggered by src/base/Kernel.ts when the NewAppProxy event is detected in an Organization. You need to include the missing ABI in manifest/templates/Kernel.template.yaml for it to be available in this reducer.
-* My callHandlers aren't working Unfortunately, TheGraph does not support callHandlers in Rinkeby. For this reason, this template avoids them altoghether. In general, we prefer to code subgraphs in a way that is compatible with all networks. Alternatively, if you by all means need to use this feature, consider hosting your own subgraph.
+#### Some data is missing in my subgraph
 
+Even though templates collect data from many sources, there are some cases in which a contract is deployed in a way that isolates it from the general data sources. For example, you may deploy an organization manually, without using the official templates or factories. If this is the case, such organization will not be detected by the bootstrapped data sources. There may also be bugs in how a template scans the data sources. If you find missing information in your subgraph, please contact us to discuss your case to see if there's a bug in the template. If a bug is not the case, you may have to manually insert specific data sources in the subgraph, such as isolated organizations, apps or tokens.
+
+#### I'm getting errors about missing ABIs when the subgraph is indexing
+
+When a reducer is run, it's run in the context of the data source that defined it. For example, hooks are triggered by src/base/Kernel.ts when the NewAppProxy event is detected in an Organization. You need to include the missing ABI in manifest/templates/contracts/Kernel.template.yaml for it to be available in this reducer. As a rule of thumb, if your data source will be triggered by a base Aragon data source (Organization templates, Organization factories, etc), include your its ABI in the manifest/templates/contracts files.
+
+#### My callHandlers aren't working
+
+Unfortunately, TheGraph does not support callHandlers in Rinkeby. For this reason, our templates avoid them altogether. In general, we prefer to code subgraphs in a way that is compatible with all networks. Alternatively, if you by all means need to use this feature, consider hosting your own subgraph.
