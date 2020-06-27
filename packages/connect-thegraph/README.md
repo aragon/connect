@@ -3,12 +3,8 @@
 ## Usage
 
 ```js
-const myorg = await connect('myorg', {
-  connector: new ConnectorTheGraph({
-    daoSubgraphUrl: 'http://…',
-    appSubgraphUrl: repoId => {
-      return 'http://…'
-    },
-  }),
-})
+const myorg = await connect('myorg', connector: new ConnectorTheGraph(network, {
+     orgSubgraphUrl: 'http://…',
+   }),
+ })
 ```

@@ -1,5 +1,5 @@
 import CoreEntity from './CoreEntity'
-import { PermissionData } from './Permission'
+import Permission, { PermissionData } from './Permission'
 import { AragonArtifact } from '../types'
 import { parseMetadata } from '../utils/parseMetadata'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
@@ -15,7 +15,7 @@ export interface RoleData {
 export default class Role extends CoreEntity implements RoleData {
   readonly appAddress!: string
   readonly description?: string
-  readonly grantees?: PermissionData[] | null
+  readonly permissions?: Permission[] | null
   readonly hash!: string
   readonly name?: string
   readonly manager?: string
@@ -29,14 +29,16 @@ export default class Role extends CoreEntity implements RoleData {
     if (artifact) {
       const { roles }: AragonArtifact = parseMetadata(artifact, 'artifact.json')
 
-      const role = roles.find((role) => role.bytes === data.hash)
+      const role = roles.find(role => role.bytes === data.hash)
 
       this.name = role?.id
       this.description = role?.name
     }
 
     this.appAddress = data.appAddress
-    this.grantees = data.grantees
+    this.permissions = data.grantees?.map(
+      grantee => new Permission(grantee, connector)
+    )
     this.hash = data.hash
     this.manager = data.manager
   }
