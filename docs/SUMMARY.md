@@ -19,6 +19,6 @@
 * [Permission](api-reference/permission.md)
 * [Repo](api-reference/repo.md)
 * [Role](api-reference/role.md)
-* [TransactionIntent](api-reference/transaction-intent.md)
+* [TransactionIntent](api-reference/transactionintent.md)
 * [TransactionPath](api-reference/transactionpath.md)
 * [TransactionRequest](api-reference/transactionrequest.md)
