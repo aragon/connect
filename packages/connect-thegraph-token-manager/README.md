@@ -2,7 +2,7 @@
 
 ## Usage
 
-```js
+```javascript
 const myorg = await connect('myorg', {
   connector: new ConnectorTheGraph({
     daoSubgraphUrl: 'http://…',
@@ -12,3 +12,4 @@ const myorg = await connect('myorg', {
   }),
 })
 ```
+

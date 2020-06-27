@@ -10,8 +10,9 @@ A connector that fetches information from a The Graph subgraph.
 
 ## ConnectorEthereumProvider
 
-A connector that fetches information from a standard Ethereum provider (EIP 1193).
+A connector that fetches information from a standard Ethereum provider \(EIP 1193\).
 
 ## ConnectorJson
 
 A connector that read information from a JSON string. Useful for testing / debugging purposes.
+
