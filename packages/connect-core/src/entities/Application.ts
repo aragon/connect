@@ -47,7 +47,6 @@ export default class Application extends CoreEntity implements ApplicationData {
   readonly registry?: string
   readonly repoAddress?: string
   readonly sourceUrl?: string
-  readonly tags?: string[]
   readonly version?: string
 
   constructor(

@@ -46,9 +46,9 @@ describe('when connecting to the mainnet subgraph', () => {
         expect(role.description!.length).toBeGreaterThan(0)
       })
 
-      test('should have valid grantees', () => {
-        expect(role.grantees).toBeDefined()
-        expect(role.grantees!.length).toBeGreaterThan(0)
+      test('should have valid permissions', () => {
+        expect(role.permissions).toBeDefined()
+        expect(role.permissions!.length).toBeGreaterThan(0)
       })
 
       test('should have a valid app address', () => {
@@ -56,7 +56,7 @@ describe('when connecting to the mainnet subgraph', () => {
       })
 
       test('should have a valid manager', () => {
-        expect(role.grantees).toBeDefined()
+        expect(role.permissions).toBeDefined()
         expect(isAddress(role.manager!)).toBeTruthy()
       })
 
