@@ -26,7 +26,7 @@ for (const transaction of transactions) {
 
 ## Documentation
 
-Please have a look at the [documentation website](https://connect.aragon.org/). If you never used the library before, we recommend starting with the [Getting Started](https://connect.aragon.org/guides/getting-started) guide.
+Please have a look at the [documentation website](https://connect.aragon.org/). If you never used the library before, we highly recommend starting with the [Getting Started](https://connect.aragon.org/guides/getting-started) guide.
 
 ## Packages
 
