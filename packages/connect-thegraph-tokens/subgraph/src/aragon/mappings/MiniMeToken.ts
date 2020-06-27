@@ -13,10 +13,9 @@ export function handleTransfer(event: TransferEvent): void {
   let tokenAddress = event.address
   let transferedAmount = event.params._amount
 
+  let miniMeTokenEntity = _getMiniMeTokenEntity(tokenAddress)
+
   let previousBlock = event.block.number.minus(BigInt.fromI32(1))
-  let miniMeTokenEntity = _getMiniMeTokenEntity(previousBlock, tokenAddress)
-
-
 
   let sendingHolderAddress = event.params._from
   let sendingHolder = _getTokenHolder(previousBlock, miniMeTokenEntity, sendingHolderAddress)
@@ -24,9 +23,6 @@ export function handleTransfer(event: TransferEvent): void {
     sendingHolder.balance = sendingHolder.balance.minus(transferedAmount)
 
     sendingHolder.save()
-  } else {
-    miniMeTokenEntity.totalSupply = miniMeTokenEntity.totalSupply.plus(transferedAmount)
-    miniMeTokenEntity.save()
   }
 
   let receivingHolderAddress = event.params._to
@@ -35,9 +31,6 @@ export function handleTransfer(event: TransferEvent): void {
     receivingHolder.balance = receivingHolder.balance.plus(transferedAmount)
 
     receivingHolder.save()
-  } else {
-    miniMeTokenEntity.totalSupply = miniMeTokenEntity.totalSupply.minus(transferedAmount)
-    miniMeTokenEntity.save()
   }
 }
 
@@ -45,7 +38,7 @@ export function handleApproval(event: ApprovalEvent): void {}
 export function handleClaimedTokens(event: ClaimedTokensEvent): void {}
 export function handleNewCloneToken(event: NewCloneTokenEvent): void {}
 
-function _getMiniMeTokenEntity(previousBlock: BigInt, tokenAddress: Address): MiniMeTokenEntity {
+function _getMiniMeTokenEntity(tokenAddress: Address): MiniMeTokenEntity {
   let miniMeTokenEntityId = 'tokenAddress-' + tokenAddress.toHexString()
 
   let miniMeTokenEntity = MiniMeTokenEntity.load(miniMeTokenEntityId)
@@ -57,7 +50,7 @@ function _getMiniMeTokenEntity(previousBlock: BigInt, tokenAddress: Address): Mi
     miniMeTokenEntity.name = tokenContract.name()
     miniMeTokenEntity.address = tokenAddress
     miniMeTokenEntity.symbol = tokenContract.symbol()
-    miniMeTokenEntity.totalSupply = tokenContract.totalSupplyAt(previousBlock)
+    miniMeTokenEntity.totalSupply = tokenContract.totalSupply()
     miniMeTokenEntity.transferable = tokenContract.transfersEnabled()
     miniMeTokenEntity.holders = new Array<string>()
 

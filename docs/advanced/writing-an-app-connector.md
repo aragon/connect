@@ -1,4 +1,4 @@
-# TheGraph connectors
+# Writing an App Connector
 
 This section contains information about how our TheGraph connectors work, and how to use one of the existing connectors as a template for your own Aragon app connector.
 
