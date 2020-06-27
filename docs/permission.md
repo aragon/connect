@@ -4,22 +4,23 @@ A single permission that represents the relation between an app role and an enti
 
 ## Properties
 
-| Name     | Type     | Description                              |
-| -------- | -------- | ---------------------------------------- |
-| `app`    | `String` | App address.                             |
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| `app` | `String` | App address. |
 | `entity` | `String` | Entity address receiving the permission. |
-| `role`   | `String` | Role identifier.                         |
+| `role` | `String` | Role identifier. |
 
 ## Methods
 
-### getApp()
+### getApp\(\)
 
-| Name    | Type  | Description                                    |
-| ------- | ----- | ---------------------------------------------- |
+| Name | Type | Description |
+| :--- | :--- | :--- |
 | returns | `App` | App instance corresponding to the app address. |
 
-### getRole()
+### getRole\(\)
 
-| Name    | Type   | Description                                         |
-| ------- | ------ | --------------------------------------------------- |
+| Name | Type | Description |
+| :--- | :--- | :--- |
 | returns | `Role` | Role instance corresponding to the role identifier. |
+
