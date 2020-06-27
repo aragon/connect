@@ -1,2 +1,0 @@
-# Writing an App subgraph
-
