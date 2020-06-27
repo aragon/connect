@@ -1,25 +1,24 @@
 # Table of contents
 
-* [Aragon Connect](README.md)
+- [Intro](README.md)
 
 ## Guides
 
-* [Getting started](guides/getting-started.md)
+- [Getting started](guides/getting-started.md)
 
 ## Advanced
 
-* [Writing an App subgraph](advanced/writing-an-app-subgraph.md)
+- [Writing an App subgraph](guides/subgraph-template.md)
 
 ## API Reference
 
-* [connect\(\)](api-reference/connect.md)
-* [App](api-reference/app.md)
-* [Connectors](api-reference/connectors.md)
-* [Intent](api-reference/intent.md)
-* [Organization](api-reference/organization.md)
-* [Permission](api-reference/permission.md)
-* [Repo](api-reference/repo.md)
-* [Role](api-reference/role.md)
-* [TransactionPath](api-reference/transactionpath.md)
-* [TransactionRequest](api-reference/transactionrequest.md)
-
+- [connect\(\)](api/connect.md)
+- [App](api/app.md)
+- [Connectors](api/connectors.md)
+- [Intent](api/transaction-intent.md)
+- [Organization](api/organization.md)
+- [Permission](api/permission.md)
+- [Repo](api/repo.md)
+- [Role](api/role.md)
+- [TransactionPath](api/transaction-path.md)
+- [TransactionRequest](api/transaction-request.md)
