@@ -1,4 +1,4 @@
-# App Subgraphs
+# Writing an App subgraph
 
 Making a subgraph for an aragon app is not much different from making any other kind of subgraph. To learn how to do that, check out TheGraphs's docs: [https://thegraph.com/docs](https://thegraph.com/docs)
 
