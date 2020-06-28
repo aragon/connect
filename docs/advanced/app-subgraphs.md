@@ -2,7 +2,7 @@
 
 Making a subgraph for an aragon app is not much different from making any other kind of subgraph. To learn how to do that, check out [TheGraphs's documentation](https://thegraph.com/docs).
 
-In this subgraph template, we merely hook up a bunch of Aragon related data sources that will detect any installed organization, app, token, etc in Aragon deployments. This is hidden from you, so that writting the subgraph is as similar as possible as writting a normal subgraph.
+In our app subgraphs, we merely hook up a bunch of Aragon related data sources that will detect any installed organization, app, token, etc in Aragon deployments. This is hidden from you, so that writing the subgraph is as similar as possible as writing a normal subgraph.
 
 ## Step by step guide for using this guide
 
@@ -10,7 +10,7 @@ To create a new subgraph for Aragon, start off by creating a copy of one of our 
 
 ### 1. Modify package.json with your username and subgraph name
 
-In `package.json`, you'll find a bunch of scripts that reference the user "aragon" and the app name "voting". Change these to your user or Github organization name.
+In `package.json`, you'll find a bunch of scripts that reference the user "aragon" and the application "voting". Change these to your user or Github organization's name, and your application's name.
 
 ### 2. Create your subgraphs in the TheGraph dashboard
 
@@ -26,7 +26,7 @@ The way we handle data sources in these subgraphs is a bit sophisticated, so the
 
 Instead, edit `subgraph.template.yaml`. You'll notice that there are a bunch of [Mustache](https://mustache.github.io) tags in this file. This is stuff that you shouldn't have to worry about. Initially, the part that matters to you is whatever is not a mustache tag. Here, you can define static data sources in the `dataSources` section, and dynamic datasources in the `templates` section.
 
-If your writting a subgraph for an Aragon app, its data source specification should go in the latter, since it's instances will be generated dynamically. As an example, this template declares the "Voting" data source template. This data source will be hooked up to any instances of voting apps found in all deployed Aragon organizations.
+If your writing a subgraph for an Aragon app, its data source specification should go in the latter, since it's instances will be generated dynamically. As an example, this template declares the "Voting" data source template. This data source will be hooked up to any instances of voting apps found in all deployed Aragon organizations.
 
 If you'd like to disable a specific injected data source, such as for example the OrganizationTemplates data sources, you may do so by using an exclamation symbol:
 
@@ -36,7 +36,7 @@ If you'd like to disable a specific injected data source, such as for example th
 
 ### 4. Provide the ABIs defined in your data source
 
-As with an TheGraph subgraph, ABIs referenced in your manifest should be provided in the `abis` folder.
+As with any TheGraph subgraph, ABIs referenced in your manifest should be provided in the `abis` folder.
 
 You may obtain such ABI files using etherscan. Simply find the address of an instance of what you're looking for using an Aragon subgraph such as [https://thegraph.com/explorer/subgraph/aragon/aragon-mainnet](https://thegraph.com/explorer/subgraph/aragon/aragon-mainnet), and search for that address in Etherscan. Since all Aragon deployments are verified, you should be able to see the contract code an ABI, then copy it for usage in your subgraph code.
 
@@ -76,7 +76,7 @@ Even though templates collect data from many sources, there are some cases in wh
 
 ### I'm getting errors about missing ABIs when the subgraph is indexing
 
-When a reducer is run, it's run in the context of the data source that defined it. For example, hooks are triggered by `src/base/Kernel.ts` when the `NewAppProxy` event is detected in an Organization. You need to include the missing ABI in manifest/templates/contracts/Kernel.template.yaml for it to be available in this reducer. As a rule of thumb, if your data source will be triggered by a base Aragon data source (Organization templates, Organization factories, etc), include your its ABI in the manifest/templates/contracts files.
+When a reducer is run, it's run in the context of the data source that defined it. For example, hooks are triggered by `src/base/Kernel.ts` when the `NewAppProxy` event is detected in an Organization. You need to include the missing ABI in `manifest/templates/contracts/Kernel.template.yaml` for it to be available in this reducer. As a rule of thumb, if your data source will be triggered by a base Aragon data source (Organization templates, Organization factories, etc), include its ABI in the `manifest/templates/contracts` files.
 
 ### My callHandlers aren't working
 
