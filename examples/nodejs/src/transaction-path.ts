@@ -27,7 +27,6 @@ async function main() {
 
   console.log('\nTransactions on the path:')
   txPath.transactions.map((tx: any) => console.log(tx))
-  txPath.transactionsDescribed.map((tx: any) => console.log(tx))
 }
 
 main()
