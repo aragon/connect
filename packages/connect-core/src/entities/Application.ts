@@ -2,7 +2,7 @@ import Repository from './Repository'
 import Role from './Role'
 import CoreEntity from './CoreEntity'
 import { AragonArtifact, AppIntent, Abi, AragonManifest } from '../types'
-import { parseMetadata } from '../utils/parseMetadata'
+import { resolveMetadata } from '../utils/metadata'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 
 // TODO:
@@ -24,21 +24,11 @@ export interface ApplicationData {
   repoAddress?: string
   version?: string
 }
-
 export default class Application extends CoreEntity implements ApplicationData {
-  readonly abi?: Abi
   readonly address!: string
   readonly appId!: string
-  readonly appName?: string
-  readonly author?: string
   readonly codeAddress!: string
   readonly contentUri?: string
-  readonly contractPath?: string
-  readonly deprecatedIntents?: { [version: string]: AppIntent[] }
-  readonly description?: string
-  readonly htmlUrl?: string
-  readonly intents?: AppIntent[]
-  readonly icons?: { src: string; sizes: string }[]
   readonly isForwarder?: boolean
   readonly isUpgradeable?: boolean
   readonly kernelAddress!: string
@@ -46,48 +36,22 @@ export default class Application extends CoreEntity implements ApplicationData {
   readonly registryAddress!: string
   readonly registry?: string
   readonly repoAddress?: string
-  readonly sourceUrl?: string
   readonly version?: string
+  #artifact?: string | null
+  #manifest?: string | null
+  abi?: Abi
+  appName?: string
+  author?: string
+  contractPath?: string
+  deprecatedIntents?: { [version: string]: AppIntent[] }
+  description?: string
+  icons?: { src: string; sizes: string }[]
+  intents?: AppIntent[]
+  htmlUrl?: string
+  sourceUrl?: string
 
-  constructor(
-    { artifact, manifest, ...data }: ApplicationData,
-    connector: ConnectorInterface
-  ) {
+  constructor(data: ApplicationData, connector: ConnectorInterface) {
     super(connector)
-
-    // TODO: If no metadata, fallback to resolve ourselves with ipfs
-
-    if (artifact) {
-      const {
-        appName,
-        path,
-        functions,
-        deprecatedFunctions,
-        abi,
-      }: AragonArtifact = parseMetadata(artifact, 'artifact.json')
-
-      this.appName = appName
-      this.contractPath = path
-      this.intents = functions
-      this.deprecatedIntents = deprecatedFunctions
-      this.abi = abi
-    }
-
-    if (manifest) {
-      const {
-        author,
-        description,
-        start_url: htmlUrl,
-        icons,
-        source_url: sourceUrl,
-      }: AragonManifest = parseMetadata(manifest, 'manifest.json')
-
-      this.author = author
-      this.description = description
-      this.htmlUrl = htmlUrl
-      this.icons = icons
-      this.sourceUrl = sourceUrl
-    }
 
     this.address = data.address
     this.appId = data.appId
@@ -101,13 +65,58 @@ export default class Application extends CoreEntity implements ApplicationData {
     this.registryAddress = data.registryAddress
     this.repoAddress = data.repoAddress
     this.version = data.version
+    this.#artifact = data.artifact
+    this.#manifest = data.manifest
+  }
+
+  async _init(): Promise<void> {
+    const {
+      appName,
+      path,
+      functions,
+      deprecatedFunctions,
+      abi,
+    }: AragonArtifact = await resolveMetadata(
+      'artifact.json',
+      this.contentUri!,
+      this.#artifact
+    )
+
+    const {
+      author,
+      description,
+      start_url: htmlUrl,
+      icons,
+      source_url: sourceUrl,
+    }: AragonManifest = await resolveMetadata(
+      'manifest.json',
+      this.contentUri!,
+      this.#manifest
+    )
+
+    this.abi = abi
+    this.appName = appName
+    this.author = author
+    this.contractPath = path
+    this.deprecatedIntents = deprecatedFunctions
+    this.description = description
+    this.icons = icons
+    this.intents = functions
+    this.htmlUrl = htmlUrl
+    this.sourceUrl = sourceUrl
   }
 
   async repo(): Promise<Repository> {
-    return this._connector.repoForApp(this.address)
+    const repo = await this._connector.repoForApp(this.address)
+    await repo._init()
+    return repo
   }
 
   async roles(): Promise<Role[]> {
-    return this._connector.rolesForAddress(this.address)
+    const roles = await this._connector.rolesForAddress(this.address)
+    for (const role of roles) {
+      await role._init()
+    }
+    return roles
   }
 }

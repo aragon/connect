@@ -86,7 +86,11 @@ export default class Organization {
   ///////// APPS ///////////
   async apps(): Promise<Application[]> {
     this.checkConnected()
-    return this._connector.appsForOrg(this.address)
+    const apps = await this._connector.appsForOrg(this.address)
+    for (const app of apps) {
+      await app._init()
+    }
+    return apps
   }
 
   onApps(callback: Function): { unsubscribe: Function } {
@@ -96,7 +100,9 @@ export default class Organization {
 
   async app(appAddress: string): Promise<Application> {
     this.checkConnected()
-    return this._connector.appByAddress(appAddress)
+    const app = await this._connector.appByAddress(appAddress)
+    await app._init()
+    return app
   }
 
   // async addApp(

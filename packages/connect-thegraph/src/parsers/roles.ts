@@ -4,6 +4,7 @@ import { QueryResult } from '../types'
 function _parseRole(
   role: any,
   connector: any,
+  contentUri: string | null,
   artifact?: string | null
 ): Role {
   const grantees =
@@ -33,28 +34,24 @@ function _parseRole(
     hash: role.roleHash,
     grantees,
     artifact,
+    contentUri,
   }
 
   return new Role(roleData, connector)
 }
 
-export function parseRole(
-  result: QueryResult,
-  connector: any
-): Role {
+export function parseRole(result: QueryResult, connector: any): Role {
+  const app = result.data.app
   const role = result.data.role
 
   if (!role) {
     throw new Error('Unable to parse role.')
   }
 
-  return _parseRole(role, connector)
+  return _parseRole(role, connector, app?.contentUri, app.version?.artifact)
 }
 
-export function parseRoles(
-  result: QueryResult,
-  connector: any
-): Role[] {
+export function parseRoles(result: QueryResult, connector: any): Role[] {
   const app = result.data.app
   const roles = app?.roles
 
@@ -63,10 +60,6 @@ export function parseRoles(
   }
 
   return roles.map((role: any) => {
-    return _parseRole(
-      role,
-      connector,
-      app.version?.artifact
-    )
+    return _parseRole(role, connector, app?.contentUri, app.version?.artifact)
   })
 }
