@@ -21,6 +21,7 @@ describe('when connecting to the mainnet subgraph', () => {
 
     beforeAll(async () => {
       repo = await connector.repoForApp(APP_ADDRESS)
+      await repo._init()
     })
 
     test('should have a valid address', () => {

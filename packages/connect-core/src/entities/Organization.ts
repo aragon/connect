@@ -87,9 +87,12 @@ export default class Organization {
   async apps(): Promise<Application[]> {
     this.checkConnected()
     const apps = await this._connector.appsForOrg(this.address)
-    for (const app of apps) {
-      await app._init()
-    }
+    await Promise.all(
+      apps.map(async app => {
+        await app._init()
+        return app
+      })
+    )
     return apps
   }
 

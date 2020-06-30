@@ -106,6 +106,7 @@ describe('when connecting to the mainnet subgraph', () => {
   describe('when querying for a specific app', () => {
     beforeAll(async () => {
       app = await connector.appByAddress(APP_ADDRESS)
+      await app._init()
     })
 
     isValidApp()
@@ -116,6 +117,12 @@ describe('when connecting to the mainnet subgraph', () => {
 
     beforeAll(async () => {
       apps = await connector.appsForOrg(ORG_ADDRESS)
+      await Promise.all(
+        apps.map(async app => {
+          app._init()
+          return app
+        })
+      )
     })
 
     test('apps are found', () => {

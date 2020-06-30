@@ -114,9 +114,12 @@ export default class Application extends CoreEntity implements ApplicationData {
 
   async roles(): Promise<Role[]> {
     const roles = await this._connector.rolesForAddress(this.address)
-    for (const role of roles) {
-      await role._init()
-    }
+    await Promise.all(
+      roles.map(async role => {
+        role._init()
+        return role
+      })
+    )
     return roles
   }
 }

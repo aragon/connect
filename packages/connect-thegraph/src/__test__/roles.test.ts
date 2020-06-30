@@ -34,6 +34,7 @@ describe('when connecting to the mainnet subgraph', () => {
 
       beforeAll(() => {
         role = roles[roles.length - 1]
+        role._init()
       })
 
       test('should have a valid name', () => {
