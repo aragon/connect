@@ -1,4 +1,4 @@
-# Intent
+# TransactionIntent
 
 An `TransactionIntent` to create an Ethereum transaction on, or through, an Aragon organization or its apps. It allows to retrieve transaction paths or a set of transactions to sign.
 
