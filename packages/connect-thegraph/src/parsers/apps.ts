@@ -1,10 +1,10 @@
-import { Application, AppData } from '@aragon/connect-core'
+import { App, AppData } from '@aragon/connect-core'
 import { QueryResult } from '../types'
 
 function _parseApp(
   app: any,
   connector: any
-): Application {
+): App{
   const data: AppData = {
     address: app.address,
     appId: app.appId,
@@ -22,7 +22,7 @@ function _parseApp(
     version: app.version?.semanticVersion.replace(/,/g, '.'),
   }
 
-  return new Application(data, connector)
+  return new App(data, connector)
 }
 
 export function parseApp(

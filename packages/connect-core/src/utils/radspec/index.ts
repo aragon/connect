@@ -3,7 +3,7 @@ import * as radspec from 'radspec'
 
 import { addressesEqual } from '../address'
 import { findAppMethodFromIntent } from '../app'
-import Application from '../../entities/Application'
+import App from '../../entities/App'
 import { TransactionRequestData } from '../../transactions/TransactionRequest'
 import { Abi, AppIntent } from '../../types'
 
@@ -17,7 +17,7 @@ interface FoundMethod {
  */
 export async function tryEvaluatingRadspec(
   intent: TransactionRequestData,
-  apps: Application[],
+  apps: App[],
   provider?: ethers.providers.Provider // Decorated intent with description, if one could be made
 ): Promise<TransactionRequestData> {
   const app = apps.find(app => addressesEqual(app.address, intent.to))

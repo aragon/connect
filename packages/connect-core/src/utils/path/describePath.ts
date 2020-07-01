@@ -1,7 +1,7 @@
 /* eslint-disable no-empty */
 import { ethers } from 'ethers'
 
-import Application from '../../entities/Application'
+import App from '../../entities/App'
 import {
   tryEvaluatingRadspec,
   postprocessRadspecDescription,
@@ -14,7 +14,7 @@ import { TransactionRequestData } from '../../transactions/TransactionRequest'
  */
 export async function describeTransactionPath(
   path: TransactionRequestData[],
-  apps: Application[],
+  apps: App[],
   provider?: ethers.providers.Provider
 ): Promise<TransactionRequestData[]> {
   return Promise.all(

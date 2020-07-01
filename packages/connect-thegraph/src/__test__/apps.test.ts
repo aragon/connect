@@ -1,5 +1,5 @@
 import ConnectorTheGraph from '../connector'
-import { Application } from '@aragon/connect-core'
+import { App } from '@aragon/connect-core'
 import { isAddress, isBytes32 } from '../../../test-helpers'
 
 const ORG_ADDRESS = '0x0c188b183ff758500d1d18b432313d10e9f6b8a4'
@@ -11,7 +11,7 @@ const MAINNET_NETWORK = {
 }
 
 describe('when connecting to the mainnet subgraph', () => {
-  let app: Application
+  let app: App
   let connector: ConnectorTheGraph
 
   beforeAll(() => {
@@ -112,7 +112,7 @@ describe('when connecting to the mainnet subgraph', () => {
   })
 
   describe('when querying for the apps of an org', () => {
-    let apps: Application[]
+    let apps: App[]
 
     beforeAll(async () => {
       apps = await connector.appsForOrg(ORG_ADDRESS)

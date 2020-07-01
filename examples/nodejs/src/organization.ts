@@ -1,4 +1,4 @@
-import { connect, Application, Organization } from '@aragon/connect'
+import { connect, App, Organization } from '@aragon/connect'
 
 const ORG_ADDRESS = '0x0c188b183ff758500d1d18b432313d10e9f6b8a4'
 
@@ -19,7 +19,7 @@ async function main() {
 
   console.log('\nA voting app:')
   const votingApp = apps.find(
-    (app: Application) => app.name == 'dandelion-voting'
+    (app: App) => app.name == 'dandelion-voting'
   )!
   console.log(votingApp)
 

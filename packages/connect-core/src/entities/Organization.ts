@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import { Network } from '@aragon/connect-types'
 
-import Application from './Application'
+import App from './App'
 import TransactionIntent from '../transactions/TransactionIntent'
 import Permission from './Permission'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
@@ -84,7 +84,7 @@ export default class Organization {
   }
 
   ///////// APPS ///////////
-  async apps(): Promise<Application[]> {
+  async apps(): Promise<App[]> {
     this.checkConnected()
     return this._connector.appsForOrg(this.address)
   }
@@ -94,7 +94,7 @@ export default class Organization {
     return this._connector.onAppsForOrg(this.address, callback)
   }
 
-  async app(appAddress: string): Promise<Application> {
+  async app(appAddress: string): Promise<App> {
     this.checkConnected()
     return this._connector.appByAddress(appAddress)
   }
