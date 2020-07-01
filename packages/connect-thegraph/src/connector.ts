@@ -87,7 +87,7 @@ export default class ConnectorTheGraph extends GraphQLWrapper
     callback: Function
   ): { unsubscribe: Function } {
     return this.subscribeToQueryWithParser(
-      queries.ORGANIZATION_APPS('query'),
+      queries.ORGANIZATION_APPS('subscription'),
       { orgAddress: orgAddress.toLowerCase() },
       callback,
       parseApps
