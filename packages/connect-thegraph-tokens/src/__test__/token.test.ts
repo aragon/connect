@@ -38,7 +38,7 @@ describe('when connecting to a token manager app', () => {
     })
 
     test('has the correct totalSupply', () => {
-      expect(token.totalSupply).toBe('1000000000000000000')
+      expect(token.totalSupply).toBe('3000000000000000000')
     })
 
     test('is transferable', () => {
