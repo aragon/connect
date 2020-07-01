@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
-import { Application, Organization } from '@aragon/connect'
+import { App, Organization } from '@aragon/connect'
 import Group from './Group'
 import Table from './Table'
 import TextButton from './TextButton'
@@ -12,7 +12,7 @@ type Props = {
 }
 
 export default function OrgApps({ onOpenApp, org }: Props) {
-  const [apps = [], loading] = useCancellableAsync<Application[]>(
+  const [apps = [], loading] = useCancellableAsync<App[]>(
     async () => (org ? org.apps() : []),
     [org]
   )
@@ -23,7 +23,7 @@ export default function OrgApps({ onOpenApp, org }: Props) {
         headers={['Name', 'Version', 'Address']}
         rows={[...apps]
           .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
-          .map((app: Application) => [
+          .map((app: App) => [
             app.name || 'unknown',
             app.version || '?',
             <TextButton onClick={() => onOpenApp(app.address)}>

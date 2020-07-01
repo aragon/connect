@@ -1,7 +1,7 @@
 import {
+  App,
   ConnectorInterface,
   Permission,
-  App,
   Repo,
   Role,
 } from '@aragon/connect-core'

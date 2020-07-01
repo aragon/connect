@@ -18,9 +18,7 @@ async function main() {
   apps.map(console.log)
 
   console.log('\nA voting app:')
-  const votingApp = apps.find(
-    (app: App) => app.name == 'dandelion-voting'
-  )!
+  const votingApp = apps.find((app: App) => app.name == 'dandelion-voting')!
   console.log(votingApp)
 
   console.log('\nRoles of an app:')

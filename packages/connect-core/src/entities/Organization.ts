@@ -8,6 +8,7 @@ import { ConnectorInterface } from '../connections/ConnectorInterface'
 
 // TODO: Implement all properties and methods from the API spec (https://github.com/aragon/connect/blob/master/docs/organization.md).
 // [x] Organization#apps()
+// [x] Organization#onApps(cb)
 // [x] Organization#app(appAddress)
 // [ ] Organization#addApp(repoName, options)
 // [ ] Organization#removeApp(appAddress)
@@ -19,10 +20,6 @@ import { ConnectorInterface } from '../connections/ConnectorInterface'
 // [ ] Organization#appIntent(appAddress, funcName, funcArgs)
 // [ ] Organization#appCall(appAddress, methodName, args)
 // [ ] Organization#appState(appAddress)
-// [ ] Organization#on(event, params, callback)
-// [ ] Organization#off(event, callback)
-// [ ] Organization#off(event)
-// [ ] Organization#off()
 // [ ] Events...
 
 export default class Organization {
@@ -89,7 +86,7 @@ export default class Organization {
     return this._connector.appsForOrg(this.address)
   }
 
-  onApps(callback: Function): { unsubscribe: Function } {
+  onApps(callback: (apps: App[]) => void): { unsubscribe: Function } {
     this.checkConnected()
     return this._connector.onAppsForOrg(this.address, callback)
   }

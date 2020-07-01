@@ -1,10 +1,7 @@
 import { App, AppData } from '@aragon/connect-core'
 import { QueryResult } from '../types'
 
-function _parseApp(
-  app: any,
-  connector: any
-): App{
+function _parseApp(app: any, connector: any): App {
   const data: AppData = {
     address: app.address,
     appId: app.appId,
@@ -25,10 +22,7 @@ function _parseApp(
   return new App(data, connector)
 }
 
-export function parseApp(
-  result: QueryResult,
-  connector: any
-): AppData {
+export function parseApp(result: QueryResult, connector: any): AppData {
   const app = result.data.app
 
   if (!app) {
@@ -38,10 +32,7 @@ export function parseApp(
   return _parseApp(app, connector)
 }
 
-export function parseApps(
-  result: QueryResult,
-  connector: any
-): AppData[] {
+export function parseApps(result: QueryResult, connector: any): AppData[] {
   const org = result.data.organization
   const apps = org?.apps
 
