@@ -1,0 +1,81 @@
+# Tokens App Connector
+
+This is an Aragon app specific connector for the Tokens app build using The Graph.
+
+## Connector API
+
+To create a new instance of the connector you need the specific Tokens app address and subgraph URL:
+
+```javascript
+import { TokenManager } from '@aragon/connect-thegraph-tokens'
+
+const tokenManager = new TokenManager(
+  TOKENS_APP_ADDRESS,
+  TOKENS_APP_SUBGRAPH_URL
+)
+```
+
+Once you have a an instance of the `TokenManager` object you can use the followig API to fetch data.
+
+### tokenManager\#token\(tokenManagerAddress\)
+
+Get the data of a Tokens app.
+
+| Name                  | Type             | Description                             |
+| :-------------------- | :--------------- | :-------------------------------------- |
+| `tokenManagerAddress` | `String`         | Address of the Tokens app.              |
+| returns               | `Promise<Token>` | Result data parsed as a `Token` entity. |
+
+### tokenManager\#tokenHolders\(tokenAddress, first, skip\)
+
+Get the data of the token holders of a Minime token.
+
+| Name           | Type                     | Description                                    |
+| :------------- | :----------------------- | :--------------------------------------------- |
+| `tokenAddress` | `String`                 | Address of the Minime Token.                   |
+| `first`        | `String`                 | Pagination argument.                           |
+| `skip`         | `String`                 | Pagination argument.                           |
+| returns        | `Promise<TokenHolder[]>` | Result data parsed as a list of token holders. |
+
+### tokenManager\#onTokenHolders\(tokenAddress, callback\)
+
+Subscribe to the data of the token holders of a Minime token.
+
+| Name           | Type       | Description                                  |
+| :------------- | :--------- | :------------------------------------------- |
+| `tokenAddress` | `String`   | Address of the Minime Token.                 |
+| `callback`     | `Function` | Callback function call on every data update. |
+| returns        | `Function` | Unsubscribe function.                        |
+
+## Subgraph schema
+
+The subgraph schema show all the avaiable entities and atributes. It could be useful to have a better picture of the kind of information you can request.
+
+```yaml
+type TokenManager @entity {
+  id: ID!
+  address: Bytes!
+  orgAddress: Bytes!
+  token: MiniMeToken! @derivedFrom(field: "tokenManager")
+}
+
+type MiniMeToken @entity {
+  id: ID!
+  address: Bytes!
+  totalSupply: BigInt!
+  transferable: Boolean!
+  name: String!
+  symbol: String!
+  orgAddress: Bytes
+  appAddress: Bytes
+  tokenManager: TokenManager
+  holders: [TokenHolder!]!
+}
+
+type TokenHolder @entity {
+  id: ID!
+  address: Bytes!
+  tokenAddress: Bytes!
+  balance: BigInt!
+}
+```

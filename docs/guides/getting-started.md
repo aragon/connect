@@ -114,6 +114,9 @@ const voting = new Voting(
   votingInfo.address,
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'
 )
+
+// Fetch votes of the Voting app
+const votes = await voting.votes()
 ```
 
 ## Subscribing to data updates
