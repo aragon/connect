@@ -24,7 +24,7 @@ export function validateMethod(
   }
 
   // Find the relevant method information
-  const method = methods.find((method) =>
+  const method = methods.find(method =>
     isFullMethodSignature(methodSignature)
       ? method.sig === methodSignature
       : // If the full signature isn't given, just select the first overload declared
@@ -62,7 +62,7 @@ export function findAppMethodFromIntent(
   let method
   // First try to find the method in the current functions
   if (Array.isArray(intents)) {
-    method = intents.find((method) => checkMethodSignature(method.sig))
+    method = intents.find(method => checkMethodSignature(method.sig))
   }
 
   if (!method) {
@@ -75,7 +75,7 @@ export function findAppMethodFromIntent(
       const allDeprecatedFunctions = ([] as AppIntent[]).concat(
         ...deprecatedFunctionsFromVersions
       )
-      method = allDeprecatedFunctions.find((method) =>
+      method = allDeprecatedFunctions.find(method =>
         checkMethodSignature(method.sig)
       )
     }
