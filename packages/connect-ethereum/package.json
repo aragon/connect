@@ -1,7 +1,7 @@
 {
   "name": "@aragon/connect-ethereum",
-  "version": "0.2.0",
-  "license": "AGPL-3.0",
+  "version": "0.3.0",
+  "license": "LGPL-3.0-or-later",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -15,6 +15,9 @@
     "compile": "tsc",
     "lint": "eslint --ext .ts ./src"
   },
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "@types/jest": "^26.0.0",
     "@typescript-eslint/eslint-plugin": "^2.29.0",

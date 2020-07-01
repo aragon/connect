@@ -1,18 +1,9 @@
 export interface TransactionRequestData {
-  to: string
-  from: string
-  data: string
-  pretransaction?: {
-    to: string
-    from: string
-    data: string
-  }
   description?: string
-  annotatedDescription?: Annotation[]
-  chainId?: number
-  gas?: string
-  gasPrice?: string
-  gasLimit?: string
+  descriptionAnnotated?: Annotation[]
+  data: string
+  from: string
+  to: string
 }
 
 export interface Annotation {
@@ -21,22 +12,17 @@ export interface Annotation {
 }
 
 export default class TransactionRequest {
-  readonly to!: string
-  readonly from!: string
-  readonly data!: string
-  readonly pretransaction?: {
-    to: string
-    from: string
-    data: string
-  }
   readonly description?: string
-  readonly annotatedDescription?: Annotation[]
-  readonly gas?: string
-  readonly gasPrice?: string
-  readonly gasLimit?: string
-  readonly chainId?: number
+  readonly descriptionAnnotated?: Annotation[]
+  readonly data!: string
+  readonly from!: string
+  readonly to!: string
 
   constructor(data: TransactionRequestData) {
-    Object.assign(this, data)
+    this.description = data.description
+    this.descriptionAnnotated = data.descriptionAnnotated
+    this.data = data.data
+    this.from = data.from
+    this.to = data.to
   }
 }

@@ -1,5 +1,4 @@
 import { QueryResult } from '@aragon/connect-thegraph'
-import { Vote as VoteDataGql } from '../queries/types'
 import Vote, { VoteData } from '../entities/Vote'
 
 export function parseVotes(
@@ -13,7 +12,7 @@ export function parseVotes(
   }
 
   const datas = votes.map(
-    (vote: VoteDataGql): VoteData => {
+    (vote: any): VoteData => {
       return vote
     }
   )

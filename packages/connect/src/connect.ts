@@ -81,6 +81,13 @@ function getNetwork(chainId?: number): Network | null {
       ensAddress: '0x98df287b6c145399aaa709692c8d308357bc085d',
     }
   }
+  if (chainId === 100) {
+    return {
+      chainId: 100,
+      name: 'xdai',
+      ensAddress: '0xaafca6b0c89521752e559650206d7c925fd0e530',
+    }
+  }
   return null
 }
 

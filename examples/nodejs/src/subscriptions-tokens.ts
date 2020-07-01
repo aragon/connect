@@ -1,4 +1,4 @@
-import { TokenManager, TokenHolder } from '@aragon/connect-thegraph-token-manager'
+import { TokenManager, TokenHolder } from '@aragon/connect-thegraph-tokens'
 import { keepRunning } from './helpers'
 
 const TOKENS_APP_ADDRESS = '0xb27004bf714ce2aa38f14647b38836f26df86cbf'
