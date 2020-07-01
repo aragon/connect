@@ -1,9 +1,9 @@
 {
   "name": "@aragon/connect-react",
-  "private": true,
   "version": "0.2.0",
   "license": "AGPL-3.0",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "yarn clean && yarn compile",
     "dev": "yarn build --watch",
@@ -29,14 +29,11 @@
   "dependencies": {
     "@aragon/connect": "*"
   },
+  "peerDependencies": {
+    "react": "^16.13.1"
+  },
   "description": "Access and interact with Aragon Organizations and their apps.",
-  "keywords": [
-    "ethereum",
-    "javascript",
-    "web3",
-    "dapp",
-    "aragon"
-  ],
+  "keywords": ["ethereum", "javascript", "web3", "dapp", "aragon"],
   "author": "Aragon Association <legal@aragon.org>",
   "homepage": "https://github.com/aragon/connect",
   "bugs": "https://github.com/aragon/connect/issues",

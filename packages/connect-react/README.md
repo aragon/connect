@@ -1,35 +1,30 @@
-# ⚡ Aragon Connect for React
+# Aragon Connect for React
+
+## Introduction
+
+Aragon Connect for React provides a series of utilities that make Aragon Connect integrated into a React environment.
+
+It consists of the `<Connect />` component, on which a connection to an organization is described, and a series of hooks: `useApps()`, `useOrganization()`, `usePermissions()`.
 
 ## Usage
 
 ```jsx
-import { useConnect, UseConnectProvider } from '@aragon/connect-react'
-import Voting from '@aragon/connect-thegraph-voting'
+import {
+  Connect,
+  useApps,
+  useOrganization,
+  usePermissions,
+} from '@aragon/connect-react'
 
 function App() {
-  // useConnect() functions return three things: the data, the error, and the loading state.
-  const [org, orgError, orgLoading] = useConnect('org.aragonid.eth', 'thegraph')
+  // connect-react functions return three things: the data, the error, and the loading state.
+  const [org, orgError, orgLoading] = useOrganization()
 
-  // It looks like the @aragon/connect org.apps(), but it receives updates here.
-  const [apps, appsError, appsLoading] = org.apps()
+  const [apps, appsError, appsLoading] = useApps()
+  const [permissions, permissionsError, permissionsLoading] = usePermissions()
 
-  // This app selection gets updated too.
-  const [voting, votingError, votingLoading] = org.app({
-    appName: 'voting.aragonpm.eth',
-  })
-
-  // We don’t really need error and loading as there is no connection step here,
-  // but it might be needed in the future or with other types of connectors.
-  // Calling .connect() to instantiate an app connector passes the context to it,
-  // but also converts method calls into their subscription equivalents internally.
-  // Voting is the same object than the one we use with @aragon/connect.
-  const [votingData] = voting.connect(Voting)
-
-  // Receives updates too.
-  const [votes, votesError, votesLoading] = voting.votes()
-
-  const loading = orgLoading || appsLoading || votingLoading || votesLoading
-  const error = orgError || appsError || votingError || votesError
+  const loading = orgLoading || appsLoading || permissionsLoading
+  const error = orgError || appsError || permissionsError
 
   if (loading) {
     return <p>Loading…</p>
@@ -45,15 +40,15 @@ function App() {
 
       <h2>Apps</h2>
       <ul>
-        {apps.map(app => (
-          <li key={app.address}>{app.name}</li>
+        {apps.map((app, i) => (
+          <li key={i}>{app.name}</li>
         ))}
       </ul>
 
-      <h2>Votes</h2>
+      <h2>Permissions</h2>
       <ul>
-        {votes.map(vote => (
-          <li key={vote.id}>{vote.metadata}</li>
+        {permissions.map((permission, i) => (
+          <li key={i}>{String(permission)}</li>
         ))}
       </ul>
     </>
@@ -61,9 +56,9 @@ function App() {
 }
 
 ReactDOM.render(
-  <UseConnectProvider>
+  <Connect location="myorg.aragonid.eth" connector="thegraph">
     <App />
-  </UseConnectProvider>,
+  </Connect>,
   document.querySelector('main')
 )
 ```
