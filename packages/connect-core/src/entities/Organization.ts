@@ -86,7 +86,7 @@ export default class Organization {
     return this._connector.appsForOrg(this.address)
   }
 
-  onApps(callback: Function): { unsubscribe: Function } {
+  onApps(callback: (apps: App[]) => void): { unsubscribe: Function } {
     this.checkConnected()
     return this._connector.onAppsForOrg(this.address, callback)
   }
