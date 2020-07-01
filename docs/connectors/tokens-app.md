@@ -1,6 +1,6 @@
 # Tokens App Connector
 
-This is an Aragon app specific connector for the Tokens app build using The Graph.
+This is an Aragon app specific connector for the Tokens app built using The Graph.
 
 ## Connector API
 
@@ -15,11 +15,11 @@ const tokenManager = new TokenManager(
 )
 ```
 
-Once you have a an instance of the `TokenManager` object you can use the followig API to fetch data.
+Once you have a an instance of the `TokenManager` object you can use the following API to fetch data.
 
 ### tokenManager\#token\(tokenManagerAddress\)
 
-Get the data of a Tokens app.
+Get the data of the token used in the provided Tokens app. 
 
 | Name                  | Type             | Description                             |
 | :-------------------- | :--------------- | :-------------------------------------- |
@@ -28,7 +28,7 @@ Get the data of a Tokens app.
 
 ### tokenManager\#tokenHolders\(tokenAddress, first, skip\)
 
-Get the data of the token holders of a Minime token.
+Get the data of the token holders of the token used in the provided app.
 
 | Name           | Type                     | Description                                    |
 | :------------- | :----------------------- | :--------------------------------------------- |
