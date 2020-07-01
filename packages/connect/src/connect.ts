@@ -13,17 +13,21 @@ import ConnectorTheGraph, {
 } from '@aragon/connect-thegraph'
 import { Network } from '@aragon/connect-types'
 
-type ConnectOptions = {
+export type ConnectOptionsResolveIpfs = (
+  ipfsIdentifier: string,
+  path: string
+) => string
+
+export type ConnectOptions = {
   readProvider?: ethers.providers.Provider
   chainId?: number
-  ipfs?: ResolveIpfs
+  ipfs?: ConnectOptionsResolveIpfs
 }
-type ConnectorDeclaration =
+
+export type ConnectorDeclaration =
   | ConnectorInterface
   | [string, object | undefined]
   | string
-
-type ResolveIpfs = (ipfsIdentifier: string, path: string) => string
 
 function normalizeConnectorConfig(
   connector: ConnectorDeclaration
