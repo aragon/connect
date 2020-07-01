@@ -18,7 +18,7 @@ export default class GraphQLWrapper {
 
   constructor(subgraphUrl: string, verbose = false) {
     if (!subgraphUrl || !subgraphUrl.startsWith('http')) {
-       throw new Error('Please provide a valid subgraph URL')
+      throw new Error('Please provide a valid subgraph URL')
     }
 
     const subscriptionClient = new SubscriptionClient(
@@ -62,7 +62,11 @@ export default class GraphQLWrapper {
 
         if (result.error) {
           throw new Error(
-            `Error performing subscription.${this.describeQueryResult(result)}`
+            [
+              'Error performing subscription.',
+              `${result.error.name}: ${result.error.message}`,
+              this.describeQueryResult(result),
+            ].join('\n')
           )
         }
 
