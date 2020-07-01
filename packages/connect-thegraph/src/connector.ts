@@ -1,8 +1,8 @@
 import {
+  App,
   ConnectorInterface,
   Permission,
-  Application,
-  Repository,
+  Repo,
   Role,
 } from '@aragon/connect-core'
 import { Network } from '@aragon/connect-types'
@@ -74,7 +74,7 @@ export default class ConnectorTheGraph extends GraphQLWrapper
     )
   }
 
-  async appsForOrg(orgAddress: string): Promise<Application[]> {
+  async appsForOrg(orgAddress: string): Promise<App[]> {
     return this.performQueryWithParser(
       queries.ORGANIZATION_APPS('query'),
       { orgAddress: orgAddress.toLowerCase() },
@@ -94,7 +94,7 @@ export default class ConnectorTheGraph extends GraphQLWrapper
     )
   }
 
-  async appByAddress(appAddress: string): Promise<Application> {
+  async appByAddress(appAddress: string): Promise<App> {
     return this.performQueryWithParser(
       queries.APP_BY_ADDRESS('query'),
       { appAddress: appAddress.toLowerCase() },
@@ -102,7 +102,7 @@ export default class ConnectorTheGraph extends GraphQLWrapper
     )
   }
 
-  async repoForApp(appAddress: string): Promise<Repository> {
+  async repoForApp(appAddress: string): Promise<Repo> {
     return this.performQueryWithParser(
       queries.REPO_BY_APP_ADDRESS('query'),
       { appAddress: appAddress.toLowerCase() },

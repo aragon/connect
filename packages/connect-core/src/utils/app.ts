@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 
 import { AppIntent } from '../types'
-import Application from '../entities/Application'
+import App from '../entities/App'
 import { TransactionRequestData } from '../transactions/TransactionRequest'
 
 // Is the given method a full signature, e.g. 'foo(arg1,arg2,...)'
@@ -16,7 +16,7 @@ export const isFullMethodSignature = (methodSignature: string): boolean => {
 export function validateMethod(
   destination: string,
   methodSignature: string,
-  destinationApp: Application
+  destinationApp: App
 ): AppIntent {
   const methods = destinationApp.intents
   if (!methods) {
@@ -24,7 +24,7 @@ export function validateMethod(
   }
 
   // Find the relevant method information
-  const method = methods.find((method) =>
+  const method = methods.find(method =>
     isFullMethodSignature(methodSignature)
       ? method.sig === methodSignature
       : // If the full signature isn't given, just select the first overload declared
@@ -46,7 +46,7 @@ export function validateMethod(
  * @return {Object|void} Method with radspec notice and function signature, or undefined if none was found
  */
 export function findAppMethodFromIntent(
-  app: Application,
+  app: App,
   transaction: TransactionRequestData
 ): AppIntent | undefined {
   const methodId = transaction.data.substring(0, 10)
@@ -62,7 +62,7 @@ export function findAppMethodFromIntent(
   let method
   // First try to find the method in the current functions
   if (Array.isArray(intents)) {
-    method = intents.find((method) => checkMethodSignature(method.sig))
+    method = intents.find(method => checkMethodSignature(method.sig))
   }
 
   if (!method) {
@@ -75,7 +75,7 @@ export function findAppMethodFromIntent(
       const allDeprecatedFunctions = ([] as AppIntent[]).concat(
         ...deprecatedFunctionsFromVersions
       )
-      method = allDeprecatedFunctions.find((method) =>
+      method = allDeprecatedFunctions.find(method =>
         checkMethodSignature(method.sig)
       )
     }

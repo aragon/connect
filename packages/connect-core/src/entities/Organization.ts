@@ -1,13 +1,14 @@
 import { ethers } from 'ethers'
 import { Network } from '@aragon/connect-types'
 
-import Application from './Application'
+import App from './App'
 import TransactionIntent from '../transactions/TransactionIntent'
 import Permission from './Permission'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 
 // TODO: Implement all properties and methods from the API spec (https://github.com/aragon/connect/blob/master/docs/organization.md).
 // [x] Organization#apps()
+// [x] Organization#onApps(cb)
 // [x] Organization#app(appAddress)
 // [ ] Organization#addApp(repoName, options)
 // [ ] Organization#removeApp(appAddress)
@@ -19,10 +20,6 @@ import { ConnectorInterface } from '../connections/ConnectorInterface'
 // [ ] Organization#appIntent(appAddress, funcName, funcArgs)
 // [ ] Organization#appCall(appAddress, methodName, args)
 // [ ] Organization#appState(appAddress)
-// [ ] Organization#on(event, params, callback)
-// [ ] Organization#off(event, callback)
-// [ ] Organization#off(event)
-// [ ] Organization#off()
 // [ ] Events...
 
 export default class Organization {
@@ -84,17 +81,17 @@ export default class Organization {
   }
 
   ///////// APPS ///////////
-  async apps(): Promise<Application[]> {
+  async apps(): Promise<App[]> {
     this.checkConnected()
     return this._connector.appsForOrg(this.address)
   }
 
-  onApps(callback: Function): { unsubscribe: Function } {
+  onApps(callback: (apps: App[]) => void): { unsubscribe: Function } {
     this.checkConnected()
     return this._connector.onAppsForOrg(this.address, callback)
   }
 
-  async app(appAddress: string): Promise<Application> {
+  async app(appAddress: string): Promise<App> {
     this.checkConnected()
     return this._connector.appByAddress(appAddress)
   }
