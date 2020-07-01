@@ -1,5 +1,5 @@
 import ConnectorTheGraph from '../connector'
-import { Repository } from '@aragon/connect-core'
+import { Repo } from '@aragon/connect-core'
 import { isAddress } from '../../../test-helpers'
 
 const APP_ADDRESS = '0xbce807b35dee2fbe457e4588f1c799879446eb54'
@@ -17,7 +17,7 @@ describe('when connecting to the mainnet subgraph', () => {
   })
 
   describe('when querying the repository of an app', () => {
-    let repo: Repository
+    let repo: Repo
 
     beforeAll(async () => {
       repo = await connector.repoForApp(APP_ADDRESS)
