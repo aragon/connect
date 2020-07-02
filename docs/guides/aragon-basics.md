@@ -4,11 +4,11 @@ This guide will explain most of the Aragon concepts that can be helpful when bui
 
 ## What is an Aragon Organization?
 
-Aragon is an open-source suite of applications and services that enable new forms of global communities (<a href="https://aragon.org/dao"><abbr title="Decentralized autonomous organization">DAO</abbr>s</a>.) Communities can organize around capital assets, currency, or tokens, which will increase in value as more people hold and use that asset to participate in the community. These tools enable people to turn a community, cause, or even just a meme into its own economy. We can unlock a long-tail of <a href="https://aragon.org/dao"><abbr title="Decentralized autonomous organization">DAO</abbr></a> communities that could not have existed otherwise.
+Aragon is an open-source suite of applications and services that enable new forms of global communities (or <a href="https://aragon.org/dao"><abbr title="Decentralized autonomous organization">DAO</abbr>s</a>.) Communities can organize around capital assets, currency, or tokens, which will increase in value as more people hold and use that asset to participate in the community. These tools enable people to turn a community, cause, or even just a meme into its own economy. We can unlock a long-tail of <abbr title="Decentralized autonomous organization">DAO</abbr> communities that could not have existed otherwise.
 
 Aragon not only provides basic financial tools like tokenization but can create reproducible and broadly applicable templates for defining the boundaries of a community and flowing value to contributors over the internet without traditional intermediaries like banks.
 
-An Aragon Organization is represented by a collection of smart contracts being deployed on the Ethereum network, and controlled by a specific set of rules.
+An Aragon Organization is represented by _a collection of smart contracts_ that are deployed on the Ethereum network. They are controlled by a specific set of rules, and can be interact with from tools like [the Aragon client](https://mainnet.aragon.org/), [aragonCLI](https://hack.aragon.org/docs/cli-intro.html), or [Aragon Connect](https://aragon.org/connect).
 
 ![](./assets/basics-organization.png)
 
@@ -16,7 +16,7 @@ An Aragon Organization is represented by a collection of smart contracts being d
 
 An essential part of an Aragon Organization is that it contains apps. Apps consist of two things: a smart contract and an optional user interface that allow to interact with it.
 
-Apps can be installed, updated, or removed from an Organization. 
+Apps can be installed, updated, or removed from an Organization.
 
 ## Permissions
 
