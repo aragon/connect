@@ -8,6 +8,7 @@
 
 ## Advanced
 
+* [Custom subgraph queries](advanced/low-level-queries.md)
 * [Writing an App Subgraph](advanced/app-subgraphs.md)
 * [Writing an App Connector](advanced/writing-an-app-connector.md)
 
@@ -23,3 +24,9 @@
 * [TransactionIntent](api-reference/transactionintent.md)
 * [TransactionPath](api-reference/transactionpath.md)
 * [TransactionRequest](api-reference/transactionrequest.md)
+
+## Connectors Reference
+
+* [Organizations](connectors/organizations.md)
+* [Tokens app](connectors/tokens-app.md)
+* [Voting app](connectors/voting-app.md)
