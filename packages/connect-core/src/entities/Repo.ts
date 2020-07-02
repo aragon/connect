@@ -19,64 +19,74 @@ export interface RepoData {
 }
 
 export default class Repo extends CoreEntity implements RepoData {
-  readonly address!: string
-  readonly contentUri?: string
-  readonly name!: string
-  readonly registry?: string | null
-  readonly registryAddress?: string | null
-  #artifact?: string | null
-  #manifest?: string | null
+  #created!: boolean
+  address!: string
   author?: string
+  artifact?: string | null
   changelogUrl?: string
+  contentUri?: string
   description?: string
   descriptionUrl?: string
   environments?: AragonEnvironments
   icons?: { src: string; sizes: string }[]
+  manifest?: string | null
+  name!: string
+  registry?: string | null
+  registryAddress?: string | null
   roles?: AragonArtifactRole[]
   screenshots?: { src: string }[]
   sourceUrl?: string
 
-  constructor(data: RepoData, connector: ConnectorInterface) {
+  constructor(connector: ConnectorInterface) {
     super(connector)
 
-    this.address = data.address
-    this.contentUri = data.contentUri ?? undefined
-    this.name = data.name
-    this.registry = data.registry
-    this.registryAddress = data.registryAddress
-    this.#artifact = data.artifact
-    this.#manifest = data.manifest
+    this.#created = false
   }
 
-  async _init(): Promise<void> {
-    const { environments, roles }: AragonArtifact = await resolveMetadata(
-      'artifact.json',
-      this.contentUri!,
-      this.#artifact
-    )
+  get created(): boolean {
+    return this.#created
+  }
 
-    const {
-      author,
-      changelog_url: changelogUrl,
-      description,
-      details_url: descriptionUrl,
-      icons,
-      screenshots,
-      source_url: sourceUrl,
-    }: AragonManifest = await resolveMetadata(
-      'manifest.json',
-      this.contentUri!,
-      this.#manifest
-    )
+  async create({ artifact, manifest, ...data }: RepoData): Promise<void> {
+    if (!this.#created) {
+      this.#created = true
 
-    this.author = author
-    this.changelogUrl = changelogUrl
-    this.description = description
-    this.descriptionUrl = descriptionUrl
-    this.environments = environments
-    this.icons = icons
-    this.roles = roles
-    this.screenshots = screenshots
-    this.sourceUrl = sourceUrl
+      const { environments, roles }: AragonArtifact = await resolveMetadata(
+        'artifact.json',
+        data.contentUri || undefined,
+        artifact
+      )
+
+      const {
+        author,
+        changelog_url: changelogUrl,
+        description,
+        details_url: descriptionUrl,
+        icons,
+        screenshots,
+        source_url: sourceUrl,
+      }: AragonManifest = await resolveMetadata(
+        'manifest.json',
+        data.contentUri || undefined,
+        manifest
+      )
+
+      this.address = data.address
+      this.author = author
+      this.artifact = artifact
+      this.changelogUrl = changelogUrl
+      this.contentUri = data.contentUri || undefined
+      this.description = description
+      this.descriptionUrl = descriptionUrl
+      this.environments = environments
+      this.icons = icons
+      this.name = data.name
+      this.manifest = manifest
+      this.registry = data.registry
+      this.registryAddress = data.registryAddress
+      this.roles = roles
+      this.screenshots = screenshots
+      this.sourceUrl = sourceUrl
+    }
   }
 }

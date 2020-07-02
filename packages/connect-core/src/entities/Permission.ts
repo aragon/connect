@@ -35,15 +35,11 @@ export default class Permission extends CoreEntity implements PermissionData {
   }
 
   async getApp(): Promise<App> {
-    const app = await this._connector.appByAddress(this.appAddress)
-    await app._init()
-    return app
+    return this._connector.appByAddress(this.appAddress)
   }
 
   async getRole(): Promise<Role | undefined> {
     const roles = await this._connector.rolesForAddress(this.appAddress)
-    const role = roles.find(role => role.hash === this.roleHash)
-    await role?._init()
-    return role
+    return roles.find(role => role.hash === this.roleHash)
   }
 }

@@ -14,39 +14,46 @@ export interface RoleData {
 }
 
 export default class Role extends CoreEntity implements RoleData {
-  readonly appAddress!: string
-  readonly hash!: string
-  readonly permissions?: Permission[] | null
-  readonly manager?: string
-  readonly params?: string
-  #artifact?: string | null
-  #contentUri?: string
+  #created!: boolean
+  appAddress!: string
   description?: string
+  hash!: string
+  params?: string[]
+  permissions?: Permission[] | null
+  manager?: string
   name?: string
 
-  constructor(data: RoleData, connector: ConnectorInterface) {
+  constructor(connector: ConnectorInterface) {
     super(connector)
 
-    this.appAddress = data.appAddress
-    this.hash = data.hash
-    this.permissions = data.grantees?.map(
-      grantee => new Permission(grantee, connector)
-    )
-    this.manager = data.manager
-    this.#artifact = data.artifact
-    this.#contentUri = data.contentUri ?? undefined
+    this.#created = false
   }
 
-  async _init(): Promise<void> {
-    const { roles }: AragonArtifact = await resolveMetadata(
-      'artifact.json',
-      this.#contentUri!,
-      this.#artifact
-    )
+  get created(): boolean {
+    return this.#created
+  }
 
-    const role = roles.find(role => role.bytes === this.hash)
+  async create({ artifact, contentUri, ...data }: RoleData): Promise<void> {
+    if (!this.#created) {
+      this.#created = true
 
-    this.name = role?.id
-    this.description = role?.name
+      const { roles }: AragonArtifact = await resolveMetadata(
+        'artifact.json',
+        contentUri || undefined,
+        artifact
+      )
+
+      const role = roles.find(role => role.bytes === data.hash)
+
+      this.appAddress = data.appAddress
+      this.description = role?.name
+      this.hash = data.hash
+      this.params = role?.params
+      this.permissions = data.grantees?.map(
+        grantee => new Permission(grantee, this._connector)
+      )
+      this.manager = data.manager
+      this.name = role?.id
+    }
   }
 }

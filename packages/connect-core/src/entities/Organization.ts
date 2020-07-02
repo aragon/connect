@@ -83,14 +83,7 @@ export default class Organization {
   ///////// APPS ///////////
   async apps(): Promise<App[]> {
     this.checkConnected()
-    const apps = await this._connector.appsForOrg(this.address)
-    await Promise.all(
-      apps.map(async app => {
-        await app._init()
-        return app
-      })
-    )
-    return apps
+    return this._connector.appsForOrg(this.address)
   }
 
   onApps(callback: (apps: App[]) => void): { unsubscribe: Function } {
@@ -100,9 +93,7 @@ export default class Organization {
 
   async app(appAddress: string): Promise<App> {
     this.checkConnected()
-    const app = await this._connector.appByAddress(appAddress)
-    await app._init()
-    return app
+    return this._connector.appByAddress(appAddress)
   }
 
   // async addApp(
@@ -127,7 +118,7 @@ export default class Organization {
   ///////// PERMISSIONS ///////////
   async permissions(): Promise<Permission[]> {
     this.checkConnected()
-    return await this._connector.permissionsForOrg(this.address)
+    return this._connector.permissionsForOrg(this.address)
   }
 
   onPermissions(callback: Function): { unsubscribe: Function } {
