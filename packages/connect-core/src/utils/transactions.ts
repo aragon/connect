@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import { erc20ABI, forwarderAbi, forwarderFeeAbi } from './abis'
 import { isFullMethodSignature } from './app'
 import { Abi, FunctionFragment } from '../types'
-import Application from '../entities/Application'
+import App from '../entities/App'
 import { TransactionRequestData } from '../transactions/TransactionRequest'
 
 export interface TransactionWithTokenData extends TransactionRequestData {
@@ -48,7 +48,7 @@ export async function createDirectTransaction(
 
 export async function createDirectTransactionForApp(
   sender: string,
-  app: Application,
+  app: App,
   methodSignature: string,
   params: any[]
 ): Promise<TransactionRequestData> {

@@ -27,7 +27,7 @@ Install a new app into the organization from a given [aragonPM repository](https
 
 | Name                      | Type                         | Description                                                                                                   |
 | :------------------------ | :--------------------------- | :------------------------------------------------------------------------------------------------------------ |
-| `repoName`                | `String`                     | Repository name \(e.g. `voting.aragonpm.eth`\).                                                               |
+| `repoName`                | `String`                     | Name of the repo \(e.g. `voting.aragonpm.eth`\).                                                               |
 | `options`                 | `Object`                     | Options object.                                                                                               |
 | `options.initFuncName`    | `String`                     | Name of the function that gets called to initialize the app. Set to `none` to skip. Defaults to `initialize`. |
 | `options.initFuncArgs`    | `Array<String>`              | Arguments passed to the function set as `options.initFuncName`. Defaults to `[]`.                             |

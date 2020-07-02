@@ -5,7 +5,7 @@
 
 import { ConnectorInterface } from './ConnectorInterface'
 import Permission from '../entities/Permission'
-import { Application, Repository, Role } from '..'
+import { App, Repo, Role } from '..'
 
 export type ConnectorJsonConfig = { permissions: Permission[] }
 
@@ -26,7 +26,7 @@ class ConnectorJson implements ConnectorInterface {
     }
   }
 
-  appsForOrg(orgAddress: string): Promise<Application[]> {
+  appsForOrg(orgAddress: string): Promise<App[]> {
     return new Promise((resolve) => {
       resolve([])
     })
@@ -38,13 +38,13 @@ class ConnectorJson implements ConnectorInterface {
     }
   }
 
-  repoForApp(appAddress: string): Promise<Repository> {
+  repoForApp(appAddress: string): Promise<Repo> {
     return new Promise((resolve) => {
       resolve()
     })
   }
 
-  appByAddress(appAddress: string): Promise<Application> {
+  appByAddress(appAddress: string): Promise<App> {
     return new Promise((resolve) => {
       resolve()
     })

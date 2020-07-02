@@ -8,6 +8,7 @@
 
 ## Advanced
 
+* [Writing an App Subgraph](advanced/app-subgraphs.md)
 * [Writing an App Connector](advanced/writing-an-app-connector.md)
 
 ## API Reference

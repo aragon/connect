@@ -1,5 +1,5 @@
 import CoreEntity from './CoreEntity'
-import Application from './Application'
+import App from './App'
 import Role from './Role'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 
@@ -34,7 +34,7 @@ export default class Permission extends CoreEntity implements PermissionData {
     this.roleHash = data.roleHash
   }
 
-  async getApp(): Promise<Application> {
+  async getApp(): Promise<App> {
     const app = await this._connector.appByAddress(this.appAddress)
     await app._init()
     return app

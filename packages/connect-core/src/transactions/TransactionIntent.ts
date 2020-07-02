@@ -2,7 +2,7 @@ import { ethers } from 'ethers'
 
 import TransactionPath from './TransactionPath'
 import TransactionRequest from './TransactionRequest'
-import Application from '../entities/Application'
+import App from '../entities/App'
 import Organization from '../entities/Organization'
 import { calculateTransactionPath } from '../utils/path/calculatePath'
 import { describeTransactionPath } from '../utils/path/describePath'
@@ -67,7 +67,7 @@ export default class TransactionIntent {
       ),
       destination: apps.find(
         app => app.address == this.contractAddress
-      ) as Application,
+      ) as App,
       forwardingFeePretransaction,
       transactions: transactionsDescribed.map(tx => new TransactionRequest(tx)),
     })

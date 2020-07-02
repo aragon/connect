@@ -8,7 +8,7 @@ import {
 import { resolveMetadata } from '../utils/metadata'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 
-export interface RepositoryData {
+export interface RepoData {
   address: string
   artifact?: string | null
   contentUri?: string | null
@@ -18,7 +18,7 @@ export interface RepositoryData {
   registryAddress?: string | null
 }
 
-export default class Repository extends CoreEntity implements RepositoryData {
+export default class Repo extends CoreEntity implements RepoData {
   readonly address!: string
   readonly contentUri?: string
   readonly name!: string
@@ -36,7 +36,7 @@ export default class Repository extends CoreEntity implements RepositoryData {
   screenshots?: { src: string }[]
   sourceUrl?: string
 
-  constructor(data: RepositoryData, connector: ConnectorInterface) {
+  constructor(data: RepoData, connector: ConnectorInterface) {
     super(connector)
 
     this.address = data.address

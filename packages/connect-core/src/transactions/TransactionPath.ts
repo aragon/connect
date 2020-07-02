@@ -1,16 +1,16 @@
 import TransactionRequest from './TransactionRequest'
-import Application from '../entities/Application'
+import App from '../entities/App'
 
 export interface TransactionPathData {
-  apps: Application[]
-  destination: Application
+  apps: App[]
+  destination: App
   forwardingFeePretransaction?: TransactionRequest
   transactions: TransactionRequest[]
 }
 
 export default class TransactionPath {
-  readonly apps!: Application[]
-  readonly destination!: Application
+  readonly apps!: App[]
+  readonly destination!: App
   readonly forwardingFeePretransaction?: TransactionRequest
   readonly transactions!: TransactionRequest[]
 

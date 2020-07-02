@@ -1,6 +1,6 @@
 import { addressesEqual, ANY_ENTITY } from '../address'
 import { getKernelNamespace } from '../kernel'
-import Application from '../../entities/Application'
+import App from '../../entities/App'
 import Role from '../../entities/Role'
 import { Annotation } from '../../transactions/TransactionRequest'
 
@@ -24,7 +24,7 @@ type ProcessToken = [string, string, Annotation]
  */
 export async function postprocessRadspecDescription(
   description: string,
-  apps: Application[]
+  apps: App[]
 ): Promise<PostProcessDescription> {
   const addressRegexStr = '0x[a-fA-F0-9]{40}'
   const addressRegex = new RegExp(`^${addressRegexStr}$`)

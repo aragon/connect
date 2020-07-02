@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { ConnectorInterface, Permission, Application, Repository, Role } from '@aragon/connect-core'
+import { ConnectorInterface, Permission, App, Repo, Role } from '@aragon/connect-core'
 
 export type ConnectorEthereumConfig = object
 
@@ -22,7 +22,7 @@ class ConnectorEthereum implements ConnectorInterface {
     }
   }
 
-  appsForOrg(orgAddress: string): Promise<Application[]> {
+  appsForOrg(orgAddress: string): Promise<App[]> {
     return new Promise((resolve) => {
       resolve([])
     })
@@ -34,13 +34,13 @@ class ConnectorEthereum implements ConnectorInterface {
     }
   }
 
-  repoForApp(appAddress: string): Promise<Repository> {
+  repoForApp(appAddress: string): Promise<Repo> {
     return new Promise((resolve) => {
       resolve()
     })
   }
 
-  appByAddress(appAddress: string): Promise<Application> {
+  appByAddress(appAddress: string): Promise<App> {
     return new Promise((resolve) => {
       resolve()
     })
