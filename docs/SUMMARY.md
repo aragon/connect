@@ -28,5 +28,5 @@
 ## Connectors Reference
 
 * [Organizations](connectors/organizations.md)
-* [Tokens app](connectors/tokens.md)
-* [Voting app](connectors/voting.md)
+* [Tokens app](connectors/tokens-app.md)
+* [Voting app](connectors/voting-app.md)
