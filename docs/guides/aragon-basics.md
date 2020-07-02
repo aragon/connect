@@ -10,7 +10,7 @@ Aragon not only provides basic financial tools like tokenization but can create 
 
 An Aragon Organization is represented by a collection of smart contracts being deployed on the Ethereum network, and controlled by a specific set of rules.
 
-![](../assets/concept-organization.png)
+![](./assets/basics-organization.png)
 
 ## Aragon apps
 
