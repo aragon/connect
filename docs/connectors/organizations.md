@@ -1,6 +1,6 @@
 # Organizations Connector
 
-This is the main connector of the Aragon Connect library. It is responsible of parsing the organization's data.
+This is the main connector of the Aragon Connect library. It is responsible of parsing the organization’s data.
 
 Currently a single flavor of this connector is available, built-in the core library using The Graph. We have plans to keep including other flavors, like an Ethereum connector that reduces the state from blockchain events, or a SQL connector that fetches data from a database, etc.
 
@@ -85,6 +85,6 @@ Perform a GraphQL subscription and parse the result return.
 
 The subgraph schema shows all the available entities and attributes. It's useful as you'll have a better, clearer picture of the kind of information you can request.
 
-The following is a picture of the graph of dependencies of the subgraph:
+The following is a picture of dependencies graph for the subgraph:
 
 ![](../assets/org-schema.png)

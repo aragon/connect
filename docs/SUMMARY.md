@@ -8,7 +8,7 @@
 
 ## Advanced
 
-* [Answering questions with custom queries](advanced/low-level-queries.md)
+* [Custom subgraph queries](advanced/low-level-queries.md)
 * [Writing an App Subgraph](advanced/app-subgraphs.md)
 * [Writing an App Connector](advanced/writing-an-app-connector.md)
 

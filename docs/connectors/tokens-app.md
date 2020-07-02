@@ -4,7 +4,7 @@ This is an Aragon app specific connector for the Tokens app built using The Grap
 
 ## Connector API
 
-To create a new instance of the connector you need the specific Tokens app address and subgraph URL:
+To create a new instance of the connector you need the specific Tokens app address and a subgraph URL:
 
 ```javascript
 import { TokenManager } from '@aragon/connect-thegraph-tokens'
@@ -15,7 +15,7 @@ const tokenManager = new TokenManager(
 )
 ```
 
-Once you have a an instance of the `TokenManager` object you can use the following API to fetch data.
+Once you have a an instance of the `TokenManager` object, you can use the following API to fetch data.
 
 ### tokenManager\#token\(tokenManagerAddress\)
 

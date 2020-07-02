@@ -4,7 +4,7 @@ This is an Aragon app specific connector for the Voting app built using The Grap
 
 ## Connector API
 
-To create a new instance of the connector you need the specific Voting app address and subgraph URL:
+To create a new instance of the connector, you need the specific Voting app address and the subgraph URL:
 
 ```javascript
 import { Voting } from '@aragon/connect-thegraph-voting'
@@ -12,7 +12,7 @@ import { Voting } from '@aragon/connect-thegraph-voting'
 const voting = new Voting(VOTING_APP_ADDRESS, VOTING_APP_SUBGRAPH_URL)
 ```
 
-Once you have a an instance of the `Voting` object you can use the following API to fetch data.
+Once you have a an instance of the `Voting` object, you can use the API below to fetch the data.
 
 ### voting\#votesForApp\(appAddress, first, skip\)
 

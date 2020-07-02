@@ -50,7 +50,7 @@ import gql from 'graphql-tag'
 import { GraphQLWrapper } from '@aragon/connect-thegraph'
 
 // Construct the query
-const QUERY = `
+const QUERY = gql`
 query miniMeToken($id: String!, $address: String!) {
   miniMeToken(id: $id){
     id
@@ -68,7 +68,7 @@ const wrapper = new GraphQLWrapper(TOKEN_MANAGER_SUBGRAPH)
 
 // Subscribe to receive data updates using a custom query
 const subscription = wrapper.subscribeToQuery(
-  gql(QUERY),
+  QUERY,
   {
     id: TOKEN_ID,
     address: ACCOUNT_ADDRES,
