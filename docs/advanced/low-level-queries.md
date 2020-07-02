@@ -16,7 +16,7 @@ import gql from 'graphql-tag'
 import { GraphQLWrapper } from '@aragon/connect-thegraph'
 
 // Construct the query
-const QUERY = `
+const QUERY = gql`
 query {
   votes(where:{
     appAddress: "${VOTING_APP_ADDRESS}"
@@ -32,7 +32,7 @@ query {
 const wrapper = new GraphQLWrapper(VOTING_SUBGRAPH_URL)
 
 // Fetch the data performing the custom query
-const results = await wrapper.performQuery(gql(QUERY))
+const results = await wrapper.performQuery(QUERY)
 
 const { votes } = results.data
 ```
