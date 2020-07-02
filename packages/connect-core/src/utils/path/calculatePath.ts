@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 
 import { AppIntent } from '../../types'
-import Application from '../../entities/Application'
+import App from '../../entities/App'
 import { TransactionRequestData } from '../../transactions/TransactionRequest'
 import { addressesEqual, includesAddress, ANY_ENTITY } from '../address'
 import { canForward } from '../canForward'
@@ -21,7 +21,7 @@ interface PathData {
 function validateMethod(
   destination: string,
   methodSignature: string,
-  destinationApp: Application
+  destinationApp: App
 ): AppIntent {
   const methods = destinationApp.intents
   if (!methods) {
@@ -184,7 +184,7 @@ export async function calculateTransactionPath(
   destination: string,
   methodSignature: string,
   params: any[],
-  apps: Application[],
+  apps: App[],
   provider: ethers.providers.Provider,
   finalForwarder?: string //Address of the final forwarder that can perfom the action. Needed for actions that aren't in the ACL but whose execution depends on other factors
 ): Promise<PathData> {

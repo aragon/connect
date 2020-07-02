@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import { connect, Application, Organization } from '@aragon/connect'
+import { connect, App, Organization } from '@aragon/connect'
 
 const network = 'mainnet'
 
@@ -14,7 +14,7 @@ async function main() {
   })) as Organization
 
   const apps = await org.apps()
-  const finance = apps.find((app: Application) => app.name == 'finance')!
+  const finance = apps.find((app: App) => app.name == 'finance')!
 
   const intent = org.appIntent(finance.address, 'newImmediatePayment', [
     ethers.constants.AddressZero,
@@ -27,7 +27,7 @@ async function main() {
 
   console.log('\nTransactions on the path:')
   txPath.transactions.map((tx: any) => console.log(tx))
-  txPath.transactionsDescribed.map((tx: any) => console.log(tx))
+  // txPath.transactionsDescribed.map((tx: any) => console.log(tx))
 }
 
 main()

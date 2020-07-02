@@ -8,7 +8,7 @@ import {
 import { parseMetadata } from '../utils/parseMetadata'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 
-export interface RepositoryData {
+export interface RepoData {
   address: string
   artifact?: string | null
   contentUri?: string | null
@@ -18,7 +18,7 @@ export interface RepositoryData {
   registryAddress?: string | null
 }
 
-export default class Repository extends CoreEntity implements RepositoryData {
+export default class Repo extends CoreEntity implements RepoData {
   readonly address!: string
   readonly author?: string
   readonly changelogUrl?: string
@@ -34,7 +34,7 @@ export default class Repository extends CoreEntity implements RepositoryData {
   readonly sourceUrl?: string
 
   constructor(
-    { artifact, manifest, ...data }: RepositoryData,
+    { artifact, manifest, ...data }: RepoData,
     connector: ConnectorInterface
   ) {
     super(connector)

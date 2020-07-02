@@ -26,7 +26,7 @@ export interface AppIntent {
 export interface AragonManifest {
   name: string // 'Counter'
   author: string // 'Aragon Association'
-  description: string // 'An application for Aragon'
+  description: string // 'An app for Aragon'
   changelog_url: string // 'https://github.com/aragon/aragon-apps/releases',
   details_url: string // '/meta/details.md'
   source_url: string // 'https://<placeholder-repository-url>'
