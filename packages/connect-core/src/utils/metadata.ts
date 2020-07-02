@@ -19,7 +19,13 @@ export async function fetchMetadata(
   const contentHashRegEx = contentUri.match(/ipfs:(.*)/)
   if (contentHashRegEx) {
     const url = `${DEFAULT_IPFS_GATEWAY}/ipfs/${contentHashRegEx[1]}/${fileName}`
-    return ethers.utils.fetchJson(url)
+    let metadata
+    try {
+      metadata = await ethers.utils.fetchJson(url)
+    } catch (error) {
+      throw new Error(`Can't fetch ${url}, failed with error: {error}.`)
+    }
+    return metadata
   }
   return {}
 }
