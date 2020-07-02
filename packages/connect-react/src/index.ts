@@ -1,4 +1,11 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import React, {
+  createElement,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import {
   Application,
   ConnectOptions,
@@ -77,7 +84,7 @@ export function Connect({
     orgLoading,
   ])
 
-  return React.createElement(ConnectContext.Provider, { value, children })
+  return createElement(ConnectContext.Provider, { value, children })
 }
 
 export function useOrganization(): OrganizationHookResult {
