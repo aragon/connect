@@ -7,9 +7,6 @@ type GroupProps = {
   name: string
 }
 
-// const blink = keyframes`50% { opacity: 0 }`
-const blink = keyframes`50% { opacity: 1 }`
-
 export default function Group({ children, loading, name }: GroupProps) {
   return (
     <div
@@ -27,10 +24,6 @@ export default function Group({ children, loading, name }: GroupProps) {
         {loading && (
           <span
             css={css`
-              animation-name: ${blink};
-              animation-duration: 80ms;
-              animation-timing-function: steps(1);
-              animation-iteration-count: infinite;
               font-size: 16px;
             `}
           >
