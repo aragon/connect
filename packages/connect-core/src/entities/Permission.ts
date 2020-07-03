@@ -27,7 +27,6 @@ export default class Permission extends CoreEntity implements PermissionData {
   constructor(data: PermissionData, connector: ConnectorInterface) {
     super(connector)
 
-
     this.allowed = data.allowed
     this.appAddress = data.appAddress
     this.granteeAddress = data.granteeAddress
@@ -41,6 +40,6 @@ export default class Permission extends CoreEntity implements PermissionData {
 
   async getRole(): Promise<Role | undefined> {
     const roles = await this._connector.rolesForAddress(this.appAddress)
-    return roles.find((role) => role.hash === this.roleHash)
+    return roles.find(role => role.hash === this.roleHash)
   }
 }

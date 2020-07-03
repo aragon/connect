@@ -2,7 +2,7 @@ import Repo from './Repo'
 import Role from './Role'
 import CoreEntity from './CoreEntity'
 import { AragonArtifact, AppIntent, Abi, AragonManifest } from '../types'
-import { parseMetadata } from '../utils/parseMetadata'
+import { resolveMetadata } from '../utils/metadata'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 
 // TODO:
@@ -26,81 +26,91 @@ export interface AppData {
 }
 
 export default class App extends CoreEntity implements AppData {
-  readonly abi?: Abi
-  readonly address!: string
-  readonly appId!: string
-  readonly appName?: string
-  readonly author?: string
-  readonly codeAddress!: string
-  readonly contentUri?: string
-  readonly contractPath?: string
-  readonly deprecatedIntents?: { [version: string]: AppIntent[] }
-  readonly description?: string
-  readonly htmlUrl?: string
-  readonly intents?: AppIntent[]
-  readonly icons?: { src: string; sizes: string }[]
-  readonly isForwarder?: boolean
-  readonly isUpgradeable?: boolean
-  readonly kernelAddress!: string
-  readonly name?: string
-  readonly registryAddress!: string
-  readonly registry?: string
-  readonly repoAddress?: string
-  readonly sourceUrl?: string
-  readonly version?: string
+  #created!: boolean
+  abi?: Abi
+  address!: string
+  appName?: string
+  appId!: string
+  author?: string
+  codeAddress!: string
+  contentUri?: string
+  contractPath?: string
+  deprecatedIntents?: { [version: string]: AppIntent[] }
+  description?: string
+  icons?: { src: string; sizes: string }[]
+  intents?: AppIntent[]
+  isForwarder?: boolean
+  isUpgradeable?: boolean
+  htmlUrl?: string
+  kernelAddress!: string
+  name?: string
+  registry?: string
+  registryAddress!: string
+  repoAddress?: string
+  sourceUrl?: string
+  version?: string
 
-  constructor(
-    { artifact, manifest, ...data }: AppData,
-    connector: ConnectorInterface
-  ) {
+  constructor(connector: ConnectorInterface) {
     super(connector)
 
-    // TODO: If no metadata, fallback to resolve ourselves with ipfs
+    this.#created = false
+  }
 
-    if (artifact) {
+  get created(): boolean {
+    return this.#created
+  }
+
+  async create({ artifact, manifest, ...data }: AppData): Promise<void> {
+    if (!this.#created) {
+      this.#created = true
+
       const {
         appName,
         path,
         functions,
         deprecatedFunctions,
         abi,
-      }: AragonArtifact = parseMetadata(artifact, 'artifact.json')
+      }: AragonArtifact = await resolveMetadata(
+        'artifact.json',
+        data.contentUri || undefined,
+        artifact
+      )
 
-      this.appName = appName
-      this.contractPath = path
-      this.intents = functions
-      this.deprecatedIntents = deprecatedFunctions
-      this.abi = abi
-    }
-
-    if (manifest) {
       const {
         author,
         description,
         start_url: htmlUrl,
         icons,
         source_url: sourceUrl,
-      }: AragonManifest = parseMetadata(manifest, 'manifest.json')
+      }: AragonManifest = await resolveMetadata(
+        'manifest.json',
+        data.contentUri || undefined,
+        manifest
+      )
 
+      this.abi = abi
+      this.address = data.address
+      this.appId = data.appId
+      this.appName = appName
       this.author = author
+      this.codeAddress = data.codeAddress
+      this.contentUri = data.contentUri || undefined
+      this.contractPath = path
+      this.deprecatedIntents = deprecatedFunctions
       this.description = description
-      this.htmlUrl = htmlUrl
       this.icons = icons
+      this.intents = functions
+      this.isForwarder = data.isForwarder ?? undefined
+      this.isUpgradeable = data.isUpgradeable ?? undefined
+      this.htmlUrl = htmlUrl
+      this.kernelAddress = data.kernelAddress
+      this.name = data.name
+      this.registry = data.registry || undefined
+      this.registryAddress = data.registryAddress
+      this.repoAddress = data.repoAddress
+      this.version = data.version
       this.sourceUrl = sourceUrl
     }
-
-    this.address = data.address
-    this.appId = data.appId
-    this.codeAddress = data.codeAddress
-    this.contentUri = data.contentUri ?? undefined
-    this.isForwarder = data.isForwarder ?? undefined
-    this.isUpgradeable = data.isUpgradeable ?? undefined
-    this.kernelAddress = data.kernelAddress
-    this.name = data.name
-    this.registry = data.registry ?? undefined
-    this.registryAddress = data.registryAddress
-    this.repoAddress = data.repoAddress
-    this.version = data.version
   }
 
   async repo(): Promise<Repo> {

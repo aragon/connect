@@ -4,14 +4,20 @@
 
 ## Guides
 
-* [Aragon Basics](guides/aragon-basics.md)
 * [Getting started](guides/getting-started.md)
+* [Aragon Basics](guides/aragon-basics.md)
 
 ## Advanced
 
-* [Custom subgraph queries](advanced/low-level-queries.md)
+* [Custom Subgraph queries](advanced/low-level-queries.md)
 * [Writing an App Subgraph](advanced/app-subgraphs.md)
-* [Writing an App Connector](advanced/writing-an-app-connector.md)
+* [Writing an App Connector](advanced/app-connectors.md)
+
+## Connectors
+
+* [Organizations](connectors-reference/organizations.md)
+* [Tokens app](connectors-reference/tokens-app.md)
+* [Voting app](connectors-reference/voting-app.md)
 
 ## API Reference
 
@@ -22,13 +28,6 @@
 * [Permission](api-reference/permission.md)
 * [Repo](api-reference/repo.md)
 * [Role](api-reference/role.md)
-* [TransactionIntent](api-reference/transactionintent.md)
-* [TransactionPath](api-reference/transactionpath.md)
-* [TransactionRequest](api-reference/transactionrequest.md)
-
-## Connectors Reference
-
-* [Organizations](connectors-reference/organizations.md)
-* [Tokens app](connectors-reference/tokens-app.md)
-* [Voting app](connectors-reference/voting-app.md)
-
+* [TransactionIntent](api-reference/transaction-intent.md)
+* [TransactionPath](api-reference/transaction-path.md)
+* [TransactionRequest](api-reference/transaction-request.md)

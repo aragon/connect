@@ -1,6 +1,6 @@
 # Role
 
-A single role, which can get assigned to create a permission.
+A single role, which can be assigned to create a permission for a specific entity.
 
 ## Properties
 

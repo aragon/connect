@@ -27,7 +27,7 @@ Connects and returns an `Organization` for `location`.
 ```javascript
 import { connect } from '@aragon/connect'
 
-// Connections should get wrapped in a try / catch to capture connection errors.
+// Connections should get wrapped in a try / catch to capture connection errors
 try {
   // Connect to an org through The Graph
   const org1 = await connect('org1.aragonid.eth', 'thegraph')
@@ -56,4 +56,3 @@ try {
   }
 }
 ```
-

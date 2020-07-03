@@ -1,14 +1,14 @@
 # Organizations
 
-This is the main connector of the Aragon Connect library. It is responsible of parsing the organization’s data.
+This is the main connector of the Aragon Connect library. It is responsible for parsing the organization’s data.
 
-Currently a single flavor of this connector is available, built-in the core library using The Graph. We have plans to keep including other flavors, like an Ethereum connector that reduces the state from blockchain events, or a SQL connector that fetches data from a database, etc.
+Currently a single flavor of this connector is available and comes built into the core library, connecting to a Subgraph data source,. We have plans to expand to other flavors, like an Ethereum connector that reduces the state directly from an Ethereum node’s JSON-RPC API, or a SQL connector that fetches data from a database, etc.
 
 ## Connector Interface
 
-The connector to be compatible with Aragon Connect library should implement the following interface:
+The connector must implement the following interface to be compatible with Aragon Connect:
 
-```javascript
+```typescript
 chainId?: number
 permissionsForOrg(orgAddress: string): Promise<Permission[]>
 onPermissionsForOrg(orgAddress: string, callback: Function): { unsubscribe: Function }
@@ -25,9 +25,9 @@ This connector was built using The Graph and uses GraphQL as a query language fo
 
 ### GraphQLWrapper
 
-The Graph connector exports the `GraphQLWrapper` object. The wrapper is useful when you want to create low level requests and talk to the subgraph directly.
+The Graph connector exports the `GraphQLWrapper` object. The wrapper is useful when you want to create low level requests and talk to the Subgraph directly.
 
-To create a wrapper instance you need to provide the subgraph URL endpoint:
+To create a wrapper instance you need to provide the Subgraph URL endpoint:
 
 ```javascript
 const wrapper = new GraphQLWrapper(SUBGRAPH_URL)
@@ -39,7 +39,7 @@ Once you have a wrapper instance you can use the following API to create custom 
 
 **GraphQLWrapper\#performQuery\(query, args\)**
 
-Performs a GraphQL query.
+Perform a GraphQL query.
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
@@ -60,7 +60,7 @@ Perform a GraphQL query and parse the result.
 
 **GraphQLWrapper\#subscribeToQuery\(query, args, callback\)**
 
-Perform a GraphQL subscription.
+Create a GraphQL subscription.
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
@@ -71,7 +71,7 @@ Perform a GraphQL subscription.
 
 **GraphQLWrapper\#subscribeToQueryWithParser\(query, args, callback, parser\)**
 
-Perform a GraphQL subscription and parse the result return.
+Create a GraphQL subscription and parse the emitted results.
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
@@ -83,9 +83,6 @@ Perform a GraphQL subscription and parse the result return.
 
 ### Subgraph Schema
 
-The subgraph schema shows all the available entities and attributes. It's useful as you'll have a better, clearer picture of the kind of information you can request.
+The Subgraph schema defines all of the available entities and attributes. It may be useful to gain a fuller, clearer picture of the information you can request.
 
-The following is a picture of dependencies graph for the subgraph:
-
-![](../.gitbook/assets/org-schema.png)
-
+![](./assets/org-schema.png)

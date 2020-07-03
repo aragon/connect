@@ -1,6 +1,6 @@
 # Organization
 
-An `Organization` instance represents an Aragon organization and allows to interact with it.
+An `Organization` instance represents an Aragon organization and exposes methods to interact with it.
 
 ## Methods
 
@@ -235,4 +235,3 @@ Start receiving the permissions of the org.
 | Name | Type | Description |
 | :--- | :--- | :--- |
 | `permissions` | `Permission[]` | A `Permissions` instance. |
-
