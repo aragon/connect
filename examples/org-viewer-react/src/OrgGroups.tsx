@@ -9,24 +9,24 @@ import OrgPermissions from './OrgPermissions'
 type OrgGroupsProps = { onOpenApp: (appAddress: string) => void }
 
 export default function OrgGroups({ onOpenApp }: OrgGroupsProps) {
-  const [org, orgError, orgLoading] = useOrganization()
-  const loading = orgLoading
+  const [org, { loading }] = useOrganization()
   return (
     <Fragment>
       {loading && (
         <p
           css={css`
             position: fixed;
-            top: 0;
+            top: 10px;
             left: 50%;
             transform: translateX(-50%);
             margin: 0;
-            padding: 10px;
+            padding: 10px 20px;
             background: #fff;
             border-radius: 6px;
+            border: 2px solid #fad4fa;
           `}
         >
-          Loading org…
+          Loading…
         </p>
       )}
       {org && (

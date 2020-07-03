@@ -1,13 +1,11 @@
 /** @jsx jsx */
-import { useEffect, useState } from 'react'
 import { jsx } from '@emotion/core'
 import { usePermissions } from '@aragon/connect-react'
 import Group from './Group'
 import Table from './Table'
 
 export default function OrgPermissions() {
-  const [permissions, error, loading] = usePermissions()
-
+  const [permissions, { loading }] = usePermissions()
   return (
     <Group name="Permissions" loading={loading}>
       <Table

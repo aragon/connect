@@ -5,7 +5,7 @@ import Group from './Group'
 import Table from './Table'
 
 export default function OrgApps() {
-  const [org, orgError, orgLoading] = useOrganization()
+  const [org] = useOrganization()
 
   if (!org) {
     return null

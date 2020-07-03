@@ -10,7 +10,7 @@ type Props = {
 }
 
 export default function OrgApps({ onOpenApp }: Props) {
-  const [apps, error, loading] = useApps()
+  const [apps, { loading }] = useApps()
 
   return (
     <Group name="Apps" loading={loading}>
