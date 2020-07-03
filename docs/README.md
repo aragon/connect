@@ -8,4 +8,3 @@ Welcome to the Aragon Connect documentation.
 * The **API Reference** section contains a complete documentation of the functions and objects exposed by Aragon Connect.
 
 If you never used the library before, we highly recommend starting with the [Getting Started](guides/getting-started.md) guide. If you are not familiar at all with Aragon, the ideal is to start by reading the [Aragon Basics](guides/aragon-basics.md) guide.
-

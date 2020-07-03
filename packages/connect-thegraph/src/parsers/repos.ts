@@ -1,7 +1,10 @@
 import { Repo, RepoData } from '@aragon/connect-core'
 import { QueryResult } from '../types'
 
-export function parseRepo(result: QueryResult, connector: any): Repo {
+export async function parseRepo(
+  result: QueryResult,
+  connector: any
+): Promise<Repo> {
   const app = result.data.app
   const repo = app.repo
 
@@ -19,5 +22,8 @@ export function parseRepo(result: QueryResult, connector: any): Repo {
     registryAddress: app.repo?.registry?.address,
   }
 
-  return new Repo(data, connector)
+  const repoEntity = new Repo(connector)
+  await repoEntity.create(data)
+
+  return repoEntity
 }
