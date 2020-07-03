@@ -1,6 +1,6 @@
 # Creating an app Subgraph
 
-Creating a Subgraph for an Aragon app is not much different from any other kind of Subgraph. If you're not already familiar with what can be done in a Subgraph, we recommend checking out [The Graph's documentation](https://thegraph.com/docs).
+Creating a Subgraph for an Aragon app is not much different from any other kind of Subgraph. If you’re not already familiar with what can be done in a Subgraph, we recommend checking out [The Graph’s documentation](https://thegraph.com/docs).
 
 In our app Subgraphs, we merely hook into a number of Aragon related data sources that will detect any installed organization, app, token, etc associated to an Aragon deployment. This is all hidden from you, so writing the Subgraph is as similar as possible to writing a normal Subgraph.
 
@@ -12,15 +12,15 @@ To create a new Subgraph for Aragon, start by creating a copy of an existing Sub
 
 In `package.json`, you’ll find a number of scripts that reference the user "aragon" and the application "voting". Change these to your user \(or Github organization’s name\) and your application’s name.
 
-### 2. Create your Subgraph in The Graph's explorer dashboard
+### 2. Create your Subgraph in The Graph’s explorer dashboard
 
 The scripts in `package.json` will generate your `subgraph.yaml` manifest file and deploy your Subgraph with a very specific nomenclature.
 
-For example, if you run `yarn deploy-mainnet`, you’ll deploy a Subgraph named "Aragon Voting Mainnet". If you run `yarn deploy-mainnet-staging`, you’ll deploy a Subgraph named "Aragon Voting Mainnet Staging". Make sure these Subgraphs are already created in [The Graph's explorer dashboard](https://thegraph.com/explorer/dashboard).
+For example, if you run `yarn deploy-mainnet`, you’ll deploy a Subgraph named "Aragon Voting Mainnet". If you run `yarn deploy-mainnet-staging`, you’ll deploy a Subgraph named "Aragon Voting Mainnet Staging". Make sure these Subgraphs are already created in [The Graph’s explorer dashboard](https://thegraph.com/explorer/dashboard).
 
 The specification for the nomenclature is: `Aragon <AppName> <Network> [Staging]`.
 
-Staging Subgraphs are intended for development, as they index very quickly. We'll expand more on this in [step 8](#8-test-your-subgraph-with-few-data-sources).
+Staging Subgraphs are intended for development, as they index very quickly. We’ll expand more on this in [step 8](#8-test-your-subgraph-with-few-data-sources).
 
 ### 3. Set up the Subgraph manifest files
 

@@ -2,7 +2,7 @@
 
 This is the main connector of the Aragon Connect library. It is responsible for parsing the organization’s data.
 
-Currently a single flavor of this connector is available and comes built into the core library, connecting to a Subgraph data source,. We have plans to expand to other flavors, like an Ethereum connector that reduces the state directly from an Ethereum node's JSON-RPC API, or a SQL connector that fetches data from a database, etc.
+Currently a single flavor of this connector is available and comes built into the core library, connecting to a Subgraph data source,. We have plans to expand to other flavors, like an Ethereum connector that reduces the state directly from an Ethereum node’s JSON-RPC API, or a SQL connector that fetches data from a database, etc.
 
 ## Connector Interface
 

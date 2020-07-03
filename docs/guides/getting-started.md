@@ -65,7 +65,7 @@ yarn add @aragon/connect-thegraph-voting
 yarn add @aragon/connect-thegraph-tokens
 ```
 
-See [“Fetching an app's state”](#fetching-an-apps-state) below to understand how to use these app connectors.
+See [“Fetching an app’s state”](#fetching-an-apps-state) below to understand how to use these app connectors.
 
 ## Connecting to an organization
 
@@ -95,7 +95,7 @@ const org = await connect('example.aragonid.eth', 'thegraph', { chainId: 4 })
 
 Note: other than the Ethereum main network \(default\), only [Rinkeby](https://docs.ethhub.io/using-ethereum/test-networks/#rinkeby) and [xDAI](https://www.xdaichain.com/) are supported by the `thegraph` connector at the moment.
 
-## Fetching an app's state
+## Fetching an app’s state
 
 Apps can be obtained from an [`Organization`](../api-reference/organization.md) instance, but they only contain basic information. Alone, an `App` instance doesn’t provide the state of the app: you need an **app connector** to achieve this.
 
@@ -194,4 +194,4 @@ for (const transaction of path.transactions) {
 
 ## Going further
 
-Now that you are familiar with the basics of Aragon Connect, you may want to explore the [examples provided in the repository](https://github.com/aragon/connect/tree/master/examples) and [API documentation](../api-reference/).
+Now that you are familiar with the basics of Aragon Connect, you may want to explore the [examples provided in the repository](https://github.com/aragon/connect/tree/master/examples) and the [API documentation](../api-reference/).

@@ -22,26 +22,26 @@ An Aragon app installed in an organization from an [aragonPM repository](https:/
 | `isUpgradeable` | `Boolean` | Whether the app can be upgraded. |
 | `kernelAddress` | `String` | The address of the kernel this app is installed on. |
 | `name` | `String` | Name of the app, from the repository. E.g. `"Tokens"`. |
-| `registryAddress` | `String` | Address of the aragonPM registry this app's repo is published to. |
-| `registry` | `String` | Name of the aragonPM registry this app's repo is published to. E.g. `"aragonpm.eth"` |
+| `registryAddress` | `String` | Address of the aragonPM registry this app’s repo is published to. |
+| `registry` | `String` | Name of the aragonPM registry this app’s repo is published to. E.g. `"aragonpm.eth"` |
 | `repoAddress` | `String` | Address of the aragonPM repository the app was installed from. |
-| `sourceUrl` | `String` | URL of the app's source code. |
+| `sourceUrl` | `String` | URL of the app’s source code. |
 | `version` | `String` | The current version of the app. |
 
 ## Methods
 
 ### App\#repo\(\)
 
-Fetch the app's aragonPM repository.
+Fetch the app’s aragonPM repository.
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| returns | `Promise<Repo>` | A promise resolving to the app's aragonPM repository. |
+| returns | `Promise<Repo>` | A promise resolving to the app’s aragonPM repository. |
 
 ### App\#roles\(\)
 
-Fetch the app's roles.
+Fetch the app’s roles.
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| returns | `Promise<Role[]>` | A promise resolving to the app's roles. |
+| returns | `Promise<Role[]>` | A promise resolving to the app’s roles. |
