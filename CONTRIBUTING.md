@@ -17,5 +17,5 @@ These are some principles that we can use to make decisions. They are only indic
 - **Simple**: a simple solution is generally preferred over a complex one that might provide more complete features or a better future-proofing.
 - **Fast**: common scenarios should be as fast as possible, even at the cost of impacting less common scenarios.
 - **Lightweight**: the bundle size should be as small as possible.
-- **Low reliance on external libraries**: external libraries should only be used when they provide a clear benefit over the costs they add in terms of size, maintainance, complexity, performances, etc.
+- **Low reliance on external libraries**: external libraries should only be used when they provide a clear benefit over the costs they add in terms of size, maintenance, complexity, performances, etc.
 - **Extensible**: we should aim for a good level of extensibility if it doesn’t conflict with the other principles. For example, custom connectors can be injected but we also embed the most common ones.
