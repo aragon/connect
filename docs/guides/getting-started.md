@@ -183,10 +183,10 @@ Then to retrieve the path you want, pass the account that will be signing the tr
 const [path] = intent.paths(wallet.account)
 ```
 
-Finally, you can sign the different transactions associated to this path. Aragon Connect doesn’t handle any signing itself, but returns an object that is ready to use with the library of your choice: [Web3.js](https://web3js.readthedocs.io/en/1.0/), [Ethers](https://docs.ethers.io/v5/), or even a JSON-RPC connection to an Ethereum node.
+Finally, you can sign the different transactions associated to this path. Aragon Connect doesn’t handle any signing itself, but returns an object that is ready to use with the library of your choice: [ethers.js](https://docs.ethers.io/v5/), [Web3.js](https://web3js.readthedocs.io/en/1.0/), or even a [JSON-RPC connection to an Ethereum node](https://eips.ethereum.org/EIPS/eip-1474).
 
 ```javascript
-// Sign the transactions using Ethers
+// Sign the transactions using ethers.js
 for (const transaction of path.transactions) {
   await ethers.sendTransaction(transaction)
 }
