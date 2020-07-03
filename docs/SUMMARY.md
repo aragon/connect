@@ -4,6 +4,7 @@
 
 ## Guides
 
+* [Aragon Basics](guides/aragon-basics.md)
 * [Getting started](guides/getting-started.md)
 
 ## Advanced
