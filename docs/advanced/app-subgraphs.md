@@ -1,4 +1,4 @@
-# App Subgraphs
+# Writing an App Subgraph
 
 Making a subgraph for an aragon app is not much different from making any other kind of subgraph. To learn how to do that, check out [TheGraphs's documentation](https://thegraph.com/docs).
 
@@ -76,8 +76,9 @@ Even though templates collect data from many sources, there are some cases in wh
 
 ### I'm getting errors about missing ABIs when the subgraph is indexing
 
-When a reducer is run, it's run in the context of the data source that defined it. For example, hooks are triggered by `src/base/Kernel.ts` when the `NewAppProxy` event is detected in an Organization. You need to include the missing ABI in `manifest/templates/contracts/Kernel.template.yaml` for it to be available in this reducer. As a rule of thumb, if your data source will be triggered by a base Aragon data source (Organization templates, Organization factories, etc), include its ABI in the `manifest/templates/contracts` files.
+When a reducer is run, it's run in the context of the data source that defined it. For example, hooks are triggered by `src/base/Kernel.ts` when the `NewAppProxy` event is detected in an Organization. You need to include the missing ABI in `manifest/templates/contracts/Kernel.template.yaml` for it to be available in this reducer. As a rule of thumb, if your data source will be triggered by a base Aragon data source \(Organization templates, Organization factories, etc\), include its ABI in the `manifest/templates/contracts` files.
 
 ### My callHandlers aren't working
 
 Unfortunately, TheGraph does not support callHandlers in Rinkeby. For this reason, our templates avoid them altogether. In general, we prefer to code subgraphs in a way that is compatible with all networks. Alternatively, if you by all means need to use this feature, consider hosting your own subgraph.
+

@@ -1,11 +1,10 @@
-# Answering questions with custom queries
+# Custom subgraph queries
 
-The data that the subgraphs have can be used to answer more complex questions; However, you'll need a more complex query.
-The available connectors create a simplified abstraction over the data, implementing a subset of queries that can cover most of the generic use cases.
+The data that the subgraphs have can be used to answer more complex questions; However, you'll need a more complex query. The available connectors create a simplified abstraction over the data, implementing a subset of queries that can cover most of the generic use cases.
 
 ## Subgraph schemas
 
-Understanding the subgraph's schema we are going to fetch data from is key so we can ask the right questions. In the [Connectors Reference](../connectors/organization.md) section you can find the schema for each subgraph associated with its particular connector.
+Understanding the subgraph's schema we are going to fetch data from is key so we can ask the right questions. In the [Connectors Reference](https://github.com/aragon/connect/tree/b37f23401732b2bb3a99c5d01a3bee5c0402f01c/docs/connectors/organization.md) section you can find the schema for each subgraph associated with its particular connector.
 
 ## Creating a custom query
 
@@ -82,3 +81,4 @@ const subscription = wrapper.subscribeToQuery(
 // Stop receiving updates
 subscription.unsubscribe()
 ```
+
