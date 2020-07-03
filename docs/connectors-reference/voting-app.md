@@ -4,7 +4,7 @@ This is an Aragon app specific connector for the Voting app built using The Grap
 
 ## Connector API
 
-To create a new instance of the connector, you need the specific Voting app address and the subgraph URL:
+To create a new instance of the connector, you need the specific Voting app address and the Subgraph URL:
 
 ```javascript
 import { Voting } from '@aragon/connect-thegraph-voting'
@@ -58,7 +58,7 @@ Subscribe to the list of casts of a vote.
 
 ## Subgraph schema
 
-The subgraph schema show all the available entities and attributes. It could be useful to have a better picture of the kind of information you can request.
+The Subgraph schema show all the available entities and attributes. It could be useful to have a better picture of the kind of information you can request.
 
 ```yaml
 type Vote @entity {

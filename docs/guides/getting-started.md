@@ -4,6 +4,8 @@
 
 Aragon Connect is a suite of tools that allow to integrate Aragon Organizations into apps and websites, providing a unified interface that allows to do all the things that can be done in the Aragon Client and the Aragon Apps: fetching data, subscribing to updates, and generating transactions. It does so by providing default settings that are balanced between performances and decentralization level. It is compatible with web and Node.js environments.
 
+This guide assumes that you are familiar with the way Aragon organizations work. If that’s not the case, we invite you to have a look at the [Aragon Basics](./aragon-basics.md) guide.
+
 ### What does it look like?
 
 This is how we can connect to an organization and list its apps:
@@ -26,7 +28,7 @@ The idea of connectors is central to Aragon Connect. A connector is an abstracte
 
 Aragon Connect allows to inject any type of connector, and includes two by default:
 
-* **The Graph**: fetch data from [subgraphs](https://thegraph.com/docs/introduction#how-the-graph-works), hosted on [thegraph.com](https://thegraph.com/) by default.
+* **The Graph**: fetch data from [Subgraphs](https://thegraph.com/docs/introduction#how-the-graph-works), hosted on [thegraph.com](https://thegraph.com/) by default.
 * **Ethereum \(WIP\)**: fetch data from an Ethereum node directly.
 
 A connector can be of two types: organization or app, to fetch data from one or the other. The main package of Aragon Connect only provides organization connectors: app connectors need to be imported separately.
