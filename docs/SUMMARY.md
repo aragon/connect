@@ -5,11 +5,19 @@
 ## Guides
 
 * [Getting started](guides/getting-started.md)
+* [Aragon Basics](guides/aragon-basics.md)
 
 ## Advanced
 
+* [Custom Subgraph queries](advanced/low-level-queries.md)
 * [Writing an App Subgraph](advanced/app-subgraphs.md)
 * [Writing an App Connector](advanced/writing-an-app-connector.md)
+
+## Connectors
+
+* [Organizations](connectors-reference/organizations.md)
+* [Tokens app](connectors-reference/tokens-app.md)
+* [Voting app](connectors-reference/voting-app.md)
 
 ## API Reference
 
