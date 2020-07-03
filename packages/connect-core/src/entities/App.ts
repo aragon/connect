@@ -94,7 +94,7 @@ export default class App extends CoreEntity implements AppData {
       this.appName = appName
       this.author = author
       this.codeAddress = data.codeAddress
-      this.contentUri = data.contentUri
+      this.contentUri = data.contentUri || undefined
       this.contractPath = path
       this.deprecatedIntents = deprecatedFunctions
       this.description = description
