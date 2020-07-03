@@ -130,12 +130,10 @@ function useConnectSubscription<Data>(
 
     cancelCb.current?.()
     cancelCb.current = () => {
-      console.log('CANCEL SUB!')
       cancelled = true
       handler?.unsubscribe?.()
     }
 
-    console.log('START SUB!')
     setLoading(true)
     handler = cbRef.current(org, (data: Data) => {
       if (!cancelled) {
@@ -151,17 +149,14 @@ function useConnectSubscription<Data>(
 }
 
 export function useApps(): AppsHookResult {
-  return useConnectSubscription<App[]>((org, onData) => {
-    console.log('SUB: APPS')
-    return org.onApps(onData)
-  }, [])
+  return useConnectSubscription<App[]>((org, onData) => org.onApps(onData), [])
 }
 
 export function usePermissions(): PermissionsHookResult {
-  return useConnectSubscription<Permission[]>((org, onData) => {
-    console.log('SUB: PERMS')
-    return org.onPermissions(onData)
-  }, [])
+  return useConnectSubscription<Permission[]>(
+    (org, onData) => org.onPermissions(onData),
+    []
+  )
 }
 
 export * from '@aragon/connect'
