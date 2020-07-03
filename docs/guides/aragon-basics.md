@@ -12,15 +12,15 @@ This brings us to the central piece of the Aragon ecosystem: the **organization*
 
 ## Organizations
 
-An Aragon organization contains the tools needed for a community to organize its decentralized life. It is composed of a kernel, a series of apps, and a set of permissions that define what can be done in in what way.
+An Aragon organization contains the tools needed for a community to organize its decentralized life. It is composed of a kernel, a series of apps, and a set of permissions that define what can be done in what way.
 
 ![The decentralized nature of organizations allows to access them in various ways.](../.gitbook/assets/basics-organization.png)
 
-The kernel of an organization, and each of its apps, are represented by smart contracts deployed on the Ethereum chain. Interacting with them can be done done through the use of tools like [the Aragon client](https://mainnet.aragon.org/) for the browser, [aragonCLI](https://hack.aragon.org/docs/cli-intro.html) for the command line, or programmatically through [Aragon Connect](https://aragon.org/connect).
+The kernel of an organization, and each of its apps, are represented by smart contracts deployed on the Ethereum chain. Interacting with them can be done through the use of tools like [the Aragon client](https://mainnet.aragon.org/) for the browser, [aragonCLI](https://hack.aragon.org/docs/cli-intro.html) for the command line, or programmatically through [Aragon Connect](https://aragon.org/connect).
 
 Organizations are created from templates. Each of them is trying to address a specific need by providing a set of apps and permissions that come bundled with the newly created organization.
 
-![ There are a multiple templates to choose from, or you can create your own.](../.gitbook/assets/basics-templates.png)
+![ There are multiple templates to choose from, or you can create your own.](../.gitbook/assets/basics-templates.png)
 
 Once deployed, organizations can get used and administrated in an extremely flexible way. We will discover how apps, permissions and forwarding paths play a role into that.
 
@@ -56,7 +56,7 @@ An important aspect of permissions is that they are not limited to normal accoun
 
 ## Forwarding paths
 
-As we just saw with the permissions, a given action might get redirected from an app to app before being executed, until the desired action can get executed on the target app. This series of actions jumping from an app to another is what we call the **forwarding path**. The computation of all the possible forwarding paths for a given action is called **transaction pathing**.
+As we just saw with the permissions, a given action might get redirected from an app to other app before being executed, until the desired action can get executed on the target app. This series of actions jumping from an app to another is what we call the **forwarding path**. The computation of all the possible forwarding paths for a given action is called **transaction pathing**.
 
 ![Example: the permission is directly granted to the account of Enrique.](../.gitbook/assets/basics-forwarding-path-direct.png)
 
@@ -72,7 +72,7 @@ An important goal for Aragon is to make things simple and understandable. One re
 
 ## What Now?
 
-Now that you are more familiar with the way Aragon organizations work, you might want to start immediately by reading [Getting Started for Aragon Connect](https://connect.aragon.org/).
+Now that you are more familiar with the way Aragon organizations work, you might want to start immediately by reading [Getting Started for Aragon Connect](getting-started.md).
 
 You might also want to know more about Aragon as a platform. In that case, we recommend you to have a look at our general documentation website: [hack.aragon.org](https://hack.aragon.org/).
 
