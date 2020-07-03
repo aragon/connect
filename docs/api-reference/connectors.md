@@ -6,7 +6,7 @@ Three connectors are provided by default, listed below.
 
 ## ConnectorTheGraph
 
-A connector that fetches information from a The Graph subgraph.
+A connector that fetches information from a The Graph Subgraph.
 
 ## ConnectorEthereumProvider
 

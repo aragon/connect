@@ -25,9 +25,9 @@ This connector was built using The Graph and uses GraphQL as a query language fo
 
 ### GraphQLWrapper
 
-The Graph connector exports the `GraphQLWrapper` object. The wrapper is useful when you want to create low level requests and talk to the subgraph directly.
+The Graph connector exports the `GraphQLWrapper` object. The wrapper is useful when you want to create low level requests and talk to the Subgraph directly.
 
-To create a wrapper instance you need to provide the subgraph URL endpoint:
+To create a wrapper instance you need to provide the Subgraph URL endpoint:
 
 ```javascript
 const wrapper = new GraphQLWrapper(SUBGRAPH_URL)
@@ -83,9 +83,9 @@ Perform a GraphQL subscription and parse the result return.
 
 ### Subgraph Schema
 
-The subgraph schema shows all the available entities and attributes. It's useful as you'll have a better, clearer picture of the kind of information you can request.
+The Subgraph schema shows all the available entities and attributes. It’s useful as you’ll have a better, clearer picture of the kind of information you can request.
 
-The following is a picture of dependencies graph for the subgraph:
+The following is a picture of dependencies graph for the Subgraph:
 
 ![](../.gitbook/assets/org-schema.png)
 

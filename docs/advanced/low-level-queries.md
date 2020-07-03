@@ -1,14 +1,14 @@
-# Custom subgraph queries
+# Custom Subgraph queries
 
-The data that the subgraphs have can be used to answer more complex questions; However, you'll need a more complex query. The available connectors create a simplified abstraction over the data, implementing a subset of queries that can cover most of the generic use cases.
+The data that the Subgraphs have can be used to answer more complex questions; However, you’ll need a more complex query. The available connectors create a simplified abstraction over the data, implementing a subset of queries that can cover most of the generic use cases.
 
 ## Subgraph schemas
 
-Understanding the subgraph's schema we are going to fetch data from is key so we can ask the right questions. In the [Connectors Reference](https://github.com/aragon/connect/tree/b37f23401732b2bb3a99c5d01a3bee5c0402f01c/docs/connectors/organization.md) section you can find the schema for each subgraph associated with its particular connector.
+Understanding the Subgraph’s schema we are going to fetch data from is key so we can ask the right questions. In the [Connectors Reference](https://github.com/aragon/connect/tree/b37f23401732b2bb3a99c5d01a3bee5c0402f01c/docs/connectors/organization.md) section you can find the schema for each Subgraph associated with its particular connector.
 
 ## Creating a custom query
 
-You can create custom queries to exploit the full power of the data contained in the subgraph. Following is an example of how to do it:
+You can create custom queries to exploit the full power of the data contained in the Subgraph. Following is an example of how to do it:
 
 ```javascript
 import gql from 'graphql-tag'
@@ -27,7 +27,7 @@ query {
 }
 `
 
-// Create the GraphQL wrapper using the specific subgraph URL
+// Create the GraphQL wrapper using the specific Subgraph URL
 const wrapper = new GraphQLWrapper(VOTING_SUBGRAPH_URL)
 
 // Fetch the data performing the custom query
@@ -62,7 +62,7 @@ query miniMeToken($id: String!, $address: String!) {
 }
 `
 
-// Create the GraphQL wrapper using the specific subgraph URL
+// Create the GraphQL wrapper using the specific Subgraph URL
 const wrapper = new GraphQLWrapper(TOKEN_MANAGER_SUBGRAPH)
 
 // Subscribe to receive data updates using a custom query

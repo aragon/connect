@@ -28,7 +28,7 @@ The idea of connectors is central to Aragon Connect. A connector is an abstracte
 
 Aragon Connect allows to inject any type of connector, and includes two by default:
 
-* **The Graph**: fetch data from [subgraphs](https://thegraph.com/docs/introduction#how-the-graph-works), hosted on [thegraph.com](https://thegraph.com/) by default.
+* **The Graph**: fetch data from [Subgraphs](https://thegraph.com/docs/introduction#how-the-graph-works), hosted on [thegraph.com](https://thegraph.com/) by default.
 * **Ethereum \(WIP\)**: fetch data from an Ethereum node directly.
 
 A connector can be of two types: organization or app, to fetch data from one or the other. The main package of Aragon Connect only provides organization connectors: app connectors need to be imported separately.
