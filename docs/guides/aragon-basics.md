@@ -85,7 +85,7 @@ As we just saw with the permissions, a given action might get redirected from an
 </figure>
 
 <figure>
-<img src="/assets/basics-forwarding-path-indirect.png" />
+<img src="./assets/basics-forwarding-path-indirect.png" />
 <figcaption><center><em>Example: the permission is granted to the Voting app which allows an indirect execution.</em></center></figcaption>
 </figure>
 
@@ -96,7 +96,7 @@ Most of our tools, including Aragon Connect, provide a way to compute the differ
 An important goal for Aragon is to make things simple and understandable. One recurrent problem in the Ethereum world is the way transactions are being presented to users, often in a raw, machine format. The Ethereum answer to this problem is the [NatSpec format](https://solidity.readthedocs.io/en/develop/natspec-format.html), allowing to document functions in a dynamic way in order to be displayed to users. We created [Radspec](https://github.com/aragon/radspec) to interpret the NatSpec format in a safe way, and integrated it into our tools and libraries.
 
 <figure>
-<img src="/assets/basics-radspec.png" />
+<img src="./assets/basics-radspec.png" />
 <figcaption><center><em>Radspec makes it possible to read transaction data in plain english.</em></center></figcaption>
 </figure>
 
