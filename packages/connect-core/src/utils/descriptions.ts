@@ -1,17 +1,18 @@
 import { ethers } from 'ethers'
 
 import App from '../entities/App'
-import TransactionRequest, {
-  TransactionRequestData,
-} from '../transactions/TransactionRequest'
-import { decodeTransactionPath } from './path/decodePath'
+import TransactionRequest from '../transactions/TransactionRequest'
+import {
+  decodeTransactionPath,
+  TransactionWithChildren,
+} from './path/decodePath'
 import {
   tryEvaluatingRadspec,
   postprocessRadspecDescription,
 } from './radspec/index'
 
 export async function describeTransaction(
-  transaction: TransactionRequestData,
+  transaction: TransactionWithChildren,
   apps: App[],
   provider?: ethers.providers.Provider
 ): Promise<TransactionRequest> {
@@ -21,26 +22,27 @@ export async function describeTransaction(
   if (!transaction.data) {
     throw new Error(`Could not describe transaction: missing 'data'`)
   }
-
   let description, descriptionAnnotated
   try {
-    const decoratedTransaction = await tryEvaluatingRadspec(
-      transaction,
-      apps,
-      provider
-    )
-    description = decoratedTransaction.description
-    // eslint-disable-next-line no-empty
-  } catch (_) {}
+    description = await tryEvaluatingRadspec(transaction, apps, provider)
 
-  if (description) {
-    try {
+    if (description) {
       const processed = await postprocessRadspecDescription(description, apps)
       descriptionAnnotated = processed.annotatedDescription
       description = processed.description
-      // eslint-disable-next-line no-empty
-    } catch (_) {}
-  }
+    }
+
+    if (transaction.children) {
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      transaction.children = await describeTransactionPath(
+        transaction.children,
+        apps,
+        provider
+      )
+    }
+
+    // eslint-disable-next-line no-empty
+  } catch (_) {}
 
   return new TransactionRequest({
     ...transaction,
@@ -54,44 +56,13 @@ export async function describeTransaction(
  *
  */
 export async function describeTransactionPath(
-  path: TransactionRequestData[],
+  path: TransactionWithChildren[],
   apps: App[],
   provider?: ethers.providers.Provider
-): Promise<TransactionRequestData[]> {
+): Promise<TransactionRequest[]> {
   return Promise.all(
     path.map(async step => {
-      let decoratedStep
-
-      // Evaluate via radspec normally
-      try {
-        decoratedStep = await tryEvaluatingRadspec(step, apps, provider)
-        // eslint-disable-next-line no-empty
-      } catch (err) {}
-
-      // Annotate the description, if one was found
-      if (decoratedStep) {
-        if (decoratedStep.description) {
-          try {
-            const processed = await postprocessRadspecDescription(
-              decoratedStep.description,
-              apps
-            )
-            decoratedStep.description = processed.description
-            decoratedStep.descriptionAnnotated = processed.annotatedDescription
-            // eslint-disable-next-line no-empty
-          } catch (err) {}
-        }
-
-        if (decoratedStep.children) {
-          decoratedStep.children = await describeTransactionPath(
-            decoratedStep.children,
-            apps,
-            provider
-          )
-        }
-      }
-
-      return decoratedStep || step
+      return describeTransaction(step, apps, provider)
     })
   )
 }
@@ -103,7 +74,5 @@ export async function describeScript(
 ): Promise<TransactionRequest[]> {
   const path = decodeTransactionPath(script)
 
-  const describedPath = await describeTransactionPath(path, apps, provider)
-
-  return describedPath.map(tx => new TransactionRequest(tx))
+  return describeTransactionPath(path, apps, provider)
 }

@@ -2,20 +2,20 @@ import { ethers } from 'ethers'
 
 import { AppIntent } from '../../types'
 import App from '../../entities/App'
-import { TransactionRequestData } from '../../transactions/TransactionRequest'
 import { addressesEqual, includesAddress, ANY_ENTITY } from '../address'
-import { canForward } from '../forwarding'
-import { encodeCallScript } from '../callScript'
 import { isFullMethodSignature } from '../app'
+import { encodeCallScript } from '../callScript'
+import { canForward } from '../forwarding'
 import {
+  Transaction,
   createDirectTransactionForApp,
   createForwarderTransactionBuilder,
   buildForwardingFeePretransaction,
 } from '../transactions'
 
 interface PathData {
-  forwardingFeePretransaction?: TransactionRequestData
-  transactions: TransactionRequestData[]
+  forwardingFeePretransaction?: Transaction
+  path: Transaction[]
 }
 
 function validateMethod(
@@ -49,14 +49,14 @@ function validateMethod(
  */
 async function calculateForwardingPath(
   sender: string,
-  directTransaction: TransactionRequestData,
+  directTransaction: Transaction,
   forwardersWithPermission: string[],
   forwarders: string[],
   provider: ethers.providers.Provider
 ): Promise<PathData> {
   // No forwarders can perform the requested action
   if (forwardersWithPermission.length === 0) {
-    return { transactions: [] }
+    return { path: [] }
   }
 
   const createForwarderTransaction = createForwarderTransactionBuilder(
@@ -79,10 +79,10 @@ async function calculateForwardingPath(
         // forwarder
         return {
           forwardingFeePretransaction,
-          transactions: [transaction, directTransaction],
+          path: [transaction, directTransaction],
         }
       } catch (err) {
-        return { transactions: [] }
+        return { path: [] }
       }
     }
   }
@@ -147,10 +147,10 @@ async function calculateForwardingPath(
           // forwarding path
           return {
             forwardingFeePretransaction,
-            transactions: [transaction, ...path],
+            path: [transaction, ...path],
           }
         } catch (err) {
-          return { transactions: [] }
+          return { path: [] }
         }
       } else {
         // The previous forwarder can forward a transaction for this forwarder,
@@ -171,7 +171,7 @@ async function calculateForwardingPath(
     queue.push([path, nextQueue])
   } while (queue.length)
 
-  return { transactions: [] }
+  return { path: [] }
 }
 
 /**
@@ -217,11 +217,11 @@ export async function calculateTransactionPath(
     (finalForwarder && addressesEqual(finalForwarder, sender))
   ) {
     try {
-      return { transactions: [directTransaction] }
+      return { path: [directTransaction] }
     } catch (_) {
       // If the direct transaction fails, we give up as we should have been able to
       // perform the action directly
-      return { transactions: [] }
+      return { path: [] }
     }
   }
 
@@ -236,7 +236,7 @@ export async function calculateTransactionPath(
       if (!includesAddress(forwarders, finalForwarder)) {
         // Final forwarder was given, but did not match any available forwarders, so no path
         // could be found
-        return { transactions: [] }
+        return { path: [] }
       }
 
       // Only attempt to find path with declared final forwarder; assume the final forwarder
@@ -253,7 +253,7 @@ export async function calculateTransactionPath(
 
     // No one has access, so of course we don't as well
     if (allowedEntities.length === 0) {
-      return { transactions: [] }
+      return { path: [] }
     }
 
     // User may have permission; attempt direct transaction
@@ -262,7 +262,7 @@ export async function calculateTransactionPath(
       includesAddress(allowedEntities, ANY_ENTITY)
     ) {
       try {
-        return { transactions: [directTransaction] }
+        return { path: [directTransaction] }
       } catch (_) {
         // Don't immediately fail as the permission could have parameters applied that
         // disallows the user from the current action and forces us to use the full

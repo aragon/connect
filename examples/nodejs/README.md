@@ -52,6 +52,12 @@ yarn run start-subscriptions-voting
 yarn run start-transaction-path
 ```
 
+### Voting describe script
+
+```
+yarn run start-describe-script
+```
+
 ### Low-level subscriptions 
 
 ```

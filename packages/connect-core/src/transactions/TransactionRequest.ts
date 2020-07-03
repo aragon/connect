@@ -1,5 +1,5 @@
 export interface TransactionRequestData {
-  children?: TransactionRequestData[]
+  children?: TransactionRequest[]
   description?: string
   descriptionAnnotated?: Annotation[]
   data: string
@@ -11,6 +11,8 @@ export interface Annotation {
   type: string
   value: any
 }
+
+// TODO: Handle children
 
 export default class TransactionRequest {
   readonly description?: string

@@ -2,10 +2,9 @@ import { ethers } from 'ethers'
 
 import TransactionPath from './TransactionPath'
 import TransactionRequest from './TransactionRequest'
-import App from '../entities/App'
 import Organization from '../entities/Organization'
 import { calculateTransactionPath } from '../utils/path/calculatePath'
-import { describeTransactionPath } from '../utils/path/describePath'
+import { describeTransactionPath } from '../utils/descriptions'
 
 export interface TransactionIntentData {
   contractAddress: string
@@ -43,7 +42,7 @@ export default class TransactionIntent {
 
     const {
       forwardingFeePretransaction,
-      transactions: path,
+      path,
     } = await calculateTransactionPath(
       account,
       this.contractAddress,
@@ -59,15 +58,15 @@ export default class TransactionIntent {
       this.#provider
     )
 
-    const appsOnPath = path.map(transaction => transaction.to)
-
     return new TransactionPath({
       apps: apps.filter(app =>
-        appsOnPath.some(address => address === app.address)
+        path
+          .map(transaction => transaction.to)
+          .some(address => address === app.address)
       ),
       destination: apps.find(app => app.address == this.contractAddress)!,
       forwardingFeePretransaction,
-      transactions: describedPath.map(tx => new TransactionRequest(tx)),
+      transactions: describedPath,
     })
   }
 

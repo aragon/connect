@@ -1,15 +1,19 @@
 import { isCallScript, decodeCallScript } from '../callScript'
 import { isValidForwardCall, parseForwardCall } from '../forwarding'
-import { TransactionRequestData } from '../../transactions/TransactionRequest'
+import { Transaction } from '../transactions'
+
+export interface TransactionWithChildren extends Transaction {
+  children?: TransactionWithChildren[]
+}
 
 /**
  * Decodes an EVM callscript and returns the transaction path it describes.
  *
- * @return {TransactionRequestData[]} An array of Ethereum transactions that describe each step in the path
+ * @return An array of Ethereum transactions that describe each step in the path
  */
 export function decodeTransactionPath(
   script: string
-): TransactionRequestData[] {
+): TransactionWithChildren[] {
   // In the future we may support more EVMScripts, but for now let's just assume we're only
   // dealing with call scripts
   if (!isCallScript(script)) {
@@ -32,5 +36,5 @@ export function decodeTransactionPath(
     }
 
     return decodeSegments.concat({ ...segment, children })
-  }, [] as TransactionRequestData[])
+  }, [] as TransactionWithChildren[])
 }

@@ -4,9 +4,14 @@ import { erc20ABI, forwarderAbi, forwarderFeeAbi } from './abis'
 import { isFullMethodSignature } from './app'
 import { Abi, FunctionFragment } from '../types'
 import App from '../entities/App'
-import { TransactionRequestData } from '../transactions/TransactionRequest'
 
-export interface TransactionWithTokenData extends TransactionRequestData {
+export interface Transaction {
+  data: string
+  from?: string
+  to: string
+}
+
+export interface TransactionWithTokenData extends Transaction {
   token: {
     address: string
     value: string
@@ -20,7 +25,7 @@ export async function createDirectTransaction(
   abi: Abi,
   methodJsonDescription: FunctionFragment,
   params: any[]
-): Promise<TransactionRequestData> {
+): Promise<Transaction> {
   let transactionOptions = {}
 
   // If an extra parameter has been provided, it is the transaction options if it is an object
@@ -51,7 +56,7 @@ export async function createDirectTransactionForApp(
   app: App,
   methodSignature: string,
   params: any[]
-): Promise<TransactionRequestData> {
+): Promise<Transaction> {
   if (!app) {
     throw new Error(`Could not create transaction due to missing app artifact`)
   }
@@ -93,14 +98,11 @@ export async function createDirectTransactionForApp(
 
 export function createForwarderTransactionBuilder(
   sender: string,
-  directTransaction: TransactionRequestData
+  directTransaction: Transaction
 ): Function {
   const forwarder = new ethers.utils.Interface(forwarderAbi)
 
-  return (
-    forwarderAddress: string,
-    script: string
-  ): TransactionRequestData => ({
+  return (forwarderAddress: string, script: string): Transaction => ({
     ...directTransaction, // Options are overwriten by the values below
     from: sender,
     to: forwarderAddress,
@@ -111,7 +113,7 @@ export function createForwarderTransactionBuilder(
 export async function buildPretransaction(
   transaction: TransactionWithTokenData,
   provider: ethers.providers.Provider
-): Promise<TransactionRequestData | undefined> {
+): Promise<Transaction | undefined> {
   // Token allowance pretransactionn
   const {
     from,
@@ -156,9 +158,9 @@ export async function buildPretransaction(
 }
 
 export async function buildForwardingFeePretransaction(
-  forwardingTransaction: TransactionRequestData,
+  forwardingTransaction: Transaction,
   provider: ethers.providers.Provider
-): Promise<TransactionRequestData | undefined> {
+): Promise<Transaction | undefined> {
   const { to: forwarderAddress, from } = forwardingTransaction
 
   const forwarderFee = new ethers.Contract(
