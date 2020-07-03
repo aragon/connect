@@ -8,7 +8,7 @@ Currently a single flavor of this connector is available, built-in the core libr
 
 The connector to be compatible with Aragon Connect library should implement the following interface:
 
-```javascript
+```typescript
 chainId?: number
 permissionsForOrg(orgAddress: string): Promise<Permission[]>
 onPermissionsForOrg(orgAddress: string, callback: Function): { unsubscribe: Function }
