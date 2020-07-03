@@ -11,7 +11,7 @@
 
 * [Custom Subgraph queries](advanced/low-level-queries.md)
 * [Writing an App Subgraph](advanced/app-subgraphs.md)
-* [Writing an App Connector](advanced/writing-an-app-connector.md)
+* [Writing an App Connector](advanced/app-connectors.md)
 
 ## Connectors
 
