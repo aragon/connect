@@ -4,6 +4,8 @@
 
 Aragon Connect is a suite of tools that allow to integrate Aragon Organizations into apps and websites, providing a unified interface that allows to do all the things that can be done in the Aragon Client and the Aragon Apps: fetching data, subscribing to updates, and generating transactions. It does so by providing default settings that are balanced between performances and decentralization level. It is compatible with web and Node.js environments.
 
+This guide assumes that you are familiar with the way Aragon organizations work. If that’s not the case, we invite you to have a look at the [Aragon Basics](./aragon-basics.md) guide.
+
 ### What does it look like?
 
 This is how we can connect to an organization and list its apps:
