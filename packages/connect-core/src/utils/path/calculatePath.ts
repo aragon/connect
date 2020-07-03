@@ -4,8 +4,8 @@ import { AppIntent } from '../../types'
 import App from '../../entities/App'
 import { TransactionRequestData } from '../../transactions/TransactionRequest'
 import { addressesEqual, includesAddress, ANY_ENTITY } from '../address'
-import { canForward } from '../canForward'
-import { encodeCallScript } from '../encodeCallScript'
+import { canForward } from '../forwarding'
+import { encodeCallScript } from '../callScript'
 import { isFullMethodSignature } from '../app'
 import {
   createDirectTransactionForApp,

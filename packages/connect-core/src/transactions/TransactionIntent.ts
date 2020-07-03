@@ -43,7 +43,7 @@ export default class TransactionIntent {
 
     const {
       forwardingFeePretransaction,
-      transactions,
+      transactions: path,
     } = await calculateTransactionPath(
       account,
       this.contractAddress,
@@ -53,23 +53,21 @@ export default class TransactionIntent {
       this.#provider
     )
 
-    const transactionsDescribed = await describeTransactionPath(
-      transactions,
+    const describedPath = await describeTransactionPath(
+      path,
       apps,
       this.#provider
     )
 
-    const appsOnPath = transactions.map(transaction => transaction.to)
+    const appsOnPath = path.map(transaction => transaction.to)
 
     return new TransactionPath({
       apps: apps.filter(app =>
         appsOnPath.some(address => address === app.address)
       ),
-      destination: apps.find(
-        app => app.address == this.contractAddress
-      ) as App,
+      destination: apps.find(app => app.address == this.contractAddress)!,
       forwardingFeePretransaction,
-      transactions: transactionsDescribed.map(tx => new TransactionRequest(tx)),
+      transactions: describedPath.map(tx => new TransactionRequest(tx)),
     })
   }
 
