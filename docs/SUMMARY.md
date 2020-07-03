@@ -4,6 +4,7 @@
 
 ## Guides
 
+* [Aragon Basics](guides/aragon-basics.md)
 * [Getting started](guides/getting-started.md)
 
 ## Advanced
@@ -27,6 +28,7 @@
 
 ## Connectors Reference
 
-* [Organizations](connectors/organizations.md)
-* [Tokens app](connectors/tokens-app.md)
-* [Voting app](connectors/voting-app.md)
+* [Organizations](connectors-reference/organizations.md)
+* [Tokens app](connectors-reference/tokens-app.md)
+* [Voting app](connectors-reference/voting-app.md)
+

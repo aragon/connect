@@ -6,7 +6,7 @@ All existing connectors target all instances of a specific app, and can be deplo
 
 ## Architecture
 
-The connectors are composed of a root project which implements the base TheGraph connector, and an underlying subgraph. If you don't have an app subgraph yet, please refer to our [documentation for creating app subgraphs](../app-subgraphs.md) and [TheGraph's documentation](https://thegraph.com/docs).
+The connectors are composed of a root project which implements the base TheGraph connector, and an underlying subgraph. If you don't have an app subgraph yet, please refer to our [documentation for creating app subgraphs](https://github.com/aragon/connect/tree/d2637378efddfe6c9349f416d2df3d972057264b/docs/app-subgraphs.md) and [TheGraph's documentation](https://thegraph.com/docs).
 
 ### The connector
 
@@ -14,10 +14,9 @@ The `src` folder contains the TheGraph connector wrapper which simply uses `@ara
 
 Use `index.ts` to pick which entities and objects are exposed to other packages.
 
-In `connector.ts`, add functions that the entities of your connector will use. For example, the Vote entity will call its `castsForVote(...): Promise<Cast[]>` function. These functions all follow the same structure of (1) performing a query, (2) parsing the results of a query, and (3) wrapping and returning the results in the appropriate entity.
+In `connector.ts`, add functions that the entities of your connector will use. For example, the Vote entity will call its `castsForVote(...): Promise<Cast[]>` function. These functions all follow the same structure of \(1\) performing a query, \(2\) parsing the results of a query, and \(3\) wrapping and returning the results in the appropriate entity.
 
 Each of the steps described above is separated in the `entities`, `parsers`, and `queries` folders for clarity.
-
 
 Queries are defined using `graphql-tag`, which allows using fragments. Fragments are useful for when your queries start getting complicated and you want to reuse chunks of code in them.
 
@@ -27,16 +26,19 @@ In the `subgraph` folder, you'll find a separate project which defines the subgr
 
 ## Step by step guide for making a new connector
 
-If you haven't already created an app subgraph yet, please follow the steps in [our documentation for creating app subgraphs](../app-subgraphs.md) first. From now on, we'll assume you have a subgraph deployed!
+If you haven't already created an app subgraph yet, please follow the steps in [our documentation for creating app subgraphs](https://github.com/aragon/connect/tree/d2637378efddfe6c9349f416d2df3d972057264b/docs/app-subgraphs.md) first. From now on, we'll assume you have a subgraph deployed!
 
 ### Create the Connector
 
 Coming soon!
 
 #### Define the queries
+
 #### Call the queries from the connector
+
 #### Define the entities
 
 ## Troubleshooting
 
-For subgraph related errors, see the [troubleshooting section in the app subgraph documentation](../app-subgraphs.md#troubleshooting).
+For subgraph related errors, see the [troubleshooting section in the app subgraph documentation](https://github.com/aragon/connect/tree/d2637378efddfe6c9349f416d2df3d972057264b/docs/app-subgraphs.md#troubleshooting).
+
