@@ -12,11 +12,11 @@ import { Voting } from '@aragon/connect-thegraph-voting'
 const voting = new Voting(VOTING_APP_ADDRESS, VOTING_APP_SUBGRAPH_URL)
 ```
 
-Once you have a an instance of the `Voting` object, you can use the API below to fetch the data.
+Once you have a an instance of the `TokenManager` object, you can use the following API to fetch data.
 
 ### voting\#votesForApp\(appAddress, first, skip\)
 
-Get the list of votes of a Voting app.
+Get the list of votes in the provided Voting app.
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
@@ -27,7 +27,7 @@ Get the list of votes of a Voting app.
 
 ### voting\#onVotesForApp\(appAddress, callback\)
 
-Subscribe to the list of votes of a Voting app.
+Subscribe to the list of votes in the provided Voting app.
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
@@ -37,7 +37,7 @@ Subscribe to the list of votes of a Voting app.
 
 ### voting\#castsForVote\(voteId, first, skip\)
 
-Get the list of casts for a vote.
+Get the list of cast votes for a vote.
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
@@ -48,7 +48,7 @@ Get the list of casts for a vote.
 
 ### voting\#onCastsForVote\(appAddress, callback\)
 
-Subscribe to the list of casts of a vote.
+Subscribe to the list of cast votes for a vote.
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
@@ -58,7 +58,7 @@ Subscribe to the list of casts of a vote.
 
 ## Subgraph schema
 
-The Subgraph schema show all the available entities and attributes. It could be useful to have a better picture of the kind of information you can request.
+The Subgraph schema defines all of the available entities and attributes. It may be useful to gain a fuller, clearer picture of the information you can request.
 
 ```yaml
 type Vote @entity {
@@ -90,4 +90,3 @@ type Cast @entity {
   vote: Vote! @derivedFrom(field: "casts")
 }
 ```
-
