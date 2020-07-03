@@ -1,6 +1,6 @@
 # Repo
 
-An app repository.
+An aragonPM repository.
 
 ## Properties
 
