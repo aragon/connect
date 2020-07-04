@@ -22,8 +22,5 @@ export async function parseRepo(
     registryAddress: app.repo?.registry?.address,
   }
 
-  const repoEntity = new Repo(connector)
-  await repoEntity.create(data)
-
-  return repoEntity
+  return Repo.create(data, connector)
 }

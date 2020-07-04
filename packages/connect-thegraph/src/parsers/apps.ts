@@ -19,16 +19,13 @@ async function _parseApp(app: any, connector: any): Promise<App> {
     version: app.version?.semanticVersion.replace(/,/g, '.'),
   }
 
-  const appEntity = new App(connector)
-  await appEntity.create(data)
-
-  return appEntity
+  return App.create(data, connector)
 }
 
 export async function parseApp(
   result: QueryResult,
   connector: any
-): Promise<AppData> {
+): Promise<App> {
   const app = result.data.app
 
   if (!app) {
@@ -41,7 +38,7 @@ export async function parseApp(
 export async function parseApps(
   result: QueryResult,
   connector: any
-): Promise<AppData[]> {
+): Promise<App[]> {
   const org = result.data.organization
   const apps = org?.apps
 

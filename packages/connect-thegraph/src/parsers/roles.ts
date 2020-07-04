@@ -37,10 +37,7 @@ async function _parseRole(
     contentUri,
   }
 
-  const roleEntity = new Role(connector)
-  await roleEntity.create(roleData)
-
-  return roleEntity
+  return Role.create(roleData, connector)
 }
 
 export async function parseRole(
