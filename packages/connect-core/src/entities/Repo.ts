@@ -2,7 +2,7 @@ import CoreEntity from './CoreEntity'
 import {
   AragonArtifact,
   AragonManifest,
-  AragonEnvironments,
+  Metadata,
   AragonArtifactRole,
 } from '../types'
 import { resolveMetadata } from '../utils/metadata'
@@ -18,75 +18,59 @@ export interface RepoData {
   registryAddress?: string | null
 }
 
-export default class Repo extends CoreEntity implements RepoData {
-  #created!: boolean
-  address!: string
-  author?: string
-  artifact?: string | null
-  changelogUrl?: string
-  contentUri?: string
-  description?: string
-  descriptionUrl?: string
-  environments?: AragonEnvironments
-  icons?: { src: string; sizes: string }[]
-  manifest?: string | null
-  name!: string
-  registry?: string | null
-  registryAddress?: string | null
-  roles?: AragonArtifactRole[]
-  screenshots?: { src: string }[]
-  sourceUrl?: string
+export default class Repo extends CoreEntity {
+  readonly address!: string
+  readonly contentUri?: string
+  readonly metadata!: Metadata
+  readonly name!: string
+  readonly registry?: string | null
+  readonly registryAddress?: string | null
 
-  constructor(connector: ConnectorInterface) {
+  constructor(
+    data: RepoData,
+    metadata: Metadata,
+    connector: ConnectorInterface
+  ) {
     super(connector)
 
-    this.#created = false
+    this.address = data.address
+    this.contentUri = data.contentUri || undefined
+    this.metadata = metadata
+    this.name = data.name
+    this.registry = data.registry
+    this.registryAddress = data.registryAddress
   }
 
-  get created(): boolean {
-    return this.#created
+  static async create(
+    data: RepoData,
+    connector: ConnectorInterface
+  ): Promise<Repo> {
+    const artifact: AragonArtifact = await resolveMetadata(
+      'artifact.json',
+      data.contentUri || undefined,
+      data.artifact
+    )
+
+    const manifest: AragonManifest = await resolveMetadata(
+      'manifest.json',
+      data.contentUri || undefined,
+      data.manifest
+    )
+
+    const metadata: Metadata = [artifact, manifest]
+
+    return new Repo(data, metadata, connector)
   }
 
-  async create({ artifact, manifest, ...data }: RepoData): Promise<void> {
-    if (!this.#created) {
-      this.#created = true
+  get artifact(): AragonArtifact {
+    return this.metadata[0] as AragonArtifact
+  }
 
-      const { environments, roles }: AragonArtifact = await resolveMetadata(
-        'artifact.json',
-        data.contentUri || undefined,
-        artifact
-      )
+  get manifest(): AragonManifest {
+    return this.metadata[1] as AragonManifest
+  }
 
-      const {
-        author,
-        changelog_url: changelogUrl,
-        description,
-        details_url: descriptionUrl,
-        icons,
-        screenshots,
-        source_url: sourceUrl,
-      }: AragonManifest = await resolveMetadata(
-        'manifest.json',
-        data.contentUri || undefined,
-        manifest
-      )
-
-      this.address = data.address
-      this.author = author
-      this.artifact = artifact
-      this.changelogUrl = changelogUrl
-      this.contentUri = data.contentUri || undefined
-      this.description = description
-      this.descriptionUrl = descriptionUrl
-      this.environments = environments
-      this.icons = icons
-      this.name = data.name
-      this.manifest = manifest
-      this.registry = data.registry
-      this.registryAddress = data.registryAddress
-      this.roles = roles
-      this.screenshots = screenshots
-      this.sourceUrl = sourceUrl
-    }
+  get roles(): AragonArtifactRole[] {
+    return this.artifact.roles
   }
 }

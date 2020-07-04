@@ -1,7 +1,13 @@
 import Repo from './Repo'
 import Role from './Role'
 import CoreEntity from './CoreEntity'
-import { AragonArtifact, AppIntent, Abi, AragonManifest } from '../types'
+import {
+  AragonArtifact,
+  AragonManifest,
+  Metadata,
+  Abi,
+  AppIntent,
+} from '../types'
 import { resolveMetadata } from '../utils/metadata'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 
@@ -25,92 +31,62 @@ export interface AppData {
   version?: string
 }
 
-export default class App extends CoreEntity implements AppData {
-  #created!: boolean
-  abi?: Abi
-  address!: string
-  appName?: string
-  appId!: string
-  author?: string
-  codeAddress!: string
-  contentUri?: string
-  contractPath?: string
-  deprecatedIntents?: { [version: string]: AppIntent[] }
-  description?: string
-  icons?: { src: string; sizes: string }[]
-  intents?: AppIntent[]
-  isForwarder?: boolean
-  isUpgradeable?: boolean
-  htmlUrl?: string
-  kernelAddress!: string
-  name?: string
-  registry?: string
-  registryAddress!: string
-  repoAddress?: string
-  sourceUrl?: string
-  version?: string
+export default class App extends CoreEntity {
+  readonly address!: string
+  readonly appId!: string
+  readonly codeAddress!: string
+  readonly contentUri?: string
+  readonly isForwarder?: boolean
+  readonly isUpgradeable?: boolean
+  readonly kernelAddress!: string
+  readonly metadata!: Metadata
+  readonly name?: string
+  readonly registry?: string
+  readonly registryAddress!: string
+  readonly repoAddress?: string
+  readonly version?: string
 
-  constructor(connector: ConnectorInterface) {
+  constructor(
+    data: AppData,
+    metadata: Metadata,
+    connector: ConnectorInterface
+  ) {
     super(connector)
 
-    this.#created = false
+    this.address = data.address
+    this.appId = data.appId
+    this.codeAddress = data.codeAddress
+    this.contentUri = data.contentUri || undefined
+    this.isForwarder = data.isForwarder ?? undefined
+    this.isUpgradeable = data.isUpgradeable ?? undefined
+    this.kernelAddress = data.kernelAddress
+    this.metadata = metadata
+    this.name = data.name
+    this.registry = data.registry || undefined
+    this.registryAddress = data.registryAddress
+    this.repoAddress = data.repoAddress
+    this.version = data.version
   }
 
-  get created(): boolean {
-    return this.#created
-  }
+  static async create(
+    data: AppData,
+    connector: ConnectorInterface
+  ): Promise<App> {
+    const artifact: AragonArtifact = await resolveMetadata(
+      'artifact.json',
+      data.contentUri || undefined,
+      data.artifact
+    )
 
-  async create({ artifact, manifest, ...data }: AppData): Promise<void> {
-    if (!this.#created) {
-      this.#created = true
+    const manifest: AragonManifest = await resolveMetadata(
+      'manifest.json',
+      data.contentUri || undefined,
+      data.manifest
+    )
 
-      const {
-        appName,
-        path,
-        functions,
-        deprecatedFunctions,
-        abi,
-      }: AragonArtifact = await resolveMetadata(
-        'artifact.json',
-        data.contentUri || undefined,
-        artifact
-      )
+    const metadata: Metadata = [artifact, manifest]
 
-      const {
-        author,
-        description,
-        start_url: htmlUrl,
-        icons,
-        source_url: sourceUrl,
-      }: AragonManifest = await resolveMetadata(
-        'manifest.json',
-        data.contentUri || undefined,
-        manifest
-      )
-
-      this.abi = abi
-      this.address = data.address
-      this.appId = data.appId
-      this.appName = appName
-      this.author = author
-      this.codeAddress = data.codeAddress
-      this.contentUri = data.contentUri || undefined
-      this.contractPath = path
-      this.deprecatedIntents = deprecatedFunctions
-      this.description = description
-      this.icons = icons
-      this.intents = functions
-      this.isForwarder = data.isForwarder ?? undefined
-      this.isUpgradeable = data.isUpgradeable ?? undefined
-      this.htmlUrl = htmlUrl
-      this.kernelAddress = data.kernelAddress
-      this.name = data.name
-      this.registry = data.registry || undefined
-      this.registryAddress = data.registryAddress
-      this.repoAddress = data.repoAddress
-      this.version = data.version
-      this.sourceUrl = sourceUrl
-    }
+    return new App(data, metadata, connector)
   }
 
   async repo(): Promise<Repo> {
@@ -119,5 +95,29 @@ export default class App extends CoreEntity implements AppData {
 
   async roles(): Promise<Role[]> {
     return this._connector.rolesForAddress(this.address)
+  }
+
+  get artifact(): AragonArtifact {
+    return this.metadata[0] as AragonArtifact
+  }
+
+  get manifest(): AragonManifest {
+    return this.metadata[1] as AragonManifest
+  }
+
+  get abi(): Abi {
+    return this.artifact.abi
+  }
+
+  get intents(): AppIntent[] {
+    return this.artifact.functions
+  }
+
+  get deprecatedIntents(): { [version: string]: AppIntent[] } {
+    return this.artifact.deprecatedFunctions
+  }
+
+  get appName(): string {
+    return this.artifact.appName
   }
 }
