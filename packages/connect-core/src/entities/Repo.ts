@@ -21,10 +21,10 @@ export interface RepoData {
 export default class Repo extends CoreEntity {
   readonly address!: string
   readonly contentUri?: string
-  readonly metadata!: Metadata
   readonly name!: string
   readonly registry?: string | null
   readonly registryAddress?: string | null
+  #metadata!: Metadata
 
   constructor(
     data: RepoData,
@@ -35,10 +35,11 @@ export default class Repo extends CoreEntity {
 
     this.address = data.address
     this.contentUri = data.contentUri || undefined
-    this.metadata = metadata
     this.name = data.name
     this.registry = data.registry
     this.registryAddress = data.registryAddress
+
+    this.#metadata = metadata
   }
 
   static async create(
@@ -63,11 +64,11 @@ export default class Repo extends CoreEntity {
   }
 
   get artifact(): AragonArtifact {
-    return this.metadata[0] as AragonArtifact
+    return this.#metadata[0] as AragonArtifact
   }
 
   get manifest(): AragonManifest {
-    return this.metadata[1] as AragonManifest
+    return this.#metadata[1] as AragonManifest
   }
 
   get roles(): AragonArtifactRole[] {

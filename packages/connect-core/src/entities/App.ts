@@ -39,12 +39,12 @@ export default class App extends CoreEntity {
   readonly isForwarder?: boolean
   readonly isUpgradeable?: boolean
   readonly kernelAddress!: string
-  readonly metadata!: Metadata
   readonly name?: string
   readonly registry?: string
   readonly registryAddress!: string
   readonly repoAddress?: string
   readonly version?: string
+  #metadata!: Metadata
 
   constructor(
     data: AppData,
@@ -60,12 +60,13 @@ export default class App extends CoreEntity {
     this.isForwarder = data.isForwarder ?? undefined
     this.isUpgradeable = data.isUpgradeable ?? undefined
     this.kernelAddress = data.kernelAddress
-    this.metadata = metadata
     this.name = data.name
     this.registry = data.registry || undefined
     this.registryAddress = data.registryAddress
     this.repoAddress = data.repoAddress
     this.version = data.version
+
+    this.#metadata = metadata
   }
 
   static async create(
@@ -98,11 +99,11 @@ export default class App extends CoreEntity {
   }
 
   get artifact(): AragonArtifact {
-    return this.metadata[0] as AragonArtifact
+    return this.#metadata[0] as AragonArtifact
   }
 
   get manifest(): AragonManifest {
-    return this.metadata[1] as AragonManifest
+    return this.#metadata[1] as AragonManifest
   }
 
   get abi(): Abi {
