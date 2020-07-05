@@ -98,14 +98,6 @@ export default class ConnectorTheGraph extends GraphQLWrapper
     )
   }
 
-  // async app(filters: AppFilters): Promise<App> {
-  //   return this.performQueryWithParser(
-  //     queries.APP_BY_ADDRESS('query'),
-  //     {},
-  //     parseApp
-  //   )
-  // }
-
   async appForOrg(orgAddress: string, filters: AppFilters): Promise<App> {
     const apps = await this.performQueryWithParser<App[]>(
       queries.ORGANIZATION_APPS('query'),
