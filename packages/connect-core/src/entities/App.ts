@@ -10,6 +10,11 @@ import {
 } from '../types'
 import { resolveMetadata } from '../utils/metadata'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
+import {
+  getApmInternalAppInfo,
+  getAragonOsInternalAppInfo,
+} from '../utils/overrides/index'
+import { hasAppInfo } from '../utils/overrides/interfaces'
 
 // TODO:
 // [ ] (ipfs) contentUrl 	String 	The HTTP URL of the app content. Uses the IPFS HTTP provider. E.g. http://gateway.ipfs.io/ipfs/QmdLEDDfi…/ (ContentUri passing through the resolver)
@@ -73,11 +78,18 @@ export default class App extends CoreEntity {
     data: AppData,
     connector: ConnectorInterface
   ): Promise<App> {
-    const artifact: AragonArtifact = await resolveMetadata(
-      'artifact.json',
-      data.contentUri || undefined,
-      data.artifact
-    )
+    let artifact: AragonArtifact
+    if (hasAppInfo(data.appId, 'apm')) {
+      artifact = getApmInternalAppInfo(data.appId)
+    } else if (hasAppInfo(data.appId, 'aragon')) {
+      artifact = getAragonOsInternalAppInfo(data.appId)
+    } else {
+      artifact = await resolveMetadata(
+        'artifact.json',
+        data.contentUri || undefined,
+        data.artifact
+      )
+    }
 
     const manifest: AragonManifest = await resolveMetadata(
       'manifest.json',

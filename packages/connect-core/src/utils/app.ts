@@ -4,6 +4,9 @@ import { AppIntent } from '../types'
 import App from '../entities/App'
 import { TransactionRequestData } from '../transactions/TransactionRequest'
 
+export const apmAppId = (appName: string): string =>
+  ethers.utils.namehash(`${appName}.aragonpm.eth`)
+
 // Is the given method a full signature, e.g. 'foo(arg1,arg2,...)'
 export const isFullMethodSignature = (methodSignature: string): boolean => {
   return (
