@@ -3,8 +3,10 @@ import { Connect } from '@aragon/connect-react'
 import { env } from './environment'
 import useRouting from './use-routing'
 import Main from './Main'
+import OrgApps from './OrgApps'
+import OrgInfo from './OrgInfo'
 import OrgInput from './OrgInput'
-import OrgGroups from './OrgGroups'
+import OrgPermissions from './OrgPermissions'
 
 export default function App() {
   const { openOrg, openApp, orgName } = useRouting()
@@ -16,7 +18,9 @@ export default function App() {
     >
       <Main>
         <OrgInput onChange={openOrg} orgName={orgName} />
-        <OrgGroups onOpenApp={openApp} />
+        <OrgInfo />
+        <OrgApps onOpenApp={openApp} />
+        <OrgPermissions />
       </Main>
     </Connect>
   )

@@ -6,21 +6,20 @@ import Group from './Group'
 import Table from './Table'
 
 export default function OrgApps() {
-  const [org] = useOrganization()
-
-  if (!org) {
-    return null
-  }
-
+  const [org, { loading }] = useOrganization()
   return (
-    <Group name="Organization">
+    <Group name="Organization" loading={loading}>
       <Table
         headers={['Name', 'Value']}
         rows={[
-          ['location', org.location],
+          ['location', org?.location || '…'],
           [
             'address',
-            <span title={org.address}>{shortenAddress(org.address)}</span>,
+            org?.address ? (
+              <span title={org.address}>{shortenAddress(org.address)}</span>
+            ) : (
+              '…'
+            ),
           ],
         ]}
       />
