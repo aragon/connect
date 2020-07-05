@@ -15,15 +15,15 @@ export default function OrgApps({ onOpenApp }: Props) {
     <Group name="Apps" loading={loading}>
       <Table
         headers={['Name', 'Version', 'Address']}
-        rows={[...apps]
-          .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
-          .map(app => [
+        rows={apps
+          .map((app): [string, string, any] => [
             app.name || 'unknown',
             app.version || '?',
             <TextButton onClick={() => onOpenApp(app.address)}>
               {app.address.slice(0, 6)}
             </TextButton>,
-          ])}
+          ])
+          .sort(([a], [b]) => a.localeCompare(b))}
       />
     </Group>
   )
