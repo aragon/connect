@@ -1,6 +1,6 @@
 # TransactionRequest
 
-An object describing a transaction that can get signed by a library like ethers.js or Web3.js, or sent via JSON-RPC.
+An object describing a transaction that can be signed by a library like [ethers.js](https://docs.ethers.io/v5/), [Web3.js](https://web3js.readthedocs.io/en/1.0/), or sent via [JSON-RPC](https://eips.ethereum.org/EIPS/eip-1474).
 
 ## Properties
 
@@ -11,4 +11,3 @@ An object describing a transaction that can get signed by a library like ethers.
 | `data` | `String` | Transaction data. |
 | `from` | `String` | Address to use as default sender. |
 | `to` | `String` | Target address or ENS name. |
-

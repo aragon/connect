@@ -1,7 +1,7 @@
 import { App, AppData } from '@aragon/connect-core'
 import { QueryResult } from '../types'
 
-function _parseApp(app: any, connector: any): App {
+async function _parseApp(app: any, connector: any): Promise<App> {
   const data: AppData = {
     address: app.address,
     appId: app.appId,
@@ -19,10 +19,16 @@ function _parseApp(app: any, connector: any): App {
     version: app.version?.semanticVersion.replace(/,/g, '.'),
   }
 
-  return new App(data, connector)
+  const appEntity = new App(connector)
+  await appEntity.create(data)
+
+  return appEntity
 }
 
-export function parseApp(result: QueryResult, connector: any): AppData {
+export async function parseApp(
+  result: QueryResult,
+  connector: any
+): Promise<AppData> {
   const app = result.data.app
 
   if (!app) {
@@ -32,7 +38,10 @@ export function parseApp(result: QueryResult, connector: any): AppData {
   return _parseApp(app, connector)
 }
 
-export function parseApps(result: QueryResult, connector: any): AppData[] {
+export async function parseApps(
+  result: QueryResult,
+  connector: any
+): Promise<AppData[]> {
   const org = result.data.organization
   const apps = org?.apps
 
@@ -40,7 +49,9 @@ export function parseApps(result: QueryResult, connector: any): AppData[] {
     throw new Error('Unable to parse apps.')
   }
 
-  return apps.map((app: any) => {
-    return _parseApp(app, connector)
-  })
+  return Promise.all(
+    apps.map(async (app: any) => {
+      return _parseApp(app, connector)
+    })
+  )
 }
