@@ -115,7 +115,7 @@ describe('when connecting to the mainnet subgraph', () => {
     let apps: App[]
 
     beforeAll(async () => {
-      apps = await connector.appsForOrg(ORG_ADDRESS)
+      apps = await connector.appsForOrg(ORG_ADDRESS, {})
     })
 
     test('apps are found', () => {
