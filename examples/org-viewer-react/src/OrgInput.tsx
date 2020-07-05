@@ -24,7 +24,7 @@ export default function OrgInput({ orgName, onChange }: OrgInputProps) {
             font-size: 20px;
           `}
         >
-          Enter an organization's location:
+          Enter an organization’s location:
         </div>
         <input
           onChange={onInputChange}
