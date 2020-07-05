@@ -73,13 +73,8 @@ As seen above, connecting to an organization can be done by calling the `connect
 
 It requires two parameters:
 
-<<<<<<< HEAD
-- The address of the organization, which can be any valid Ethereum address \(`0x…`\) or [ENS name](https://ens.domains/) \(`….eth`\).
-- The connector we want to use.
-=======
-* The address of the organization, which can be any valid Ethereum address \(`0x…`\) or [ENS domain](https://ens.domains/) \(`….eth`\).
-* The connector you want to use.
->>>>>>> master
+- The address of the organization, which can be any valid Ethereum address \(`0x…`\) or [ENS domain](https://ens.domains/) \(`….eth`\).
+- The connector you want to use.
 
 ```javascript
 const org = await connect('example.aragonid.eth', 'thegraph')
@@ -112,17 +107,7 @@ import Voting from '@aragon/connect-thegraph-voting'
 
 const org = await connect('example.aragonid.eth', 'thegraph')
 
-<<<<<<< HEAD
 // Instanciate the Voting app connector using the app address:
-=======
-// Fetch the apps of the organization
-const apps = await org.apps()
-
-// Pick the first Voting app instance
-const votingInfo = apps.find(app => app.appName === 'voting.aragonpm.eth')
-
-// Instantiate the Voting app connector using its address
->>>>>>> master
 const voting = new Voting(
   await org.app('voting').address,
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'
