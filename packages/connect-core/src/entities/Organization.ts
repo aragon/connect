@@ -5,10 +5,7 @@ import App from './App'
 import TransactionIntent from '../transactions/TransactionIntent'
 import Permission from './Permission'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
-
-function toArrayEntry(value: any): any[] {
-  return Array.isArray(value) ? value : [value]
-}
+import { toArrayEntry } from '../utils/misc'
 
 // TODO
 // Organization#addApp(repoName, options)
