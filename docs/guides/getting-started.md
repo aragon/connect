@@ -73,14 +73,8 @@ As seen above, connecting to an organization can be done by calling the `connect
 
 It requires two parameters:
 
-<<<<<<< HEAD
-
-- The address of the organization, which can be any valid Ethereum address \(`0x…`\) or [ENS name](https://ens.domains/) \(`….eth`\).
-- # The connector we want to use.
-
-* The address of the organization, which can be any valid Ethereum address \(`0x…`\) or [ENS domain](https://ens.domains/) \(`….eth`\).
-* The connector you want to use.
-  > > > > > > > master
+- The address of the organization, which can be any valid Ethereum address \(`0x…`\) or [ENS domain](https://ens.domains/) \(`….eth`\).
+- The connector you want to use.
 
 ```javascript
 const org = await connect('example.aragonid.eth', 'thegraph')
