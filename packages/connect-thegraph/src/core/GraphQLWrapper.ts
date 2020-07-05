@@ -105,12 +105,13 @@ export default class GraphQLWrapper {
     return result
   }
 
-  async performQueryWithParser(
+  async performQueryWithParser<T>(
     query: DocumentNode,
     args: any = {},
     parser: ParseFunction
-  ): Promise<any> {
-    return this.parseQueryResult(parser, await this.performQuery(query, args))
+  ): Promise<T> {
+    const result = await this.performQuery(query, args)
+    return this.parseQueryResult(parser, result)
   }
 
   async parseQueryResult(

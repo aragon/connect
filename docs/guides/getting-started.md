@@ -28,8 +28,8 @@ The idea of connectors is central to Aragon Connect. A connector is an abstracti
 
 Aragon Connect allows for injecting any type of connector, and includes two by default:
 
-* **The Graph**: fetch data from [Subgraphs](https://thegraph.com/docs/introduction#how-the-graph-works), hosted on [thegraph.com](https://thegraph.com/) by default.
-* **Ethereum \(WIP\)**: fetch data from an Ethereum node directly.
+- **The Graph**: fetch data from [Subgraphs](https://thegraph.com/docs/introduction#how-the-graph-works), hosted on [thegraph.com](https://thegraph.com/) by default.
+- **Ethereum \(WIP\)**: fetch data from an Ethereum node directly.
 
 A connector can be of two types: **organization** or **app**, to fetch data from one or the other. The main package of Aragon Connect only provides organization connectors: app connectors need to be imported separately.
 
@@ -37,10 +37,10 @@ A connector can be of two types: **organization** or **app**, to fetch data from
 
 Aragon Connect consists of a few parts:
 
-* `@aragon/connect`: this is the main library. It provides the main features to connect and interact with organizations, and includes the basic organization connectors.
-* `@aragon/connect-thegraph-voting`: an app connector for fetching data from the Voting app, through The Graph.
-* `@aragon/connect-thegraph-tokens`: an app connector for fetching data from the Tokens app, through The Graph.
-* Additional app connectors published by individual app authors
+- `@aragon/connect`: this is the main library. It provides the main features to connect and interact with organizations, and includes the basic organization connectors.
+- `@aragon/connect-thegraph-voting`: an app connector for fetching data from the Voting app, through The Graph.
+- `@aragon/connect-thegraph-tokens`: an app connector for fetching data from the Tokens app, through The Graph.
+- Additional app connectors published by individual app authors
 
 [A few other packages](https://github.com/aragon/connect/tree/master/packages) are also published, but they are only needed to author or extend connectors and not to use the library.
 
@@ -48,7 +48,7 @@ Aragon Connect consists of a few parts:
 
 Start by adding [`@aragon/connect`](https://www.npmjs.com/package/@aragon/connect) to your project:
 
-```text
+```console
 yarn add @aragon/connect
 ```
 
@@ -73,8 +73,13 @@ As seen above, connecting to an organization can be done by calling the `connect
 
 It requires two parameters:
 
+<<<<<<< HEAD
+- The address of the organization, which can be any valid Ethereum address \(`0x…`\) or [ENS name](https://ens.domains/) \(`….eth`\).
+- The connector we want to use.
+=======
 * The address of the organization, which can be any valid Ethereum address \(`0x…`\) or [ENS domain](https://ens.domains/) \(`….eth`\).
 * The connector you want to use.
+>>>>>>> master
 
 ```javascript
 const org = await connect('example.aragonid.eth', 'thegraph')
@@ -107,6 +112,9 @@ import Voting from '@aragon/connect-thegraph-voting'
 
 const org = await connect('example.aragonid.eth', 'thegraph')
 
+<<<<<<< HEAD
+// Instanciate the Voting app connector using the app address:
+=======
 // Fetch the apps of the organization
 const apps = await org.apps()
 
@@ -114,8 +122,9 @@ const apps = await org.apps()
 const votingInfo = apps.find(app => app.appName === 'voting.aragonpm.eth')
 
 // Instantiate the Voting app connector using its address
+>>>>>>> master
 const voting = new Voting(
-  votingInfo.address,
+  await org.app('voting').address,
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'
 )
 

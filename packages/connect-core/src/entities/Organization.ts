@@ -1,23 +1,61 @@
 import { ethers } from 'ethers'
-import { Network } from '@aragon/connect-types'
+import { AppFilters, Network } from '@aragon/connect-types'
 
 import App from './App'
 import TransactionIntent from '../transactions/TransactionIntent'
 import Permission from './Permission'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
+import { toArrayEntry } from '../utils/misc'
 
-// TODO: Implement all properties and methods from the API spec (https://github.com/aragon/connect/blob/master/docs/organization.md).
-// [x] Organization#apps()
-// [x] Organization#onApps(cb)
-// [x] Organization#app(appAddress)
-// [ ] Organization#addApp(repoName, options)
-// [ ] Organization#removeApp(appAddress)
-// [x] Organization#permissions()
-// [ ] Organization#addPermission(address, appAddress, roleId)
-// [ ] Organization#removePermission(address, appAddress, roleId)
-// [ ] Organization#roleManager(appAddress, roleId)
-// [ ] Organization#setRoleManager(address, appAddress, roleId)
-// [x] Organization#appIntent(appAddress, funcName, funcArgs)
+// TODO
+// Organization#addApp(repoName, options)
+// Organization#removeApp(appAddress)
+// Organization#addPermission(address, appAddress, roleId)
+// Organization#removePermission(address, appAddress, roleId)
+// Organization#roleManager(appAddress, roleId)
+// Organization#setRoleManager(address, appAddress, roleId)
+
+type AppFiltersAddressParam = string | string[]
+
+type AppFiltersParam =
+  | null
+  | AppFiltersAddressParam
+  | {
+      address?: AppFiltersAddressParam
+      name?: string | string[]
+    }
+
+type OnAppCallback = (app: App) => void
+type OnAppsCallback = (apps: App[]) => void
+type SubscriptionHandler = { unsubscribe: Function }
+
+function normalizeAppFilters(filters?: AppFiltersParam): AppFilters {
+  if (!filters) {
+    return {}
+  }
+
+  if (typeof filters === 'string') {
+    return filters.startsWith('0x')
+      ? { address: [filters] }
+      : { name: [filters] }
+  }
+
+  if (Array.isArray(filters)) {
+    return filters[0]?.startsWith('0x')
+      ? { address: filters }
+      : { name: filters }
+  }
+
+  if (filters.address) {
+    return { address: toArrayEntry(filters.address) }
+  }
+
+  if (filters.name) {
+    return { name: toArrayEntry(filters.name) }
+  }
+
+  return {}
+}
 
 export default class Organization {
   readonly location: string
@@ -78,39 +116,51 @@ export default class Organization {
   }
 
   ///////// APPS ///////////
-  async apps(): Promise<App[]> {
+
+  async app(filters?: AppFiltersParam): Promise<App> {
     this.checkConnected()
-    return this._connector.appsForOrg(this.address)
+    return this._connector.appForOrg(this.address, normalizeAppFilters(filters))
   }
 
-  onApps(callback: (apps: App[]) => void): { unsubscribe: Function } {
+  async apps(filters?: AppFiltersParam): Promise<App[]> {
     this.checkConnected()
-    return this._connector.onAppsForOrg(this.address, callback)
+    return this._connector.appsForOrg(
+      this.address,
+      normalizeAppFilters(filters)
+    )
   }
 
-  async app(appAddress: string): Promise<App> {
+  onApp(
+    filtersOrCallback: AppFiltersParam | OnAppCallback,
+    callback?: OnAppCallback
+  ): SubscriptionHandler {
     this.checkConnected()
-    return this._connector.appByAddress(appAddress)
+
+    const filters = (callback ? filtersOrCallback : null) as AppFiltersParam
+    const _callback = (callback || filtersOrCallback) as OnAppCallback
+
+    return this._connector.onAppForOrg(
+      this.address,
+      normalizeAppFilters(filters),
+      _callback
+    )
   }
 
-  // async addApp(
-  //   repoName: string,
-  //   {
-  //     initFuncName,
-  //     initFuncArgs,
-  //     openPermissions,
-  //   }: {
-  //     initFuncName: string
-  //     initFuncArgs: string[]
-  //     openPermissions: boolean
-  //   }
-  // ): Promise<TransactionIntent> {
-  //   return []
-  // }
+  onApps(
+    filtersOrCallback: AppFiltersParam | OnAppsCallback,
+    callback?: OnAppsCallback
+  ): SubscriptionHandler {
+    this.checkConnected()
 
-  // async removeApp(appAddress: string): Promise<TransactionIntent> {
-  //   return []
-  // }
+    const filters = (callback ? filtersOrCallback : null) as AppFiltersParam
+    const _callback = (callback || filtersOrCallback) as OnAppsCallback
+
+    return this._connector.onAppsForOrg(
+      this.address,
+      normalizeAppFilters(filters),
+      _callback
+    )
+  }
 
   ///////// PERMISSIONS ///////////
   async permissions(): Promise<Permission[]> {
@@ -118,61 +168,10 @@ export default class Organization {
     return this._connector.permissionsForOrg(this.address)
   }
 
-  onPermissions(callback: Function): { unsubscribe: Function } {
+  onPermissions(callback: Function): SubscriptionHandler {
     this.checkConnected()
     return this._connector.onPermissionsForOrg(this.address, callback)
   }
-
-  // async addPermissions(
-  //   grantee: string,
-  //   roleId: string
-  // ): Promise<TransactionIntent> {
-  //   return new TransactionIntent(
-  //     {
-  //       contractAddress: acl,
-  //       functionName: '',
-  //       functionArgs: [appAddress, grantee, roleId],
-  //     },
-  //     this,
-  //     this.#provider
-  //   )
-  // }
-  // }
-
-  // async removePermissions(
-  //   grantee: string,
-  //   appAddress: string,
-  //   roleId: string
-  // ): Promise<TransactionIntent> {
-  //   return []
-  // }
-
-  // async roleManager(roleId: string): Promise<string> {
-  //   const permissions: Permission[] = await this.permissions()
-
-  //   const permission = permissions.filter(
-  //     (permission: Permission) => permission.role === roleId
-  //   )[0]
-
-  //   const role: Role = await permission.getRole()
-
-  //   return role.manager
-  // }
-
-  // async setRoleManager(
-  //   grantee: string,
-  //   roleId: string
-  // ): Promise<TransactionIntent> {
-  //   return new TransactionIntent(
-  //     {
-  //       contractAddress: appAddress,
-  //       functionName: funcName,
-  //       functionArgs: funcArgs,
-  //       finalForwarder: 'aclAddress',
-  //     },
-  //     this
-  //   )
-  // }
 
   ///////// INTENTS ///////////
   appIntent(
