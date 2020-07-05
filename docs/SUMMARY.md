@@ -11,7 +11,7 @@
 
 * [Custom Subgraph queries](advanced/low-level-queries.md)
 * [Writing an App Subgraph](advanced/app-subgraphs.md)
-* [Writing an App Connector](advanced/writing-an-app-connector.md)
+* [Writing an App Connector](advanced/app-connectors.md)
 
 ## Connectors
 
@@ -28,6 +28,6 @@
 * [Permission](api-reference/permission.md)
 * [Repo](api-reference/repo.md)
 * [Role](api-reference/role.md)
-* [TransactionIntent](api-reference/transactionintent.md)
-* [TransactionPath](api-reference/transactionpath.md)
-* [TransactionRequest](api-reference/transactionrequest.md)
+* [TransactionIntent](api-reference/transaction-intent.md)
+* [TransactionPath](api-reference/transaction-path.md)
+* [TransactionRequest](api-reference/transaction-request.md)

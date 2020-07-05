@@ -4,7 +4,7 @@ This is an Aragon app specific connector for the Tokens app built using The Grap
 
 ## Connector API
 
-To create a new instance of the connector you need the specific Tokens app address and a Subgraph URL:
+To create a new instance of the connector, you need the specific Tokens app address and a Subgraph URL:
 
 ```javascript
 import { TokenManager } from '@aragon/connect-thegraph-tokens'
@@ -19,7 +19,7 @@ Once you have a an instance of the `TokenManager` object, you can use the follow
 
 ### tokenManager\#token\(tokenManagerAddress\)
 
-Get the data of the token used in the provided Tokens app.
+Get the data of the token used in the provided Tokens app. The token is always an [ERC-20 MiniMe token](https://github.com/aragon/minime).
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
@@ -39,7 +39,7 @@ Get the data of the token holders of the token used in the provided app.
 
 ### tokenManager\#onTokenHolders\(tokenAddress, callback\)
 
-Subscribe to the data of the token holders of a Minime token.
+Subscribe to the data of the token holders of the token used in the provided app.
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
@@ -49,7 +49,7 @@ Subscribe to the data of the token holders of a Minime token.
 
 ## Subgraph schema
 
-The Subgraph schema show all the avaiable entities and atributes. It could be useful to have a better picture of the kind of information you can request.
+The Subgraph schema defines all of the available entities and attributes. It may be useful to gain a fuller, clearer picture of the information you can request.
 
 ```yaml
 type TokenManager @entity {
@@ -79,4 +79,3 @@ type TokenHolder @entity {
   balance: BigInt!
 }
 ```
-

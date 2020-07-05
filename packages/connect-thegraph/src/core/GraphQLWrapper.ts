@@ -81,8 +81,8 @@ export default class GraphQLWrapper {
     callback: Function,
     parser: ParseFunction
   ): { unsubscribe: Function } {
-    return this.subscribeToQuery(query, args, (result: QueryResult) => {
-      callback(this.parseQueryResult(parser, result))
+    return this.subscribeToQuery(query, args, async (result: QueryResult) => {
+      callback(await this.parseQueryResult(parser, result))
     })
   }
 
@@ -113,7 +113,10 @@ export default class GraphQLWrapper {
     return this.parseQueryResult(parser, await this.performQuery(query, args))
   }
 
-  parseQueryResult(parser: ParseFunction, result: QueryResult): any {
+  async parseQueryResult(
+    parser: ParseFunction,
+    result: QueryResult
+  ): Promise<any> {
     try {
       return parser(result, this)
     } catch (error) {

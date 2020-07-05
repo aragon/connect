@@ -115,7 +115,7 @@ export default class Organization {
   ///////// PERMISSIONS ///////////
   async permissions(): Promise<Permission[]> {
     this.checkConnected()
-    return await this._connector.permissionsForOrg(this.address)
+    return this._connector.permissionsForOrg(this.address)
   }
 
   onPermissions(callback: Function): { unsubscribe: Function } {

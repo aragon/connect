@@ -5,7 +5,7 @@ import {
   AragonEnvironments,
   AragonArtifactRole,
 } from '../types'
-import { parseMetadata } from '../utils/parseMetadata'
+import { resolveMetadata } from '../utils/metadata'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 
 export interface RepoData {
@@ -19,39 +19,44 @@ export interface RepoData {
 }
 
 export default class Repo extends CoreEntity implements RepoData {
-  readonly address!: string
-  readonly author?: string
-  readonly changelogUrl?: string
-  readonly descriptionUrl?: string
-  readonly description?: string
-  readonly environments?: AragonEnvironments
-  readonly icons?: { src: string; sizes: string }[]
-  readonly name!: string
-  readonly registry?: string | null
-  readonly registryAddress?: string | null
-  readonly roles?: AragonArtifactRole[]
-  readonly screenshots?: { src: string }[]
-  readonly sourceUrl?: string
+  #created!: boolean
+  address!: string
+  author?: string
+  artifact?: string | null
+  changelogUrl?: string
+  contentUri?: string
+  description?: string
+  descriptionUrl?: string
+  environments?: AragonEnvironments
+  icons?: { src: string; sizes: string }[]
+  manifest?: string | null
+  name!: string
+  registry?: string | null
+  registryAddress?: string | null
+  roles?: AragonArtifactRole[]
+  screenshots?: { src: string }[]
+  sourceUrl?: string
 
-  constructor(
-    { artifact, manifest, ...data }: RepoData,
-    connector: ConnectorInterface
-  ) {
+  constructor(connector: ConnectorInterface) {
     super(connector)
 
-    // TODO: If no metadata, fallback to resolve ourselves with ipfs
+    this.#created = false
+  }
 
-    if (artifact) {
-      const { environments, roles }: AragonArtifact = parseMetadata(
-        artifact,
-        'artifact.json'
+  get created(): boolean {
+    return this.#created
+  }
+
+  async create({ artifact, manifest, ...data }: RepoData): Promise<void> {
+    if (!this.#created) {
+      this.#created = true
+
+      const { environments, roles }: AragonArtifact = await resolveMetadata(
+        'artifact.json',
+        data.contentUri || undefined,
+        artifact
       )
 
-      this.environments = environments
-      this.roles = roles
-    }
-
-    if (manifest) {
       const {
         author,
         changelog_url: changelogUrl,
@@ -60,20 +65,28 @@ export default class Repo extends CoreEntity implements RepoData {
         icons,
         screenshots,
         source_url: sourceUrl,
-      }: AragonManifest = parseMetadata(manifest, 'manifest.json')
+      }: AragonManifest = await resolveMetadata(
+        'manifest.json',
+        data.contentUri || undefined,
+        manifest
+      )
 
+      this.address = data.address
       this.author = author
+      this.artifact = artifact
       this.changelogUrl = changelogUrl
+      this.contentUri = data.contentUri || undefined
       this.description = description
       this.descriptionUrl = descriptionUrl
+      this.environments = environments
       this.icons = icons
+      this.name = data.name
+      this.manifest = manifest
+      this.registry = data.registry
+      this.registryAddress = data.registryAddress
+      this.roles = roles
       this.screenshots = screenshots
       this.sourceUrl = sourceUrl
     }
-
-    this.address = data.address
-    this.name = data.name
-    this.registry = data.registry
-    this.registryAddress = data.registryAddress
   }
 }
