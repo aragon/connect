@@ -1,0 +1,73 @@
+{
+  "appName": "kernel.aragonpm.eth",
+  "roles": [
+    {
+      "name": "Manage apps",
+      "id": "APP_MANAGER_ROLE",
+      "bytes": "0xb6d92708f3d4817afc106147d969e229ced5c46e65e0a5002a0d391287762bd0"
+    },
+    {
+      "name": "Manage profile",
+      "id": "MANAGE_PROFILE_ROLE",
+      "bytes": "0x675b358b95ae7561136697fcc3302da54a334ac7c199d53621288290fb863f5c"
+    }
+  ],
+  "functions": [
+    {
+      "sig":"initialize(address,address)",
+      "roles":[
+
+      ],
+      "notice":"Initializes a kernel instance along with its ACL and sets `_permissionsCreator` as the entity that can create other permissions"
+    },
+    {
+      "sig":"newAppInstance(bytes32,address)",
+      "roles":[
+          "APP_MANAGER_ROLE"
+      ],
+      "notice":"Create a new upgradeable instance of `_appId` app linked to the Kernel, setting its code to `_appBase`"
+    },
+    {
+      "sig":"newAppInstance(bytes32,address,bytes,bool)",
+      "roles":[
+          "APP_MANAGER_ROLE"
+      ],
+      "notice":"Create a new upgradeable instance of `_appId` app linked to the Kernel, setting its code to `_appBase`. `_setDefault ? 'Also sets it as the default app instance.':''`"
+    },
+    {
+      "sig":"newPinnedAppInstance(bytes32,address)",
+      "roles":[
+          "APP_MANAGER_ROLE"
+      ],
+      "notice":"Create a new non-upgradeable instance of `_appId` app linked to the Kernel, setting its code to `_appBase`."
+    },
+    {
+      "sig":"newPinnedAppInstance(bytes32,address,bytes,bool)",
+      "roles":[
+          "APP_MANAGER_ROLE"
+      ],
+      "notice":"Create a new non-upgradeable instance of `_appId` app linked to the Kernel, setting its code to `_appBase`. `_setDefault ? 'Also sets it as the default app instance.':''`"
+    },
+    {
+      "sig":"setApp(bytes32,bytes32,address)",
+      "roles":[
+          "APP_MANAGER_ROLE"
+      ],
+      "notice":"Set the resolving address of `_appId` in namespace `_namespace` to `_app`"
+    },
+    {
+      "sig":"setRecoveryVaultAppId(bytes32)",
+      "roles":[
+          "APP_MANAGER_ROLE"
+      ],
+      "notice":null
+    },
+    {
+      "sig":"transferToVault(address)",
+      "roles":[
+
+      ],
+      "notice":"Send funds to recovery Vault. This contract should never receive funds, but in case it does, this function allows one to recover them."
+    }    
+  ]
+}

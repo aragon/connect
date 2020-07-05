@@ -1,0 +1,32 @@
+{
+  "appName": "apm-registry.aragonpm.eth",
+	"roles": [
+		{
+			"id": "CREATE_REPO_ROLE",
+			"bytes": "0x2a9494d64846c9fdbf0158785aa330d8bc9caf45af27fa0e8898eb4d55adcea6",
+			"name": "Create repos",
+			"params": []
+		}
+	],
+	"functions": [
+		{
+			"sig": "initialize(address)",
+			"roles": [],
+			"notice": "Initialize this APMRegistry instance and set `_registrar` as the ENS subdomain registrar"
+		},
+		{
+			"sig": "newRepo(string,address)",
+			"roles": [
+				"CREATE_REPO_ROLE"
+			],
+			"notice": "Create new repo in registry with `_name`"
+		},
+		{
+			"sig": "newRepoWithVersion(string,address,uint16[3],address,bytes)",
+			"roles": [
+				"CREATE_REPO_ROLE"
+			],
+			"notice": "Create new repo in registry with `_name` and publish a first version with contract `_contractAddress` and content `@fromHex(_contentURI)`"
+		}
+	]
+}

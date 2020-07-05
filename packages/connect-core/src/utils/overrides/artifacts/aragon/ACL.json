@@ -1,0 +1,82 @@
+{
+  "appName": "acl.aragonpm.eth",
+  "roles": [
+    {
+      "name": "Create permissions",
+      "id": "CREATE_PERMISSIONS_ROLE",
+      "bytes": "0x0b719b33c83b8e5d300c521cb8b54ae9bd933996a14bef8c2f4e0285d2d2400a"
+    }
+  ],
+  "functions": [
+    {
+        "sig":"initialize(address)",
+        "roles":[
+
+        ],
+        "notice":"Initializes an ACL instance and sets `_permissionsCreator` as the entity that can create other permissions"
+    },
+    {
+        "sig":"createPermission(address,address,bytes32,address)",
+        "roles":[
+            "CREATE_PERMISSIONS_ROLE"
+        ],
+        "notice":"Create a new permission granting `_entity` the ability to perform actions of role `_role` on `_app` (setting `_manager` as the permission manager)"
+    },
+    {
+        "sig":"grantPermission(address,address,bytes32)",
+        "roles":[
+
+        ],
+        "notice":"Grants `_entity` the ability to perform actions of role `_role` on `_app`"
+    },
+    {
+        "sig":"grantPermissionP(address,address,bytes32,uint256[])",
+        "roles":[
+
+        ],
+        "notice":"Grants `_entity` the ability to perform actions of role `_role` on `_app`"
+    },
+    {
+        "sig":"revokePermission(address,address,bytes32)",
+        "roles":[
+
+        ],
+        "notice":"Revokes `_entity` the ability to perform actions of role `_role` on `_app`"
+    },
+    {
+        "sig":"setPermissionManager(address,address,bytes32)",
+        "roles":[
+
+        ],
+        "notice":"Sets `_newManager` as the manager of the permission `_role` in `_app`"
+    },
+    {
+        "sig":"removePermissionManager(address,bytes32)",
+        "roles":[
+
+        ],
+        "notice":"Removes the manager of the permission `_role` in `_app`"
+    },
+    {
+        "sig":"getPermissionParam(address,address,address)",
+        "roles":[
+
+        ],
+        "notice":"Get parameter for permission"
+    },
+    {
+        "sig":"_evalLogic(address,bytes32,address,address,bytes32,uint256[])",
+        "roles":[
+
+        ],
+        "notice":null
+    },
+    {
+      "sig":"transferToVault(address)",
+      "roles":[
+
+      ],
+      "notice":"Send funds to recovery Vault. This contract should never receive funds, but in case it does, this function allows one to recover them."
+    }
+  ]
+}

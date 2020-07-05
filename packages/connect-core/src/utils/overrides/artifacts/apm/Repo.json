@@ -1,0 +1,25 @@
+{
+  "appName": "apm-repo.aragonpm.eth",
+	"roles": [
+		{
+			"id": "CREATE_VERSION_ROLE",
+			"bytes": "0x1f56cfecd3595a2e6cc1a7e6cb0b20df84cdbd92eff2fee554e70e4e45a9a7d8",
+			"name": "Publish versions",
+			"params": []
+		}
+	],
+	"functions": [
+		{
+			"sig": "initialize()",
+			"roles": [],
+			"notice": "Initialize this Repo"
+		},
+		{
+			"sig": "newVersion(uint16[3],address,bytes)",
+			"roles": [
+				"CREATE_VERSION_ROLE"
+			],
+			"notice": "Create new version with contract `_contractAddress` and content `@fromHex(_contentURI)`"
+		}
+	]
+}
