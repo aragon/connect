@@ -25,7 +25,7 @@ type ConnectProps = {
 }
 type ContextValue = {
   org: Organization | null
-  orgLoadingStatus: LoadingStatus
+  orgStatus: LoadingStatus
 }
 type LoadingStatus = {
   error: Error | null
@@ -59,6 +59,7 @@ export function Connect({
       cancelled = true
     }
 
+    setOrg(null)
     setOrgLoading(true)
 
     const update = async () => {
@@ -85,7 +86,7 @@ export function Connect({
   const value = useMemo<ContextValue>(
     () => ({
       org,
-      orgLoadingStatus: {
+      orgStatus: {
         error: orgError,
         loading: orgLoading,
         retry: loadOrg,
@@ -108,12 +109,12 @@ function useConnectContext(): ContextValue {
 }
 
 export function useOrganization(): OrganizationHookResult {
-  const { org, orgLoadingStatus } = useConnectContext()
-  return [org, orgLoadingStatus]
+  const { org, orgStatus } = useConnectContext()
+  return [org, orgStatus]
 }
 
 function useConnectSubscription<Data>(
-  cb: (
+  callback: (
     org: Organization,
     onData: (data: Data) => void
   ) => { unsubscribe: Function },
@@ -121,13 +122,18 @@ function useConnectSubscription<Data>(
 ): [Data, LoadingStatus] {
   const [data, setData] = useState<Data>(initValue)
   const [loading, setLoading] = useState<boolean>(false)
-  const { org } = useConnectContext()
-  const cbRef = useRef(cb)
+  const {
+    org,
+    orgStatus: { loading: orgLoading },
+  } = useConnectContext()
 
   const cancelCb = useRef<Function | null>(null)
 
   const subscribe = useCallback(() => {
     if (!org) {
+      // If the org is loading, the subscription is loading as well.
+      setLoading(orgLoading)
+      setData(initValue)
       return
     }
 
@@ -141,15 +147,17 @@ function useConnectSubscription<Data>(
     }
 
     setLoading(true)
-    handler = cbRef.current(org, (data: Data) => {
+    handler = callback(org, (data: Data) => {
       if (!cancelled) {
         setData(data)
         setLoading(false)
       }
     })
-  }, [org])
+  }, [org, orgLoading, callback])
 
-  useEffect(subscribe, [subscribe])
+  useEffect(() => {
+    subscribe()
+  }, [subscribe])
 
   return [data, { error: null, loading, retry: subscribe }]
 }
@@ -157,24 +165,23 @@ function useConnectSubscription<Data>(
 export function useApp(
   appsFilter?: AppFiltersParam
 ): [App | null, LoadingStatus] {
-  return useConnectSubscription<App | null>(
-    (org, onData) => org.onApp(appsFilter, onData),
-    null
-  )
+  const callback = useCallback((org, onData) => org.onApp(appsFilter, onData), [
+    JSON.stringify(appsFilter),
+  ])
+  return useConnectSubscription<App | null>(callback, null)
 }
 
 export function useApps(appsFilter?: AppFiltersParam): [App[], LoadingStatus] {
-  return useConnectSubscription<App[]>(
+  const callback = useCallback(
     (org, onData) => org.onApps(appsFilter, onData),
-    []
+    [JSON.stringify(appsFilter)]
   )
+  return useConnectSubscription<App[]>(callback, [])
 }
 
 export function usePermissions(): [Permission[], LoadingStatus] {
-  return useConnectSubscription<Permission[]>(
-    (org, onData) => org.onPermissions(onData),
-    []
-  )
+  const callback = useCallback((org, onData) => org.onPermissions(onData), [])
+  return useConnectSubscription<Permission[]>(callback, [])
 }
 
 export * from '@aragon/connect'
