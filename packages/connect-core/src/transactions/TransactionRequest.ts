@@ -1,8 +1,9 @@
 export interface TransactionRequestData {
+  children?: TransactionRequest[]
   description?: string
   descriptionAnnotated?: Annotation[]
   data: string
-  from: string
+  from?: string
   to: string
 }
 
@@ -11,11 +12,13 @@ export interface Annotation {
   value: any
 }
 
+// TODO: Handle children
+
 export default class TransactionRequest {
   readonly description?: string
   readonly descriptionAnnotated?: Annotation[]
   readonly data!: string
-  readonly from!: string
+  readonly from?: string
   readonly to!: string
 
   constructor(data: TransactionRequestData) {

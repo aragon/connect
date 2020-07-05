@@ -13,6 +13,7 @@
     "start-voting": "yarn build; node dist/src/voting.js",
     "start-subscriptions-voting": "yarn build; node dist/src/subscriptions-voting.js",
     "start-transaction-path": "yarn build; node dist/src/transaction-path.js",
+    "start-describe-script": "yarn build; node dist/src/describe-script.js",
     "start-voting-low-level": "yarn build; node dist/src/voting-low-level.js",
     "start-subscriptions-low-level": "yarn build; node dist/src/subscriptions-low-level.js",
     "start-subscriptions-org": "yarn build; node dist/src/subscriptions-org.js",
