@@ -2,9 +2,9 @@
 
 ## Introduction
 
-Aragon Connect provides a series of utilities that makes it easier to use in React environments.
+Aragon Connect provides a series of utilities that simplify the usage of Aragon Connect in a React environment.
 
-It consists of the `<Connect />` component, on which a connection to an organization is described, and a series of hooks: `useApp()`, `useApps()`, `useOrganization()`, `usePermissions()`.
+It consists of the `<Connect />` component, through which a connection to an organization is described, and a series of hooks: `useApp()`, `useApps()`, `useOrganization()`, `usePermissions()`.
 
 ## Usage
 
