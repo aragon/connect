@@ -4,7 +4,6 @@ This folder contains a small Aragon organization viewer built with React and Ara
 
 ## How to run
 
-
 ```
 yarn run dev
 ```
