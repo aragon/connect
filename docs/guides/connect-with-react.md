@@ -81,7 +81,7 @@ This component is required in order to use the provided hooks.
 
 | Props   | Type                                                                                 | Description                                                                                           |
 | :------ | :----------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------- |
-| returns | `[Organization \| null, { loading: boolean, error: null | Error, retry: Function }]` | An array containing the [organization](../api-reference/organization.md) and a loading status object. |
+| returns | `[Organization \| null, { loading: boolean, error: null \| Error, retry: Function }]` | An array containing the [organization](../api-reference/organization.md) and a loading status object. |
 
 ### useApp(appFilters)
 
