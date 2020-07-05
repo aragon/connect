@@ -12,7 +12,7 @@ function _parseApp(app: any, connector: any): App {
     isUpgradeable: app.isUpgradeable,
     kernelAddress: app.organization?.address,
     manifest: app.version?.manifest,
-    name: app.repo?.name,
+    name: app.repoName,
     registry: app.repo?.registry?.name,
     registryAddress: app.repo?.registry?.address,
     repoAddress: app.repo?.address,
