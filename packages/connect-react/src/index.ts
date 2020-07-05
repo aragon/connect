@@ -7,6 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
+import { AppFiltersParam } from '@aragon/connect-types'
 import {
   App,
   ConnectOptions,
@@ -35,13 +36,8 @@ type OrganizationHookResult = [
   Organization | null,
   { error: Error | null; loading: boolean; retry: () => void }
 ]
-type AppsHookResult = [App[], LoadingStatus]
-type PermissionsHookResult = [Permission[], LoadingStatus]
 
-const ConnectContext = React.createContext<ContextValue>({
-  org: null,
-  orgLoadingStatus: { error: null, loading: false, retry: () => {} },
-})
+const ConnectContext = React.createContext<ContextValue | null>(null)
 
 export function Connect({
   children,
@@ -101,8 +97,18 @@ export function Connect({
   return createElement(ConnectContext.Provider, { value, children })
 }
 
+function useConnectContext(): ContextValue {
+  const contextValue = useContext(ConnectContext)
+  if (contextValue === null) {
+    throw new Error(
+      'The <Connect /> component need to be declared in order to use the provided hooks.'
+    )
+  }
+  return contextValue
+}
+
 export function useOrganization(): OrganizationHookResult {
-  const { org, orgLoadingStatus } = useContext<ContextValue>(ConnectContext)
+  const { org, orgLoadingStatus } = useConnectContext()
   return [org, orgLoadingStatus]
 }
 
@@ -115,7 +121,7 @@ function useConnectSubscription<Data>(
 ): [Data, LoadingStatus] {
   const [data, setData] = useState<Data>(initValue)
   const [loading, setLoading] = useState<boolean>(false)
-  const { org } = useContext<ContextValue>(ConnectContext)
+  const { org } = useConnectContext()
   const cbRef = useRef(cb)
 
   const cancelCb = useRef<Function | null>(null)
@@ -148,11 +154,23 @@ function useConnectSubscription<Data>(
   return [data, { error: null, loading, retry: subscribe }]
 }
 
-export function useApps(): AppsHookResult {
-  return useConnectSubscription<App[]>((org, onData) => org.onApps(onData), [])
+export function useApp(
+  appsFilter?: AppFiltersParam
+): [App | null, LoadingStatus] {
+  return useConnectSubscription<App | null>(
+    (org, onData) => org.onApp(appsFilter, onData),
+    null
+  )
 }
 
-export function usePermissions(): PermissionsHookResult {
+export function useApps(appsFilter?: AppFiltersParam): [App[], LoadingStatus] {
+  return useConnectSubscription<App[]>(
+    (org, onData) => org.onApps(appsFilter, onData),
+    []
+  )
+}
+
+export function usePermissions(): [Permission[], LoadingStatus] {
   return useConnectSubscription<Permission[]>(
     (org, onData) => org.onPermissions(onData),
     []

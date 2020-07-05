@@ -11,7 +11,6 @@ type Props = {
 
 export default function OrgApps({ onOpenApp }: Props) {
   const [apps, { loading }] = useApps()
-
   return (
     <Group name="Apps" loading={loading}>
       <Table
