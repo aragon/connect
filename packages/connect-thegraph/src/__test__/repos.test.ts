@@ -27,9 +27,17 @@ describe('when connecting to the mainnet subgraph', () => {
       expect(isAddress(repo.address)).toBeTruthy()
     })
 
-    test('should have a valid author', () => {
-      expect(repo.author).toBeDefined()
-      expect(repo.author!.length).toBeGreaterThan(0)
+    test('should have a valid artifact', () => {
+      expect(repo.artifact).toBeDefined()
+    })
+
+    test('should have a valid content uri', () => {
+      expect(repo.contentUri).toBeDefined()
+      expect(repo.contentUri!.length).toBeGreaterThan(0)
+    })
+
+    test('should have a valid manifest', () => {
+      expect(repo.manifest).toBeDefined()
     })
 
     test('should have valid roles', () => {
@@ -37,31 +45,9 @@ describe('when connecting to the mainnet subgraph', () => {
       expect(repo.roles!.length).toBeGreaterThan(0)
     })
 
-    test('should have valid environments', () => {
-      expect(repo.environments).toBeDefined()
-
-      const environments = Object.keys(repo.environments!)
-      expect(environments.length).toBeGreaterThan(0)
-    })
-
-    test('should have a valid description', () => {
-      expect(repo.description).toBeDefined()
-      expect(repo.description!.length).toBeGreaterThan(0)
-    })
-
-    test('should have a valid description url', () => {
-      expect(repo.descriptionUrl).toBeDefined()
-      expect(repo.descriptionUrl!.length).toBeGreaterThan(0)
-    })
-
     test('should have a valid name', () => {
       expect(repo.name).toBeDefined()
       expect(repo.name!.length).toBeGreaterThan(0)
-    })
-
-    test('should have a valid source url', () => {
-      expect(repo.sourceUrl).toBeDefined()
-      expect(repo.sourceUrl!.length).toBeGreaterThan(0)
     })
   })
 })

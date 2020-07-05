@@ -1,5 +1,7 @@
 import { ethers } from 'ethers'
 
+export type Metadata = (AragonArtifact | AragonManifest)[]
+
 // Type definition: https://github.com/ethers-io/ethers.js/blob/ethers-v5-beta/packages/abi/lib/fragments.d.ts#L68
 export type FunctionFragment = ethers.utils.FunctionFragment
 
