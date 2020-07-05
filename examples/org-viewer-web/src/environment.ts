@@ -4,7 +4,7 @@ type EnvType = {
   orgSubgraphUrl?: string
 }
 
-const ENV_NAME = 'rinkeby'
+const ENV_NAME = 'mainnet'
 
 const ENVIRONMENTS = new Map([
   [

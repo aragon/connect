@@ -105,11 +105,8 @@ import Voting from '@aragon/connect-thegraph-voting'
 
 const org = await connect('example.aragonid.eth', 'thegraph')
 
-// Fetch the apps of the organization
-const apps = await org.apps()
-
 // Pick the first Voting app instance
-const votingInfo = apps.find(app => app.appName === 'voting.aragonpm.eth')
+const votingInfo = await org.app('voting')
 
 // Instanciate the Voting app connector using its address:
 const voting = new Voting(

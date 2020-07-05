@@ -5,3 +5,8 @@ export type Network = {
 }
 
 export type Networkish = Network | string | number
+
+export type AppFilters = {
+  address?: string[]
+  name?: string[]
+}

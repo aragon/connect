@@ -4,9 +4,9 @@ import * as fragments from './fragments'
 type Query = 'query' | 'subscription'
 
 export const ORGANIZATION_APPS = (type: Query) => gql`
-  ${type} Organization($orgAddress: String!) {
+  ${type} Organization($orgAddress: String!, $appFilter: App_filter!, $first: Int) {
     organization(id: $orgAddress) {
-      apps {
+      apps(where: $appFilter, first: $first) {
         ...App_app
       }
     }

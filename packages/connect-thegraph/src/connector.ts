@@ -5,7 +5,7 @@ import {
   Repo,
   Role,
 } from '@aragon/connect-core'
-import { Network } from '@aragon/connect-types'
+import { AppFilters, Network } from '@aragon/connect-types'
 import * as queries from './queries'
 import GraphQLWrapper from './core/GraphQLWrapper'
 import {
@@ -29,6 +29,22 @@ function getOrgSubgraphUrl(network: Network): string | null {
     return 'https://api.thegraph.com/subgraphs/name/aragon/aragon-rinkeby'
   }
   return null
+}
+
+function appFiltersToQueryFilter(appFilters: AppFilters) {
+  const queryFilter = {} as any
+
+  if (appFilters.name) {
+    queryFilter.repoName_in = appFilters.name.map(name =>
+      name.replace(/\.aragonpm\.eth$/, '')
+    )
+  }
+
+  if (appFilters.address) {
+    queryFilter.address_in = appFilters.address
+  }
+
+  return queryFilter
 }
 
 export default class ConnectorTheGraph extends GraphQLWrapper
@@ -74,31 +90,76 @@ export default class ConnectorTheGraph extends GraphQLWrapper
     )
   }
 
-  async appsForOrg(orgAddress: string): Promise<App[]> {
+  async appByAddress(appAddress: string): Promise<App> {
     return this.performQueryWithParser(
+      queries.APP_BY_ADDRESS('query'),
+      { appAddress: appAddress.toLowerCase() },
+      parseApp
+    )
+  }
+
+  // async app(filters: AppFilters): Promise<App> {
+  //   return this.performQueryWithParser(
+  //     queries.APP_BY_ADDRESS('query'),
+  //     {},
+  //     parseApp
+  //   )
+  // }
+
+  async appForOrg(orgAddress: string, filters: AppFilters): Promise<App> {
+    const apps = await this.performQueryWithParser<App[]>(
       queries.ORGANIZATION_APPS('query'),
-      { orgAddress: orgAddress.toLowerCase() },
+      {
+        appFilter: appFiltersToQueryFilter(filters),
+        first: 1,
+        orgAddress: orgAddress.toLowerCase(),
+      },
+      parseApps
+    )
+    return apps[0]
+  }
+
+  async appsForOrg(orgAddress: string, filters: AppFilters): Promise<App[]> {
+    return this.performQueryWithParser<App[]>(
+      queries.ORGANIZATION_APPS('query'),
+      {
+        appFilter: appFiltersToQueryFilter(filters),
+        orgAddress: orgAddress.toLowerCase(),
+      },
+      parseApps
+    )
+  }
+
+  onAppForOrg(
+    orgAddress: string,
+    filters: AppFilters,
+    callback: Function
+  ): { unsubscribe: Function } {
+    return this.subscribeToQueryWithParser(
+      queries.ORGANIZATION_APPS('subscription'),
+      {
+        appFilter: appFiltersToQueryFilter(filters),
+        first: 1,
+        orgAddress: orgAddress.toLowerCase(),
+      },
+      (apps: App[]) => callback(apps[0]),
       parseApps
     )
   }
 
   onAppsForOrg(
     orgAddress: string,
+    filters: AppFilters,
     callback: Function
   ): { unsubscribe: Function } {
     return this.subscribeToQueryWithParser(
-      queries.ORGANIZATION_APPS('query'),
-      { orgAddress: orgAddress.toLowerCase() },
+      queries.ORGANIZATION_APPS('subscription'),
+      {
+        appFilter: appFiltersToQueryFilter(filters),
+        orgAddress: orgAddress.toLowerCase(),
+      },
       callback,
       parseApps
-    )
-  }
-
-  async appByAddress(appAddress: string): Promise<App> {
-    return this.performQueryWithParser(
-      queries.APP_BY_ADDRESS('query'),
-      { appAddress: appAddress.toLowerCase() },
-      parseApp
     )
   }
 

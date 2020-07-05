@@ -18,7 +18,7 @@ export default class GraphQLWrapper {
 
   constructor(subgraphUrl: string, verbose = false) {
     if (!subgraphUrl || !subgraphUrl.startsWith('http')) {
-       throw new Error('Please provide a valid subgraph URL')
+      throw new Error('Please provide a valid subgraph URL')
     }
 
     const subscriptionClient = new SubscriptionClient(
@@ -101,12 +101,13 @@ export default class GraphQLWrapper {
     return result
   }
 
-  async performQueryWithParser(
+  async performQueryWithParser<T>(
     query: DocumentNode,
     args: any = {},
     parser: ParseFunction
-  ): Promise<any> {
-    return this.parseQueryResult(parser, await this.performQuery(query, args))
+  ): Promise<T> {
+    const result = await this.performQuery(query, args)
+    return this.parseQueryResult(parser, result)
   }
 
   parseQueryResult(parser: ParseFunction, result: QueryResult): any {
