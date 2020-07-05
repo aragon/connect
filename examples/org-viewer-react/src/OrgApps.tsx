@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
 import { useApps } from '@aragon/connect-react'
+import { shortenAddress } from './utils'
 import Group from './Group'
 import Table from './Table'
 import TextButton from './TextButton'
@@ -20,7 +21,7 @@ export default function OrgApps({ onOpenApp }: Props) {
             app.name || 'unknown',
             app.version || '?',
             <TextButton onClick={() => onOpenApp(app.address)}>
-              {app.address.slice(0, 6)}
+              {shortenAddress(app.address)}
             </TextButton>,
           ])
           .sort(([a], [b]) => a.localeCompare(b))}

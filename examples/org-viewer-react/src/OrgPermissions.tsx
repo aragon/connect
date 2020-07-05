@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
 import { usePermissions } from '@aragon/connect-react'
+import { shortenAddress } from './utils'
 import Group from './Group'
 import Table from './Table'
 
@@ -13,9 +14,11 @@ export default function OrgPermissions() {
         rows={
           permissions
             ? permissions.map(permission => [
-                (permission.appAddress || '?').slice(0, 6),
-                permission.roleHash.slice(0, 6),
-                permission.granteeAddress.slice(0, 6),
+                permission.appAddress
+                  ? shortenAddress(permission.appAddress)
+                  : '?',
+                shortenAddress(permission.roleHash),
+                shortenAddress(permission.granteeAddress),
               ])
             : []
         }

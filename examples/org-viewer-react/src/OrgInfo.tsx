@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
-import { useOrganization, Organization } from '@aragon/connect-react'
+import { useOrganization } from '@aragon/connect-react'
+import { shortenAddress } from './utils'
 import Group from './Group'
 import Table from './Table'
 
@@ -19,7 +20,7 @@ export default function OrgApps() {
           ['location', org.location],
           [
             'address',
-            <span title={org.address}>{org.address.slice(0, 10) + '…'}</span>,
+            <span title={org.address}>{shortenAddress(org.address)}</span>,
           ],
         ]}
       />
