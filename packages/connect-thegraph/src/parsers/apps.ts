@@ -12,23 +12,20 @@ async function _parseApp(app: any, connector: any): Promise<App> {
     isUpgradeable: app.isUpgradeable,
     kernelAddress: app.organization?.address,
     manifest: app.version?.manifest,
-    name: app.repo?.name,
+    name: app.repoName,
     registry: app.repo?.registry?.name,
     registryAddress: app.repo?.registry?.address,
     repoAddress: app.repo?.address,
     version: app.version?.semanticVersion.replace(/,/g, '.'),
   }
 
-  const appEntity = new App(connector)
-  await appEntity.create(data)
-
-  return appEntity
+  return App.create(data, connector)
 }
 
 export async function parseApp(
   result: QueryResult,
   connector: any
-): Promise<AppData> {
+): Promise<App> {
   const app = result.data.app
 
   if (!app) {
@@ -41,7 +38,7 @@ export async function parseApp(
 export async function parseApps(
   result: QueryResult,
   connector: any
-): Promise<AppData[]> {
+): Promise<App[]> {
   const org = result.data.organization
   const apps = org?.apps
 

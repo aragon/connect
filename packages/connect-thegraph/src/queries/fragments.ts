@@ -60,6 +60,7 @@ export const APP_FRAGMENT = gql`
     appId
     isForwarder
     isUpgradeable
+    repoName
     implementation {
       address
     }

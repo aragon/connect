@@ -35,9 +35,8 @@ describe('when connecting to the mainnet subgraph', () => {
       expect(app.appName!.length).toBeGreaterThan(0)
     })
 
-    test('should have a valid author', () => {
-      expect(app.author).toBeDefined()
-      expect(app.author!.length).toBeGreaterThan(0)
+    test('should have a valid artifact', () => {
+      expect(app.artifact).toBeDefined()
     })
 
     test('should have a valid code address', () => {
@@ -49,24 +48,9 @@ describe('when connecting to the mainnet subgraph', () => {
       expect(app.contentUri!.length).toBeGreaterThan(0)
     })
 
-    test('should have a contract path', () => {
-      expect(app.contractPath).toBeDefined()
-      expect(app.contractPath!.length).toBeGreaterThan(0)
-    })
-
-    test('should have a valid description', () => {
-      expect(app.description).toBeDefined()
-      expect(app.description!.length).toBeGreaterThan(0)
-    })
-
     test('should have valid intents', () => {
       expect(app.intents).toBeDefined()
       expect(app.intents!.length).toBeGreaterThan(0)
-    })
-
-    test('should have valid icons', () => {
-      expect(app.icons).toBeDefined()
-      expect(app.icons!.length).toBeGreaterThan(0)
     })
     test('should have valid isForwarder', () => {
       expect(app.isForwarder).toBeDefined()
@@ -79,22 +63,23 @@ describe('when connecting to the mainnet subgraph', () => {
       expect(isAddress(app.kernelAddress)).toBeTruthy()
     })
 
+    test('should have a valid manifest', () => {
+      expect(app.manifest).toBeDefined()
+    })
+
     test('should have a valid name', () => {
       expect(app.name).toBeDefined()
       expect(app.name!.length).toBeGreaterThan(0)
     })
+
     test('should have a valid registry address', () => {
+      expect(app.registryAddress).toBeDefined()
       expect(isAddress(app.registryAddress)).toBeTruthy()
     })
 
     test('should have a valid repo address', () => {
       expect(app.repoAddress).toBeDefined()
       expect(isAddress(app.repoAddress!)).toBeTruthy()
-    })
-
-    test('should have a valid source url', () => {
-      expect(app.sourceUrl).toBeDefined()
-      expect(app.sourceUrl!.length).toBeGreaterThan(0)
     })
 
     test('should have a valid version', () => {

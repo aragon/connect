@@ -1,6 +1,6 @@
 import CoreEntity from './CoreEntity'
 import Permission, { PermissionData } from './Permission'
-import { AragonArtifact } from '../types'
+import { AragonArtifact, Metadata } from '../types'
 import { resolveMetadata } from '../utils/metadata'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 
@@ -13,47 +13,49 @@ export interface RoleData {
   grantees?: PermissionData[] | null
 }
 
-export default class Role extends CoreEntity implements RoleData {
-  #created!: boolean
-  appAddress!: string
-  description?: string
-  hash!: string
-  params?: string[]
-  permissions?: Permission[] | null
-  manager?: string
-  name?: string
+export default class Role extends CoreEntity {
+  readonly appAddress!: string
+  readonly description?: string
+  readonly hash!: string
+  readonly params?: string[]
+  readonly permissions?: Permission[] | null
+  readonly manager?: string
+  readonly name?: string
 
-  constructor(connector: ConnectorInterface) {
+  constructor(
+    data: RoleData,
+    metadata: Metadata,
+    connector: ConnectorInterface
+  ) {
     super(connector)
 
-    this.#created = false
+    const { roles } = metadata[0] as AragonArtifact
+
+    const role = roles.find(role => role.bytes === data.hash)
+
+    this.appAddress = data.appAddress
+    this.description = role?.name
+    this.hash = data.hash
+    this.params = role?.params
+    this.permissions = data.grantees?.map(
+      grantee => new Permission(grantee, this._connector)
+    )
+    this.manager = data.manager
+    this.name = role?.id
   }
 
-  get created(): boolean {
-    return this.#created
-  }
+  static async create(
+    data: RoleData,
+    connector: ConnectorInterface
+  ): Promise<Role> {
+    const artifact: AragonArtifact = await resolveMetadata(
+      'artifact.json',
+      data.contentUri || undefined,
+      data.artifact
+    )
 
-  async create({ artifact, contentUri, ...data }: RoleData): Promise<void> {
-    if (!this.#created) {
-      this.#created = true
+    const metadata: Metadata = [artifact]
 
-      const { roles }: AragonArtifact = await resolveMetadata(
-        'artifact.json',
-        contentUri || undefined,
-        artifact
-      )
-
-      const role = roles.find(role => role.bytes === data.hash)
-
-      this.appAddress = data.appAddress
-      this.description = role?.name
-      this.hash = data.hash
-      this.params = role?.params
-      this.permissions = data.grantees?.map(
-        grantee => new Permission(grantee, this._connector)
-      )
-      this.manager = data.manager
-      this.name = role?.id
-    }
+    return new Role(data, metadata, connector)
   }
 }
