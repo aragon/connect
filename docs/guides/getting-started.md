@@ -74,12 +74,13 @@ As seen above, connecting to an organization can be done by calling the `connect
 It requires two parameters:
 
 <<<<<<< HEAD
+
 - The address of the organization, which can be any valid Ethereum address \(`0x…`\) or [ENS name](https://ens.domains/) \(`….eth`\).
-- The connector we want to use.
-=======
+- # The connector we want to use.
+
 * The address of the organization, which can be any valid Ethereum address \(`0x…`\) or [ENS domain](https://ens.domains/) \(`….eth`\).
 * The connector you want to use.
->>>>>>> master
+  > > > > > > > master
 
 ```javascript
 const org = await connect('example.aragonid.eth', 'thegraph')
@@ -204,3 +205,5 @@ for (const transaction of path.transactions) {
 ## Going further
 
 Now that you are familiar with the basics of Aragon Connect, you may want to explore the [examples provided in the repository](https://github.com/aragon/connect/tree/master/examples) and the [API documentation](../api-reference/).
+
+If you are using React, you might want to have a look at the [Usage with React](./connect-with-react.md) guide.
