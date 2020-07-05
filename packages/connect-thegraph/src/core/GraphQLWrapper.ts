@@ -62,7 +62,11 @@ export default class GraphQLWrapper {
 
         if (result.error) {
           throw new Error(
-            `Error performing subscription.${this.describeQueryResult(result)}`
+            [
+              'Error performing subscription.',
+              `${result.error.name}: ${result.error.message}`,
+              this.describeQueryResult(result),
+            ].join('\n')
           )
         }
 

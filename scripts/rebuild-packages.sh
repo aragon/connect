@@ -45,7 +45,7 @@ oao run-script --ignore-src '!packages/connect' build --parallel
 
 # Build the app connectors.
 echo 'Building the app connectors…'
-oao run-script --ignore-src '!packages/connect-thegraph-*' build --parallel
+oao run-script --ignore-src '!packages/connect-{thegraph-*,react}' build --parallel
 
 # Build the examples.
 if [ $MODE != "libs-only" ]; then

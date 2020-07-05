@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import { AppFilters, Network } from '@aragon/connect-types'
+import { AppFilters, AppFiltersParam, Network } from '@aragon/connect-types'
 
 import App from './App'
 import TransactionIntent from '../transactions/TransactionIntent'
@@ -14,16 +14,6 @@ import { toArrayEntry } from '../utils/misc'
 // Organization#removePermission(address, appAddress, roleId)
 // Organization#roleManager(appAddress, roleId)
 // Organization#setRoleManager(address, appAddress, roleId)
-
-type AppFiltersAddressParam = string | string[]
-
-type AppFiltersParam =
-  | null
-  | AppFiltersAddressParam
-  | {
-      address?: AppFiltersAddressParam
-      name?: string | string[]
-    }
 
 type OnAppCallback = (app: App) => void
 type OnAppsCallback = (apps: App[]) => void

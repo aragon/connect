@@ -6,6 +6,7 @@
 
 * [Getting started](guides/getting-started.md)
 * [Aragon Basics](guides/aragon-basics.md)
+* [Usage with React](guides/connect-with-react.md)
 
 ## Advanced
 
