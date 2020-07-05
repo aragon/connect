@@ -1,8 +1,8 @@
-# Aragon Connect for React
+# Using Aragon Connect with React
 
 ## Introduction
 
-Aragon Connect for React provides a series of utilities that make Aragon Connect integrated into a React environment.
+Aragon Connect provides a series of utilities that makes it easier to use in React environments.
 
 It consists of the `<Connect />` component, on which a connection to an organization is described, and a series of hooks: `useApps()`, `useOrganization()`, `usePermissions()`.
 
@@ -17,14 +17,14 @@ import {
 } from '@aragon/connect-react'
 
 function App() {
-  // connect-react functions return three things: the data, the error, and the loading state.
-  const [org, orgError, orgLoading] = useOrganization()
+  const [org, orgStatus] = useOrganization()
 
-  const [apps, appsError, appsLoading] = useApps()
-  const [permissions, permissionsError, permissionsLoading] = usePermissions()
+  const [apps, appsStatus] = useApps()
+  const [permissions, permissionsStatus] = usePermissions()
 
-  const loading = orgLoading || appsLoading || permissionsLoading
-  const error = orgError || appsError || permissionsError
+  const loading =
+    orgStatus.loading || appsStatus.loading || permissionsStatus.loading
+  const error = orgStatus.error || appsStatus.error || permissionsStatus.error
 
   if (loading) {
     return <p>Loading…</p>
