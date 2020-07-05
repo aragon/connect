@@ -6,25 +6,17 @@ import TransactionIntent from '../transactions/TransactionIntent'
 import Permission from './Permission'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 
-// TODO: Implement all properties and methods from the API spec (https://github.com/aragon/connect/blob/master/docs/organization.md).
-// [x] Organization#apps()
-// [x] Organization#onApps(cb)
-// [x] Organization#app(appAddress)
-// [ ] Organization#addApp(repoName, options)
-// [ ] Organization#removeApp(appAddress)
-// [x] Organization#permissions()
-// [ ] Organization#addPermission(address, appAddress, roleId)
-// [ ] Organization#removePermission(address, appAddress, roleId)
-// [ ] Organization#roleManager(appAddress, roleId)
-// [ ] Organization#setRoleManager(address, appAddress, roleId)
-// [ ] Organization#appIntent(appAddress, funcName, funcArgs)
-// [ ] Organization#appCall(appAddress, methodName, args)
-// [ ] Organization#appState(appAddress)
-// [ ] Events...
-
 function toArrayEntry(value: any): any[] {
   return Array.isArray(value) ? value : [value]
 }
+
+// TODO
+// Organization#addApp(repoName, options)
+// Organization#removeApp(appAddress)
+// Organization#addPermission(address, appAddress, roleId)
+// Organization#removePermission(address, appAddress, roleId)
+// Organization#roleManager(appAddress, roleId)
+// Organization#setRoleManager(address, appAddress, roleId)
 
 type AppFiltersAddressParam = string | string[]
 
