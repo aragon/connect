@@ -9,14 +9,34 @@ Currently a single flavor of this connector is available and comes built into th
 The connector must implement the following interface to be compatible with Aragon Connect:
 
 ```typescript
-chainId?: number
-permissionsForOrg(orgAddress: string): Promise<Permission[]>
-onPermissionsForOrg(orgAddress: string, callback: Function): { unsubscribe: Function }
-appsForOrg(orgAddress: string): Promise<App[]>
-onAppsForOrg(orgAddress: string, callback: Function): { unsubscribe: Function }
-repoForApp(appAddress: string): Promise<Repo>
-appByAddress(appAddress: string): Promise<App>
-rolesForAddress(appAddress: string): Promise<Role[]>
+export type AppFilters = {
+  address?: string[]
+  name?: string[]
+}
+
+export interface ConnectorInterface {
+  appByAddress(appAddress: string): Promise<App>
+  appForOrg(orgAddress: string, filters?: AppFilters): Promise<App>
+  appsForOrg(orgAddress: string, filters?: AppFilters): Promise<App[]>
+  chainId?: number
+  onAppsForOrg(
+    orgAddress: string,
+    filters: AppFilters,
+    callback: Function
+  ): { unsubscribe: Function }
+  onAppForOrg(
+    orgAddress: string,
+    filters: AppFilters,
+    callback: Function
+  ): { unsubscribe: Function }
+  onPermissionsForOrg(
+    orgAddress: string,
+    callback: Function
+  ): { unsubscribe: Function }
+  permissionsForOrg(orgAddress: string): Promise<Permission[]>
+  repoForApp(appAddress: string): Promise<Repo>
+  rolesForAddress(appAddress: string): Promise<Role[]>
+}
 ```
 
 ## The Graph Connector

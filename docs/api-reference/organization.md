@@ -50,6 +50,23 @@ Like `Organization#apps()`, but as a subscription.
 | `callback`          | `app => void`                               | A callback that will get called every time the result gets updated.                                                                                                                                                                                                                                                                |
 | returns             | `{ unsubscribe: Function }`                 | A handler that allows to stop receiving updates.                                                                                                                                                                                                                                                                                   |
 
+### Organization\#permissions\(\)
+
+Fetch the organization’s permissions.
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| returns | `Promise<Permission[]>` | A promise resolving to a `Permissions`. |
+
+### Organization\#onPermissions\(callback\)
+
+Like `Organization#permissions()`, but as a subscription.
+
+| Name                | Type                          | Description                                                                                                                                                                                                                                                   |
+| :------------------ | :---------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `callback`          | `permission => void`                 | A callback that will get called every time the result gets updated.                                                                                                                                                                                           |
+| returns             | `{ unsubscribe: Function }`   | A handler that allows to stop receiving updates.                                                                                                                                                                                                              |
+
 ### Organization\#appIntent\(appAddress, funcName, funcArgs\)
 
 Execute a function on a given app.
