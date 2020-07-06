@@ -4,6 +4,7 @@ import { AppFilters, AppFiltersParam, Network } from '@aragon/connect-types'
 import App from './App'
 import TransactionIntent from '../transactions/TransactionIntent'
 import Permission from './Permission'
+import { XDAI_WSS_ENDPOINT } from '../params'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 import { toArrayEntry } from '../utils/misc'
 
@@ -73,6 +74,8 @@ export default class Organization {
 
     this.#provider = provider
       ? getEthersProvider()
+      : network.chainId === 100
+      ? new ethers.providers.WebSocketProvider(XDAI_WSS_ENDPOINT, network)
       : ethers.getDefaultProvider(network)
 
     this._connector = connector

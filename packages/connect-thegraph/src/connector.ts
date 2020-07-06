@@ -28,6 +28,9 @@ function getOrgSubgraphUrl(network: Network): string | null {
   if (network.chainId === 4) {
     return 'https://api.thegraph.com/subgraphs/name/aragon/aragon-rinkeby'
   }
+  if (network.chainId === 100) {
+    return 'https://api.thegraph.com/subgraphs/name/1hive/aragon-xdai'
+  }
   return null
 }
 
