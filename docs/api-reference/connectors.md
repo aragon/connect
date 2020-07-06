@@ -1,6 +1,6 @@
 # Connectors
 
-Connectors implement `IConnector`. A connector contains the mechanism through which the data is going to be fetched.
+Connectors implement `ConnectorInterface`. A connector contains the mechanism through which the data is going to be fetched.
 
 Three connectors are provided by default, listed below.
 
