@@ -6,6 +6,8 @@ Aragon Connect provides a series of utilities that simplify the usage of Aragon 
 
 It consists of the `<Connect />` component, through which a connection to an organization is described, and a series of hooks: `useApp()`, `useApps()`, `useOrganization()`, `usePermissions()`.
 
+To get started, add the `@aragon/connect-react` package to your project. It contains all the exports of the `@aragon/connect`, so you don’t have to install both.
+
 ## Usage
 
 ```jsx
