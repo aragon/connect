@@ -1,4 +1,4 @@
-# Creating an app Subgraph
+# Writing an App Subgraph
 
 Creating a Subgraph for an Aragon app is not much different from any other kind of Subgraph. If you’re not already familiar with what can be done in a Subgraph, we recommend checking out [The Graph’s documentation](https://thegraph.com/docs).
 
@@ -20,7 +20,7 @@ For example, if you run `yarn deploy-mainnet`, you’ll deploy a Subgraph named 
 
 The specification for the nomenclature is: `Aragon <AppName> <Network> [Staging]`.
 
-Staging Subgraphs are intended for development, as they index very quickly. We’ll expand more on this in [step 8](#8-test-your-subgraph-with-few-data-sources).
+Staging Subgraphs are intended for development, as they index very quickly. We’ll expand more on this in [step 8](app-subgraphs.md#8-test-your-subgraph-with-few-data-sources).
 
 ### 3. Set up the Subgraph manifest files
 
@@ -91,3 +91,4 @@ As a rule of thumb, if your data source will be triggered by a base Aragon data 
 ### My `callHandlers` aren’t working
 
 Unfortunately, [The Graph does not support callHandlers in Rinkeby](https://thegraph.com/docs/define-a-subgraph#call-handlers). For this reason, our templates avoid them altogether. In general, we prefer to code Subgraphs in a way that is compatible with all networks. Alternatively, if you have no other choice than to use this feature, consider hosting your own Subgraph.
+
