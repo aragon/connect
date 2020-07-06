@@ -9,7 +9,7 @@ Connects and returns an `Organization` for `location`.
 | Name | Type | Description |  |  |
 | :--- | :--- | :--- | :--- | :--- |
 | `location` | `String` | The Ethereum address or ENS domain of an Aragon organization. |  |  |
-| `connector` | `Connector | [String, Object] | String` | Accepts a `Connector` instance, and either a string or a tuple for embedded connectors and their config. |  |  |
+| `connector` | `Connector or [String, Object] or String` | Accepts a `Connector` instance, and either a string or a tuple for embedded connectors and their config. |  |  |
 | `options` | `Object` | The optional configuration object. |  |  |
 | `options.readProvider` | `EthereumProvider` | An [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compatible object. |  |  |
 | `options.chainId` | `Number` | The [Chain ID](https://chainid.network/) to connect to. Defaults to `1`. |  |  |
@@ -56,4 +56,3 @@ try {
   }
 }
 ```
-
