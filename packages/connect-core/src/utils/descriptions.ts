@@ -41,7 +41,7 @@ export async function describeTransaction(
       )
     }
   } catch (err) {
-    throw new Error(`Error: ${err}`)
+    throw new Error(`Could not describe transaction: ${err}`)
   }
 
   return new TransactionRequest({
