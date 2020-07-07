@@ -1,11 +1,12 @@
 import CoreEntity from './CoreEntity'
 import Permission, { PermissionData } from './Permission'
 import { AragonArtifact, Metadata } from '../types'
-import { resolveMetadata } from '../utils/metadata'
+import { resolveArtifact } from '../utils/metadata'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 
 export interface RoleData {
   appAddress: string
+  appId: string
   artifact?: string | null
   contentUri?: string | null
   hash: string
@@ -15,6 +16,7 @@ export interface RoleData {
 
 export default class Role extends CoreEntity {
   readonly appAddress!: string
+  readonly appId!: string
   readonly description?: string
   readonly hash!: string
   readonly params?: string[]
@@ -31,7 +33,7 @@ export default class Role extends CoreEntity {
 
     const { roles } = metadata[0] as AragonArtifact
 
-    const role = roles.find(role => role.bytes === data.hash)
+    const role = roles?.find(role => role.bytes === data.hash)
 
     this.appAddress = data.appAddress
     this.description = role?.name
@@ -48,11 +50,7 @@ export default class Role extends CoreEntity {
     data: RoleData,
     connector: ConnectorInterface
   ): Promise<Role> {
-    const artifact: AragonArtifact = await resolveMetadata(
-      'artifact.json',
-      data.contentUri || undefined,
-      data.artifact
-    )
+    const artifact = await resolveArtifact(data)
 
     const metadata: Metadata = [artifact]
 

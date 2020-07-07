@@ -8,3 +8,5 @@ export function getAragonOsInternalAppInfo(appId: string): AragonArtifact {
 export function getApmInternalAppInfo(appId: string): AragonArtifact {
   return getAppInfo(appId, 'apm')
 }
+
+export { hasAppInfo, getAppInfo } from './interfaces'

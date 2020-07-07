@@ -12,9 +12,8 @@ export interface Annotation {
   value: any
 }
 
-// TODO: Handle children
-
 export default class TransactionRequest {
+  readonly children?: TransactionRequest[]
   readonly description?: string
   readonly descriptionAnnotated?: Annotation[]
   readonly data!: string
@@ -22,6 +21,7 @@ export default class TransactionRequest {
   readonly to!: string
 
   constructor(data: TransactionRequestData) {
+    this.children = data.children
     this.description = data.description
     this.descriptionAnnotated = data.descriptionAnnotated
     this.data = data.data

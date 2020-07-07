@@ -40,9 +40,9 @@ export async function describeTransaction(
         provider
       )
     }
-
-    // eslint-disable-next-line no-empty
-  } catch (_) {}
+  } catch (err) {
+    throw new Error(`Error: ${err}`)
+  }
 
   return new TransactionRequest({
     ...transaction,

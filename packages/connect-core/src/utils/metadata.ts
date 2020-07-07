@@ -1,6 +1,15 @@
 import { ethers } from 'ethers'
 
+import { AppData } from '../entities/App'
+import { RepoData } from '../entities/Repo'
+import { RoleData } from '../entities/Role'
+import {
+  getApmInternalAppInfo,
+  getAragonOsInternalAppInfo,
+  hasAppInfo,
+} from './overrides/index'
 import { DEFAULT_IPFS_GATEWAY } from '../params'
+import { AragonArtifact, AragonManifest } from '../types'
 
 export function parseMetadata(name: string, metadata: string): any {
   let parsedMetaData
@@ -38,4 +47,30 @@ export async function resolveMetadata(
   if (metadata) return parseMetadata(fileName, metadata)
   if (contentUri) return fetchMetadata(fileName, contentUri)
   return {}
+}
+
+export async function resolveManifest(
+  data: AppData | RepoData
+): Promise<AragonManifest> {
+  return resolveMetadata(
+    'manifest.json',
+    data.contentUri || undefined,
+    data.manifest
+  )
+}
+
+export async function resolveArtifact(
+  data: AppData | RoleData
+): Promise<AragonArtifact> {
+  if (hasAppInfo(data.appId, 'apm')) {
+    return getApmInternalAppInfo(data.appId)
+  } else if (hasAppInfo(data.appId, 'aragon')) {
+    return getAragonOsInternalAppInfo(data.appId)
+  } else {
+    return resolveMetadata(
+      'artifact.json',
+      data.contentUri || undefined,
+      data.artifact
+    )
+  }
 }
