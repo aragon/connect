@@ -64,13 +64,13 @@ export async function resolveArtifact(
 ): Promise<AragonArtifact> {
   if (hasAppInfo(data.appId, 'apm')) {
     return getApmInternalAppInfo(data.appId)
-  } else if (hasAppInfo(data.appId, 'aragon')) {
-    return getAragonOsInternalAppInfo(data.appId)
-  } else {
-    return resolveMetadata(
-      'artifact.json',
-      data.contentUri || undefined,
-      data.artifact
-    )
   }
+  if (hasAppInfo(data.appId, 'aragon')) {
+    return getAragonOsInternalAppInfo(data.appId)
+  }
+  return resolveMetadata(
+    'artifact.json',
+    data.contentUri || undefined,
+    data.artifact
+  )
 }
