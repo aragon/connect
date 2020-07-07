@@ -1,9 +1,9 @@
-# Aragon Connect react examples
+# React Intro
 
-This folder contains a small Aragon organization viewer built with React and Aragon Connect
+A simple demo that displays the apps of an organization.
 
 ## How to run
 
-```
-yarn run dev
+```console
+yarn dev
 ```
