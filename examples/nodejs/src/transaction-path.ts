@@ -1,21 +1,14 @@
 import { ethers } from 'ethers'
 import { connect, App, Organization } from '@aragon/connect'
 
-const network = 'mainnet'
-
-const ORG_ADDRESS = '0x0c188b183ff758500d1d18b432313d10e9f6b8a4'
 const ACCOUNT = '0xf76604Ce7e7F0134a5310bCfc9C34cAEddf15873'
 
 async function main() {
-  const readProvider = ethers.getDefaultProvider(network)
+  const org = await connect('piedao.aragonid.eth', 'thegraph')
 
-  const org = (await connect(ORG_ADDRESS, 'thegraph', {
-    readProvider,
-  })) as Organization
+  const finance = await org.app('finance')
 
-  const apps = await org.apps()
-  const finance = apps.find((app: App) => app.name == 'finance')!
-
+  // Transaction intent
   const intent = org.appIntent(finance.address, 'newImmediatePayment', [
     ethers.constants.AddressZero,
     ACCOUNT,
@@ -23,9 +16,10 @@ async function main() {
     'Tests Payment',
   ])
 
+  // Transaction path
   const txPath = await intent.paths(ACCOUNT)
 
-  console.log('\nTransactions on the path:')
+  // Transaction request
   txPath.transactions.map((tx: any) => console.log(tx))
 }
 
@@ -38,3 +32,4 @@ main()
     )
     process.exit(1)
   })
+
