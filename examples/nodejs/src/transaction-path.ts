@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import { connect, App, Organization } from '@aragon/connect'
+import { connect } from '@aragon/connect'
 
 const ACCOUNT = '0xf76604Ce7e7F0134a5310bCfc9C34cAEddf15873'
 
