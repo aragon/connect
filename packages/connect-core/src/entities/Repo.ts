@@ -5,7 +5,7 @@ import {
   Metadata,
   AragonArtifactRole,
 } from '../types'
-import { resolveMetadata } from '../utils/metadata'
+import { resolveMetadata, resolveManifest } from '../utils/metadata'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 
 export interface RepoData {
@@ -46,17 +46,12 @@ export default class Repo extends CoreEntity {
     data: RepoData,
     connector: ConnectorInterface
   ): Promise<Repo> {
-    const artifact: AragonArtifact = await resolveMetadata(
+    const artifact = await resolveMetadata(
       'artifact.json',
       data.contentUri || undefined,
       data.artifact
     )
-
-    const manifest: AragonManifest = await resolveMetadata(
-      'manifest.json',
-      data.contentUri || undefined,
-      data.manifest
-    )
+    const manifest = await resolveManifest(data)
 
     const metadata: Metadata = [artifact, manifest]
 

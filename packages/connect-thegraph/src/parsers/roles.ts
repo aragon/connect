@@ -1,12 +1,7 @@
 import { Role, RoleData, PermissionData } from '@aragon/connect-core'
 import { QueryResult } from '../types'
 
-async function _parseRole(
-  role: any,
-  connector: any,
-  contentUri: string | null,
-  artifact?: string | null
-): Promise<Role> {
+async function _parseRole(role: any, app: any, connector: any): Promise<Role> {
   const grantees =
     role?.grantees &&
     role?.grantees.map(
@@ -33,8 +28,9 @@ async function _parseRole(
     manager: role.manager,
     hash: role.roleHash,
     grantees,
-    artifact,
-    contentUri,
+    appId: app.appId,
+    artifact: app.version?.artifact,
+    contentUri: app?.contentUri,
   }
 
   return Role.create(roleData, connector)
@@ -51,7 +47,7 @@ export async function parseRole(
     throw new Error('Unable to parse role.')
   }
 
-  return _parseRole(role, connector, app?.contentUri, app.version?.artifact)
+  return _parseRole(role, app, connector)
 }
 
 export async function parseRoles(
@@ -67,7 +63,7 @@ export async function parseRoles(
 
   return Promise.all(
     roles.map(async (role: any) => {
-      return _parseRole(role, connector, app?.contentUri, app.version?.artifact)
+      return _parseRole(role, app, connector)
     })
   )
 }

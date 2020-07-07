@@ -108,6 +108,11 @@ export default class Organization {
     return this.#address || '' // The || '' should never happen but TypeScript requires it.
   }
 
+  get provider(): ethers.providers.Provider {
+    this.checkConnected()
+    return this.#provider
+  }
+
   ///////// APPS ///////////
 
   async app(filters?: AppFiltersParam): Promise<App> {
