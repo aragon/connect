@@ -1,5 +1,5 @@
-import { ethers, providers } from 'ethers'
-import { fetchRepo } from './helpers'
+import { ethers } from 'ethers'
+import { fetchRepo, getOrgAddress } from './helpers'
 
 const ARAGON_MNEMONIC =
   'explain tackle mirror kit van hammer degree position ginger unfair soup bonus'
@@ -21,16 +21,23 @@ async function main() {
   // create signer
   const provider = ethers.getDefaultProvider('rinkeby')
   const wallet = ethers.Wallet.fromMnemonic(ARAGON_MNEMONIC)
-  wallet.connect(provider)
+  const signer = wallet.connect(provider)
 
   // create template contract
   const templateContract = new ethers.Contract(
     templateAddress,
     templateArtifact.abi,
-    wallet
+    signer
   )
 
-  const tx = await templateContract.functions.newInstance()
+  // Get the proper function we want to call; ethers will not get the overload
+  // automatically, so we take the proper one from the object, and then call it.
+  const tx = await templateContract['newInstance()']()
+
+  // Filter and get the org address from the events.
+  const orgAddress = await getOrgAddress('DeployDao', templateContract, tx.hash)
+
+  console.log(`Organization Address: ${orgAddress}`)
 }
 
 main()
