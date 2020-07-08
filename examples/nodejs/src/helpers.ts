@@ -10,29 +10,28 @@ export async function keepRunning() {
   })
 }
 
-export async function fetchRepo(name: string, subgraph: string) {
-  // Construct the query to fetch
-  const QUERY = gql`
-  query {
-    repos(where:{
-      name: "${name}"
-    }) {
+const QUERY_REPO_BY_NAME = gql`
+  query RepoData($name: String) {
+    repos(where: { name: $name }) {
       id
-    	name
-    	lastVersion{
+      name
+      lastVersion {
         codeAddress
         artifact
         semanticVersion
       }
     }
   }
-  `
+`
 
+export async function fetchRepo(name: string, subgraph: string) {
   // Create the GraphQL wrapper using the specific Subgraph URL
   const wrapper = new GraphQLWrapper(subgraph)
 
   // Invoke the custom query and receive data
-  return wrapper.performQuery(QUERY)
+  return wrapper.performQuery(QUERY_REPO_BY_NAME, {
+    name,
+  })
 }
 
 export async function getOrgAddress(
@@ -45,6 +44,7 @@ export async function getOrgAddress(
 
     templateContract.on(filter, (contractAddress, event) => {
       if (event.transactionHash === transactionHash) {
+        templateContract.removeAllListeners()
         resolve(contractAddress)
       }
     })
