@@ -52,6 +52,7 @@ export const ORGANIZATION_PERMISSIONS = (type: Query) => gql`
 export const ROLE_BY_APP_ADDRESS = (type: Query) => gql`
   ${type} App($appAddress: String!) {
     app(id: $appAddress) {
+      appId
       version{
         ...Version_version
       }
