@@ -2,7 +2,7 @@ type TokenManager @entity {
   id: ID!
   address: Bytes!
   orgAddress: Bytes!
-  token: MiniMeToken! @derivedFrom(field: "tokenManager")
+  token: MiniMeToken @derivedFrom(field: "tokenManager")
 }
 
 type MiniMeToken @entity {

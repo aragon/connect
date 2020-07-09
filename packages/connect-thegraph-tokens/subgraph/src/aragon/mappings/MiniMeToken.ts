@@ -8,6 +8,7 @@ import { ClaimedTokens as ClaimedTokensEvent } from '../../../generated/template
 import { NewCloneToken as NewCloneTokenEvent } from '../../../generated/templates/MiniMeToken/MiniMeToken'
 import { getTokenManagerId } from './../../TokenManager'
 import { TokenManager as TokenManagerContract } from '../../../generated/templates/TokenManager/TokenManager'
+import * as aragon from '../aragon'
 
 export function handleTransfer(event: TransferEvent): void {
   let tokenAddress = event.address
@@ -15,8 +16,6 @@ export function handleTransfer(event: TransferEvent): void {
 
   let previousBlock = event.block.number.minus(BigInt.fromI32(1))
   let miniMeTokenEntity = _getMiniMeTokenEntity(previousBlock, tokenAddress)
-
-
 
   let sendingHolderAddress = event.params._from
   let sendingHolder = _getTokenHolder(previousBlock, miniMeTokenEntity, sendingHolderAddress)
@@ -50,6 +49,8 @@ function _getMiniMeTokenEntity(previousBlock: BigInt, tokenAddress: Address): Mi
 
   let miniMeTokenEntity = MiniMeTokenEntity.load(miniMeTokenEntityId)
   if (!miniMeTokenEntity) {
+    aragon.processToken(tokenAddress, false)
+
     miniMeTokenEntity = new MiniMeTokenEntity(miniMeTokenEntityId)
     miniMeTokenEntity.address = tokenAddress
 

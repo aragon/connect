@@ -25,10 +25,12 @@ export function processApp(appAddress: Address, appId: string): void {
   }
 }
 
-export function processToken(tokenAddress: Address): void {
+export function processToken(tokenAddress: Address, createTemplate: boolean = true): void {
   if (!_isRegistered(tokenAddress, 'token')) {
-    MiniMeTokenTemplate.create(tokenAddress)
-    hooks.onTokenTemplateCreated(tokenAddress)
+    if (createTemplate) {
+      MiniMeTokenTemplate.create(tokenAddress)
+      hooks.onTokenTemplateCreated(tokenAddress)
+    }
 
     _registerEntity(tokenAddress, 'token')
   }
@@ -80,7 +82,7 @@ function _getAragonInfo(): AragonInfoEntity {
   if (!aragon) {
     aragon = new AragonInfoEntity(aragonId)
 
-    aragon.version = 'tokens-v0.1.0'
+    aragon.version = 'tokens-v0.1.1'
     aragon.orgs = []
     aragon.apps = []
     aragon.tokens = []

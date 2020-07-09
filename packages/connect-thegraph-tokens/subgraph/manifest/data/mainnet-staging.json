@@ -3,16 +3,22 @@
   "dataSources": {
     "Organizations": [
       {
-        "name": "PieDAO",
-        "address": "0x0c188B183FF758500D1D18B432313d10e9F6b8a4",
-        "startBlock": "9593674"
+        "name": "DeepDAO",
+        "address": "0x5aAd137d8f7D2Dc6e1B2548c059B1483360bCC6a",
+        "startBlock": "8134920"
       }
     ],
     "OrganizationFactories": [],
     "OrganizationTemplates": [],
     "LegacyOrganizationTemplates": [],
     "TokenFactories": [],
-    "Tokens": []
+    "Tokens": [
+      {
+        "name": "BrightID_Main_DAO",
+        "address": "0x0077Cd5Eca22e86177cc465633227652ff02F32d",
+        "startBlock": "8134898"
+      }
+    ]
   }
 }
 

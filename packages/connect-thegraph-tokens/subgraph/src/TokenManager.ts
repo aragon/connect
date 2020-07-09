@@ -24,7 +24,9 @@ export function getTokenManagerEntity(proxyAddress: Address): TokenManagerEntity
     tokenManagerEntity.orgAddress = tokenManagerContract.kernel()
 
     let tokenAddress = tokenManagerContract.token()
-    aragon.processToken(tokenAddress)
+    if (tokenAddress.toHexString() != '0x0000000000000000000000000000000000000000') {
+      aragon.processToken(tokenAddress)
+    }
 
     tokenManagerEntity.save()
   }
