@@ -26,11 +26,6 @@ if [ "$MODE" == "libs-only" ]; then
   glob_packages='!packages/*'
 fi
 
-build_command='build'
-if [ "$FAST" == "1" ]; then
-  build_command='build:fast'
-fi
-
 function esbuild_cmd()
 {
   format=$1
@@ -109,19 +104,19 @@ oao run-script --ignore-src '!packages/connect-types' build --parallel
 # references, but it doesn’t seem to work: @aragon/connect-core doesn’t get
 # built first.
 echo 'Building @aragon/connect-core…'
-oao run-script --ignore-src '!packages/connect-core' ${build_command} --parallel
+oao run-script --ignore-src '!packages/connect-core' build --parallel
 
 # Build the connectors.
 echo 'Building the connectors…'
-oao run-script --ignore-src '!packages/connect-{thegraph,ethereum}' ${build_command} --parallel
+oao run-script --ignore-src '!packages/connect-{thegraph,ethereum}' build --parallel
 
 # Build connect and its references, the connectors.
 echo 'Building @aragon/connect…'
-oao run-script --ignore-src '!packages/connect' ${build_command} --parallel
+oao run-script --ignore-src '!packages/connect' build --parallel
 
 # Build the app connectors.
 echo 'Building the app connectors…'
-oao run-script --ignore-src '!packages/connect-{thegraph-*,react}' ${build_command} --parallel
+oao run-script --ignore-src '!packages/connect-{thegraph-*,react}' build --parallel
 
 # Build the examples.
 if [ $MODE != "libs-only" ]; then
