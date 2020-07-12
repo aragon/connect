@@ -29,4 +29,3 @@ Get all the possible transaction paths for a given address. This can be useful t
 | `options.as` | `String` | Address of an Aragon organization, or its agent app, through which the paths should get created. |
 | `options.path` | `String[]` | An array of address that conform a transaction path, it will be verified without calculating other paths. |
 | returns | `Promise<TransactionPath[]>` | Array of all the possible transaction paths. |
-
