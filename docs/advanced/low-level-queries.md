@@ -4,7 +4,7 @@ The data that the Subgraphs contain can be used to answer complex questions. Whi
 
 ## Subgraph schemas
 
-To be able to fetch data from the Subgraph, we first have to understand their [GraphQL schemas](https://graphql.org/learn/schema/). You can find the schemas associated with each Subgraph included officially with Aragon Connect in the [Connectors Reference](../connectors-reference/organizations.md) section.
+To be able to fetch data from the Subgraph, we first have to understand their [GraphQL schemas](https://graphql.org/learn/schema/). You can find the schemas associated with each Subgraph included officially with Aragon Connect in the [Connectors Reference](../connectors/organizations.md) section.
 
 ## Creating a custom query
 
