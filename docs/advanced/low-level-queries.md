@@ -50,16 +50,16 @@ import { GraphQLWrapper } from '@aragon/connect-thegraph'
 
 // Construct the query
 const QUERY = gql`
-query miniMeToken($id: String!, $address: String!) {
-  miniMeToken(id: $id){
-    id
-    totalSupply
-    holders(where: {address: $address}){
-      address
-      balance
+  query miniMeToken($id: String!, $address: String!) {
+    miniMeToken(id: $id) {
+      id
+      totalSupply
+      holders(where: { address: $address }) {
+        address
+        balance
+      }
     }
   }
-}
 `
 
 // Create the GraphQL wrapper using the specific Subgraph URL

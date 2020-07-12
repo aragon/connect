@@ -7,7 +7,7 @@ This file documents the main exports of the library.
 Connects and returns an `Organization` for `location`.
 
 | Name                   | Type                                          | Description                                                                                              |
-| :--------------------- | :-------------------------------------------- | :------------------------------------------------------------------------------------------------------- |
+| ---------------------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | `location`             | `String`                                      | The Ethereum address or ENS domain of an Aragon organization.                                            |
 | `connector`            | `Connector` or `[String, Object]` or `String` | Accepts a `Connector` instance, and either a string or a tuple for embedded connectors and their config. |
 | `options`              | `Object`                                      | The optional configuration object.                                                                       |
@@ -18,7 +18,7 @@ Connects and returns an `Organization` for `location`.
 ### Errors
 
 | Type                   | Description                                            |
-| :--------------------- | :----------------------------------------------------- |
+| ---------------------- | ------------------------------------------------------ |
 | `ConnectionError`      | Gets thrown if the connection fails.                   |
 | `OrganizationNotFound` | Gets thrown if the organization doesn’t seem to exist. |
 

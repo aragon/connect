@@ -40,9 +40,9 @@ But there is one point where Aragon apps clearly differ from traditional OS apps
 
 Every organization also contains a set of three **system apps**, which are generally not removed. These are also smart contracts, and provide core features to organizations:
 
-* The organization kernel and its list of installed apps \(Kernel\).
-* The permissions module of the organization \(ACL\).
-* The ability to forward actions to other apps \(EVM Script Registry\).
+- The organization kernel and its list of installed apps \(Kernel\).
+- The permissions module of the organization \(ACL\).
+- The ability to forward actions to other apps \(EVM Script Registry\).
 
 ![System apps provide the core features of organizations.](./assets/basics-system-apps.png)
 

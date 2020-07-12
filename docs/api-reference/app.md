@@ -5,7 +5,7 @@ An Aragon app installed in an organization from an [aragonPM repository](https:/
 ## Properties
 
 | Name                | Type                                 | Description                                                                                                                                   |
-| :------------------ | :----------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------- |
+| ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | `abi`               | `Abi`                                | The Ethereum contract ABI of the app contract.                                                                                                |
 | `address`           | `String`                             | The address of the app proxy contract \(never changes\).                                                                                      |
 | `appId`             | `String`                             | The `appName` encoded via [namehash](https://eips.ethereum.org/EIPS/eip-137).                                                                 |
@@ -32,7 +32,7 @@ An Aragon app installed in an organization from an [aragonPM repository](https:/
 Fetch the app’s aragonPM repository.
 
 | Name    | Type            | Description                                           |
-| :------ | :-------------- | :---------------------------------------------------- |
+| ------- | --------------- | ----------------------------------------------------- |
 | returns | `Promise<Repo>` | A promise resolving to the app’s aragonPM repository. |
 
 ### App\#roles\(\)
@@ -40,5 +40,5 @@ Fetch the app’s aragonPM repository.
 Fetch the app’s roles.
 
 | Name    | Type              | Description                             |
-| :------ | :---------------- | :-------------------------------------- |
+| ------- | ----------------- | --------------------------------------- |
 | returns | `Promise<Role[]>` | A promise resolving to the app’s roles. |

@@ -18,43 +18,43 @@ Once you have an instance of the `Voting` object, you can use the following API 
 
 Get the list of votes in the provided Voting app.
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
-| `appAddress` | `String` | Address of the Voting app. |
-| `first` | `String` | Pagination argument. |
-| `skip` | `String` | Pagination argument. |
-| returns | `Promise<Vote[]>` | Result data parsed as a list of votes. |
+| Name         | Type              | Description                            |
+| ------------ | ----------------- | -------------------------------------- |
+| `appAddress` | `String`          | Address of the Voting app.             |
+| `first`      | `String`          | Pagination argument.                   |
+| `skip`       | `String`          | Pagination argument.                   |
+| returns      | `Promise<Vote[]>` | Result data parsed as a list of votes. |
 
 ### voting\#onVotesForApp\(appAddress, callback\)
 
 Subscribe to the list of votes in the provided Voting app.
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
-| `appAddress` | `String` | Address of the Voting app. |
-| `callback` | `Function` | Callback function call on every data update. |
-| returns | `Function` | Unsubscribe function. |
+| Name         | Type       | Description                                  |
+| ------------ | ---------- | -------------------------------------------- |
+| `appAddress` | `String`   | Address of the Voting app.                   |
+| `callback`   | `Function` | Callback function call on every data update. |
+| returns      | `Function` | Unsubscribe function.                        |
 
 ### voting\#castsForVote\(voteId, first, skip\)
 
 Get the list of cast votes for a vote.
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
-| `voteId` | `String` | Id of the Vote. |
-| `first` | `String` | Pagination argument. |
-| `skip` | `String` | Pagination argument. |
-| returns | `Promise<Cast[]>` | Result data parsed as a list of casts. |
+| Name     | Type              | Description                            |
+| -------- | ----------------- | -------------------------------------- |
+| `voteId` | `String`          | Id of the Vote.                        |
+| `first`  | `String`          | Pagination argument.                   |
+| `skip`   | `String`          | Pagination argument.                   |
+| returns  | `Promise<Cast[]>` | Result data parsed as a list of casts. |
 
 ### voting\#onCastsForVote\(appAddress, callback\)
 
 Subscribe to the list of cast votes for a vote.
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
-| `voteId` | `String` | Id of the Vote. |
+| Name       | Type       | Description                                  |
+| ---------- | ---------- | -------------------------------------------- |
+| `voteId`   | `String`   | Id of the Vote.                              |
 | `callback` | `Function` | Callback function call on every data update. |
-| returns | `Function` | Unsubscribe function. |
+| returns    | `Function` | Unsubscribe function.                        |
 
 ## Subgraph schema
 

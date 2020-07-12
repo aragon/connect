@@ -61,45 +61,45 @@ Once you have a wrapper instance you can use the following API to create custom 
 
 Perform a GraphQL query.
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
-| `query` | `DocumentNode` | GraphQL query parsed in the standard GraphQL AST. |
-| `args` | `any = {}` | Arguments to pass to fields in the query. |
-| returns | `Promise<QueryResult>` | Query result data. |
+| Name    | Type                   | Description                                       |
+| ------- | ---------------------- | ------------------------------------------------- |
+| `query` | `DocumentNode`         | GraphQL query parsed in the standard GraphQL AST. |
+| `args`  | `any = {}`             | Arguments to pass to fields in the query.         |
+| returns | `Promise<QueryResult>` | Query result data.                                |
 
 **GraphQLWrapper\#performQueryWithParser\(query, args, parser\)**
 
 Perform a GraphQL query and parse the result.
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
-| `query` | `DocumentNode` | GraphQL query parsed in the standard GraphQL AST. |
-| `args` | `any = {}` | Arguments to pass to fields in the query. |
-| `parser` | `Function` | Parser function. |
-| returns | `Promise<any>` | Query result data parsed. |
+| Name     | Type           | Description                                       |
+| -------- | -------------- | ------------------------------------------------- |
+| `query`  | `DocumentNode` | GraphQL query parsed in the standard GraphQL AST. |
+| `args`   | `any = {}`     | Arguments to pass to fields in the query.         |
+| `parser` | `Function`     | Parser function.                                  |
+| returns  | `Promise<any>` | Query result data parsed.                         |
 
 **GraphQLWrapper\#subscribeToQuery\(query, args, callback\)**
 
 Create a GraphQL subscription.
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
-| `query` | `DocumentNode` | GraphQL query parsed in the standard GraphQL AST. |
-| `args` | `any = {}` | Arguments to pass to fields in the query. |
-| `callback` | `Function` | Callback function call on every data update. |
-| returns | `Function` | Unsubscribe function. |
+| Name       | Type           | Description                                       |
+| ---------- | -------------- | ------------------------------------------------- |
+| `query`    | `DocumentNode` | GraphQL query parsed in the standard GraphQL AST. |
+| `args`     | `any = {}`     | Arguments to pass to fields in the query.         |
+| `callback` | `Function`     | Callback function call on every data update.      |
+| returns    | `Function`     | Unsubscribe function.                             |
 
 **GraphQLWrapper\#subscribeToQueryWithParser\(query, args, callback, parser\)**
 
 Create a GraphQL subscription and parse the emitted results.
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
-| `query` | `DocumentNode` | GraphQL query parsed in the standard GraphQL AST. |
-| `args` | `any = {}` | Arguments to pass to fields in the query. |
-| `callback` | `Function` | Callback function call on every data update. |
-| `parser` | `Function` | Parser function. |
-| returns | `Function` | Unsubscribe function. |
+| Name       | Type           | Description                                       |
+| ---------- | -------------- | ------------------------------------------------- |
+| `query`    | `DocumentNode` | GraphQL query parsed in the standard GraphQL AST. |
+| `args`     | `any = {}`     | Arguments to pass to fields in the query.         |
+| `callback` | `Function`     | Callback function call on every data update.      |
+| `parser`   | `Function`     | Parser function.                                  |
+| returns    | `Function`     | Unsubscribe function.                             |
 
 ### Subgraph Schema
 

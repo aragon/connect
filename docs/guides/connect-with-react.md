@@ -72,7 +72,7 @@ ReactDOM.render(
 This component is required in order to use the provided hooks.
 
 | Props                  | Type                                          | Description                                                                                              |
-| :--------------------- | :-------------------------------------------- | :------------------------------------------------------------------------------------------------------- |
+| ---------------------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | `location`             | `String`                                      | The Ethereum address or ENS domain of an Aragon organization.                                            |
 | `connector`            | `Connector` or `[String, Object]` or `String` | Accepts a `Connector` instance, and either a string or a tuple for embedded connectors and their config. |
 | `options`              | `Object`                                      | The optional configuration object.                                                                       |
@@ -82,13 +82,13 @@ This component is required in order to use the provided hooks.
 ### useOrganization()
 
 | Props   | Type                                                                                  | Description                                                                                           |
-| :------ | :------------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------- |
+| ------- | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | returns | `[Organization \| null, { loading: boolean, error: null \| Error, retry: Function }]` | An array containing the [organization](../api-reference/organization.md) and a loading status object. |
 
 ### useApp(appFilters)
 
 | Name                | Type                                                                         | Description                                                                                                                                                                                                                                                   |
-| :------------------ | :--------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| ------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `appFilter`         | `String` or `Object` \(optional\)                                            | When a string is passed, the app will get searched by address if it starts by `0x`, and by `appName` otherwise. See `appFilter.address` and `appFilter.appName` to set them explicitly. For the time being, only one type of filter can get passed at a time. |
 | `appFilter.address` | `String`                                                                     | Same as `appFilter`, but makes the selection by `address` explicit.                                                                                                                                                                                           |
 | `appFilter.appName` | `String`                                                                     | Same as `appFilter`, but makes the selection by `appName` explicit.                                                                                                                                                                                           |
@@ -97,7 +97,7 @@ This component is required in order to use the provided hooks.
 ### useApps(appFilters)
 
 | Name                | Type                                                                   | Description                                                                                                                                                                                                                                                                                                                        |
-| :------------------ | :--------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ------------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `appFilter`         | `String` or `String[]` or object (optional)                            | When a string is passed, apps will get filtered by address if it starts by `0x`, and by `appName` otherwise. When an array is passed, the first entry determines the type of filter. See `appFilter.address` and `appFilter.appName` to set them explicitly. For the time being, only one type of filter can get passed at a time. |
 | `appFilter.address` | `String` or `String[]`                                                 | Same as `appFilter`, but makes the selection by `address` explicit.                                                                                                                                                                                                                                                                |
 | `appFilter.appName` | `String` or `String[]`                                                 | Same as `appFilter`, but makes the selection by `appName` explicit.                                                                                                                                                                                                                                                                |
@@ -106,5 +106,5 @@ This component is required in order to use the provided hooks.
 ### usePermissions()
 
 | Name    | Type                                                                          | Description                                                                                                     |
-| :------ | :---------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------- |
+| ------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | returns | `[Permission[], { loading: boolean, error: null \| Error, retry: Function }]` | An array containing the organization [permissions](../api-reference/permission.md) and a loading status object. |
