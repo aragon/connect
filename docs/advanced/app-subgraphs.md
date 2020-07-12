@@ -1,4 +1,4 @@
-# Creating an app Subgraph
+# Writing an app Subgraph
 
 Creating a Subgraph for an Aragon app is not much different from any other kind of Subgraph. If you’re not already familiar with what can be done in a Subgraph, we recommend checking out [The Graph’s documentation](https://thegraph.com/docs).
 
@@ -20,7 +20,7 @@ For example, if you run `yarn deploy-mainnet`, you’ll deploy a Subgraph named 
 
 The specification for the nomenclature is: `Aragon <AppName> <Network> [Staging]`.
 
-Staging Subgraphs are intended for development, as they index very quickly. We’ll expand more on this in [step 8](#8-test-your-subgraph-with-few-data-sources).
+Staging Subgraphs are intended for development, as they index very quickly. We’ll expand more on this in [step 8](app-subgraphs.md#8-test-your-subgraph-with-few-data-sources).
 
 ### 3. Set up the Subgraph manifest files
 

@@ -65,7 +65,7 @@ yarn add @aragon/connect-thegraph-voting
 yarn add @aragon/connect-thegraph-tokens
 ```
 
-See [“Fetching an app’s state”](#fetching-an-apps-state) below to understand how to use these app connectors.
+See [“Fetching an app’s state”](getting-started.md#fetching-an-apps-state) below to understand how to use these app connectors.
 
 ## Connecting to an organization
 
@@ -190,4 +190,4 @@ for (const transaction of path.transactions) {
 
 Now that you are familiar with the basics of Aragon Connect, you may want to explore the [examples provided in the repository](https://github.com/aragon/connect/tree/master/examples) and the [API documentation](../api-reference/).
 
-If you are using React, you might want to have a look at the [Usage with React](./connect-with-react.md) guide.
+If you are using React, you might want to have a look at the [Usage with React](connect-with-react.md) guide.

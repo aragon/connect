@@ -6,7 +6,7 @@ All existing connectors target all instances of a specific app, and can be deplo
 
 ## Architecture
 
-The connectors are composed of a root project which implements a base connector for The Graph, and an underlying Subgraph. If you don’t have an app Subgraph yet, please refer to our [documentation for creating app Subgraphs](./app-subgraphs.md) and [The Graph’s documentation](https://thegraph.com/docs).
+The connectors are composed of a root project which implements a base connector for The Graph, and an underlying Subgraph. If you don’t have an app Subgraph yet, please refer to our [documentation for creating app Subgraphs](app-subgraphs.md) and [The Graph’s documentation](https://thegraph.com/docs).
 
 ### The connector
 
@@ -26,7 +26,7 @@ In the `subgraph` folder, you’ll find a separate project which defines the Sub
 
 ## Step by step guide
 
-If you haven’t already created an app Subgraph yet, please follow the steps in our [documentation for creating app Subgraphs](./app-subgraphs.md) first. From now on, we’ll assume you have a Subgraph deployed!
+If you haven’t already created an app Subgraph yet, please follow the steps in our [documentation for creating app Subgraphs](app-subgraphs.md) first. From now on, we’ll assume you have a Subgraph deployed!
 
 ### Create the Connector
 
@@ -40,4 +40,4 @@ Coming soon!
 
 ## Troubleshooting
 
-For Subgraph related errors, see the [troubleshooting section in our app Subgraph documentation](./app-subgraphs.md#troubleshooting).
+For Subgraph related errors, see the [troubleshooting section in our app Subgraph documentation](app-subgraphs.md#troubleshooting).
