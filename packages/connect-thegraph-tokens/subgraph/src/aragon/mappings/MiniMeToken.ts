@@ -58,7 +58,7 @@ function _getMiniMeTokenEntity(previousBlock: BigInt, tokenAddress: Address): Mi
     miniMeTokenEntity.name = tokenContract.name()
     miniMeTokenEntity.address = tokenAddress
     miniMeTokenEntity.symbol = tokenContract.symbol()
-    miniMeTokenEntity.totalSupply = tokenContract.totalSupplyAt(previousBlock)
+    miniMeTokenEntity.totalSupply = _getTotalSupplyAt(tokenContract, previousBlock)
     miniMeTokenEntity.transferable = tokenContract.transfersEnabled()
     miniMeTokenEntity.holders = new Array<string>()
 
@@ -90,17 +90,7 @@ function _getTokenHolder(previousBlock: BigInt, miniMeTokenEntity: MiniMeTokenEn
     tokenHolder.tokenAddress = tokenAddress as Address
 
     let tokenContract = MiniMeTokenContract.bind(tokenAddress)
-    let callResult = tokenContract.try_balanceOfAt(holderAddress, previousBlock)
-    if (callResult.reverted) {
-      log.info('balanceOfAt reverted - token {}, holder {}, block {}', [
-        tokenAddress.toHexString(),
-        holderAddress.toHexString(),
-        previousBlock.toString()
-      ])
-      tokenHolder.balance = BigInt.fromI32(0)
-    } else {
-      tokenHolder.balance = callResult.value
-    }
+    tokenHolder.balance = _getBalanceOfAt(tokenContract, holderAddress, previousBlock)
 
     let holders = miniMeTokenEntity.holders
     holders.push(tokenHolder.id)
@@ -112,3 +102,22 @@ function _getTokenHolder(previousBlock: BigInt, miniMeTokenEntity: MiniMeTokenEn
 
   return tokenHolder
 }
+
+function _getTotalSupplyAt(tokenContract: MiniMeTokenContract, blockNumber: BigInt): BigInt {
+  let callResult = tokenContract.try_totalSupplyAt(blockNumber)
+  if (callResult.reverted) {
+    return BigInt.fromI32(0)
+  } else {
+    return callResult.value
+  }
+}
+
+function _getBalanceOfAt(tokenContract: MiniMeTokenContract, holderAddress: Address, blockNumber: BigInt): BigInt {
+  let callResult = tokenContract.try_balanceOfAt(holderAddress, blockNumber)
+  if (callResult.reverted) {
+    return BigInt.fromI32(0)
+  } else {
+    return callResult.value
+  }
+}
+
