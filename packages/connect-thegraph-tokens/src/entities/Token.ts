@@ -1,6 +1,7 @@
-import TokensEntity from "./TokensEntity";
-import TokenHolder from "./TokenHolder";
-import TokenManagerConnectorTheGraph from "../connector";
+import { SubscriptionHandler } from '@aragon/connect-types'
+import TokensEntity from './TokensEntity'
+import TokenHolder from './TokenHolder'
+import TokenManagerConnectorTheGraph from '../connector'
 
 export interface TokenData {
   id: string
@@ -26,17 +27,10 @@ export default class Token extends TokensEntity implements TokenData {
   }
 
   async holders({ first = 1000, skip = 0 } = {}): Promise<TokenHolder[]> {
-    return this._connector.tokenHolders(
-      this.address,
-      first,
-      skip
-    )
+    return this._connector.tokenHolders(this.address, first, skip)
   }
 
-  onHolders(callback: Function): { unsubscribe: Function } {
-    return this._connector.onTokenHolders(
-      this.address,
-      callback
-    )
+  onHolders(callback: Function): SubscriptionHandler {
+    return this._connector.onTokenHolders(this.address, callback)
   }
 }

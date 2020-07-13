@@ -1,3 +1,4 @@
+import { SubscriptionHandler } from '@aragon/connect-types'
 import { GraphQLWrapper } from '@aragon/connect-thegraph'
 import * as queries from './queries'
 import Token from './entities/Token'
@@ -13,7 +14,11 @@ export default class TokenManagerConnectorTheGraph extends GraphQLWrapper {
     )
   }
 
-  async tokenHolders(tokenAddress: string, first: number, skip: number): Promise<TokenHolder[]> {
+  async tokenHolders(
+    tokenAddress: string,
+    first: number,
+    skip: number
+  ): Promise<TokenHolder[]> {
     return this.performQueryWithParser(
       queries.TOKEN_HOLDERS('query'),
       { tokenAddress, first, skip },
@@ -21,7 +26,10 @@ export default class TokenManagerConnectorTheGraph extends GraphQLWrapper {
     )
   }
 
-  onTokenHolders(tokenAddress: string, callback: Function): { unsubscribe: Function } {
+  onTokenHolders(
+    tokenAddress: string,
+    callback: Function
+  ): SubscriptionHandler {
     return this.subscribeToQueryWithParser(
       queries.TOKEN_HOLDERS('subscription'),
       { tokenAddress, first: 1000, skip: 0 },

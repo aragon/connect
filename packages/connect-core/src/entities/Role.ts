@@ -1,8 +1,8 @@
-import CoreEntity from './CoreEntity'
-import Permission, { PermissionData } from './Permission'
+import IOrganizationConnector from '../connections/IOrganizationConnector'
 import { AragonArtifact, Metadata } from '../types'
 import { resolveArtifact } from '../utils/metadata'
-import { ConnectorInterface } from '../connections/ConnectorInterface'
+import CoreEntity from './CoreEntity'
+import Permission, { PermissionData } from './Permission'
 
 export interface RoleData {
   appAddress: string
@@ -27,7 +27,7 @@ export default class Role extends CoreEntity {
   constructor(
     data: RoleData,
     metadata: Metadata,
-    connector: ConnectorInterface
+    connector: IOrganizationConnector
   ) {
     super(connector)
 
@@ -48,7 +48,7 @@ export default class Role extends CoreEntity {
 
   static async create(
     data: RoleData,
-    connector: ConnectorInterface
+    connector: IOrganizationConnector
   ): Promise<Role> {
     const artifact = await resolveArtifact(data)
 

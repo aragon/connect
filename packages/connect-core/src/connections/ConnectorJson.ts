@@ -3,15 +3,16 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { AppFilters } from '@aragon/connect-types'
+import { AppFilters, SubscriptionHandler } from '@aragon/connect-types'
+import IOrganizationConnector from './IOrganizationConnector'
 import { App, Repo, Role } from '..'
 import Permission from '../entities/Permission'
-import { ConnectorInterface } from './ConnectorInterface'
 
 export type ConnectorJsonConfig = { permissions: Permission[] }
 
-class ConnectorJson implements ConnectorInterface {
+class ConnectorJson implements IOrganizationConnector {
   #permissions: Permission[]
+  readonly name = 'json'
 
   constructor({ permissions }: ConnectorJsonConfig) {
     this.#permissions = permissions
@@ -24,7 +25,7 @@ class ConnectorJson implements ConnectorInterface {
   onPermissionsForOrg(
     orgAddress: string,
     callback: Function
-  ): { unsubscribe: Function } {
+  ): SubscriptionHandler {
     return {
       unsubscribe: () => {},
     }
@@ -54,7 +55,7 @@ class ConnectorJson implements ConnectorInterface {
     orgAddress: string,
     filters: AppFilters,
     callback: Function
-  ): { unsubscribe: Function } {
+  ): SubscriptionHandler {
     return {
       unsubscribe: () => {},
     }
@@ -64,7 +65,7 @@ class ConnectorJson implements ConnectorInterface {
     orgAddress: string,
     filters: AppFilters,
     callback: Function
-  ): { unsubscribe: Function } {
+  ): SubscriptionHandler {
     return {
       unsubscribe: () => {},
     }

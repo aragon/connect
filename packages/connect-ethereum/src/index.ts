@@ -3,9 +3,10 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
+import { SubscriptionHandler } from '@aragon/connect-types'
 import { AppFilters } from '@aragon/connect-types'
 import {
-  ConnectorInterface,
+  IOrganizationConnector,
   Permission,
   App,
   Repo,
@@ -14,7 +15,9 @@ import {
 
 export type ConnectorEthereumConfig = object
 
-class ConnectorEthereum implements ConnectorInterface {
+class ConnectorEthereum implements IOrganizationConnector {
+  readonly name = 'ethereum'
+
   constructor(config: ConnectorEthereumConfig = {}) {}
 
   async permissionsForOrg(): Promise<Permission[]> {
@@ -26,7 +29,7 @@ class ConnectorEthereum implements ConnectorInterface {
   onPermissionsForOrg(
     orgAddress: string,
     callback: Function
-  ): { unsubscribe: Function } {
+  ): SubscriptionHandler {
     return {
       unsubscribe: () => {},
     }
@@ -48,7 +51,7 @@ class ConnectorEthereum implements ConnectorInterface {
     orgAddress: string,
     filters: AppFilters,
     callback: Function
-  ): { unsubscribe: Function } {
+  ): SubscriptionHandler {
     return {
       unsubscribe: () => {},
     }
@@ -58,7 +61,7 @@ class ConnectorEthereum implements ConnectorInterface {
     orgAddress: string,
     filters: AppFilters,
     callback: Function
-  ): { unsubscribe: Function } {
+  ): SubscriptionHandler {
     return {
       unsubscribe: () => {},
     }
