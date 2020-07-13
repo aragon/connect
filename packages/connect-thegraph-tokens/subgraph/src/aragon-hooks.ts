@@ -1,5 +1,8 @@
-import { Address } from '@graphprotocol/graph-ts'
-import { getTokenManagerEntity } from './TokenManager'
+import { Address, ethereum } from '@graphprotocol/graph-ts'
+import {
+  getTokenManagerEntity,
+  processOrphanTokenManagers
+} from './TokenManager'
 
 /*
  * Called when an app proxy is detected.
@@ -25,3 +28,7 @@ export function onAppTemplateCreated(appAddress: Address, appId: string): void {
 export function onOrgTemplateCreated(orgAddress: Address): void {}
 
 export function onTokenTemplateCreated(tokenAddress: Address): void {}
+
+export function onBlockEntered(block: ethereum.Block): void {
+  processOrphanTokenManagers()
+}

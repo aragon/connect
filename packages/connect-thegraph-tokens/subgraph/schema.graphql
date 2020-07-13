@@ -25,6 +25,11 @@ type TokenHolder @entity {
   balance: BigInt!
 }
 
+type OrphanTokenManagers @entity {
+  id: ID!
+  apps: [Bytes!]!
+}
+
 type AragonInfo @entity {
   id: ID!
   version: String!
