@@ -86,7 +86,7 @@ function _getAragonInfo(): AragonInfoEntity {
   if (!aragon) {
     aragon = new AragonInfoEntity(aragonId)
 
-    aragon.version = 'tokens-v0.1.1'
+    aragon.version = 'tokens-v0.1.2'
     aragon.orgs = []
     aragon.apps = []
     aragon.tokens = []
