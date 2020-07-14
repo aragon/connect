@@ -1,6 +1,7 @@
-import Entity from "./VotingEntity";
+import { SubscriptionHandler } from '@aragon/connect-types'
+import Entity from './VotingEntity'
 import Cast from './Cast'
-import VotingConnectorTheGraph from "../connector";
+import VotingConnectorTheGraph from '../connector'
 
 export interface VoteData {
   id: string
@@ -38,17 +39,10 @@ export default class Vote extends Entity implements VoteData {
   }
 
   async casts({ first = 1000, skip = 0 } = {}): Promise<Cast[]> {
-    return this._connector.castsForVote(
-      this.id,
-      first,
-      skip
-    )
+    return this._connector.castsForVote(this.id, first, skip)
   }
 
-  onCasts(callback: Function): { unsubscribe: Function } {
-    return this._connector.onCastsForVote(
-      this.id,
-      callback
-    )
+  onCasts(callback: Function): SubscriptionHandler {
+    return this._connector.onCastsForVote(this.id, callback)
   }
 }

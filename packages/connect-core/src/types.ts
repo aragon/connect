@@ -1,4 +1,5 @@
 import { ethers } from 'ethers'
+import { Address, Network } from '@aragon/connect-types'
 
 export type Metadata = (AragonArtifact | AragonManifest)[]
 
