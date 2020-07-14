@@ -1,3 +1,5 @@
+export { default as IAppConnected } from './connections/IAppConnected'
+export { default as IAppConnector } from './connections/IAppConnector'
 export { default as IOrganizationConnector } from './connections/IOrganizationConnector'
 export {
   default as ConnectorJson,

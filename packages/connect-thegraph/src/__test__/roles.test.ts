@@ -15,7 +15,7 @@ describe('when connecting to the mainnet subgraph', () => {
   let connector: ConnectorTheGraph
 
   beforeAll(() => {
-    connector = new ConnectorTheGraph(MAINNET_NETWORK)
+    connector = new ConnectorTheGraph({ network: MAINNET_NETWORK })
   })
 
   describe('when querying the roles associated with an app', () => {

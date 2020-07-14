@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { SubscriptionHandler } from '@aragon/connect-types'
+import { Network, SubscriptionHandler } from '@aragon/connect-types'
 import { AppFilters } from '@aragon/connect-types'
 import {
   IOrganizationConnector,
@@ -13,12 +13,17 @@ import {
   Role,
 } from '@aragon/connect-core'
 
-export type ConnectorEthereumConfig = object
+export type ConnectorEthereumConfig = {
+  network: Network
+}
 
 class ConnectorEthereum implements IOrganizationConnector {
   readonly name = 'ethereum'
+  readonly network: Network
 
-  constructor(config: ConnectorEthereumConfig = {}) {}
+  constructor(config: ConnectorEthereumConfig) {
+    this.network = config.network
+  }
 
   async permissionsForOrg(): Promise<Permission[]> {
     return new Promise(resolve => {

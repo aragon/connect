@@ -1,6 +1,6 @@
-import { OperationResult } from "@urql/core"
+import { OperationResult } from '@urql/core'
 
 export type QueryResult = OperationResult<any>
 export type DataGql = any
 
-export type ParseFunction = (data: DataGql, connector: any) => {}
+export type ParseFunction = (data: DataGql) => any

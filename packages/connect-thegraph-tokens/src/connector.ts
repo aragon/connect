@@ -5,12 +5,18 @@ import Token from './entities/Token'
 import TokenHolder from './entities/TokenHolder'
 import { parseToken, parseTokenHolders } from './parsers'
 
-export default class TokenManagerConnectorTheGraph extends GraphQLWrapper {
+export default class TokenManagerConnectorTheGraph {
+  #gql: GraphQLWrapper
+
+  constructor(subgraphUrl: string, verbose = false) {
+    this.#gql = new GraphQLWrapper(subgraphUrl, verbose)
+  }
+
   async token(tokenManagerAddress: string): Promise<Token> {
-    return this.performQueryWithParser(
+    return this.#gql.performQueryWithParser<Token>(
       queries.TOKEN('query'),
       { tokenManagerAddress },
-      parseToken
+      result => parseToken(result, this)
     )
   }
 
@@ -19,10 +25,10 @@ export default class TokenManagerConnectorTheGraph extends GraphQLWrapper {
     first: number,
     skip: number
   ): Promise<TokenHolder[]> {
-    return this.performQueryWithParser(
+    return this.#gql.performQueryWithParser<TokenHolder[]>(
       queries.TOKEN_HOLDERS('query'),
       { tokenAddress, first, skip },
-      parseTokenHolders
+      result => parseTokenHolders(result, this)
     )
   }
 
@@ -30,11 +36,11 @@ export default class TokenManagerConnectorTheGraph extends GraphQLWrapper {
     tokenAddress: string,
     callback: Function
   ): SubscriptionHandler {
-    return this.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser(
       queries.TOKEN_HOLDERS('subscription'),
       { tokenAddress, first: 1000, skip: 0 },
       callback,
-      parseTokenHolders
+      result => parseTokenHolders(result, this)
     )
   }
 }

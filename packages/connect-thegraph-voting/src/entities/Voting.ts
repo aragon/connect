@@ -1,9 +1,10 @@
 import { SubscriptionHandler } from '@aragon/connect-types'
+import { IAppConnected } from '@aragon/connect-core'
 import VotingEntity from './VotingEntity'
 import Vote from './Vote'
 import VotingConnectorTheGraph from '../connector'
 
-export default class Voting extends VotingEntity {
+export default class Voting extends VotingEntity implements IAppConnected {
   readonly appAddress: string
 
   constructor(appAddress: string, subgraphUrl: string, verbose = false) {

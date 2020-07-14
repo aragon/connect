@@ -2,14 +2,15 @@ import Repo from './Repo'
 import Role from './Role'
 import CoreEntity from './CoreEntity'
 import {
+  Abi,
+  AppIntent,
   AragonArtifact,
   AragonManifest,
   Metadata,
-  Abi,
-  AppIntent,
 } from '../types'
 import { resolveManifest, resolveArtifact } from '../utils/metadata'
 import IOrganizationConnector from '../connections/IOrganizationConnector'
+import IAppConnected from '../connections/IAppConnected'
 
 // TODO:
 // [ ] (ipfs) contentUrl 	String 	The HTTP URL of the app content. Uses the IPFS HTTP provider. E.g. http://gateway.ipfs.io/ipfs/QmdLEDDfi…/ (ContentUri passing through the resolver)
@@ -79,6 +80,18 @@ export default class App extends CoreEntity {
     const metadata: Metadata = [artifact, manifest]
 
     return new App(data, metadata, connector)
+  }
+
+  // `any` should be IAppConnector here, but it the TS type checker restricts
+  // it to IAppConnector only in that case, rather than the connector being passed.
+  async connect(
+    // appConnect: (app: App, connector: IOrganizationConnector) => IAppConnected
+    appConnect: (app: App, connector: IOrganizationConnector) => any
+  ) {
+    if (typeof appConnect !== 'function') {
+      throw new Error('The passed value is not an app connector.')
+    }
+    return appConnect(this, this._connector)
   }
 
   async repo(): Promise<Repo> {

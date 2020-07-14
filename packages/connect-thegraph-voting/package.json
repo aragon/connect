@@ -15,9 +15,7 @@
     "compile": "tsc",
     "lint": "eslint --ext .ts ./src"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "devDependencies": {
     "@types/jest": "^26.0.0",
     "@types/react": "^16.9.34",
@@ -35,13 +33,7 @@
     "graphql-tag": "^2.10.3"
   },
   "description": "Access and interact with Aragon Organizations and their apps.",
-  "keywords": [
-    "ethereum",
-    "javascript",
-    "web3",
-    "dapp",
-    "aragon"
-  ],
+  "keywords": ["ethereum", "javascript", "web3", "dapp", "aragon"],
   "author": "Aragon Association <legal@aragon.org>",
   "homepage": "https://github.com/aragon/connect",
   "bugs": "https://github.com/aragon/connect/issues",

@@ -1,4 +1,3 @@
-import { ethers } from 'ethers'
 import {
   Address,
   AppFilters,
@@ -65,8 +64,8 @@ export default class Organization {
     return this.#connection.orgAddress
   }
 
-  get provider(): ethers.providers.Provider {
-    return this.#connection.ethersProvider
+  get _connection(): ConnectionContext {
+    return this.#connection
   }
 
   ///////// APPS ///////////

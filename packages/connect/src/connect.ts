@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
 import {
+  ConnectionContext,
   ConnectorJson,
   ConnectorJsonConfig,
   IOrganizationConnector,
@@ -54,7 +55,7 @@ function getIpfsResolver(ipfs: ConnectOptions['ipfs']) {
 
 function normalizeConnectorConfig(
   connector: ConnectorDeclaration
-): [string, object] | null {
+): [string, any] | null {
   if (Array.isArray(connector)) {
     return [connector[0], connector[1] || {}]
   }
@@ -76,12 +77,18 @@ function getConnector(
 
   const [name, config] = normalizedConfig
 
+  if (!config.network) {
+    config.network = network
+  }
+
   if (name === 'json') {
     return new ConnectorJson(config as ConnectorJsonConfig)
   }
+
   if (name === 'thegraph') {
-    return new ConnectorTheGraph(network, config as ConnectorTheGraphConfig)
+    return new ConnectorTheGraph(config as ConnectorTheGraphConfig)
   }
+
   if (name === 'ethereum') {
     return new ConnectorEthereum(config as ConnectorEthereumConfig)
   }
@@ -164,7 +171,7 @@ async function connect(
     orgConnector.connect?.(),
   ])
 
-  return new Organization({
+  const connectionContext = {
     actAs: actAs || null,
     ethereumProvider: ethereumProvider || null,
     ethersProvider,
@@ -173,7 +180,9 @@ async function connect(
     orgAddress,
     orgConnector,
     orgLocation: location,
-  })
+  }
+
+  return new Organization(connectionContext)
 }
 
 export default connect

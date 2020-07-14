@@ -1,9 +1,13 @@
-import { Permission, PermissionData } from '@aragon/connect-core'
+import {
+  IOrganizationConnector,
+  Permission,
+  PermissionData,
+} from '@aragon/connect-core'
 import { QueryResult } from '../types'
 
 export function parsePermissions(
   result: QueryResult,
-  connector: any
+  connector: IOrganizationConnector
 ): Permission[] {
   const org = result.data.organization
   const permissions = org?.permissions
@@ -31,7 +35,9 @@ export function parsePermissions(
     }
   )
 
-  const allowedPermissions = datas.filter((data: PermissionData) => data.allowed)
+  const allowedPermissions = datas.filter(
+    (data: PermissionData) => data.allowed
+  )
 
   return allowedPermissions.map((data: PermissionData) => {
     return new Permission(data, connector)

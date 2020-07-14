@@ -5,25 +5,31 @@ import Vote from './entities/Vote'
 import Cast from './entities/Cast'
 import { parseVotes, parseCasts } from './parsers'
 
-export default class VotingConnectorTheGraph extends GraphQLWrapper {
+export default class VotingConnectorTheGraph {
+  #gql: GraphQLWrapper
+
+  constructor(subgraphUrl: string, verbose = false) {
+    this.#gql = new GraphQLWrapper(subgraphUrl, verbose)
+  }
+
   async votesForApp(
     appAddress: string,
     first: number,
     skip: number
   ): Promise<Vote[]> {
-    return this.performQueryWithParser(
+    return this.#gql.performQueryWithParser(
       queries.ALL_VOTES('query'),
       { appAddress, first, skip },
-      parseVotes
+      result => parseVotes(result, this)
     )
   }
 
   onVotesForApp(appAddress: string, callback: Function): SubscriptionHandler {
-    return this.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser(
       queries.ALL_VOTES('subscription'),
       { appAddress, first: 1000, skip: 0 },
       callback,
-      parseVotes
+      result => parseVotes(result, this)
     )
   }
 
@@ -32,19 +38,19 @@ export default class VotingConnectorTheGraph extends GraphQLWrapper {
     first: number,
     skip: number
   ): Promise<Cast[]> {
-    return this.performQueryWithParser(
+    return this.#gql.performQueryWithParser(
       queries.CASTS_FOR_VOTE('query'),
       { voteId, first, skip },
-      parseCasts
+      result => parseCasts(result, this)
     )
   }
 
   onCastsForVote(voteId: string, callback: Function): SubscriptionHandler {
-    return this.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser(
       queries.CASTS_FOR_VOTE('subscription'),
       { voteId, first: 1000, skip: 0 },
       callback,
-      parseCasts
+      result => parseCasts(result, this)
     )
   }
 }

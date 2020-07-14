@@ -1,4 +1,4 @@
-import VotingConnectorTheGraph from "../connector";
+import VotingConnectorTheGraph from '../connector'
 
 export default class VotingEntity {
   protected _connector: VotingConnectorTheGraph
