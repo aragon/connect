@@ -1,12 +1,8 @@
-import { ethereum, Address, DataSourceTemplate } from '@graphprotocol/graph-ts'
+import { Address, DataSourceTemplate } from '@graphprotocol/graph-ts'
 import { AragonInfo as AragonInfoEntity } from '../../generated/schema'
 import { Kernel as KernelTemplate } from '../../generated/templates'
 import { MiniMeToken as MiniMeTokenTemplate } from '../../generated/templates'
 import * as hooks from '../aragon-hooks'
-
-export function processBlock(block: ethereum.Block): void {
-  hooks.onBlockEntered(block)
-}
 
 export function processOrg(orgAddress: Address): void {
   if (!_isRegistered(orgAddress, 'org')) {
@@ -86,7 +82,7 @@ function _getAragonInfo(): AragonInfoEntity {
   if (!aragon) {
     aragon = new AragonInfoEntity(aragonId)
 
-    aragon.version = 'tokens-v0.1.2'
+    aragon.version = 'tokens-v0.1.3'
     aragon.orgs = []
     aragon.apps = []
     aragon.tokens = []

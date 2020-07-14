@@ -1,4 +1,4 @@
-import { Address, ethereum } from '@graphprotocol/graph-ts'
+import { Address } from '@graphprotocol/graph-ts'
 import {
   getTokenManagerEntity,
   processOrphanTokenManagers
@@ -23,12 +23,9 @@ export function getTemplateForApp(appId: string): string | null {
 
 export function onAppTemplateCreated(appAddress: Address, appId: string): void {
   getTokenManagerEntity(appAddress)
+  processOrphanTokenManagers()
 }
 
 export function onOrgTemplateCreated(orgAddress: Address): void {}
 
 export function onTokenTemplateCreated(tokenAddress: Address): void {}
-
-export function onBlockEntered(block: ethereum.Block): void {
-  processOrphanTokenManagers()
-}

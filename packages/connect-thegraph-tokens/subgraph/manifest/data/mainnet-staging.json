@@ -12,7 +12,13 @@
     "OrganizationTemplates": [],
     "LegacyOrganizationTemplates": [],
     "TokenFactories": [],
-    "Tokens": []
+    "Tokens": [
+      {
+        "name": "BrightID_Main_DAO",
+        "address": "0x0077Cd5Eca22e86177cc465633227652ff02F32d",
+        "startBlock": 8134898
+      }
+    ]
   }
 }
 

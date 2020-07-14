@@ -6,7 +6,7 @@ import { MiniMeToken as MiniMeTokenContract } from '../../../generated/templates
 import { Approval as ApprovalEvent } from '../../../generated/templates/MiniMeToken/MiniMeToken'
 import { ClaimedTokens as ClaimedTokensEvent } from '../../../generated/templates/MiniMeToken/MiniMeToken'
 import { NewCloneToken as NewCloneTokenEvent } from '../../../generated/templates/MiniMeToken/MiniMeToken'
-import { getTokenManagerId } from './../../TokenManager'
+import { getTokenManagerId, getTokenManagerEntity } from './../../TokenManager'
 import { TokenManager as TokenManagerContract } from '../../../generated/templates/TokenManager/TokenManager'
 import * as aragon from '../aragon'
 
@@ -65,6 +65,13 @@ function _getMiniMeTokenEntity(previousBlock: BigInt, tokenAddress: Address): Mi
     let tokenManagerAddress = tokenContract.controller()
     miniMeTokenEntity.tokenManager = getTokenManagerId(tokenManagerAddress)
     miniMeTokenEntity.appAddress = tokenManagerAddress
+
+    // This token's associated TokenManager entity might not
+    // be connected to the token. Since its 'token' property
+    // is derived from MiniMeTokenEntity's, simply loading it and saving it
+    // should trigger the refresh and connect the TokenManager to the MiniMeToken.
+    let tokenManagerEntity = getTokenManagerEntity(tokenManagerAddress)
+    tokenManagerEntity.save()
 
     let tokenManagerContract = TokenManagerContract.bind(tokenManagerAddress)
     miniMeTokenEntity.orgAddress = tokenManagerContract.kernel()

@@ -43,16 +43,18 @@ export function processOrphanTokenManagers(): void {
   let registry = _getOrphanTokenManagersEntity()
 
   let apps = registry.apps
-  for (let i = 0; i < apps.length; i++) {
-    let proxyAddress = apps[i] as Address
+  if (apps.length > 0) {
+    for (let i = 0; i < apps.length; i++) {
+      let proxyAddress = apps[i] as Address
 
-    let tokenManagerContract = TokenManagerContract.bind(proxyAddress)
+      let tokenManagerContract = TokenManagerContract.bind(proxyAddress)
 
-    let tokenAddress = tokenManagerContract.token()
-    if (tokenAddress.toHexString() != '0x0000000000000000000000000000000000000000') {
-      _unregisterOrphanTokenManager(proxyAddress)
+      let tokenAddress = tokenManagerContract.token()
+      if (tokenAddress.toHexString() != '0x0000000000000000000000000000000000000000') {
+        _unregisterOrphanTokenManager(proxyAddress)
 
-      aragon.processToken(tokenAddress)
+        aragon.processToken(tokenAddress)
+      }
     }
   }
 }
