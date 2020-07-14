@@ -1,9 +1,9 @@
-import { ConnectorInterface } from '../connections/ConnectorInterface'
+import IOrganizationConnector from '../connections/IOrganizationConnector'
 
 export default class CoreEntity {
-  protected _connector: ConnectorInterface
+  protected _connector: IOrganizationConnector
 
-  constructor(connector: ConnectorInterface) {
+  constructor(connector: IOrganizationConnector) {
     this._connector = connector
   }
 }

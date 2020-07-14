@@ -1,14 +1,17 @@
+import { AppFilters, Network } from '@aragon/connect-types'
 import App from '../entities/App'
 import Permission from '../entities/Permission'
 import Repo from '../entities/Repo'
 import Role from '../entities/Role'
-import { AppFilters } from '@aragon/connect-types'
 
-export interface ConnectorInterface {
+export default interface IOrganizationConnector {
+  readonly name: string
+  readonly network: Network
   appByAddress(appAddress: string): Promise<App>
   appForOrg(orgAddress: string, filters?: AppFilters): Promise<App>
   appsForOrg(orgAddress: string, filters?: AppFilters): Promise<App[]>
-  chainId?: number
+  chainId?: string
+  connect?: () => Promise<void>
   onAppsForOrg(
     orgAddress: string,
     filters: AppFilters,

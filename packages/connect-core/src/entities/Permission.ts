@@ -1,7 +1,7 @@
 import CoreEntity from './CoreEntity'
 import App from './App'
 import Role from './Role'
-import { ConnectorInterface } from '../connections/ConnectorInterface'
+import IOrganizationConnector from '../connections/IOrganizationConnector'
 
 export interface ParamData {
   argumentId: number
@@ -24,7 +24,7 @@ export default class Permission extends CoreEntity implements PermissionData {
   readonly params!: ParamData[]
   readonly roleHash!: string
 
-  constructor(data: PermissionData, connector: ConnectorInterface) {
+  constructor(data: PermissionData, connector: IOrganizationConnector) {
     super(connector)
 
     this.allowed = data.allowed

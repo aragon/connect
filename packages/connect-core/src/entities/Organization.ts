@@ -5,7 +5,7 @@ import App from './App'
 import TransactionIntent from '../transactions/TransactionIntent'
 import Permission from './Permission'
 import { XDAI_WSS_ENDPOINT } from '../params'
-import { ConnectorInterface } from '../connections/ConnectorInterface'
+import IOrganizationConnector from '../connections/IOrganizationConnector'
 import { toArrayEntry } from '../utils/misc'
 
 // TODO
@@ -54,11 +54,11 @@ export default class Organization {
   #provider: ethers.providers.Provider
   #connected: boolean
 
-  private _connector: ConnectorInterface
+  private _connector: IOrganizationConnector
 
   constructor(
     location: string,
-    connector: ConnectorInterface,
+    connector: IOrganizationConnector,
     provider: any,
     network: Network
   ) {
