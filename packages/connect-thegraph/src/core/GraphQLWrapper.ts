@@ -6,11 +6,10 @@ import {
   subscriptionExchange,
   createRequest,
 } from '@urql/core'
-import { SubscriptionOperation } from '@urql/core/dist/types/exchanges/subscription'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { DocumentNode } from 'graphql'
-import { ParseFunction, QueryResult } from '../types'
 import { pipe, subscribe } from 'wonka'
+import { ParseFunction, QueryResult, SubscriptionOperation } from '../types'
 
 export default class GraphQLWrapper {
   #client: Client
