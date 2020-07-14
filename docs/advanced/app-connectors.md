@@ -41,4 +41,3 @@ Coming soon!
 ## Troubleshooting
 
 For Subgraph related errors, see the [troubleshooting section in our app Subgraph documentation](app-subgraphs.md#troubleshooting).
-

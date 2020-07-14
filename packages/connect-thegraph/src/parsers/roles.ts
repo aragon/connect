@@ -30,7 +30,7 @@ async function _parseRole(role: any, app: any, connector: any): Promise<Role> {
     grantees,
     appId: app.appId,
     artifact: app.version?.artifact,
-    contentUri: app?.contentUri,
+    contentUri: app.version?.contentUri,
   }
 
   return Role.create(roleData, connector)

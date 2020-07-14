@@ -1,7 +1,7 @@
 {
   "name": "org-viewer-web",
   "main": "dist/index.js",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "private": true,
   "sideEffects": false,
   "scripts": {

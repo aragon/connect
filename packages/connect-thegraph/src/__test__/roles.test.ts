@@ -60,6 +60,11 @@ describe('when connecting to the mainnet subgraph', () => {
         expect(isAddress(role.manager!)).toBeTruthy()
       })
 
+      test('should have a valid name', () => {
+        expect(role.name).toBeDefined()
+        expect(role.name!.length).toBeGreaterThan(0)
+      })
+
       test('has a valid hash', () => {
         expect(isBytes32(role.hash)).toBeTruthy()
       })

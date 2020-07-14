@@ -1,7 +1,7 @@
 {
   "name": "nodejs",
   "main": "dist/index.js",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "private": true,
   "scripts": {
     "build": "yarn clean && yarn compile",
@@ -17,7 +17,8 @@
     "start-voting-low-level": "yarn build; node dist/src/voting-low-level.js",
     "start-subscriptions-low-level": "yarn build; node dist/src/subscriptions-low-level.js",
     "start-subscriptions-org": "yarn build; node dist/src/subscriptions-org.js",
-    "start-subscriptions-tokens": "yarn build; node dist/src/subscriptions-tokens.js"
+    "start-subscriptions-tokens": "yarn build; node dist/src/subscriptions-tokens.js",
+    "start-create-org": "yarn build; node dist/src/create-org.js"
   },
   "dependencies": {
     "@aragon/connect": "*",
