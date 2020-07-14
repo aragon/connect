@@ -1,8 +1,8 @@
 import { ethers } from 'ethers'
 import {
-  ConnectorInterface,
   ConnectorJson,
   ConnectorJsonConfig,
+  IOrganizationConnector,
   Organization,
 } from '@aragon/connect-core'
 import ConnectorEthereum, {
@@ -25,13 +25,13 @@ export type ConnectOptions = {
 }
 
 export type ConnectorDeclaration =
-  | ConnectorInterface
+  | IOrganizationConnector
   | [string, object | undefined]
   | string
 
 function normalizeConnectorConfig(
   connector: ConnectorDeclaration
-): [string, object] | null {
+): [string, any] | null {
   if (Array.isArray(connector)) {
     return [connector[0], connector[1] || {}]
   }
@@ -44,21 +44,27 @@ function normalizeConnectorConfig(
 function getConnector(
   connector: ConnectorDeclaration,
   network: Network
-): ConnectorInterface {
+): IOrganizationConnector {
   const normalizedConfig = normalizeConnectorConfig(connector)
 
   if (normalizedConfig === null) {
-    return connector as ConnectorInterface
+    return connector as IOrganizationConnector
   }
 
   const [name, config] = normalizedConfig
 
+  if (!config.network) {
+    config.network = network
+  }
+
   if (name === 'json') {
     return new ConnectorJson(config as ConnectorJsonConfig)
   }
+
   if (name === 'thegraph') {
-    return new ConnectorTheGraph(network, config as ConnectorTheGraphConfig)
+    return new ConnectorTheGraph(config as ConnectorTheGraphConfig)
   }
+
   if (name === 'ethereum') {
     return new ConnectorEthereum(config as ConnectorEthereumConfig)
   }
@@ -66,7 +72,7 @@ function getConnector(
   throw new Error(`Unsupported connector name: ${name}`)
 }
 
-function getNetwork(chainId?: number): Network | null {
+function getNetwork(chainId?: number): Network {
   if (chainId === 1 || !chainId) {
     return {
       chainId: 1,
@@ -88,7 +94,7 @@ function getNetwork(chainId?: number): Network | null {
       ensAddress: '0xaafca6b0c89521752e559650206d7c925fd0e530',
     }
   }
-  return null
+  throw new Error(`Invalid chainId provided: ${chainId}`)
 }
 
 async function connect(

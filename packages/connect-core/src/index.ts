@@ -1,4 +1,4 @@
-export { ConnectorInterface } from './connections/ConnectorInterface'
+export { default as IOrganizationConnector } from './connections/IOrganizationConnector'
 export {
   default as ConnectorJson,
   ConnectorJsonConfig,
