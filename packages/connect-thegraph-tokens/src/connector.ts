@@ -5,6 +5,12 @@ import TokenHolder from './entities/TokenHolder'
 import { parseToken, parseTokenHolders } from './parsers'
 
 export default class TokenManagerConnectorTheGraph extends GraphQLWrapper {
+  async connect() {}
+
+  async disconnect() {
+    this.close()
+  }
+
   async token(tokenManagerAddress: string): Promise<Token> {
     return this.performQueryWithParser(
       queries.TOKEN('query'),

@@ -5,6 +5,12 @@ import Cast from './entities/Cast'
 import { parseVotes, parseCasts } from './parsers'
 
 export default class VotingConnectorTheGraph extends GraphQLWrapper {
+  async connect() {}
+
+  async disconnect() {
+    this.close()
+  }
+
   async votesForApp(appAddress: string, first: number, skip: number): Promise<Vote[]> {
     return this.performQueryWithParser(
       queries.ALL_VOTES('query'),
