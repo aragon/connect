@@ -16,6 +16,10 @@ describe('when connecting to the mainnet subgraph', () => {
     connector = new ConnectorTheGraph(MAINNET_NETWORK)
   })
 
+  afterAll(async () => {
+    await connector.disconnect()
+  })
+
   describe('when querying for the permissions of an org', () => {
     let permissions: Permission[]
 

@@ -11,7 +11,11 @@ export default class VotingConnectorTheGraph extends GraphQLWrapper {
     this.close()
   }
 
-  async votesForApp(appAddress: string, first: number, skip: number): Promise<Vote[]> {
+  async votesForApp(
+    appAddress: string,
+    first: number,
+    skip: number
+  ): Promise<Vote[]> {
     return this.performQueryWithParser(
       queries.ALL_VOTES('query'),
       { appAddress, first, skip },
@@ -19,7 +23,10 @@ export default class VotingConnectorTheGraph extends GraphQLWrapper {
     )
   }
 
-  onVotesForApp(appAddress: string, callback: Function): { unsubscribe: Function } {
+  onVotesForApp(
+    appAddress: string,
+    callback: Function
+  ): { unsubscribe: Function } {
     return this.subscribeToQueryWithParser(
       queries.ALL_VOTES('subscription'),
       { appAddress, first: 1000, skip: 0 },
@@ -28,7 +35,11 @@ export default class VotingConnectorTheGraph extends GraphQLWrapper {
     )
   }
 
-  async castsForVote(voteId: string, first: number, skip: number): Promise<Cast[]> {
+  async castsForVote(
+    voteId: string,
+    first: number,
+    skip: number
+  ): Promise<Cast[]> {
     return this.performQueryWithParser(
       queries.CASTS_FOR_VOTE('query'),
       { voteId, first, skip },
@@ -36,7 +47,10 @@ export default class VotingConnectorTheGraph extends GraphQLWrapper {
     )
   }
 
-  onCastsForVote(voteId: string, callback: Function): { unsubscribe: Function } {
+  onCastsForVote(
+    voteId: string,
+    callback: Function
+  ): { unsubscribe: Function } {
     return this.subscribeToQueryWithParser(
       queries.CASTS_FOR_VOTE('subscription'),
       { voteId, first: 1000, skip: 0 },

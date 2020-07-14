@@ -12,6 +12,10 @@ describe('when connecting to a voting app', () => {
     )
   })
 
+  afterAll(async () => {
+    await connector.disconnect()
+  })
+
   describe('when querying for all the votes of a voting app', () => {
     let votes: Vote[]
 
