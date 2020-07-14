@@ -5,7 +5,7 @@ import MiniMeToken from './artifacts/MiniMeToken.json'
 import Token from './artifacts/Token.json'
 
 const privateKey =
-  '0x28b99031bcce07fac7c3fd1c3e88a4e99e346ffde291fefee8b75c133552f027'
+  '0xa8a54b2d8197bc0b19bb8a084031be71835580a01e70a45a13babd16c9bc1563'
 
 const DAO_ID = 'gardens' + Math.random() // Note this must be unique for each deployment, change it for subsequent deployments
 const TOKEN_OWNER = '0x625236038836CecC532664915BD0399647E7826b'
@@ -76,12 +76,15 @@ async function main() {
 
   const TEMPLATE_NAME = 'gardens-template'
 
+  const templateAddress = '0xa21b6c0ac58e2d21114ed3e88cec769234e41ece' // Hardcode Address deployed to xDai
+
+  // 0x2Cd20c209FB30e403Ac365e961aD7B879a327476
+
   // fetch Repos data
   const { data } = await fetchRepo(TEMPLATE_NAME, MAIN_SUBGRAPH_RINKEBY)
 
   // parse data from last version published
   const { lastVersion } = data.repos[0]
-  const templateAddress = lastVersion.codeAddress
   const templateArtifact = JSON.parse(lastVersion.artifact)
 
   // create signer
