@@ -101,13 +101,10 @@ async function connect(
     throw new Error(`Invalid chainId provided: ${chainId}`)
   }
 
-  const org = new Organization(
-    location,
-    getConnector(connector, network),
-    readProvider,
-    network
-  )
+  const _connector = getConnector(connector, network)
+  await _connector.connect?.()
 
+  const org = new Organization(location, _connector, readProvider, network)
   await org._connect()
 
   return org

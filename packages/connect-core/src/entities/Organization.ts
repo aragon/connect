@@ -95,6 +95,10 @@ export default class Organization {
     return true
   }
 
+  async disconnect() {
+    this._connector.disconnect?.()
+  }
+
   private checkConnected() {
     if (!this.#connected) {
       throw new Error(

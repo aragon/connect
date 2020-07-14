@@ -9,6 +9,8 @@ export interface ConnectorInterface {
   appForOrg(orgAddress: string, filters?: AppFilters): Promise<App>
   appsForOrg(orgAddress: string, filters?: AppFilters): Promise<App[]>
   chainId?: number
+  connect?(): Promise<void>
+  disconnect?(): Promise<void>
   onAppsForOrg(
     orgAddress: string,
     filters: AppFilters,

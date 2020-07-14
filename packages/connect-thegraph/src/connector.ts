@@ -65,6 +65,12 @@ export default class ConnectorTheGraph extends GraphQLWrapper
     super(_orgSubgraphUrl, verbose)
   }
 
+  async connect() {}
+
+  async disconnect() {
+    this.close()
+  }
+
   async rolesForAddress(appAddress: string): Promise<Role[]> {
     return this.performQueryWithParser(
       queries.ROLE_BY_APP_ADDRESS('query'),

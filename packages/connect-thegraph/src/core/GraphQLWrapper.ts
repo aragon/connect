@@ -24,6 +24,7 @@ function filterSubgraphUrl(url: string): [string, string] {
 export default class GraphQLWrapper {
   #client: Client
   #verbose: boolean
+  close: () => void
 
   constructor(subgraphUrl: string, verbose = false) {
     const [urlHttp, urlWs] = filterSubgraphUrl(subgraphUrl)
@@ -48,6 +49,7 @@ export default class GraphQLWrapper {
     })
 
     this.#verbose = verbose
+    this.close = () => subscriptionClient.close()
   }
 
   subscribeToQuery(
