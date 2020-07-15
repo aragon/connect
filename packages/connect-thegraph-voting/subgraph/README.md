@@ -1,3 +1,3 @@
-# Example Subgraph
+# Aragon Voting Subgraph
 
-An example to help you get started with The Graph. For more information see the docs on https://thegraph.com/docs/.
+Universal subgraph, for all Aragon Voting apps.
