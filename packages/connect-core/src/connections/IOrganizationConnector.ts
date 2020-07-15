@@ -1,4 +1,5 @@
 import { AppFilters, Network, SubscriptionHandler } from '@aragon/connect-types'
+import { ConnectionContext } from '../types'
 import App from '../entities/App'
 import Permission from '../entities/Permission'
 import Repo from '../entities/Repo'
@@ -10,8 +11,8 @@ export default interface IOrganizationConnector {
   appByAddress(appAddress: string): Promise<App>
   appForOrg(orgAddress: string, filters?: AppFilters): Promise<App>
   appsForOrg(orgAddress: string, filters?: AppFilters): Promise<App[]>
-  chainId?: string
-  connect?: () => Promise<void>
+  connect(connection: ConnectionContext): Promise<void>
+  disconnect(): Promise<void>
   onAppsForOrg(
     orgAddress: string,
     filters: AppFilters,

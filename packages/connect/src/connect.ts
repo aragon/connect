@@ -163,13 +163,7 @@ async function connect(
   const ethersProvider = getEthersProvider(ethereumProvider, network)
   const orgConnector = getConnector(connector, network)
 
-  // Two independent tasks in parallel are done here:
-  //  - Resolving the organization address.
-  //  - Calling .connect() on the connector.
-  const [orgAddress] = await Promise.all([
-    resolveAddress(ethersProvider, location),
-    orgConnector.connect?.(),
-  ])
+  const orgAddress = await resolveAddress(ethersProvider, location)
 
   const connectionContext = {
     actAs: actAs || null,
@@ -181,6 +175,8 @@ async function connect(
     orgConnector,
     orgLocation: location,
   }
+
+  await orgConnector.connect(connectionContext)
 
   return new Organization(connectionContext)
 }

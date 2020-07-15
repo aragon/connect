@@ -1,5 +1,6 @@
 import {
   App,
+  ConnectionContext,
   IOrganizationConnector,
   Permission,
   Repo,
@@ -39,7 +40,7 @@ function appFiltersToQueryFilter(appFilters: AppFilters) {
   const queryFilter = {} as any
 
   if (appFilters.name) {
-    queryFilter.repoName_in = appFilters.name.map(name =>
+    queryFilter.repoName_in = appFilters.name.map((name: string) =>
       name.replace(/\.aragonpm\.eth$/, '')
     )
   }
@@ -55,6 +56,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
   #gql: GraphQLWrapper
   readonly name = 'thegraph'
   readonly network: Network
+  connection?: ConnectionContext
 
   constructor(config: ConnectorTheGraphConfig) {
     const orgSubgraphUrl =
@@ -68,11 +70,19 @@ class ConnectorTheGraph implements IOrganizationConnector {
     this.network = config.network
   }
 
+  async connect(connection: ConnectionContext) {
+    this.connection = connection
+  }
+
+  async disconnect() {
+    delete this.connection
+  }
+
   async rolesForAddress(appAddress: string): Promise<Role[]> {
     return this.#gql.performQueryWithParser<Role[]>(
       queries.ROLE_BY_APP_ADDRESS('query'),
       { appAddress: appAddress.toLowerCase() },
-      result => parseRoles(result, this)
+      result => parseRoles(result, this.connection)
     )
   }
 
@@ -80,7 +90,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
     return this.#gql.performQueryWithParser<Permission[]>(
       queries.ORGANIZATION_PERMISSIONS('query'),
       { orgAddress: orgAddress.toLowerCase() },
-      result => parsePermissions(result, this)
+      result => parsePermissions(result, this.connection)
     )
   }
 
@@ -92,7 +102,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
       queries.ORGANIZATION_PERMISSIONS('subscription'),
       { orgAddress: orgAddress.toLowerCase() },
       callback,
-      result => parsePermissions(result, this)
+      result => parsePermissions(result, this.connection)
     )
   }
 
@@ -100,7 +110,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
     return this.#gql.performQueryWithParser<App>(
       queries.APP_BY_ADDRESS('query'),
       { appAddress: appAddress.toLowerCase() },
-      result => parseApp(result, this)
+      result => parseApp(result, this.connection)
     )
   }
 
@@ -112,7 +122,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
         first: 1,
         orgAddress: orgAddress.toLowerCase(),
       },
-      result => parseApps(result, this)
+      result => parseApps(result, this.connection)
     )
     return apps[0]
   }
@@ -124,7 +134,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
         appFilter: appFiltersToQueryFilter(filters),
         orgAddress: orgAddress.toLowerCase(),
       },
-      result => parseApps(result, this)
+      result => parseApps(result, this.connection)
     )
   }
 
@@ -141,7 +151,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
         orgAddress: orgAddress.toLowerCase(),
       },
       (apps: App[]) => callback(apps[0]),
-      result => parseApps(result, this)
+      result => parseApps(result, this.connection)
     )
   }
 
@@ -157,7 +167,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
         orgAddress: orgAddress.toLowerCase(),
       },
       callback,
-      result => parseApps(result, this)
+      result => parseApps(result, this.connection)
     )
   }
 
@@ -165,7 +175,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
     return this.#gql.performQueryWithParser(
       queries.REPO_BY_APP_ADDRESS('query'),
       { appAddress: appAddress.toLowerCase() },
-      result => parseRepo(result, this)
+      result => parseRepo(result, this.connection)
     )
   }
 }

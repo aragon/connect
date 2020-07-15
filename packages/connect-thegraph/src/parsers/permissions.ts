@@ -1,5 +1,5 @@
 import {
-  IOrganizationConnector,
+  ConnectionContext,
   Permission,
   PermissionData,
 } from '@aragon/connect-core'
@@ -7,32 +7,35 @@ import { QueryResult } from '../types'
 
 export function parsePermissions(
   result: QueryResult,
-  connector: IOrganizationConnector
+  connection?: ConnectionContext
 ): Permission[] {
-  const org = result.data.organization
+  if (!connection) {
+    throw new Error(
+      'Unable to parse permission because there is no connection. ' +
+        'Has the .connect() method been called on the organization connector?'
+    )
+  }
+
+  const org = result?.data?.organization
   const permissions = org?.permissions
 
-  if (!permissions) {
+  if (!Array.isArray(permissions)) {
     throw new Error('Unable to parse permissions.')
   }
 
   const datas = permissions.map(
-    (permission: any): PermissionData => {
-      return {
-        appAddress: permission.appAddress,
-        allowed: permission.allowed,
-        granteeAddress: permission.granteeAddress,
-        params:
-          permission.params.map((param: any) => {
-            return {
-              argumentId: param.argumentId,
-              operationType: param.operationType,
-              argumentValue: param.argumentValue,
-            }
-          }) || [],
-        roleHash: permission.roleHash,
-      }
-    }
+    (permission: any): PermissionData => ({
+      appAddress: permission?.appAddress,
+      allowed: permission?.allowed,
+      granteeAddress: permission?.granteeAddress,
+      params:
+        permission?.params?.map?.((param: any) => ({
+          argumentId: param?.argumentId,
+          operationType: param?.operationType,
+          argumentValue: param?.argumentValue,
+        })) || [],
+      roleHash: permission?.roleHash,
+    })
   )
 
   const allowedPermissions = datas.filter(
@@ -40,6 +43,6 @@ export function parsePermissions(
   )
 
   return allowedPermissions.map((data: PermissionData) => {
-    return new Permission(data, connector)
+    return new Permission(data, connection)
   })
 }

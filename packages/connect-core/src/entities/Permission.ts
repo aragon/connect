@@ -1,7 +1,7 @@
+import { ConnectionContext } from '../types'
 import CoreEntity from './CoreEntity'
 import App from './App'
 import Role from './Role'
-import IOrganizationConnector from '../connections/IOrganizationConnector'
 
 export interface ParamData {
   argumentId: number
@@ -24,8 +24,8 @@ export default class Permission extends CoreEntity implements PermissionData {
   readonly params!: ParamData[]
   readonly roleHash!: string
 
-  constructor(data: PermissionData, connector: IOrganizationConnector) {
-    super(connector)
+  constructor(data: PermissionData, connection: ConnectionContext) {
+    super(connection)
 
     this.allowed = data.allowed
     this.appAddress = data.appAddress
@@ -35,11 +35,11 @@ export default class Permission extends CoreEntity implements PermissionData {
   }
 
   async getApp(): Promise<App> {
-    return this._connector.appByAddress(this.appAddress)
+    return this.orgConnector.appByAddress(this.appAddress)
   }
 
   async getRole(): Promise<Role | undefined> {
-    const roles = await this._connector.rolesForAddress(this.appAddress)
+    const roles = await this.orgConnector.rolesForAddress(this.appAddress)
     return roles.find(role => role.hash === this.roleHash)
   }
 }

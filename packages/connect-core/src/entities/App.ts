@@ -6,6 +6,7 @@ import {
   AppIntent,
   AragonArtifact,
   AragonManifest,
+  ConnectionContext,
   Metadata,
 } from '../types'
 import { resolveManifest, resolveArtifact } from '../utils/metadata'
@@ -50,9 +51,9 @@ export default class App extends CoreEntity {
   constructor(
     data: AppData,
     metadata: Metadata,
-    connector: IOrganizationConnector
+    connection: ConnectionContext
   ) {
-    super(connector)
+    super(connection)
 
     this.address = data.address
     this.appId = data.appId
@@ -72,14 +73,14 @@ export default class App extends CoreEntity {
 
   static async create(
     data: AppData,
-    connector: IOrganizationConnector
+    connection: ConnectionContext
   ): Promise<App> {
     const artifact = await resolveArtifact(data)
     const manifest = await resolveManifest(data)
 
     const metadata: Metadata = [artifact, manifest]
 
-    return new App(data, metadata, connector)
+    return new App(data, metadata, connection)
   }
 
   // `any` should be IAppConnector here, but it the TS type checker restricts
@@ -91,15 +92,15 @@ export default class App extends CoreEntity {
     if (typeof appConnect !== 'function') {
       throw new Error('The passed value is not an app connector.')
     }
-    return appConnect(this, this._connector)
+    return appConnect(this, this.orgConnector)
   }
 
   async repo(): Promise<Repo> {
-    return this._connector.repoForApp(this.address)
+    return this.orgConnector.repoForApp(this.address)
   }
 
   async roles(): Promise<Role[]> {
-    return this._connector.rolesForAddress(this.address)
+    return this.orgConnector.rolesForAddress(this.address)
   }
 
   get artifact(): AragonArtifact {

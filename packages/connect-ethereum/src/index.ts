@@ -3,12 +3,12 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { Network, SubscriptionHandler } from '@aragon/connect-types'
-import { AppFilters } from '@aragon/connect-types'
+import { AppFilters, Network, SubscriptionHandler } from '@aragon/connect-types'
 import {
+  App,
+  ConnectionContext,
   IOrganizationConnector,
   Permission,
-  App,
   Repo,
   Role,
 } from '@aragon/connect-core'
@@ -20,9 +20,18 @@ export type ConnectorEthereumConfig = {
 class ConnectorEthereum implements IOrganizationConnector {
   readonly name = 'ethereum'
   readonly network: Network
+  connection?: ConnectionContext
 
   constructor(config: ConnectorEthereumConfig) {
     this.network = config.network
+  }
+
+  async connect(connection: ConnectionContext) {
+    this.connection = connection
+  }
+
+  async disconnect() {
+    delete this.connection
   }
 
   async permissionsForOrg(): Promise<Permission[]> {

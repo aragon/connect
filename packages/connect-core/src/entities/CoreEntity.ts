@@ -1,9 +1,12 @@
 import IOrganizationConnector from '../connections/IOrganizationConnector'
+import { ConnectionContext } from '../types'
 
 export default class CoreEntity {
-  protected _connector: IOrganizationConnector
+  readonly connection: ConnectionContext
+  readonly orgConnector: IOrganizationConnector
 
-  constructor(connector: IOrganizationConnector) {
-    this._connector = connector
+  constructor(connection: ConnectionContext) {
+    this.connection = connection
+    this.orgConnector = connection.orgConnector
   }
 }

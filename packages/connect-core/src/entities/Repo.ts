@@ -1,9 +1,10 @@
 import CoreEntity from './CoreEntity'
 import {
   AragonArtifact,
-  AragonManifest,
-  Metadata,
   AragonArtifactRole,
+  AragonManifest,
+  ConnectionContext,
+  Metadata,
 } from '../types'
 import IOrganizationConnector from '../connections/IOrganizationConnector'
 import { resolveMetadata, resolveManifest } from '../utils/metadata'
@@ -29,9 +30,9 @@ export default class Repo extends CoreEntity {
   constructor(
     data: RepoData,
     metadata: Metadata,
-    connector: IOrganizationConnector
+    connection: ConnectionContext
   ) {
-    super(connector)
+    super(connection)
 
     this.address = data.address
     this.contentUri = data.contentUri || undefined
@@ -44,7 +45,7 @@ export default class Repo extends CoreEntity {
 
   static async create(
     data: RepoData,
-    connector: IOrganizationConnector
+    connection: ConnectionContext
   ): Promise<Repo> {
     const artifact = await resolveMetadata(
       'artifact.json',
@@ -55,7 +56,7 @@ export default class Repo extends CoreEntity {
 
     const metadata: Metadata = [artifact, manifest]
 
-    return new Repo(data, metadata, connector)
+    return new Repo(data, metadata, connection)
   }
 
   get artifact(): AragonArtifact {

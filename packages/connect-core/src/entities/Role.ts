@@ -1,5 +1,5 @@
 import IOrganizationConnector from '../connections/IOrganizationConnector'
-import { AragonArtifact, Metadata } from '../types'
+import { AragonArtifact, ConnectionContext, Metadata } from '../types'
 import { resolveArtifact } from '../utils/metadata'
 import CoreEntity from './CoreEntity'
 import Permission, { PermissionData } from './Permission'
@@ -27,9 +27,9 @@ export default class Role extends CoreEntity {
   constructor(
     data: RoleData,
     metadata: Metadata,
-    connector: IOrganizationConnector
+    connection: ConnectionContext
   ) {
-    super(connector)
+    super(connection)
 
     const { roles } = metadata[0] as AragonArtifact
 
@@ -40,7 +40,7 @@ export default class Role extends CoreEntity {
     this.hash = data.hash
     this.params = role?.params
     this.permissions = data.grantees?.map(
-      grantee => new Permission(grantee, this._connector)
+      grantee => new Permission(grantee, this.connection)
     )
     this.manager = data.manager
     this.name = role?.id
@@ -48,12 +48,12 @@ export default class Role extends CoreEntity {
 
   static async create(
     data: RoleData,
-    connector: IOrganizationConnector
+    connection: ConnectionContext
   ): Promise<Role> {
     const artifact = await resolveArtifact(data)
 
     const metadata: Metadata = [artifact]
 
-    return new Role(data, metadata, connector)
+    return new Role(data, metadata, connection)
   }
 }

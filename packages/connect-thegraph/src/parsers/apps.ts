@@ -1,11 +1,18 @@
 import { Network } from '@aragon/connect-types'
-import { App, AppData, IOrganizationConnector } from '@aragon/connect-core'
+import { App, AppData, ConnectionContext } from '@aragon/connect-core'
 import { QueryResult } from '../types'
 
 async function _parseApp(
   app: any,
-  connector: IOrganizationConnector
+  connection?: ConnectionContext
 ): Promise<App> {
+  if (!connection) {
+    throw new Error(
+      'Unable to parse app because there is no connection. ' +
+        'Has the .connect() method been called on the organization connector?'
+    )
+  }
+
   const data: AppData = {
     address: app.address,
     appId: app.appId,
@@ -23,27 +30,27 @@ async function _parseApp(
     version: app.version?.semanticVersion.replace(/,/g, '.'),
   }
 
-  return App.create(data, connector)
+  return App.create(data, connection)
 }
 
 export async function parseApp(
   result: QueryResult,
-  connector: any
+  connection?: ConnectionContext
 ): Promise<App> {
-  const app = result.data.app
+  const app = result?.data?.app
 
-  if (!app) {
+  if (!app || !connection) {
     throw new Error('Unable to parse app.')
   }
 
-  return _parseApp(app, connector)
+  return _parseApp(app, connection)
 }
 
 export async function parseApps(
   result: QueryResult,
-  connector: IOrganizationConnector
+  connection?: ConnectionContext
 ): Promise<App[]> {
-  const org = result.data.organization
+  const org = result?.data?.organization
   const apps = org?.apps
 
   if (!apps) {
@@ -52,7 +59,7 @@ export async function parseApps(
 
   return Promise.all(
     apps.map(async (app: any) => {
-      return _parseApp(app, connector)
+      return _parseApp(app, connection)
     })
   )
 }
