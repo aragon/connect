@@ -2,6 +2,7 @@ import {
   App,
   ConnectionContext,
   IOrganizationConnector,
+  Organization,
   Permission,
   Repo,
   Role,
@@ -78,68 +79,80 @@ class ConnectorTheGraph implements IOrganizationConnector {
     delete this.connection
   }
 
-  async rolesForAddress(appAddress: string): Promise<Role[]> {
+  async rolesForAddress(
+    organization: Organization,
+    appAddress: string
+  ): Promise<Role[]> {
     return this.#gql.performQueryWithParser<Role[]>(
       queries.ROLE_BY_APP_ADDRESS('query'),
       { appAddress: appAddress.toLowerCase() },
-      result => parseRoles(result, this.connection)
+      result => parseRoles(result, organization)
     )
   }
 
-  async permissionsForOrg(orgAddress: string): Promise<Permission[]> {
+  async permissionsForOrg(organization: Organization): Promise<Permission[]> {
     return this.#gql.performQueryWithParser<Permission[]>(
       queries.ORGANIZATION_PERMISSIONS('query'),
-      { orgAddress: orgAddress.toLowerCase() },
-      result => parsePermissions(result, this.connection)
+      { orgAddress: organization.address.toLowerCase() },
+      result => parsePermissions(result, organization)
     )
   }
 
   onPermissionsForOrg(
-    orgAddress: string,
+    organization: Organization,
     callback: Function
   ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
       queries.ORGANIZATION_PERMISSIONS('subscription'),
-      { orgAddress: orgAddress.toLowerCase() },
+      { orgAddress: organization.address.toLowerCase() },
       callback,
-      result => parsePermissions(result, this.connection)
+      result => parsePermissions(result, organization)
     )
   }
 
-  async appByAddress(appAddress: string): Promise<App> {
+  async appByAddress(
+    organization: Organization,
+    appAddress: string
+  ): Promise<App> {
     return this.#gql.performQueryWithParser<App>(
       queries.APP_BY_ADDRESS('query'),
       { appAddress: appAddress.toLowerCase() },
-      result => parseApp(result, this.connection)
+      result => parseApp(result, organization)
     )
   }
 
-  async appForOrg(orgAddress: string, filters: AppFilters): Promise<App> {
+  async appForOrg(
+    organization: Organization,
+    filters: AppFilters
+  ): Promise<App> {
     const apps = await this.#gql.performQueryWithParser<App[]>(
       queries.ORGANIZATION_APPS('query'),
       {
         appFilter: appFiltersToQueryFilter(filters),
         first: 1,
-        orgAddress: orgAddress.toLowerCase(),
+        orgAddress: organization.address.toLowerCase(),
       },
-      result => parseApps(result, this.connection)
+      result => parseApps(result, organization)
     )
     return apps[0]
   }
 
-  async appsForOrg(orgAddress: string, filters: AppFilters): Promise<App[]> {
+  async appsForOrg(
+    organization: Organization,
+    filters: AppFilters
+  ): Promise<App[]> {
     return this.#gql.performQueryWithParser<App[]>(
       queries.ORGANIZATION_APPS('query'),
       {
         appFilter: appFiltersToQueryFilter(filters),
-        orgAddress: orgAddress.toLowerCase(),
+        orgAddress: organization.address.toLowerCase(),
       },
-      result => parseApps(result, this.connection)
+      result => parseApps(result, organization)
     )
   }
 
   onAppForOrg(
-    orgAddress: string,
+    organization: Organization,
     filters: AppFilters,
     callback: Function
   ): SubscriptionHandler {
@@ -148,15 +161,15 @@ class ConnectorTheGraph implements IOrganizationConnector {
       {
         appFilter: appFiltersToQueryFilter(filters),
         first: 1,
-        orgAddress: orgAddress.toLowerCase(),
+        orgAddress: organization.address.toLowerCase(),
       },
       (apps: App[]) => callback(apps[0]),
-      result => parseApps(result, this.connection)
+      result => parseApps(result, organization)
     )
   }
 
   onAppsForOrg(
-    orgAddress: string,
+    organization: Organization,
     filters: AppFilters,
     callback: Function
   ): SubscriptionHandler {
@@ -164,18 +177,21 @@ class ConnectorTheGraph implements IOrganizationConnector {
       queries.ORGANIZATION_APPS('subscription'),
       {
         appFilter: appFiltersToQueryFilter(filters),
-        orgAddress: orgAddress.toLowerCase(),
+        orgAddress: organization.address.toLowerCase(),
       },
       callback,
-      result => parseApps(result, this.connection)
+      result => parseApps(result, organization)
     )
   }
 
-  async repoForApp(appAddress: string): Promise<Repo> {
+  async repoForApp(
+    organization: Organization,
+    appAddress: string
+  ): Promise<Repo> {
     return this.#gql.performQueryWithParser(
       queries.REPO_BY_APP_ADDRESS('query'),
       { appAddress: appAddress.toLowerCase() },
-      result => parseRepo(result, this.connection)
+      result => parseRepo(result, organization)
     )
   }
 }

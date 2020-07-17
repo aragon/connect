@@ -1,23 +1,11 @@
-import {
-  ConnectionContext,
-  Permission,
-  PermissionData,
-} from '@aragon/connect-core'
+import { Organization, Permission, PermissionData } from '@aragon/connect-core'
 import { QueryResult } from '../types'
 
 export function parsePermissions(
   result: QueryResult,
-  connection?: ConnectionContext
+  organization: Organization
 ): Permission[] {
-  if (!connection) {
-    throw new Error(
-      'Unable to parse permission because there is no connection. ' +
-        'Has the .connect() method been called on the organization connector?'
-    )
-  }
-
-  const org = result?.data?.organization
-  const permissions = org?.permissions
+  const permissions = result?.data?.organization?.permissions
 
   if (!Array.isArray(permissions)) {
     throw new Error('Unable to parse permissions.')
@@ -43,6 +31,6 @@ export function parsePermissions(
   )
 
   return allowedPermissions.map((data: PermissionData) => {
-    return new Permission(data, connection)
+    return new Permission(data, organization)
   })
 }

@@ -1,5 +1,5 @@
 import { SubscriptionHandler } from '@aragon/connect-types'
-import { GraphQLWrapper } from '@aragon/connect-thegraph'
+import { GraphQLWrapper, QueryResult } from '@aragon/connect-thegraph'
 import * as queries from './queries'
 import Vote from './entities/Vote'
 import Cast from './entities/Cast'
@@ -20,7 +20,7 @@ export default class VotingConnectorTheGraph {
     return this.#gql.performQueryWithParser(
       queries.ALL_VOTES('query'),
       { appAddress, first, skip },
-      result => parseVotes(result, this)
+      (result: QueryResult) => parseVotes(result, this)
     )
   }
 
@@ -29,7 +29,7 @@ export default class VotingConnectorTheGraph {
       queries.ALL_VOTES('subscription'),
       { appAddress, first: 1000, skip: 0 },
       callback,
-      result => parseVotes(result, this)
+      (result: QueryResult) => parseVotes(result, this)
     )
   }
 
@@ -41,7 +41,7 @@ export default class VotingConnectorTheGraph {
     return this.#gql.performQueryWithParser(
       queries.CASTS_FOR_VOTE('query'),
       { voteId, first, skip },
-      result => parseCasts(result, this)
+      (result: QueryResult) => parseCasts(result)
     )
   }
 
@@ -50,7 +50,7 @@ export default class VotingConnectorTheGraph {
       queries.CASTS_FOR_VOTE('subscription'),
       { voteId, first: 1000, skip: 0 },
       callback,
-      result => parseCasts(result, this)
+      (result: QueryResult) => parseCasts(result)
     )
   }
 }

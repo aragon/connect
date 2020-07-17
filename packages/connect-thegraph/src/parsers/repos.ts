@@ -1,21 +1,13 @@
-import { ConnectionContext, Repo, RepoData } from '@aragon/connect-core'
+import { Organization, Repo, RepoData } from '@aragon/connect-core'
 import { QueryResult } from '../types'
 
 export async function parseRepo(
   result: QueryResult,
-  connection?: ConnectionContext
+  organization: Organization
 ): Promise<Repo> {
-  if (!connection) {
-    throw new Error(
-      'Unable to parse repo because there is no connection. ' +
-        'Has the .connect() method been called on the organization connector?'
-    )
-  }
+  const repo = result?.data?.app?.repo
 
-  const app = result?.data?.app
-  const repo = app?.repo
-
-  if (!app || !repo) {
+  if (!repo) {
     throw new Error('Unable to parse repo.')
   }
 
@@ -26,8 +18,8 @@ export async function parseRepo(
     manifest: repo?.lastVersion?.manifest,
     name: repo?.name,
     registry: repo?.registry?.name,
-    registryAddress: app?.repo?.registry?.address,
+    registryAddress: repo?.registry?.address,
   }
 
-  return Repo.create(data, connection)
+  return Repo.create(data, organization)
 }

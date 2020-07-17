@@ -50,36 +50,36 @@ function normalizeAppFilters(filters?: AppFiltersParam): AppFilters {
 }
 
 export default class Organization {
-  #connection: ConnectionContext
+  readonly connection: ConnectionContext
 
   constructor(connection: ConnectionContext) {
-    this.#connection = connection
+    this.connection = connection
   }
 
   get location() {
-    return this.#connection.orgLocation
+    return this.connection.orgLocation
   }
 
   get address(): Address {
-    return this.#connection.orgAddress
+    return this.connection.orgAddress
   }
 
   get _connection(): ConnectionContext {
-    return this.#connection
+    return this.connection
   }
 
   ///////// APPS ///////////
 
   async app(filters?: AppFiltersParam): Promise<App> {
-    return this.#connection.orgConnector.appForOrg(
-      this.address,
+    return this.connection.orgConnector.appForOrg(
+      this,
       normalizeAppFilters(filters)
     )
   }
 
   async apps(filters?: AppFiltersParam): Promise<App[]> {
-    return this.#connection.orgConnector.appsForOrg(
-      this.address,
+    return this.connection.orgConnector.appsForOrg(
+      this,
       normalizeAppFilters(filters)
     )
   }
@@ -91,8 +91,8 @@ export default class Organization {
     const filters = (callback ? filtersOrCallback : null) as AppFiltersParam
     const _callback = (callback || filtersOrCallback) as OnAppCallback
 
-    return this.#connection.orgConnector.onAppForOrg(
-      this.address,
+    return this.connection.orgConnector.onAppForOrg(
+      this,
       normalizeAppFilters(filters),
       _callback
     )
@@ -105,8 +105,8 @@ export default class Organization {
     const filters = (callback ? filtersOrCallback : null) as AppFiltersParam
     const _callback = (callback || filtersOrCallback) as OnAppsCallback
 
-    return this.#connection.orgConnector.onAppsForOrg(
-      this.address,
+    return this.connection.orgConnector.onAppsForOrg(
+      this,
       normalizeAppFilters(filters),
       _callback
     )
@@ -114,14 +114,11 @@ export default class Organization {
 
   ///////// PERMISSIONS ///////////
   async permissions(): Promise<Permission[]> {
-    return this.#connection.orgConnector.permissionsForOrg(this.address)
+    return this.connection.orgConnector.permissionsForOrg(this)
   }
 
   onPermissions(callback: Function): SubscriptionHandler {
-    return this.#connection.orgConnector.onPermissionsForOrg(
-      this.address,
-      callback
-    )
+    return this.connection.orgConnector.onPermissionsForOrg(this, callback)
   }
 
   ///////// INTENTS ///////////
@@ -133,7 +130,7 @@ export default class Organization {
     return new TransactionIntent(
       { contractAddress: appAddress, functionName, functionArgs },
       this,
-      this.#connection.ethersProvider
+      this.connection.ethersProvider
     )
   }
 }

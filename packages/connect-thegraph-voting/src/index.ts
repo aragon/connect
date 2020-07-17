@@ -1,5 +1,5 @@
 import { Network } from '@aragon/connect-types'
-import { App, IOrganizationConnector } from '@aragon/connect-core'
+import { App } from '@aragon/connect-core'
 import Voting from './entities/Voting'
 
 function subgraphUrlFromChainId(chainId: number) {
@@ -18,31 +18,34 @@ type ConnectOptions = {
   verbose?: boolean
 }
 
-function connect(
+async function connectVoting(
+  app: App | Promise<App>,
   options: ConnectOptions = {}
-): (app: App, orgConnector: IOrganizationConnector) => Voting {
-  return function connect(
-    app: App,
-    orgConnector: IOrganizationConnector
-  ): Voting {
-    const { network } = orgConnector
+): Promise<Voting> {
+  app = await app
 
-    const subgraphUrl =
-      options.subgraphUrl || subgraphUrlFromChainId(network.chainId)
-
-    if (!subgraphUrl) {
-      throw new Error(
-        `[Voting] unsupported chainId: ${network.chainId}. ` +
-          `Please set a supported chainId, or pass subgraphUrl directly.`
-      )
-    }
-
-    return new Voting(app.address, subgraphUrl, options.verbose)
+  if (!(app instanceof App)) {
+    throw new Error(`connectVoting(): the passed value is not an App.`)
   }
+
+  const network =
+    options.network || app.organization.connection.orgConnector.network
+
+  const subgraphUrl =
+    options.subgraphUrl || subgraphUrlFromChainId(network.chainId)
+
+  if (!subgraphUrl) {
+    throw new Error(
+      `[Voting] unsupported chainId: ${network.chainId}. ` +
+        `Please set a supported chainId, or pass subgraphUrl directly.`
+    )
+  }
+
+  return new Voting(app.address, subgraphUrl, options.verbose)
 }
 
 export { Voting }
 export { default as VotingConnectorTheGraph } from './connector'
 export { default as Cast } from './entities/Cast'
 export { default as Vote } from './entities/Vote'
-export default connect
+export default connectVoting

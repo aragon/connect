@@ -1,6 +1,3 @@
-import VotingEntity from "./VotingEntity";
-import VotingConnectorTheGraph from "../connector";
-
 export interface CastData {
   id: string
   voteId: string
@@ -8,15 +5,16 @@ export interface CastData {
   supports: boolean
 }
 
-export default class Cast extends VotingEntity implements CastData {
+export default class Cast implements CastData {
   readonly id!: string
   readonly voteId!: string
   readonly voter!: string
   readonly supports!: boolean
 
-  constructor(data: CastData, connector: VotingConnectorTheGraph) {
-    super(connector)
-
-    Object.assign(this, data)
+  constructor(data: CastData) {
+    this.id = data.id
+    this.voteId = data.voteId
+    this.voter = data.voter
+    this.supports = data.supports
   }
 }

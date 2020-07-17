@@ -1,10 +1,8 @@
 import { QueryResult } from '@aragon/connect-thegraph'
-import Vote, { VoteData } from '../entities/Vote'
+import { VoteData } from '../types'
+import Vote from '../entities/Vote'
 
-export function parseVotes(
-  result: QueryResult,
-  connector: any
-): Vote[] {
+export function parseVotes(result: QueryResult, connector: any): Vote[] {
   const votes = result.data.votes
 
   if (!votes) {
@@ -13,6 +11,7 @@ export function parseVotes(
 
   const datas = votes.map(
     (vote: any): VoteData => {
+      // TODO: ensure vote is safe
       return vote
     }
   )

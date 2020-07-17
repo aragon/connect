@@ -1,10 +1,7 @@
 import { QueryResult } from '@aragon/connect-thegraph'
 import Cast, { CastData } from '../entities/Cast'
 
-export function parseCasts(
-  result: QueryResult,
-  connector: any
-): Cast[] {
+export function parseCasts(result: QueryResult): Cast[] {
   const casts = result.data.casts
 
   if (!casts) {
@@ -23,6 +20,6 @@ export function parseCasts(
   )
 
   return datas.map((data: CastData) => {
-    return new Cast(data, connector)
+    return new Cast(data)
   })
 }

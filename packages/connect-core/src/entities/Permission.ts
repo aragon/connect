@@ -1,6 +1,6 @@
-import { ConnectionContext } from '../types'
-import CoreEntity from './CoreEntity'
+import IOrganizationConnector from '../connections/IOrganizationConnector'
 import App from './App'
+import Organization from './Organization'
 import Role from './Role'
 
 export interface ParamData {
@@ -17,15 +17,16 @@ export interface PermissionData {
   roleHash: string
 }
 
-export default class Permission extends CoreEntity implements PermissionData {
+export default class Permission implements PermissionData {
+  #organization: Organization
   readonly allowed!: boolean
   readonly appAddress!: string
   readonly granteeAddress!: string
   readonly params!: ParamData[]
   readonly roleHash!: string
 
-  constructor(data: PermissionData, connection: ConnectionContext) {
-    super(connection)
+  constructor(data: PermissionData, organization: Organization) {
+    this.#organization = organization
 
     this.allowed = data.allowed
     this.appAddress = data.appAddress
@@ -34,12 +35,19 @@ export default class Permission extends CoreEntity implements PermissionData {
     this.roleHash = data.roleHash
   }
 
-  async getApp(): Promise<App> {
-    return this.orgConnector.appByAddress(this.appAddress)
+  private orgConnector(): IOrganizationConnector {
+    return this.#organization.connection.orgConnector
   }
 
-  async getRole(): Promise<Role | undefined> {
-    const roles = await this.orgConnector.rolesForAddress(this.appAddress)
+  async app(): Promise<App> {
+    return this.orgConnector().appByAddress(this.#organization, this.appAddress)
+  }
+
+  async role(): Promise<Role | undefined> {
+    const roles = await this.orgConnector().rolesForAddress(
+      this.#organization,
+      this.appAddress
+    )
     return roles.find(role => role.hash === this.roleHash)
   }
 }

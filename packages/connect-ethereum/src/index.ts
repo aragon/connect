@@ -8,6 +8,7 @@ import {
   App,
   ConnectionContext,
   IOrganizationConnector,
+  Organization,
   Permission,
   Repo,
   Role,
@@ -41,7 +42,7 @@ class ConnectorEthereum implements IOrganizationConnector {
   }
 
   onPermissionsForOrg(
-    orgAddress: string,
+    organization: Organization,
     callback: Function
   ): SubscriptionHandler {
     return {
@@ -49,20 +50,20 @@ class ConnectorEthereum implements IOrganizationConnector {
     }
   }
 
-  appForOrg(orgAddress: string, filters: AppFilters): Promise<App> {
+  appForOrg(organization: Organization, filters: AppFilters): Promise<App> {
     return new Promise(resolve => {
       resolve()
     })
   }
 
-  appsForOrg(orgAddress: string, filters: AppFilters): Promise<App[]> {
+  appsForOrg(organization: Organization, filters: AppFilters): Promise<App[]> {
     return new Promise(resolve => {
       resolve([])
     })
   }
 
   onAppForOrg(
-    orgAddress: string,
+    organization: Organization,
     filters: AppFilters,
     callback: Function
   ): SubscriptionHandler {
@@ -72,7 +73,7 @@ class ConnectorEthereum implements IOrganizationConnector {
   }
 
   onAppsForOrg(
-    orgAddress: string,
+    organization: Organization,
     filters: AppFilters,
     callback: Function
   ): SubscriptionHandler {
@@ -81,30 +82,25 @@ class ConnectorEthereum implements IOrganizationConnector {
     }
   }
 
-  repoForApp(appAddress: string): Promise<Repo> {
+  repoForApp(organization: Organization, appAddress: string): Promise<Repo> {
     return new Promise(resolve => {
       resolve()
     })
   }
 
-  appByAddress(appAddress: string): Promise<App> {
+  appByAddress(organization: Organization, appAddress: string): Promise<App> {
     return new Promise(resolve => {
       resolve()
     })
   }
 
-  rolesForAddress(appAddress: string): Promise<Role[]> {
+  rolesForAddress(
+    organization: Organization,
+    appAddress: string
+  ): Promise<Role[]> {
     return new Promise(resolve => {
       resolve([])
     })
-  }
-
-  async app(filters: AppFilters): Promise<App> {
-    return this.appByAddress('')
-  }
-
-  async apps(filters: AppFilters): Promise<App[]> {
-    return []
   }
 }
 

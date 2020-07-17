@@ -1,32 +1,30 @@
 import { connect } from '@aragon/connect'
-import votingConnector from '@aragon/connect-thegraph-voting'
+import connectVoting from '@aragon/connect-thegraph-voting'
 
 const BLUE = '\x1b[36m'
 const RESET = '\x1b[0m'
 
-const env = {
-  chainId: 4,
-  location: 'gardens.aragonid.eth',
-}
-
 // const env = {
-//   chainId: 1,
-//   location: 'governance.aragonproject.eth',
+//   chainId: 4,
+//   location: 'gardens.aragonid.eth',
 // }
+
+const env = {
+  chainId: 1,
+  location: 'governance.aragonproject.eth',
+}
 
 async function main() {
   const org = await connect(env.location, 'thegraph', { chainId: env.chainId })
-
-  console.log('')
-  printOrganization(org)
-
-  const votingInfo = await org.app('voting')
-  const voting = await votingInfo.connect(votingConnector())
+  const voting = await connectVoting(org.app('voting'))
   const votes = await voting.votes()
+
+  printOrganization(org)
   printVotes(votes)
 }
 
 function printOrganization(organization: any) {
+  console.log('')
   console.log(' Organization')
   console.log('')
   console.log('  Location:', BLUE + organization.location + RESET)

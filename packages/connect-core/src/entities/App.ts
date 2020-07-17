@@ -1,6 +1,6 @@
+import Organization from './Organization'
 import Repo from './Repo'
 import Role from './Role'
-import CoreEntity from './CoreEntity'
 import {
   Abi,
   AppIntent,
@@ -33,7 +33,7 @@ export interface AppData {
   version?: string
 }
 
-export default class App extends CoreEntity {
+export default class App {
   readonly address!: string
   readonly appId!: string
   readonly codeAddress!: string
@@ -42,18 +42,15 @@ export default class App extends CoreEntity {
   readonly isUpgradeable?: boolean
   readonly kernelAddress!: string
   readonly name?: string
+  readonly organization: Organization
   readonly registry?: string
   readonly registryAddress!: string
   readonly repoAddress?: string
   readonly version?: string
   #metadata!: Metadata
 
-  constructor(
-    data: AppData,
-    metadata: Metadata,
-    connection: ConnectionContext
-  ) {
-    super(connection)
+  constructor(data: AppData, metadata: Metadata, organization: Organization) {
+    this.#metadata = metadata
 
     this.address = data.address
     this.appId = data.appId
@@ -63,44 +60,30 @@ export default class App extends CoreEntity {
     this.isUpgradeable = data.isUpgradeable ?? undefined
     this.kernelAddress = data.kernelAddress
     this.name = data.name
+    this.organization = organization
     this.registry = data.registry || undefined
     this.registryAddress = data.registryAddress
     this.repoAddress = data.repoAddress
     this.version = data.version
-
-    this.#metadata = metadata
   }
 
-  static async create(
-    data: AppData,
-    connection: ConnectionContext
-  ): Promise<App> {
+  static async create(data: AppData, organization: Organization): Promise<App> {
     const artifact = await resolveArtifact(data)
     const manifest = await resolveManifest(data)
-
     const metadata: Metadata = [artifact, manifest]
-
-    return new App(data, metadata, connection)
+    return new App(data, metadata, organization)
   }
 
-  // `any` should be IAppConnector here, but it the TS type checker restricts
-  // it to IAppConnector only in that case, rather than the connector being passed.
-  async connect(
-    // appConnect: (app: App, connector: IOrganizationConnector) => IAppConnected
-    appConnect: (app: App, connector: IOrganizationConnector) => any
-  ) {
-    if (typeof appConnect !== 'function') {
-      throw new Error('The passed value is not an app connector.')
-    }
-    return appConnect(this, this.orgConnector)
+  private orgConnector(): IOrganizationConnector {
+    return this.organization.connection.orgConnector
   }
 
   async repo(): Promise<Repo> {
-    return this.orgConnector.repoForApp(this.address)
+    return this.orgConnector().repoForApp(this.organization, this.address)
   }
 
   async roles(): Promise<Role[]> {
-    return this.orgConnector.rolesForAddress(this.address)
+    return this.orgConnector().rolesForAddress(this.organization, this.address)
   }
 
   get artifact(): AragonArtifact {

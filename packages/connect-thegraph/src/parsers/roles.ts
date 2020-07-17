@@ -1,5 +1,5 @@
 import {
-  ConnectionContext,
+  Organization,
   PermissionData,
   Role,
   RoleData,
@@ -9,15 +9,8 @@ import { QueryResult } from '../types'
 async function _parseRole(
   role: any,
   app: any,
-  connection?: ConnectionContext
+  organization: Organization
 ): Promise<Role> {
-  if (!connection) {
-    throw new Error(
-      'Unable to parse role because there is no connection. ' +
-        'Has the .connect() method been called on the organization connector?'
-    )
-  }
-
   const grantees = role?.grantees?.grantees?.map(
     (permission: any): PermissionData => ({
       appAddress: permission?.appAddress,
@@ -43,12 +36,12 @@ async function _parseRole(
     manager: role?.manager,
   }
 
-  return Role.create(roleData, connection)
+  return Role.create(roleData, organization)
 }
 
 export async function parseRole(
   result: QueryResult,
-  connection?: ConnectionContext
+  organization: Organization
 ): Promise<Role> {
   const app = result?.data?.app
   const role = result?.data?.role
@@ -57,12 +50,12 @@ export async function parseRole(
     throw new Error('Unable to parse role.')
   }
 
-  return _parseRole(role, app, connection)
+  return _parseRole(role, app, organization)
 }
 
 export async function parseRoles(
   result: QueryResult,
-  connection?: ConnectionContext
+  organization: Organization
 ): Promise<Role[]> {
   const app = result?.data?.app
   const roles = app?.roles
@@ -73,7 +66,7 @@ export async function parseRoles(
 
   return Promise.all(
     roles.map(async (role: any) => {
-      return _parseRole(role, app, connection)
+      return _parseRole(role, app, organization)
     })
   )
 }
