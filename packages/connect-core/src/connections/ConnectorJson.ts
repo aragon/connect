@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { AppFilters } from '@aragon/connect-types'
+import { AppFilters, Network, SubscriptionHandler } from '@aragon/connect-types'
 import { App, Repo, Role } from '..'
 import Permission from '../entities/Permission'
 import { ConnectorInterface } from './ConnectorInterface'
@@ -24,7 +24,7 @@ class ConnectorJson implements ConnectorInterface {
   onPermissionsForOrg(
     orgAddress: string,
     callback: Function
-  ): { unsubscribe: Function } {
+  ): SubscriptionHandler {
     return {
       unsubscribe: () => {},
     }
@@ -54,7 +54,7 @@ class ConnectorJson implements ConnectorInterface {
     orgAddress: string,
     filters: AppFilters,
     callback: Function
-  ): { unsubscribe: Function } {
+  ): SubscriptionHandler {
     return {
       unsubscribe: () => {},
     }
@@ -64,7 +64,7 @@ class ConnectorJson implements ConnectorInterface {
     orgAddress: string,
     filters: AppFilters,
     callback: Function
-  ): { unsubscribe: Function } {
+  ): SubscriptionHandler {
     return {
       unsubscribe: () => {},
     }

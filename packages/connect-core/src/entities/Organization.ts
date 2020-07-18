@@ -1,12 +1,17 @@
 import { ethers } from 'ethers'
-import { AppFilters, AppFiltersParam, Network } from '@aragon/connect-types'
-
-import App from './App'
+import {
+  Address,
+  AppFilters,
+  AppFiltersParam,
+  Network,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 import TransactionIntent from '../transactions/TransactionIntent'
-import Permission from './Permission'
 import { XDAI_WSS_ENDPOINT } from '../params'
 import { ConnectorInterface } from '../connections/ConnectorInterface'
 import { toArrayEntry } from '../utils/misc'
+import App from './App'
+import Permission from './Permission'
 
 // TODO
 // Organization#addApp(repoName, options)
@@ -18,7 +23,6 @@ import { toArrayEntry } from '../utils/misc'
 
 type OnAppCallback = (app: App) => void
 type OnAppsCallback = (apps: App[]) => void
-type SubscriptionHandler = { unsubscribe: Function }
 
 function normalizeAppFilters(filters?: AppFiltersParam): AppFilters {
   if (!filters) {
