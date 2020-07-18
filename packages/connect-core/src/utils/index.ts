@@ -1,4 +1,5 @@
-export { findAppMethodFromIntent } from './app'
-export { decodeCallScript, encodeCallScript } from './callScript'
 export * from './descriptions'
+export * from './misc'
+export { decodeCallScript, encodeCallScript } from './callScript'
 export { fetchMetadata } from './metadata'
+export { findAppMethodFromIntent } from './app'
