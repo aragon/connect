@@ -11,20 +11,20 @@ import { ConnectorInterface } from '../connections/ConnectorInterface'
 export interface RepoData {
   address: string
   artifact?: string | null
-  contentUri?: string | null
-  name: string
+  contentUri?: string
   manifest?: string | null
-  registry?: string | null
-  registryAddress?: string | null
+  name: string
+  registry?: string
+  registryAddress?: string
 }
 
 export default class Repo extends CoreEntity {
-  readonly address!: string
-  readonly contentUri?: string
-  readonly name!: string
-  readonly registry?: string | null
-  readonly registryAddress?: string | null
   #metadata!: Metadata
+  readonly address: string
+  readonly contentUri?: string
+  readonly name: string
+  readonly registry?: string
+  readonly registryAddress?: string
 
   constructor(
     data: RepoData,
@@ -33,13 +33,13 @@ export default class Repo extends CoreEntity {
   ) {
     super(connector)
 
+    this.#metadata = metadata
+
     this.address = data.address
-    this.contentUri = data.contentUri || undefined
+    this.contentUri = data.contentUri
     this.name = data.name
     this.registry = data.registry
     this.registryAddress = data.registryAddress
-
-    this.#metadata = metadata
   }
 
   static async create(
@@ -48,7 +48,7 @@ export default class Repo extends CoreEntity {
   ): Promise<Repo> {
     const artifact = await resolveMetadata(
       'artifact.json',
-      data.contentUri || undefined,
+      data.contentUri,
       data.artifact
     )
     const manifest = await resolveManifest(data)
