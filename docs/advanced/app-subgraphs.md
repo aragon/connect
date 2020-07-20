@@ -68,6 +68,8 @@ For example, if you run `yarn deploy-mainnet-staging`, `manifest/data/mainnet-st
 
 ### 9. Deploy your Subgraph with all data sources
 
+You need to export your thegraph API key as `GRAPHKEY` env variable
+
 Once you are confident that your Subgraph will behave as expected, you can run `yarn deploy-mainnet` \(without `-staging`!\). This will use `manifest/data/mainnet.json`, which contains many Aragon data sources, such as the templates used by most users to create an organization. This will allow your Subgraph to find all the organizations out there, and as in the example, index all instances of the specified apps.
 
 Of course, this deployment will take much more time to index--potentially days.
