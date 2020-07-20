@@ -44,7 +44,8 @@ function printVotes(votes: any) {
 function formatVote(vote: any): string {
   let str = vote.metadata
   str = str.replace(/\n/g, ' ')
-  return str.length > 60 ? str.slice(0, 60) + '…' : str
+  str = str.length > 60 ? str.slice(0, 60) + '…' : str
+  return str || '[Action]'
 }
 
 main()
