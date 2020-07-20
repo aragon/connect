@@ -131,4 +131,5 @@ export type ConnectionContext = {
   orgAddress: Address
   orgConnector: IOrganizationConnector
   orgLocation: string
+  verbose: boolean
 }

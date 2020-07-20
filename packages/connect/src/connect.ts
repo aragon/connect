@@ -24,6 +24,7 @@ export type ConnectOptions = {
   chainId?: number
   ethereum?: object
   ipfs?: IpfsUrlResolver | string
+  verbose?: boolean
 }
 
 export type ConnectorDeclaration =
@@ -157,7 +158,13 @@ async function resolveAddress(
 async function connect(
   location: string,
   connector: ConnectorDeclaration,
-  { actAs, chainId, ethereum: ethereumProvider, ipfs }: ConnectOptions = {}
+  {
+    actAs,
+    chainId,
+    ethereum: ethereumProvider,
+    ipfs,
+    verbose,
+  }: ConnectOptions = {}
 ): Promise<Organization> {
   const network = getNetwork(chainId)
   const ethersProvider = getEthersProvider(ethereumProvider, network)
@@ -174,6 +181,7 @@ async function connect(
     orgAddress,
     orgConnector,
     orgLocation: location,
+    verbose: verbose ?? false,
   }
 
   await orgConnector.connect(connectionContext)
