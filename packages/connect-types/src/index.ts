@@ -3,10 +3,13 @@ export type Address = string
 export type Network = {
   name: string
   chainId: number
-  ensAddress?: Address
+  ensAddress: Address
 }
 
-export type Networkish = Network | string | number
+export type Networkish =
+  | { name: string; chainId: number; ensAddress?: Address }
+  | string
+  | number
 
 // Normalized app fiters
 export type AppFilters = {
