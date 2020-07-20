@@ -45,8 +45,8 @@ export function createAppConnector<
       connector || orgConnector.name
     )
 
-    return {
-      ...callback({
+    return Object.assign(
+      callback({
         app,
         config: connectorConfig,
         connector: connectorName,
@@ -54,7 +54,7 @@ export function createAppConnector<
         network: orgConnector.network,
         verbose: connection.verbose,
       }),
-      ...app,
-    }
+      app
+    )
   }
 }
