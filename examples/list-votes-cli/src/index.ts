@@ -4,14 +4,9 @@ import connectVoting from '@aragon/connect-thegraph-voting'
 const BLUE = '\x1b[36m'
 const RESET = '\x1b[0m'
 
-// const env = {
-//   chainId: 4,
-//   location: 'gardens.aragonid.eth',
-// }
-
 const env = {
-  chainId: 1,
-  location: 'governance.aragonproject.eth',
+  chainId: parseInt(process.env.CHAIN_ID ?? '1', 10),
+  location: process.env.ORGANIZATION ?? 'governance.aragonproject.eth',
 }
 
 async function main() {
