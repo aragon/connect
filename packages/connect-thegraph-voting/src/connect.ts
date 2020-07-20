@@ -12,7 +12,7 @@ export default createAppConnector<Voting, Config>(
   ({ app, config, connector, network, verbose }) => {
     if (connector !== 'thegraph') {
       console.warn(
-        `Connector unsupported: ${connector}. Using thegraph instead.`
+        `Connector unsupported: ${connector}. Using "thegraph" instead.`
       )
     }
 
