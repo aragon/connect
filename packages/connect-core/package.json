@@ -30,7 +30,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "ethers": "^5.0.0",
+    "ethers": "^5.0.6",
     "radspec": "^2.0.0-rc.1"
   },
   "description": "Access and interact with Aragon Organizations and their apps.",
