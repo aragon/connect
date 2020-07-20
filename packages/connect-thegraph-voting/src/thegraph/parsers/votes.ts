@@ -1,6 +1,6 @@
 import { QueryResult } from '@aragon/connect-thegraph'
-import { VoteData } from '../types'
-import Vote from '../entities/Vote'
+import { VoteData } from '../../types'
+import Vote from '../../entities/Vote'
 
 export function parseVotes(result: QueryResult, connector: any): Vote[] {
   const votes = result.data.votes

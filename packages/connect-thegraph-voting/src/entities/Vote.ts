@@ -1,10 +1,9 @@
 import { SubscriptionHandler } from '@aragon/connect-types'
-import { VoteData } from '../types'
-import VotingConnectorTheGraph from '../connector'
+import { IVotingConnector, VoteData } from '../types'
 import Cast from './Cast'
 
 export default class Vote {
-  #connector: VotingConnectorTheGraph
+  #connector: IVotingConnector
 
   readonly id: string
   readonly creator: string
@@ -19,7 +18,7 @@ export default class Vote {
   readonly votingPower: string
   readonly script: string
 
-  constructor(data: VoteData, connector: VotingConnectorTheGraph) {
+  constructor(data: VoteData, connector: IVotingConnector) {
     this.#connector = connector
 
     this.id = data.id
