@@ -74,6 +74,10 @@ export default class App {
     return new App(data, metadata, organization)
   }
 
+  extend(obj: any) {
+    return Object.assign(obj, this)
+  }
+
   private orgConnector(): IOrganizationConnector {
     return this.organization.connection.orgConnector
   }

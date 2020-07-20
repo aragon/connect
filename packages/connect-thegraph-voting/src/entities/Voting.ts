@@ -1,11 +1,10 @@
 import { Address, SubscriptionHandler } from '@aragon/connect-types'
-import { IAppConnected } from '@aragon/connect-core'
 import Vote from './Vote'
 import { IVotingConnector } from '../types'
 
-export default class Voting implements IAppConnected {
-  #connector: IVotingConnector
+export default class Voting {
   #appAddress: Address
+  #connector: IVotingConnector
 
   constructor(connector: IVotingConnector, appAddress: Address) {
     this.#connector = connector

@@ -6,6 +6,7 @@ import VotingConnectorTheGraph, {
   subgraphUrlFromChainId,
 } from './thegraph/connector'
 
+interface ConnectedApp extends App, Voting {}
 type ConnectorDeclaration = string | [string, object | undefined]
 
 type ConnectOptions = {
@@ -50,7 +51,7 @@ function getConnector(
 async function connect(
   app: App | Promise<App>,
   options: ConnectOptions = {}
-): Promise<Voting> {
+): Promise<ConnectedApp> {
   app = await app
 
   if (!(app instanceof App)) {
@@ -61,7 +62,7 @@ async function connect(
   const network = toNetwork(options.network || connection.orgConnector.network)
   const connector = getConnector(connection, network, options.connector)
 
-  return new Voting(connector, app.address)
+  return app.extend(new Voting(connector, app.address))
 }
 
 export default connect
