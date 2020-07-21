@@ -11,6 +11,10 @@ describe('when connecting to a token manager app', () => {
     connector = new TokenManagerConnectorTheGraph(TOKENS_SUBGRAPH_URL)
   })
 
+  afterAll(async () => {
+    await connector.disconnect()
+  })
+
   describe('when querying for the token', () => {
     let token: Token
 

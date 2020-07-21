@@ -70,6 +70,12 @@ export default class ConnectorTheGraph implements IOrganizationConnector {
     this.network = config.network
   }
 
+  async connect() {}
+
+  async disconnect() {
+    this.#gql.close()
+  }
+
   async rolesForAddress(appAddress: string): Promise<Role[]> {
     return this.#gql.performQueryWithParser(
       queries.ROLE_BY_APP_ADDRESS('query'),
