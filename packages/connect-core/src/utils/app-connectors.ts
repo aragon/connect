@@ -28,7 +28,11 @@ function normalizeConnectorConfig<Config extends object>(
 export function createAppConnector<
   ConnectedApp extends object,
   Config extends object
->(callback: (context: { config: Config } & AppConnectContext) => ConnectedApp) {
+>(
+  callback: (
+    context: { config: Config } & AppConnectContext
+  ) => ConnectedApp | Promise<ConnectedApp>
+) {
   return async function connect(
     app: App | Promise<App>,
     connector?: string | [string, Config | undefined]
@@ -45,16 +49,15 @@ export function createAppConnector<
       connector || orgConnector.name
     )
 
-    return Object.assign(
-      callback({
-        app,
-        config: connectorConfig,
-        connector: connectorName,
-        ipfs: connection.ipfs,
-        network: orgConnector.network,
-        verbose: connection.verbose,
-      }),
-      app
-    )
+    const connectedApp = await callback({
+      app,
+      config: connectorConfig,
+      connector: connectorName,
+      ipfs: connection.ipfs,
+      network: orgConnector.network,
+      verbose: connection.verbose,
+    })
+
+    return Object.assign(connectedApp, app)
   }
 }
