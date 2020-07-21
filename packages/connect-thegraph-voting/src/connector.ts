@@ -1,3 +1,4 @@
+import { SubscriptionHandler } from '@aragon/connect-types'
 import { GraphQLWrapper } from '@aragon/connect-thegraph'
 import * as queries from './queries'
 import Vote from './entities/Vote'
@@ -23,10 +24,7 @@ export default class VotingConnectorTheGraph extends GraphQLWrapper {
     )
   }
 
-  onVotesForApp(
-    appAddress: string,
-    callback: Function
-  ): { unsubscribe: Function } {
+  onVotesForApp(appAddress: string, callback: Function): SubscriptionHandler {
     return this.subscribeToQueryWithParser(
       queries.ALL_VOTES('subscription'),
       { appAddress, first: 1000, skip: 0 },
@@ -47,10 +45,7 @@ export default class VotingConnectorTheGraph extends GraphQLWrapper {
     )
   }
 
-  onCastsForVote(
-    voteId: string,
-    callback: Function
-  ): { unsubscribe: Function } {
+  onCastsForVote(voteId: string, callback: Function): SubscriptionHandler {
     return this.subscribeToQueryWithParser(
       queries.CASTS_FOR_VOTE('subscription'),
       { voteId, first: 1000, skip: 0 },

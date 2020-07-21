@@ -2,7 +2,7 @@ type TokenManager @entity {
   id: ID!
   address: Bytes!
   orgAddress: Bytes!
-  token: MiniMeToken! @derivedFrom(field: "tokenManager")
+  token: MiniMeToken @derivedFrom(field: "tokenManager")
 }
 
 type MiniMeToken @entity {
@@ -23,6 +23,11 @@ type TokenHolder @entity {
   address: Bytes!
   tokenAddress: Bytes!
   balance: BigInt!
+}
+
+type OrphanTokenManagers @entity {
+  id: ID!
+  apps: [Bytes!]!
 }
 
 type AragonInfo @entity {

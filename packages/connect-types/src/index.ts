@@ -1,24 +1,29 @@
+export type Address = string
+
 export type Network = {
   name: string
   chainId: number
-  ensAddress?: string
+  ensAddress?: Address
 }
 
 export type Networkish = Network | string | number
 
 // Normalized app fiters
 export type AppFilters = {
-  address?: string[]
+  address?: Address[]
   name?: string[]
 }
 
 // App fiters passed by consumers
-type AppFiltersAddressParam = string | string[]
+type AppFiltersNameOrAddress = string | Address
 export type AppFiltersParam =
   | undefined
   | null
-  | AppFiltersAddressParam
+  | AppFiltersNameOrAddress
+  | AppFiltersNameOrAddress[]
   | {
-      address?: AppFiltersAddressParam
+      address?: Address | Address[]
       name?: string | string[]
     }
+
+export type SubscriptionHandler = { unsubscribe: () => void }

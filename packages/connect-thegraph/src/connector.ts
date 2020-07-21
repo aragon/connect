@@ -1,11 +1,11 @@
 import {
   App,
-  ConnectorInterface,
+  IOrganizationConnector,
   Permission,
   Repo,
   Role,
 } from '@aragon/connect-core'
-import { AppFilters, Network } from '@aragon/connect-types'
+import { AppFilters, Network, SubscriptionHandler } from '@aragon/connect-types'
 import * as queries from './queries'
 import GraphQLWrapper from './core/GraphQLWrapper'
 import {
@@ -17,8 +17,9 @@ import {
 } from './parsers'
 
 export type ConnectorTheGraphConfig = {
-  verbose?: boolean
+  network: Network
   orgSubgraphUrl?: string
+  verbose?: boolean
 }
 
 function getOrgSubgraphUrl(network: Network): string | null {
@@ -50,19 +51,23 @@ function appFiltersToQueryFilter(appFilters: AppFilters) {
   return queryFilter
 }
 
-export default class ConnectorTheGraph extends GraphQLWrapper
-  implements ConnectorInterface {
-  constructor(
-    network: Network,
-    { verbose = false, orgSubgraphUrl }: ConnectorTheGraphConfig = {}
-  ) {
-    const _orgSubgraphUrl = orgSubgraphUrl || getOrgSubgraphUrl(network)
-    if (!_orgSubgraphUrl) {
+export default class ConnectorTheGraph implements IOrganizationConnector {
+  #gql: GraphQLWrapper
+  readonly name = 'thegraph'
+  readonly network: Network
+
+  constructor(config: ConnectorTheGraphConfig) {
+    const orgSubgraphUrl =
+      config.orgSubgraphUrl || getOrgSubgraphUrl(config.network)
+
+    if (!orgSubgraphUrl) {
       throw new Error(
-        `The chainId ${network.chainId} is not supported by the TheGraph connector.`
+        `The chainId ${config.network.chainId} is not supported by the TheGraph connector.`
       )
     }
-    super(_orgSubgraphUrl, verbose)
+
+    this.#gql = new GraphQLWrapper(orgSubgraphUrl, config.verbose)
+    this.network = config.network
   }
 
   async connect() {}
@@ -72,7 +77,7 @@ export default class ConnectorTheGraph extends GraphQLWrapper
   }
 
   async rolesForAddress(appAddress: string): Promise<Role[]> {
-    return this.performQueryWithParser(
+    return this.#gql.performQueryWithParser(
       queries.ROLE_BY_APP_ADDRESS('query'),
       { appAddress: appAddress.toLowerCase() },
       parseRoles
@@ -80,7 +85,7 @@ export default class ConnectorTheGraph extends GraphQLWrapper
   }
 
   async permissionsForOrg(orgAddress: string): Promise<Permission[]> {
-    return this.performQueryWithParser(
+    return this.#gql.performQueryWithParser(
       queries.ORGANIZATION_PERMISSIONS('query'),
       { orgAddress: orgAddress.toLowerCase() },
       parsePermissions
@@ -90,8 +95,8 @@ export default class ConnectorTheGraph extends GraphQLWrapper
   onPermissionsForOrg(
     orgAddress: string,
     callback: Function
-  ): { unsubscribe: Function } {
-    return this.subscribeToQueryWithParser(
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser(
       queries.ORGANIZATION_PERMISSIONS('subscription'),
       { orgAddress: orgAddress.toLowerCase() },
       callback,
@@ -100,7 +105,7 @@ export default class ConnectorTheGraph extends GraphQLWrapper
   }
 
   async appByAddress(appAddress: string): Promise<App> {
-    return this.performQueryWithParser(
+    return this.#gql.performQueryWithParser(
       queries.APP_BY_ADDRESS('query'),
       { appAddress: appAddress.toLowerCase() },
       parseApp
@@ -108,7 +113,7 @@ export default class ConnectorTheGraph extends GraphQLWrapper
   }
 
   async appForOrg(orgAddress: string, filters: AppFilters): Promise<App> {
-    const apps = await this.performQueryWithParser<App[]>(
+    const apps = await this.#gql.performQueryWithParser<App[]>(
       queries.ORGANIZATION_APPS('query'),
       {
         appFilter: appFiltersToQueryFilter(filters),
@@ -121,7 +126,7 @@ export default class ConnectorTheGraph extends GraphQLWrapper
   }
 
   async appsForOrg(orgAddress: string, filters: AppFilters): Promise<App[]> {
-    return this.performQueryWithParser<App[]>(
+    return this.#gql.performQueryWithParser<App[]>(
       queries.ORGANIZATION_APPS('query'),
       {
         appFilter: appFiltersToQueryFilter(filters),
@@ -135,8 +140,8 @@ export default class ConnectorTheGraph extends GraphQLWrapper
     orgAddress: string,
     filters: AppFilters,
     callback: Function
-  ): { unsubscribe: Function } {
-    return this.subscribeToQueryWithParser(
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser(
       queries.ORGANIZATION_APPS('subscription'),
       {
         appFilter: appFiltersToQueryFilter(filters),
@@ -152,8 +157,8 @@ export default class ConnectorTheGraph extends GraphQLWrapper
     orgAddress: string,
     filters: AppFilters,
     callback: Function
-  ): { unsubscribe: Function } {
-    return this.subscribeToQueryWithParser(
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser(
       queries.ORGANIZATION_APPS('subscription'),
       {
         appFilter: appFiltersToQueryFilter(filters),
@@ -165,7 +170,7 @@ export default class ConnectorTheGraph extends GraphQLWrapper
   }
 
   async repoForApp(appAddress: string): Promise<Repo> {
-    return this.performQueryWithParser(
+    return this.#gql.performQueryWithParser(
       queries.REPO_BY_APP_ADDRESS('query'),
       { appAddress: appAddress.toLowerCase() },
       parseRepo

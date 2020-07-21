@@ -25,7 +25,7 @@ Like `Organization#app()`, but as a subscription.
 | `appFilter.address` | `String`                      | Same as `appFilter`, but makes the selection by `address` explicit.                                                                                                                                                                                           |
 | `appFilter.appName` | `String`                      | Same as `appFilter`, but makes the selection by `appName` explicit.                                                                                                                                                                                           |
 | `callback`          | `app => void`                 | A callback that will get called every time the result gets updated.                                                                                                                                                                                           |
-| returns             | `{ unsubscribe: Function }`   | A handler that allows to stop receiving updates.                                                                                                                                                                                                              |
+| returns             | `{ unsubscribe: () => void }` | A handler that allows to stop receiving updates.                                                                                                                                                                                                              |
 
 ### Organization\#apps\(appFilter\)
 
@@ -48,7 +48,7 @@ Like `Organization#apps()`, but as a subscription.
 | `appFilter.address` | `String` or `String[]`                      | Same as `appFilter`, but makes the selection by `address` explicit.                                                                                                                                                                                                                                                                |
 | `appFilter.appName` | `String` or `String[]`                      | Same as `appFilter`, but makes the selection by `appName` explicit.                                                                                                                                                                                                                                                                |
 | `callback`          | `app => void`                               | A callback that will get called every time the result gets updated.                                                                                                                                                                                                                                                                |
-| returns             | `{ unsubscribe: Function }`                 | A handler that allows to stop receiving updates.                                                                                                                                                                                                                                                                                   |
+| returns             | `{ unsubscribe: () => void }`               | A handler that allows to stop receiving updates.                                                                                                                                                                                                                                                                                   |
 
 ### Organization\#permissions\(\)
 
@@ -62,10 +62,10 @@ Fetch the organization’s permissions.
 
 Like `Organization#permissions()`, but as a subscription.
 
-| Name       | Type                        | Description                                                         |
-| ---------- | --------------------------- | ------------------------------------------------------------------- |
-| `callback` | `permission => void`        | A callback that will get called every time the result gets updated. |
-| returns    | `{ unsubscribe: Function }` | A handler that allows to stop receiving updates.                    |
+| Name       | Type                          | Description                                                         |
+| ---------- | ----------------------------- | ------------------------------------------------------------------- |
+| `callback` | `permission => void`          | A callback that will get called every time the result gets updated. |
+| returns    | `{ unsubscribe: () => void }` | A handler that allows to stop receiving updates.                    |
 
 ### Organization\#appIntent\(appAddress, funcName, funcArgs\)
 

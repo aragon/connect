@@ -12,13 +12,11 @@ import { DEFAULT_IPFS_GATEWAY } from '../params'
 import { AragonArtifact, AragonManifest } from '../types'
 
 export function parseMetadata(name: string, metadata: string): any {
-  let parsedMetaData
   try {
-    parsedMetaData = JSON.parse(metadata)
+    return JSON.parse(metadata)
   } catch (error) {
     throw new Error(`Can't parse ${name} file, invalid JSON.`)
   }
-  return parsedMetaData
 }
 
 export async function fetchMetadata(
@@ -41,22 +39,22 @@ export async function fetchMetadata(
 
 export async function resolveMetadata(
   fileName: string,
-  contentUri?: string,
+  contentUri?: string | null,
   metadata?: string | null
 ): Promise<any> {
-  if (metadata) return parseMetadata(fileName, metadata)
-  if (contentUri) return fetchMetadata(fileName, contentUri)
+  if (metadata) {
+    return parseMetadata(fileName, metadata)
+  }
+  if (contentUri) {
+    return fetchMetadata(fileName, contentUri)
+  }
   return {}
 }
 
 export async function resolveManifest(
   data: AppData | RepoData
 ): Promise<AragonManifest> {
-  return resolveMetadata(
-    'manifest.json',
-    data.contentUri || undefined,
-    data.manifest
-  )
+  return resolveMetadata('manifest.json', data.contentUri, data.manifest)
 }
 
 export async function resolveArtifact(
@@ -68,9 +66,5 @@ export async function resolveArtifact(
   if (hasAppInfo(data.appId, 'aragon')) {
     return getAragonOsInternalAppInfo(data.appId)
   }
-  return resolveMetadata(
-    'artifact.json',
-    data.contentUri || undefined,
-    data.artifact
-  )
+  return resolveMetadata('artifact.json', data.contentUri, data.artifact)
 }
