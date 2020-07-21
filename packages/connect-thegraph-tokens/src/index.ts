@@ -1,5 +1,5 @@
-export { default as TokenManagerConnectorTheGraph } from './connector'
-
-export { default as TokenManager } from './entities/TokenManager'
-export { default as TokenHolder } from './entities/TokenHolder'
 export { default as Token } from './entities/Token'
+export { default as TokenHolder } from './entities/TokenHolder'
+export { default as Tokens } from './entities/Tokens'
+export { default as TokensConnectorTheGraph } from './thegraph/connector'
+export { default } from './connect'

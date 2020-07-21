@@ -1,10 +1,7 @@
 import { QueryResult } from '@aragon/connect-thegraph'
-import TokenHolder, { TokenHolderData } from '../entities/TokenHolder'
+import TokenHolder, { TokenHolderData } from '../../entities/TokenHolder'
 
-export function parseTokenHolders(
-  result: QueryResult,
-  connector: any
-): TokenHolder[] {
+export function parseTokenHolders(result: QueryResult): TokenHolder[] {
   const holders = result.data.tokenHolders
 
   if (!holders) {
@@ -18,6 +15,6 @@ export function parseTokenHolders(
   )
 
   return datas.map((data: TokenHolderData) => {
-    return new TokenHolder(data, connector)
+    return new TokenHolder(data)
   })
 }

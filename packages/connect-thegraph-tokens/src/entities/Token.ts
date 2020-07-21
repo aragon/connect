@@ -1,36 +1,26 @@
-import { SubscriptionHandler } from '@aragon/connect-types'
-import TokensEntity from './TokensEntity'
-import TokenHolder from './TokenHolder'
-import TokenManagerConnectorTheGraph from '../connector'
-
-export interface TokenData {
-  id: string
+export type TokenData = {
   address: string
-  totalSupply: string
-  transferable: boolean
+  id: string
   name: string
   symbol: string
+  totalSupply: string
+  transferable: boolean
 }
 
-export default class Token extends TokensEntity implements TokenData {
-  readonly id!: string
-  readonly address!: string
-  readonly totalSupply!: string
-  readonly transferable!: boolean
-  readonly name!: string
-  readonly symbol!: string
+export default class Token {
+  readonly address: string
+  readonly id: string
+  readonly name: string
+  readonly symbol: string
+  readonly totalSupply: string
+  readonly transferable: boolean
 
-  constructor(data: TokenData, connector: TokenManagerConnectorTheGraph) {
-    super(connector)
-
-    Object.assign(this, data)
-  }
-
-  async holders({ first = 1000, skip = 0 } = {}): Promise<TokenHolder[]> {
-    return this._connector.tokenHolders(this.address, first, skip)
-  }
-
-  onHolders(callback: Function): SubscriptionHandler {
-    return this._connector.onTokenHolders(this.address, callback)
+  constructor(data: TokenData) {
+    this.address = data.address
+    this.id = data.id
+    this.name = data.name
+    this.symbol = data.symbol
+    this.totalSupply = data.totalSupply
+    this.transferable = data.transferable
   }
 }
