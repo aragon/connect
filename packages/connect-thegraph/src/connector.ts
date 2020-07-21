@@ -5,7 +5,7 @@ import {
   Repo,
   Role,
 } from '@aragon/connect-core'
-import { AppFilters, Network } from '@aragon/connect-types'
+import { AppFilters, Network, SubscriptionHandler } from '@aragon/connect-types'
 import * as queries from './queries'
 import GraphQLWrapper from './core/GraphQLWrapper'
 import {
@@ -89,7 +89,7 @@ export default class ConnectorTheGraph implements IOrganizationConnector {
   onPermissionsForOrg(
     orgAddress: string,
     callback: Function
-  ): { unsubscribe: Function } {
+  ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
       queries.ORGANIZATION_PERMISSIONS('subscription'),
       { orgAddress: orgAddress.toLowerCase() },
@@ -134,7 +134,7 @@ export default class ConnectorTheGraph implements IOrganizationConnector {
     orgAddress: string,
     filters: AppFilters,
     callback: Function
-  ): { unsubscribe: Function } {
+  ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
       queries.ORGANIZATION_APPS('subscription'),
       {
@@ -151,7 +151,7 @@ export default class ConnectorTheGraph implements IOrganizationConnector {
     orgAddress: string,
     filters: AppFilters,
     callback: Function
-  ): { unsubscribe: Function } {
+  ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
       queries.ORGANIZATION_APPS('subscription'),
       {

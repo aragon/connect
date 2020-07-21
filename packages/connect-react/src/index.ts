@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { AppFiltersParam } from '@aragon/connect-types'
+import { AppFiltersParam, SubscriptionHandler } from '@aragon/connect-types'
 import {
   App,
   ConnectOptions,
@@ -117,7 +117,7 @@ function useConnectSubscription<Data>(
   callback: (
     org: Organization,
     onData: (data: Data) => void
-  ) => { unsubscribe: Function },
+  ) => SubscriptionHandler,
   initValue: Data
 ): [Data, LoadingStatus] {
   const [data, setData] = useState<Data>(initValue)

@@ -1,5 +1,4 @@
 import { ethers } from 'ethers'
-import IOrganizationConnector from './connections/IOrganizationConnector'
 
 export type Metadata = (AragonArtifact | AragonManifest)[]
 

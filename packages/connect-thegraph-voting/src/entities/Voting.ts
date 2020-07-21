@@ -1,3 +1,4 @@
+import { SubscriptionHandler } from '@aragon/connect-types'
 import VotingEntity from './VotingEntity'
 import Vote from './Vote'
 import VotingConnectorTheGraph from '../connector'
@@ -12,17 +13,10 @@ export default class Voting extends VotingEntity {
   }
 
   async votes({ first = 1000, skip = 0 } = {}): Promise<Vote[]> {
-    return this._connector.votesForApp(
-      this.appAddress,
-      first,
-      skip
-    )
+    return this._connector.votesForApp(this.appAddress, first, skip)
   }
 
-  onVotes(callback: Function): { unsubscribe: Function } {
-    return this._connector.onVotesForApp!(
-      this.appAddress,
-      callback
-    )
+  onVotes(callback: Function): SubscriptionHandler {
+    return this._connector.onVotesForApp!(this.appAddress, callback)
   }
 }

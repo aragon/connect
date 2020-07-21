@@ -9,6 +9,7 @@ import {
 import { SubscriptionOperation } from '@urql/core/dist/types/exchanges/subscription'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { DocumentNode } from 'graphql'
+import { SubscriptionHandler } from '@aragon/connect-types'
 import { ParseFunction, QueryResult } from '../types'
 import { pipe, subscribe } from 'wonka'
 
@@ -50,7 +51,7 @@ export default class GraphQLWrapper {
     query: DocumentNode,
     args: any = {},
     callback: Function
-  ): { unsubscribe: Function } {
+  ): SubscriptionHandler {
     const request = createRequest(query, args)
 
     return pipe(
@@ -80,7 +81,7 @@ export default class GraphQLWrapper {
     args: any = {},
     callback: Function,
     parser: ParseFunction
-  ): { unsubscribe: Function } {
+  ): SubscriptionHandler {
     return this.subscribeToQuery(query, args, async (result: QueryResult) => {
       callback(await this.parseQueryResult(parser, result))
     })

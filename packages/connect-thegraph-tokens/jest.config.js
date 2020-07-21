@@ -9,7 +9,7 @@ module.exports = {
   testRegex: `(packages/${packageName}/.*/__tests__/.*|\\.(test|spec))\\.tsx?$`,
   modulePaths: [`<rootDir>/packages/${packageName}/src/`],
   name: packageName,
-  displayName: 'VOTING',
+  displayName: 'TOKENS',
   testTimeout: 30000,
   rootDir: '../..',
 }
