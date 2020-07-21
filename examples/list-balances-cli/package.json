@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@aragon/connect": "*",
-    "@aragon/connect-thegraph-voting": "*",
+    "@aragon/connect-voting": "*",
     "token-amount": "^0.1.0"
   }
 }

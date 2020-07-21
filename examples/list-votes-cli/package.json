@@ -13,6 +13,6 @@
   },
   "dependencies": {
     "@aragon/connect": "*",
-    "@aragon/connect-thegraph-voting": "*"
+    "@aragon/connect-voting": "*"
   }
 }

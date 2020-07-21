@@ -1,13 +1,7 @@
 {
   "name": "@aragon/connect",
   "description": "Access and interact with Aragon Organizations and their apps.",
-  "keywords": [
-    "ethereum",
-    "javascript",
-    "web3",
-    "dapp",
-    "aragon"
-  ],
+  "keywords": ["ethereum", "javascript", "web3", "dapp", "aragon"],
   "author": "Aragon Association <legal@aragon.org>",
   "license": "LGPL-3.0-or-later",
   "homepage": "https://github.com/aragon/connect",
@@ -15,10 +9,7 @@
   "bugs": "https://github.com/aragon/connect/issues",
   "private": true,
   "workspaces": {
-    "packages": [
-      "packages/*",
-      "examples/*"
-    ],
+    "packages": ["packages/*", "examples/*"],
     "nohoist": [
       "**/@graphprotocol/graph-ts",
       "**/@graphprotocol/graph-ts/**",
@@ -32,8 +23,8 @@
     "connect-react": "yarn workspace @aragon/connect-react",
     "connect-ethereum": "yarn workspace @aragon/connect-ethereum",
     "connect-thegraph": "yarn workspace @aragon/connect-thegraph",
-    "connect-thegraph-voting": "yarn workspace @aragon/connect-thegraph-voting",
-    "connect-thegraph-tokens": "yarn workspace @aragon/connect-thegraph-tokens",
+    "connect-voting": "yarn workspace @aragon/connect-voting",
+    "connect-tokens": "yarn workspace @aragon/connect-tokens",
     "connect-types": "yarn workspace @aragon/connect-types",
     "test": "is-ci \"test:coverage\" \"test:watch\"",
     "test:coverage": "jest --coverage --forceExit --detectOpenHandles",

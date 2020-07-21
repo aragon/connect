@@ -1,6 +1,6 @@
 import TokenAmount from 'token-amount'
 import { connect } from '@aragon/connect'
-import connectTokens from '@aragon/connect-thegraph-tokens'
+import connectTokens from '@aragon/connect-tokens'
 
 const BLUE = '\x1b[36m'
 const RESET = '\x1b[0m'

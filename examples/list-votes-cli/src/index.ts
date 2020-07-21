@@ -1,5 +1,5 @@
 import { connect } from '@aragon/connect'
-import connectVoting from '@aragon/connect-thegraph-voting'
+import connectVoting from '@aragon/connect-voting'
 
 const BLUE = '\x1b[36m'
 const RESET = '\x1b[0m'

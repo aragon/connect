@@ -23,8 +23,8 @@
   "dependencies": {
     "@aragon/connect": "*",
     "@aragon/connect-thegraph": "*",
-    "@aragon/connect-thegraph-tokens": "*",
-    "@aragon/connect-thegraph-voting": "*",
+    "@aragon/connect-tokens": "*",
+    "@aragon/connect-voting": "*",
     "ethers": "^5.0.0",
     "graphql-tag": "^2.10.3"
   },

@@ -38,8 +38,8 @@ A connector can be of two types: **organization** or **app**, to fetch data from
 Aragon Connect consists of a few parts:
 
 - `@aragon/connect`: this is the main library. It provides the main features to connect and interact with organizations, and includes the basic organization connectors.
-- `@aragon/connect-thegraph-voting`: an app connector for fetching data from the Voting app, through The Graph.
-- `@aragon/connect-thegraph-tokens`: an app connector for fetching data from the Tokens app, through The Graph.
+- `@aragon/connect-voting`: an app connector for fetching data from the Voting app.
+- `@aragon/connect-tokens`: an app connector for fetching data from the Tokens app.
 - Additional app connectors published by individual app authors
 
 [A few other packages](https://github.com/aragon/connect/tree/master/packages) are also published, but they are only needed to author or extend connectors and not to use the library.
@@ -55,14 +55,14 @@ yarn add @aragon/connect
 You can now import it:
 
 ```javascript
-import { connect } from '@aragon/connect'
+import connect from '@aragon/connect'
 ```
 
 If you want to interact with the Voting or the Tokens app, you should also install their respective connectors:
 
 ```text
-yarn add @aragon/connect-thegraph-voting
-yarn add @aragon/connect-thegraph-tokens
+yarn add @aragon/connect-voting
+yarn add @aragon/connect-tokens
 ```
 
 See [“Fetching an app’s state”](getting-started.md#fetching-an-apps-state) below to understand how to use these app connectors.
@@ -102,16 +102,13 @@ Apps can be obtained from an [`Organization`](../api-reference/organization.md) 
 Let’s see how to retrieve all the votes from a Voting app:
 
 ```javascript
-import { connect } from '@aragon/connect'
-import Voting from '@aragon/connect-thegraph-voting'
+import connect from '@aragon/connect'
+import connectVoting from '@aragon/connect-voting'
 
 const org = await connect('example.aragonid.eth', 'thegraph')
 
-// Instanciate the Voting app connector using the app address:
-const voting = new Voting(
-  await org.app('voting').address,
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'
-)
+// Connect the Voting app using the corresponding connector:
+const voting = connectVoting(org.app('voting'))
 
 // Fetch votes of the Voting app
 const votes = await voting.votes()
@@ -147,10 +144,11 @@ handler.unsubscribe()
 App connectors also support subscriptions in an identical way:
 
 ```javascript
-const voting = new Voting(
-  votingInfo.address,
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'
-)
+import connect from '@aragon/connect'
+import connectVoting from '@aragon/connect-voting'
+
+const org = await connect('example.aragonid.eth', 'thegraph')
+const voting = connectVoting(org.app('voting'))
 
 const handler = voting.onVotes(votes => {
   console.log('Votes updated:', votes)
