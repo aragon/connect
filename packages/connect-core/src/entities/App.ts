@@ -9,7 +9,7 @@ import {
   AppIntent,
 } from '../types'
 import { resolveManifest, resolveArtifact } from '../utils/metadata'
-import { ConnectorInterface } from '../connections/ConnectorInterface'
+import IOrganizationConnector from '../connections/IOrganizationConnector'
 
 // TODO:
 // [ ] (ipfs) contentUrl 	String 	The HTTP URL of the app content. Uses the IPFS HTTP provider. E.g. http://gateway.ipfs.io/ipfs/QmdLEDDfi…/ (ContentUri passing through the resolver)
@@ -49,7 +49,7 @@ export default class App extends CoreEntity {
   constructor(
     data: AppData,
     metadata: Metadata,
-    connector: ConnectorInterface
+    connector: IOrganizationConnector
   ) {
     super(connector)
 
@@ -71,7 +71,7 @@ export default class App extends CoreEntity {
 
   static async create(
     data: AppData,
-    connector: ConnectorInterface
+    connector: IOrganizationConnector
   ): Promise<App> {
     const artifact = await resolveArtifact(data)
     const manifest = await resolveManifest(data)

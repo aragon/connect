@@ -4,17 +4,23 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import { AppFilters, Network, SubscriptionHandler } from '@aragon/connect-types'
+import IOrganizationConnector from './IOrganizationConnector'
 import { App, Repo, Role } from '..'
 import Permission from '../entities/Permission'
-import { ConnectorInterface } from './ConnectorInterface'
 
-export type ConnectorJsonConfig = { permissions: Permission[] }
+export type ConnectorJsonConfig = {
+  permissions: Permission[]
+  network: Network
+}
 
-class ConnectorJson implements ConnectorInterface {
+class ConnectorJson implements IOrganizationConnector {
   #permissions: Permission[]
+  readonly name = 'json'
+  readonly network: Network
 
-  constructor({ permissions }: ConnectorJsonConfig) {
+  constructor({ permissions, network }: ConnectorJsonConfig) {
     this.#permissions = permissions
+    this.network = network
   }
 
   async permissionsForOrg(): Promise<Permission[]> {

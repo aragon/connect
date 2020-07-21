@@ -1,7 +1,11 @@
-import { App, AppData } from '@aragon/connect-core'
+import { Network } from '@aragon/connect-types'
+import { App, AppData, IOrganizationConnector } from '@aragon/connect-core'
 import { QueryResult } from '../types'
 
-async function _parseApp(app: any, connector: any): Promise<App> {
+async function _parseApp(
+  app: any,
+  connector: IOrganizationConnector
+): Promise<App> {
   const data: AppData = {
     address: app.address,
     appId: app.appId,
@@ -37,7 +41,7 @@ export async function parseApp(
 
 export async function parseApps(
   result: QueryResult,
-  connector: any
+  connector: IOrganizationConnector
 ): Promise<App[]> {
   const org = result.data.organization
   const apps = org?.apps

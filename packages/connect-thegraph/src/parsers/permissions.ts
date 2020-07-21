@@ -1,9 +1,13 @@
-import { Permission, PermissionData } from '@aragon/connect-core'
+import {
+  IOrganizationConnector,
+  Permission,
+  PermissionData,
+} from '@aragon/connect-core'
 import { QueryResult } from '../types'
 
 export function parsePermissions(
   result: QueryResult,
-  connector: any
+  connector: IOrganizationConnector
 ): Permission[] {
   const org = result.data.organization
   const permissions = org?.permissions

@@ -5,8 +5,8 @@ import {
   Metadata,
   AragonArtifactRole,
 } from '../types'
+import IOrganizationConnector from '../connections/IOrganizationConnector'
 import { resolveMetadata, resolveManifest } from '../utils/metadata'
-import { ConnectorInterface } from '../connections/ConnectorInterface'
 
 export interface RepoData {
   address: string
@@ -29,7 +29,7 @@ export default class Repo extends CoreEntity {
   constructor(
     data: RepoData,
     metadata: Metadata,
-    connector: ConnectorInterface
+    connector: IOrganizationConnector
   ) {
     super(connector)
 
@@ -44,7 +44,7 @@ export default class Repo extends CoreEntity {
 
   static async create(
     data: RepoData,
-    connector: ConnectorInterface
+    connector: IOrganizationConnector
   ): Promise<Repo> {
     const artifact = await resolveMetadata(
       'artifact.json',

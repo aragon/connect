@@ -8,7 +8,7 @@ import {
 } from '@aragon/connect-types'
 import TransactionIntent from '../transactions/TransactionIntent'
 import { XDAI_WSS_ENDPOINT } from '../params'
-import { ConnectorInterface } from '../connections/ConnectorInterface'
+import IOrganizationConnector from '../connections/IOrganizationConnector'
 import { toArrayEntry } from '../utils/misc'
 import App from './App'
 import Permission from './Permission'
@@ -58,11 +58,11 @@ export default class Organization {
   #provider: ethers.providers.Provider
   #connected: boolean
 
-  private _connector: ConnectorInterface
+  private _connector: IOrganizationConnector
 
   constructor(
     location: string,
-    connector: ConnectorInterface,
+    connector: IOrganizationConnector,
     provider: any,
     network: Network
   ) {
