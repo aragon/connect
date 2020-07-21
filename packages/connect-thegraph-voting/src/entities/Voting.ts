@@ -7,8 +7,8 @@ export default class Voting {
   #connector: IVotingConnector
 
   constructor(connector: IVotingConnector, appAddress: Address) {
-    this.#connector = connector
     this.#appAddress = appAddress
+    this.#connector = connector
   }
 
   async votes({ first = 1000, skip = 0 } = {}): Promise<Vote[]> {
