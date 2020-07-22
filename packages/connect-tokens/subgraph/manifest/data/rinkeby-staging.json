@@ -5,7 +5,7 @@
       {
         "name": "SomeOrg",
         "address": "0x059bCFBC477C46AB39D76c05B7b40f3A42e7DE3B",
-        "startBlock": "6430210"
+        "startBlock": 6430210
       }
     ],
     "OrganizationFactories": [],

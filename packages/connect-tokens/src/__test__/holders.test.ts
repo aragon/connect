@@ -1,26 +1,25 @@
 import { TokenManagerConnectorTheGraph, Token, TokenHolder } from '../../src'
 
-const TOKENS_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-tokens-rinkeby'
+const TOKENS_SUBGRAPH_URL =
+  'https://api.thegraph.com/subgraphs/name/aragon/aragon-tokens-rinkeby'
 const TOKEN_ADDRESS = '0x4445bcd1f3e18bafca435379c46a11f40461e2ef'
 
 describe('when connecting to a token manager app', () => {
   let connector: TokenManagerConnectorTheGraph
 
   beforeAll(() => {
-    connector = new TokenManagerConnectorTheGraph(
-      TOKENS_SUBGRAPH_URL
-    )
+    connector = new TokenManagerConnectorTheGraph(TOKENS_SUBGRAPH_URL)
+  })
+
+  afterAll(async () => {
+    await connector.disconnect()
   })
 
   describe('when querying for the holders of a token', () => {
     let holders: TokenHolder[]
 
     beforeAll(async () => {
-      holders = await connector.tokenHolders(
-        TOKEN_ADDRESS,
-        1000,
-        0
-      )
+      holders = await connector.tokenHolders(TOKEN_ADDRESS, 1000, 0)
     })
 
     test('reports 3 holders', () => {
@@ -35,7 +34,9 @@ describe('when connecting to a token manager app', () => {
       })
 
       test('has the correct address', () => {
-        expect(holder.address).toBe('0x23565f4f4cb3154fdc0b59a7382b7fee09ec9493')
+        expect(holder.address).toBe(
+          '0x23565f4f4cb3154fdc0b59a7382b7fee09ec9493'
+        )
       })
 
       test('has the correct balance', () => {
@@ -44,4 +45,3 @@ describe('when connecting to a token manager app', () => {
     })
   })
 })
-

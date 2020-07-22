@@ -16,6 +16,10 @@ describe('when connecting to the mainnet subgraph', () => {
     connector = new ConnectorTheGraph({ network: MAINNET_NETWORK })
   })
 
+  afterAll(async () => {
+    await connector.disconnect()
+  })
+
   describe('when querying the repository of an app', () => {
     let repo: Repo
 

@@ -184,7 +184,7 @@ async function connect(
     verbose: verbose ?? false,
   }
 
-  await orgConnector.connect(connectionContext)
+  await orgConnector.connect?.(connectionContext)
 
   return new Organization(connectionContext)
 }

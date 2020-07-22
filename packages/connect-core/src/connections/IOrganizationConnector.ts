@@ -12,8 +12,8 @@ export default interface IOrganizationConnector {
   appByAddress(organization: Organization, appAddress: string): Promise<App>
   appForOrg(organization: Organization, filters?: AppFilters): Promise<App>
   appsForOrg(organization: Organization, filters?: AppFilters): Promise<App[]>
-  connect(connection: ConnectionContext): Promise<void>
-  disconnect(): Promise<void>
+  connect?(connection: ConnectionContext): Promise<void>
+  disconnect?(): Promise<void>
   onAppForOrg(
     organization: Organization,
     filters: AppFilters,
