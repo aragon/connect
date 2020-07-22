@@ -5,3 +5,4 @@ export function handleNewAppProxy(event: NewAppProxyEvent): void {
   aragon.processOrg(event.address)
   aragon.processApp(event.params.proxy, event.params.appId.toHexString())
 }
+

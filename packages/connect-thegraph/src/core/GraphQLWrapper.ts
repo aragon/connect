@@ -6,34 +6,39 @@ import {
   subscriptionExchange,
   createRequest,
 } from '@urql/core'
-import { SubscriptionOperation } from '@urql/core/dist/types/exchanges/subscription'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { DocumentNode } from 'graphql'
-import { SubscriptionHandler } from '@aragon/connect-types'
-import { ParseFunction, QueryResult } from '../types'
 import { pipe, subscribe } from 'wonka'
+import { SubscriptionHandler } from '@aragon/connect-types'
+import { ParseFunction, QueryResult, SubscriptionOperation } from '../types'
+
+const AUTO_RECONNECT = true
+const CONNECTION_TIMEOUT = 20 * 1000
+
+function filterSubgraphUrl(url: string): [string, string] {
+  if (!/^(?:https|wss):\/\//.test(url)) {
+    throw new Error('Please provide a valid subgraph URL')
+  }
+  return [url.replace(/^wss/, 'https'), url.replace(/^https/, 'wss')]
+}
 
 export default class GraphQLWrapper {
   #client: Client
   #verbose: boolean
+  close: () => void
 
   constructor(subgraphUrl: string, verbose = false) {
-    if (!subgraphUrl || !subgraphUrl.startsWith('http')) {
-      throw new Error('Please provide a valid subgraph URL')
-    }
+    const [urlHttp, urlWs] = filterSubgraphUrl(subgraphUrl)
 
     const subscriptionClient = new SubscriptionClient(
-      subgraphUrl.replace('http', 'ws'),
-      {
-        reconnect: true,
-        timeout: 20000,
-      },
+      urlWs,
+      { reconnect: AUTO_RECONNECT, timeout: CONNECTION_TIMEOUT },
       ws
     )
 
     this.#client = new Client({
       maskTypename: true,
-      url: subgraphUrl,
+      url: urlHttp,
       fetch,
       exchanges: [
         ...defaultExchanges,
@@ -45,6 +50,7 @@ export default class GraphQLWrapper {
     })
 
     this.#verbose = verbose
+    this.close = () => subscriptionClient.close()
   }
 
   subscribeToQuery(

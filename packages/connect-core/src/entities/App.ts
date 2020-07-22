@@ -19,32 +19,32 @@ export interface AppData {
   appId: string
   artifact?: string | null
   codeAddress: string
-  contentUri?: string | null
-  isForwarder?: boolean | null
-  isUpgradeable?: boolean | null
+  contentUri?: string
+  isForwarder?: boolean
+  isUpgradeable?: boolean
   kernelAddress: string
   manifest?: string | null
   name?: string
-  registry?: string | null
+  registry?: string
   registryAddress: string
   repoAddress?: string
   version?: string
 }
 
 export default class App extends CoreEntity {
-  readonly address!: string
-  readonly appId!: string
-  readonly codeAddress!: string
+  #metadata!: Metadata
+  readonly address: string
+  readonly appId: string
+  readonly codeAddress: string
   readonly contentUri?: string
   readonly isForwarder?: boolean
   readonly isUpgradeable?: boolean
-  readonly kernelAddress!: string
+  readonly kernelAddress: string
   readonly name?: string
   readonly registry?: string
-  readonly registryAddress!: string
+  readonly registryAddress: string
   readonly repoAddress?: string
   readonly version?: string
-  #metadata!: Metadata
 
   constructor(
     data: AppData,
@@ -53,20 +53,20 @@ export default class App extends CoreEntity {
   ) {
     super(connector)
 
+    this.#metadata = metadata
+
     this.address = data.address
     this.appId = data.appId
     this.codeAddress = data.codeAddress
-    this.contentUri = data.contentUri || undefined
-    this.isForwarder = data.isForwarder ?? undefined
-    this.isUpgradeable = data.isUpgradeable ?? undefined
+    this.contentUri = data.contentUri
+    this.isForwarder = data.isForwarder
+    this.isUpgradeable = data.isUpgradeable
     this.kernelAddress = data.kernelAddress
     this.name = data.name
-    this.registry = data.registry || undefined
+    this.registry = data.registry
     this.registryAddress = data.registryAddress
     this.repoAddress = data.repoAddress
     this.version = data.version
-
-    this.#metadata = metadata
   }
 
   static async create(

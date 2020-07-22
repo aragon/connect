@@ -1,5 +1,8 @@
 import { Address } from '@graphprotocol/graph-ts'
-import { getTokenManagerEntity } from './TokenManager'
+import {
+  getTokenManagerEntity,
+  processOrphanTokenManagers
+} from './TokenManager'
 
 /*
  * Called when an app proxy is detected.
@@ -20,6 +23,7 @@ export function getTemplateForApp(appId: string): string | null {
 
 export function onAppTemplateCreated(appAddress: Address, appId: string): void {
   getTokenManagerEntity(appAddress)
+  processOrphanTokenManagers()
 }
 
 export function onOrgTemplateCreated(orgAddress: Address): void {}

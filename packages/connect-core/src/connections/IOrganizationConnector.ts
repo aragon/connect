@@ -10,8 +10,9 @@ export default interface IOrganizationConnector {
   appByAddress(appAddress: string): Promise<App>
   appForOrg(orgAddress: string, filters?: AppFilters): Promise<App>
   appsForOrg(orgAddress: string, filters?: AppFilters): Promise<App[]>
-  chainId?: string
-  connect?: () => Promise<void>
+  chainId?: number
+  connect?(): Promise<void>
+  disconnect?(): Promise<void>
   onAppsForOrg(
     orgAddress: string,
     filters: AppFilters,

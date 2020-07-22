@@ -18,6 +18,10 @@ describe('when connecting to the mainnet subgraph', () => {
     connector = new ConnectorTheGraph({ network: MAINNET_NETWORK })
   })
 
+  afterAll(async () => {
+    await connector.disconnect()
+  })
+
   function isValidApp(): void {
     test('should have a valid abi', () => {
       expect(app.abi).toBeDefined()

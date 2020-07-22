@@ -1,6 +1,7 @@
 import { Address } from '@graphprotocol/graph-ts'
 import { TokenManager as TokenManagerContract } from '../generated/templates/TokenManager/TokenManager'
 import { TokenManager as TokenManagerEntity } from '../generated/schema'
+import { OrphanTokenManagers as OrphanTokenManagersEntity } from '../generated/schema'
 // import { NewVesting as NewVestingEvent } from '../generated/templates/TokenManager/TokenManager'
 // import { RevokeVesting as RevokeVestingEvent } from '../generated/templates/TokenManager/TokenManager'
 // import { ScriptResult as ScriptResultEvent } from '../generated/templates/TokenManager/TokenManager'
@@ -23,13 +24,81 @@ export function getTokenManagerEntity(proxyAddress: Address): TokenManagerEntity
     tokenManagerEntity.address = proxyAddress
     tokenManagerEntity.orgAddress = tokenManagerContract.kernel()
 
+    // See if the TokenManager is already initialized with a token.
+    // If it's not, remember it so that we can check later.
     let tokenAddress = tokenManagerContract.token()
-    aragon.processToken(tokenAddress)
+    if (tokenAddress.toHexString() != '0x0000000000000000000000000000000000000000') {
+      aragon.processToken(tokenAddress)
+    } else {
+      _registerOrphanTokenManager(proxyAddress)
+    }
 
     tokenManagerEntity.save()
   }
 
   return tokenManagerEntity!
+}
+
+export function processOrphanTokenManagers(): void {
+  let registry = _getOrphanTokenManagersEntity()
+
+  let apps = registry.apps
+  if (apps.length > 0) {
+    for (let i = 0; i < apps.length; i++) {
+      let proxyAddress = apps[i] as Address
+
+      let tokenManagerContract = TokenManagerContract.bind(proxyAddress)
+
+      let tokenAddress = tokenManagerContract.token()
+      if (tokenAddress.toHexString() != '0x0000000000000000000000000000000000000000') {
+        _unregisterOrphanTokenManager(proxyAddress)
+
+        aragon.processToken(tokenAddress)
+      }
+    }
+  }
+}
+
+function _registerOrphanTokenManager(appAddress: Address): void {
+  let registry = _getOrphanTokenManagersEntity()
+
+  let apps = registry.apps
+  if (!apps.includes(appAddress)) {
+    apps.push(appAddress)
+
+    registry.apps = apps
+
+    registry.save()
+  }
+}
+
+function _unregisterOrphanTokenManager(appAddress: Address): void {
+  let registry = _getOrphanTokenManagersEntity()
+
+  let apps = registry.apps
+  if (apps.includes(appAddress)) {
+    let idx = apps.indexOf(appAddress)
+    apps.splice(idx, 1)
+
+    registry.apps = apps
+
+    registry.save()
+  }
+}
+
+function _getOrphanTokenManagersEntity(): OrphanTokenManagersEntity {
+  let registryId = 'Singleton_OrphanTokenManagers'
+
+  let registry = OrphanTokenManagersEntity.load(registryId)
+  if (!registry) {
+    registry = new OrphanTokenManagersEntity(registryId)
+
+    registry.apps = []
+
+    registry.save()
+  }
+
+  return registry!
 }
 
 // These are commented out to improve sync performance
