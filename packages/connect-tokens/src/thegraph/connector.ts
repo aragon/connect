@@ -47,6 +47,10 @@ export default class TokensConnectorTheGraph implements ITokensConnector {
     return new TokensConnectorTheGraph(gql, token)
   }
 
+  async disconnect() {
+    this.#gql.close()
+  }
+
   async token(): Promise<Token> {
     return this.#token
   }

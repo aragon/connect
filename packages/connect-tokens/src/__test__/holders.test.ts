@@ -1,25 +1,30 @@
-import { TokenManagerConnectorTheGraph, Token, TokenHolder } from '../../src'
+import { connect } from '@aragon/connect'
+import { Organization } from '@aragon/connect-core'
+import connectTokens, { Tokens, TokenHolder } from '../../src'
 
-const TOKENS_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-tokens-rinkeby'
+const ORG_NAME = '0x059bcfbc477c46ab39d76c05b7b40f3a42e7de3b'
+const APP_ADDRESS = '0xB5146c785A64feFC17bCbAE1f07ad0000E300442'
 const TOKEN_ADDRESS = '0x4445bcd1f3e18bafca435379c46a11f40461e2ef'
 
 describe('when connecting to a token manager app', () => {
-  let connector: TokenManagerConnectorTheGraph
+  let org: Organization
+  let tokens: Tokens
 
-  beforeAll(() => {
-    connector = new TokenManagerConnectorTheGraph(TOKENS_SUBGRAPH_URL)
+  beforeAll(async () => {
+    org = await connect(ORG_NAME, 'thegraph', { network: 4 })
+    tokens = await connectTokens(org.app(APP_ADDRESS))
   })
 
   afterAll(async () => {
-    await connector.disconnect()
+    await org.connection.orgConnector.disconnect?.()
+    await tokens.disconnect()
   })
 
   describe('when querying for the holders of a token', () => {
     let holders: TokenHolder[]
 
     beforeAll(async () => {
-      holders = await connector.tokenHolders(TOKEN_ADDRESS, 1000, 0)
+      holders = await tokens.holders()
     })
 
     test('reports 3 holders', () => {

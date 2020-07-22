@@ -12,6 +12,10 @@ export default class Tokens {
     this.#connector = connector
   }
 
+  async disconnect() {
+    await this.#connector.disconnect()
+  }
+
   async token(): Promise<Token> {
     return this.#connector.token()
   }

@@ -18,6 +18,7 @@ export interface VoteData {
 }
 
 export interface IVotingConnector {
+  disconnect(): Promise<void>
   votesForApp(appAddress: string, first: number, skip: number): Promise<Vote[]>
   onVotesForApp(appAddress: string, callback: Function): SubscriptionHandler
   castsForVote(voteId: string, first: number, skip: number): Promise<Cast[]>

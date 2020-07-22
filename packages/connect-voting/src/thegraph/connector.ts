@@ -28,6 +28,10 @@ export default class VotingConnectorTheGraph implements IVotingConnector {
     this.#gql = new GraphQLWrapper(subgraphUrl, verbose)
   }
 
+  async disconnect() {
+    this.#gql.close()
+  }
+
   async votesForApp(
     appAddress: string,
     first: number,

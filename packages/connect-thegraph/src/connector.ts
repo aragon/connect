@@ -6,8 +6,15 @@ import {
   Permission,
   Repo,
   Role,
+  toNetwork,
 } from '@aragon/connect-core'
-import { AppFilters, Network, SubscriptionHandler } from '@aragon/connect-types'
+import {
+  Address,
+  AppFilters,
+  Network,
+  Networkish,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 import * as queries from './queries'
 import GraphQLWrapper from './core/GraphQLWrapper'
 import {
@@ -19,7 +26,7 @@ import {
 } from './parsers'
 
 export type ConnectorTheGraphConfig = {
-  network: Network
+  network: Networkish
   orgSubgraphUrl?: string
   verbose?: boolean
 }
@@ -60,15 +67,18 @@ class ConnectorTheGraph implements IOrganizationConnector {
   connection?: ConnectionContext
 
   constructor(config: ConnectorTheGraphConfig) {
+    this.network = toNetwork(config.network)
+
     const orgSubgraphUrl =
-      config.orgSubgraphUrl || getOrgSubgraphUrl(config.network)
+      config.orgSubgraphUrl || getOrgSubgraphUrl(this.network)
+
     if (!orgSubgraphUrl) {
       throw new Error(
-        `The chainId ${config.network.chainId} is not supported by the TheGraph connector.`
+        `The chainId ${this.network.chainId} is not supported by the TheGraph connector.`
       )
     }
+
     this.#gql = new GraphQLWrapper(orgSubgraphUrl, config.verbose)
-    this.network = config.network
   }
 
   async connect(connection: ConnectionContext) {
@@ -76,12 +86,13 @@ class ConnectorTheGraph implements IOrganizationConnector {
   }
 
   async disconnect() {
+    this.#gql.close()
     delete this.connection
   }
 
   async rolesForAddress(
     organization: Organization,
-    appAddress: string
+    appAddress: Address
   ): Promise<Role[]> {
     return this.#gql.performQueryWithParser<Role[]>(
       queries.ROLE_BY_APP_ADDRESS('query'),
@@ -112,7 +123,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
 
   async appByAddress(
     organization: Organization,
-    appAddress: string
+    appAddress: Address
   ): Promise<App> {
     return this.#gql.performQueryWithParser<App>(
       queries.APP_BY_ADDRESS('query'),
@@ -186,7 +197,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
 
   async repoForApp(
     organization: Organization,
-    appAddress: string
+    appAddress: Address
   ): Promise<Repo> {
     return this.#gql.performQueryWithParser(
       queries.REPO_BY_APP_ADDRESS('query'),

@@ -11,7 +11,7 @@ async function _parseRole(
   app: any,
   organization: Organization
 ): Promise<Role> {
-  const grantees = role?.grantees?.grantees?.map(
+  const grantees = role?.grantees?.map(
     (permission: any): PermissionData => ({
       appAddress: permission?.appAddress,
       allowed: permission?.allowed,
@@ -60,7 +60,7 @@ export async function parseRoles(
   const app = result?.data?.app
   const roles = app?.roles
 
-  if (!app || Array.isArray(roles)) {
+  if (!app || !Array.isArray(roles)) {
     throw new Error('Unable to parse roles.')
   }
 

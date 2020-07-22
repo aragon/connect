@@ -7,7 +7,7 @@
   "scripts": {
     "build": "yarn clean && yarn compile",
     "dev": "yarn build --watch",
-    "test": "is-ci \"test:coverage\" \"test:watch\"",
+    "test": "is-ci \"test:coverage\" \"jest\"",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",
     "test:debug": "node --inspect-brk ../../node_modules/jest/bin/jest.js --runInBand --watch",
