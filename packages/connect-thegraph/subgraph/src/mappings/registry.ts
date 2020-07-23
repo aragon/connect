@@ -35,6 +35,7 @@ export function handleNewRepo(event: NewRepoEvent): void {
     repo.name = event.params.name
     repo.node = event.params.id
     repo.versions = []
+    repo.appCount = 0
   }
 
   // add the repo to the registry

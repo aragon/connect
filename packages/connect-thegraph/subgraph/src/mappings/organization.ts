@@ -85,6 +85,8 @@ export function handleNewProxyApp(event: NewAppProxyEvent): void {
         app.repo = repo.id
         app.repoName = repo.name
         app.repoAddress = repo.address
+	repo.appCount += 1
+	repo.save()
       }
     }
   }

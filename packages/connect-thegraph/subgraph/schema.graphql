@@ -29,6 +29,8 @@ type Repo @entity {
   lastVersion: Version
   versions: [Version!]!
   registry: Registry! @derivedFrom(field: "repos")
+  "The number of proxies deployed for the app in this repo"
+  appCount: Int!
 }
 
 type Version @entity {
