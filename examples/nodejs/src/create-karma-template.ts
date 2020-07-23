@@ -11,7 +11,7 @@ const envs = new Map(
         name: 'xdai',
         ensAddress: '0xaafca6b0c89521752e559650206d7c925fd0e530',
       },
-      key: '0x28b99031bcce07fac7c3fd1c3e88a4e99e346ffde291fefee8b75c133552f027',
+      key: '0xa8a54b2d8197bc0b19bb8a084031be71835580a01e70a45a13babd16c9bc1563',
       templateAddress: '0x9b321667c89cf888785413b89178b78dc67747c8',
       subgraph: 'https://api.thegraph.com/subgraphs/name/1hive/aragon-xdai',
     },
