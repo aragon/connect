@@ -1,0 +1,17 @@
+{
+  "network": "rinkeby",
+  "dataSources": {
+    "Organizations": [
+      {
+        "name": "Agreement",
+        "address": "0x6EfBC6D176D076B3ab2f0b0260694A57Ae505d98",
+        "startBlock": "6792811"
+      }
+    ],
+    "OrganizationFactories": [],
+    "OrganizationTemplates": [],
+    "LegacyOrganizationTemplates": [],
+    "TokenFactories": [],
+    "Tokens": []
+  }
+}
