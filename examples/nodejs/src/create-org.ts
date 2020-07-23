@@ -10,11 +10,8 @@ const MAIN_SUBGRAPH_RINKEBY =
 const TEMPLATE_NAME = 'bare-template'
 
 async function main() {
-  // fetch Repos data
-  const { data } = await fetchRepo(TEMPLATE_NAME, MAIN_SUBGRAPH_RINKEBY)
-
-  // parse data from last version published
-  const { lastVersion } = data.repos[0]
+  // fetch repo
+  const { lastVersion } = await fetchRepo(TEMPLATE_NAME, MAIN_SUBGRAPH_RINKEBY)
   const templateAddress = lastVersion.codeAddress
   const templateArtifact = JSON.parse(lastVersion.artifact)
 
