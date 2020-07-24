@@ -1,0 +1,38 @@
+# Do not edit subgraph.yaml, this is a generated file.
+# Instead, edit subgraph.template.yaml and run `yarn manifest-<network>-[staging]`
+specVersion: 0.0.2
+description: A template for Aragon subgraphs
+repository: https://github.com/aragon/connect
+schema:
+  file: ./schema.graphql
+dataSources:
+{{> Organizations.yaml}}
+{{> OrganizationFactories.yaml}}
+{{> OrganizationTemplates.yaml}}
+{{> LegacyOrganizationTemplates.yaml}}
+{{> TokenFactories.yaml}}
+{{> Tokens.yaml}}
+templates:
+  {{> Kernel.template.yaml}}
+  {{> MiniMeToken.template.yaml}}
+  - kind: ethereum/contract
+    name: Finance
+    network: {{network}}
+    source:
+      abi: Finance
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.1
+      language: wasm/assemblyscript
+      entities:
+        - Transaction
+        - TokenBalance
+      abis:
+        - name: Finance
+          file: ./abis/Finance.json
+        - name: Vault
+          file: ./abis/Vault.json
+      eventHandlers:
+        - event: NewTransaction(indexed uint256,bool,indexed address,uint256,string)
+          handler: handleNewTransaction
+      file: ./src/Finance.ts
