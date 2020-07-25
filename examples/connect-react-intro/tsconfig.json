@@ -3,9 +3,10 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "src",
-    "jsx": "react"
+    "jsx": "react",
+    "target": "ESNext"
   },
-  "include": ["src"],
+  "include": ["src/**/*"],
   "exclude": ["dist"],
   "references": [{ "path": "../../packages/connect" }]
 }

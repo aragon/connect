@@ -43,7 +43,7 @@ ReactDOM.render(
       `}
     </style>
 
-    <UseWalletProvider chainId={4}>
+    <UseWalletProvider chainId={1}>
       <App />
     </UseWalletProvider>
   </>,
