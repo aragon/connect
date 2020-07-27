@@ -1,26 +1,19 @@
 {
   "name": "connect-react-intro",
-  "version": "0.4.1",
-  "private": true,
-  "sideEffects": false,
-  "type": "module",
+  "version": "1.0.0",
   "scripts": {
-    "start": "parcel serve ./src/index.html",
-    "build": "parcel build ./src/index.html"
+    "start": "snowpack dev",
+    "build": "snowpack build"
   },
   "dependencies": {
-    "@aragon/connect-react": "*",
-    "ethers": "^5.0.4",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "use-wallet": "0.6.0"
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0"
   },
   "devDependencies": {
-    "@parcel/transformer-typescript-tsc": "^2.0.0-nightly.352",
+    "@snowpack/app-scripts-react": "^1.6.0-alpha.0",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
-    "parcel": "^2.0.0-nightly.350",
-    "typescript": "^3.8.3"
-  },
-  "browserslist": ["last 1 chrome version", "last 1 firefox version"]
+    "snowpack": "^2.6.4",
+    "typescript": "^3.8.0"
+  }
 }
