@@ -1,8 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist"
+    "outDir": "./dist/esm",
+    "rootDir": "src"
   },
-  "include": ["./src/**/*"],
+  "include": ["src"],
+  "exclude": ["dist"],
   "references": [{ "path": "../connect" }]
 }

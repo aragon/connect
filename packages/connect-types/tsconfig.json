@@ -1,9 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "dist",
+    "outDir": "dist/esm",
     "rootDir": "src"
   },
   "include": ["src"],
-  "exclude": ["dist"]
+  "exclude": ["dist", "**/__test__/**"]
 }
