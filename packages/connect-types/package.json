@@ -3,17 +3,17 @@
   "private": true,
   "version": "0.4.2",
   "license": "LGPL-3.0-or-later",
-  "main": "dist/index.js",
-  "module": "dist/types.esm.js",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/cjs/index.d.ts",
+  "files": ["dist"],
   "scripts": {
-    "build": "yarn compile",
+    "build": "yarn build:esm && yarn build:cjs",
+    "build:esm": "tsc --build",
+    "build:cjs": "tsc --build ./tsconfig.cjs.json",
     "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo",
-    "compile": "tsc --build",
-    "dev": "yarn build --watch"
+    "dev:esm": "yarn build:esm --watch",
+    "dev:cjs": "yarn build:cjs --watch"
   },
   "devDependencies": {
     "typescript": "^3.8.3"

@@ -18,7 +18,8 @@
     "start-subscriptions-low-level": "yarn build; node dist/src/subscriptions-low-level.js",
     "start-subscriptions-org": "yarn build; node dist/src/subscriptions-org.js",
     "start-subscriptions-tokens": "yarn build; node dist/src/subscriptions-tokens.js",
-    "start-create-org": "yarn build; node dist/src/create-org.js"
+    "start-create-org": "yarn build; node dist/src/create-org.js",
+    "start-create-karma-template": "yarn build; node dist/src/create-karma-template.js"
   },
   "dependencies": {
     "@aragon/connect": "*",
