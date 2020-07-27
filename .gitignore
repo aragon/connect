@@ -23,3 +23,7 @@ tsconfig.cjs.tsbuildinfo
 .vscode
 
 packages/*/yarn-error.log
+
+# Parcel
+.parcel-cache/
+.cache/
