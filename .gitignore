@@ -16,6 +16,7 @@ subgraph.yaml
 .pnp.*
 
 tsconfig.tsbuildinfo
+tsconfig.cjs.tsbuildinfo
 
 # IDE specific
 .graphqlconfig
