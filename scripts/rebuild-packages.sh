@@ -10,7 +10,7 @@ set -eu
 # See https://github.com/guigrpa/oao/issues/96
 
 glob_packages=''
-if [ "$MODE" == "libs-only" ]; then
+if [ "$MODE" = "libs-only" ]; then
   glob_packages='!packages/*'
 fi
 
