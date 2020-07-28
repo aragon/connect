@@ -19,7 +19,15 @@ export default class Voting {
     return this.#connector.votesForApp(this.#appAddress, first, skip)
   }
 
-  onVotes(callback: Function): SubscriptionHandler {
-    return this.#connector.onVotesForApp!(this.#appAddress, callback)
+  onVotes(
+    { first = 1000, skip = 0 } = {},
+    callback: Function
+  ): SubscriptionHandler {
+    return this.#connector.onVotesForApp(
+      this.#appAddress,
+      callback,
+      first,
+      skip
+    )
   }
 }
