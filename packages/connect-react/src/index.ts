@@ -184,4 +184,55 @@ export function usePermissions(): [Permission[], LoadingStatus] {
   return useConnectSubscription<Permission[]>(callback, [])
 }
 
+export function createAppHook(appConnect: Function) {
+  return function useAppData<T = any>(
+    app: App | null,
+    callback?: (app: App | any) => T | Promise<T>
+  ): [T | null, LoadingStatus] {
+    const [result, setResult] = useState<T | null>(null)
+    const [error, setError] = useState<Error | null>(null)
+    const [loading, setLoading] = useState<boolean>(false)
+    const callbackRef = useRef<Function>((app: App) => app)
+
+    useEffect(() => {
+      callbackRef.current = callback || ((app: App) => app)
+    }, [callback])
+
+    useEffect(() => {
+      let cancelled = false
+
+      setResult(null)
+      setError(null)
+
+      const update = async () => {
+        setLoading(true)
+
+        try {
+          const connectedApp = await appConnect(app)
+          const result = await callbackRef.current(connectedApp)
+          if (!cancelled) {
+            setLoading(false)
+            setResult(result)
+          }
+        } catch (err) {
+          if (!cancelled) {
+            setLoading(false)
+            setError(err)
+          }
+        }
+      }
+
+      if (app) {
+        update()
+      }
+
+      return () => {
+        cancelled = true
+      }
+    }, [app])
+
+    return [result, { error, loading, retry: () => null }]
+  }
+}
+
 export * from '@aragon/connect'
