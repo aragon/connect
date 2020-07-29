@@ -81,4 +81,3 @@ const subscription = wrapper.subscribeToQuery(
 // Stop receiving updates
 subscription.unsubscribe()
 ```
-
