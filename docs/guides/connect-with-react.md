@@ -108,3 +108,4 @@ This component is required in order to use the provided hooks.
 | Name | Type | Description |  |
 | :--- | :--- | :--- | :--- |
 | returns | `[Permission[], { loading: boolean, error: null or Error, retry: Function }]` | An array containing the organization [permissions](../api-reference/permission.md) and a loading status object. |  |
+

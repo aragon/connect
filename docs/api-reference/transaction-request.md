@@ -12,3 +12,4 @@ An object describing a transaction that can be signed by a library like [ethers.
 | `data` | `String` | Transaction data. |
 | `from` | `String` | Address to use as default sender. |
 | `to` | `String` | Target address or ENS name. |
+

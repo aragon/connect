@@ -105,5 +105,5 @@ Create a GraphQL subscription and parse the emitted results.
 
 The Subgraph schema defines all of the available entities and attributes. It may be useful to gain a fuller, clearer picture of the information you can request.
 
-![](../.gitbook/assets/org-schema%20%282%29.png)
+![](../.gitbook/assets/org-schema%20%282%29%20%281%29.png)
 
