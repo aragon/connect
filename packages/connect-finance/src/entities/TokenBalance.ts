@@ -7,9 +7,9 @@ export interface TokenBalanceData {
 }
 
 export default class TokenBalance implements TokenBalanceData {
-  readonly id!: string
-  readonly token!: string
-  readonly balance!: string
+  readonly id: string
+  readonly token: string
+  readonly balance: string
 
   constructor(data: TokenBalanceData) {
     this.id = data.id

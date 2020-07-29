@@ -11,7 +11,9 @@ export interface IFinanceConnector {
   ): Promise<Transaction[]>
   onTransactionsForApp(
     appAddress: string,
-    callback: Function
+    callback: Function,
+    first: number,
+    skip: number
   ): SubscriptionHandler
   balanceForToken(
     appAddress: string,
@@ -19,4 +21,10 @@ export interface IFinanceConnector {
     first: number,
     skip: number
   ): Promise<TokenBalance>
+  onBalanceForToken(
+    appAddress: string,
+    callback: Function,
+    first: number,
+    skip: number
+  ): SubscriptionHandler
 }

@@ -20,8 +20,16 @@ export default class Finance {
     return this.#connector.transactionsForApp(this.#appAddress, first, skip)
   }
 
-  onTransactions(callback: Function): SubscriptionHandler {
-    return this.#connector.onTransactionsForApp!(this.#appAddress, callback)
+  onTransactions(
+    { first = 1000, skip = 0 } = {},
+    callback: Function
+  ): SubscriptionHandler {
+    return this.#connector.onTransactionsForApp!(
+      this.#appAddress,
+      callback,
+      first,
+      skip
+    )
   }
 
   async balance(
@@ -31,6 +39,18 @@ export default class Finance {
     return this.#connector.balanceForToken(
       this.#appAddress,
       tokenAddress,
+      first,
+      skip
+    )
+  }
+
+  onBalance(
+    { first = 1000, skip = 0 } = {},
+    callback: Function
+  ): SubscriptionHandler {
+    return this.#connector.onBalanceForToken!(
+      this.#appAddress,
+      callback,
       first,
       skip
     )

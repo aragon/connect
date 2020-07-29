@@ -14,6 +14,10 @@ describe('when connecting to a finance app', () => {
     connector = new FinanceConnectorTheGraph(FINANCE_SUBGRAPH_URL)
   })
 
+  afterAll(async () => {
+    await connector.disconnect()
+  })
+
   describe('when getting the balance for a token', () => {
     let tokenBalance: TokenBalance
 

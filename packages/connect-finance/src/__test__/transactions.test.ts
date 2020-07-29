@@ -12,6 +12,10 @@ describe('when connecting to a finance app', () => {
     connector = new FinanceConnectorTheGraph(FINANCE_SUBGRAPH_URL)
   })
 
+  afterAll(async () => {
+    await connector.disconnect()
+  })
+
   describe('when getting the list of transactons for an app', () => {
     let transactions: Transaction[]
 

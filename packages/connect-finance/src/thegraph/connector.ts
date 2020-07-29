@@ -8,13 +8,13 @@ import { parseTransactions, parseTokenBalance } from './parsers'
 
 export function subgraphUrlFromChainId(chainId: number) {
   if (chainId === 1) {
-    return 'https://api.thegraph.com/subgraphs/name/0xgabi/aragon-finance-mainnet'
+    return 'https://api.thegraph.com/subgraphs/name/aragon/aragon-finance-mainnet'
   }
   if (chainId === 4) {
-    return 'https://api.thegraph.com/subgraphs/name/0xgabi/aragon-finance-rinkeby'
+    return 'https://api.thegraph.com/subgraphs/name/aragon/aragon-finance-rinkeby'
   }
   if (chainId === 100) {
-    return 'https://api.thegraph.com/subgraphs/name/0xgabi/aragon-finance-xdai'
+    return 'https://api.thegraph.com/subgraphs/name/aragon/aragon-finance-xdai'
   }
   return null
 }
@@ -49,11 +49,13 @@ export default class FinanceConnectorTheGraph implements IFinanceConnector {
 
   onTransactionsForApp(
     appAddress: string,
-    callback: Function
+    callback: Function,
+    first: number,
+    skip: number
   ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
       queries.ALL_TRANSACTIONS('subscription'),
-      { appAddress, first: 1000, skip: 0 },
+      { appAddress, first, skip },
       callback,
       (result: QueryResult) => parseTransactions(result)
     )
@@ -69,6 +71,20 @@ export default class FinanceConnectorTheGraph implements IFinanceConnector {
       queries.BALANCE_FOR_TOKEN('query'),
       { appAddress, tokenAddress, first, skip },
       (result: QueryResult) => parseTokenBalance(result)
+    )
+  }
+
+  onBalanceForToken(
+    appAddress: string,
+    callback: Function,
+    first: number,
+    skip: number
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser(
+      queries.BALANCE_FOR_TOKEN('subscription'),
+      { appAddress, first, skip },
+      callback,
+      (result: QueryResult) => parseTransactions(result)
     )
   }
 }

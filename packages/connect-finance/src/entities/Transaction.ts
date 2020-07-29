@@ -11,13 +11,13 @@ export interface TransactionData {
 }
 
 export default class Transaction implements TransactionData {
-  readonly id!: string
-  readonly token!: Address
-  readonly entity!: Address
-  readonly isIncoming!: boolean
-  readonly amount!: string
-  readonly date!: string
-  readonly reference!: string
+  readonly id: string
+  readonly token: Address
+  readonly entity: Address
+  readonly isIncoming: boolean
+  readonly amount: string
+  readonly date: string
+  readonly reference: string
 
   constructor(data: TransactionData) {
     this.id = data.id
