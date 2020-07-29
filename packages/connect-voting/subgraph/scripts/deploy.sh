@@ -5,6 +5,12 @@ USER=$1
 NAME=$2
 NETWORK=$3
 
+# Require $GRAPHKEY to be set
+if [[ -z "${GRAPHKEY}" ]]; then
+>&2 echo "Please set \$GRAPHKEY to your The Graph access token to run this command."
+exit 1
+fi
+
 # Build manifest
 echo ''
 echo '> Building manifest file subgraph.yaml'
