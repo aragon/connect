@@ -23,6 +23,7 @@
     "connect-react": "yarn workspace @aragon/connect-react",
     "connect-ethereum": "yarn workspace @aragon/connect-ethereum",
     "connect-thegraph": "yarn workspace @aragon/connect-thegraph",
+    "connect-finance": "yarn workspace @aragon/connect-finance",
     "connect-voting": "yarn workspace @aragon/connect-voting",
     "connect-tokens": "yarn workspace @aragon/connect-tokens",
     "connect-types": "yarn workspace @aragon/connect-types",
