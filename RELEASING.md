@@ -1,5 +1,9 @@
 # Releasing a new version of Aragon Connect
 
+## Prepare the release notes
+
+[Create a new draft release](https://github.com/aragon/connect/releases/new) and write the complete changelog for this version. Ideally this should be done before publishing on npm, so that there is no delay between the release on npm and the announcement.
+
 ## Check that everything is ready
 
 ```console
@@ -54,3 +58,11 @@ Reorder the menu in GitBook:
 - Open the versions menu (it should be on “latest” by default).
 - Drag and drop the new version so that it is right below “latest”.
 - Click on the “Save” button, then “Merge”.
+
+## Publish the release on GitHub
+
+Open the draft release, and assign the version tag to it (e.g. `v0.5.0`). Publish!
+
+## Announcement
+
+Announce the release on our usual channels: Discord, Keybase, Twitter, etc.
