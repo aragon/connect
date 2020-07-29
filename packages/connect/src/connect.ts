@@ -14,9 +14,7 @@ import ConnectorTheGraph, {
   ConnectorTheGraphConfig,
 } from '@aragon/connect-thegraph'
 import { Address, Network, Networkish } from '@aragon/connect-types'
-
-const XDAI_WSS_ENDPOINT = 'wss://xdai.poanetwork.dev/wss'
-const DEFAULT_IPFS_URL = 'https://ipfs.eth.aragon.network/{cid}{path}'
+import { XDAI_WSS_ENDPOINT, DEFAULT_IPFS_URL } from './constants'
 
 export type IpfsUrlResolver = (cid: string, path?: string) => string
 
@@ -115,9 +113,11 @@ function getEthersProvider(
       throw err
     }
   }
+
   if (network.chainId === 100) {
     return new ethers.providers.WebSocketProvider(XDAI_WSS_ENDPOINT, network)
   }
+
   return ethers.getDefaultProvider(network)
 }
 

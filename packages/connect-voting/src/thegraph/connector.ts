@@ -13,6 +13,9 @@ export function subgraphUrlFromChainId(chainId: number) {
   if (chainId === 4) {
     return 'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby'
   }
+  if (chainId === 100) {
+    return 'https://api.thegraph.com/subgraphs/name/0xgabi/aragon-voting-xdai'
+  }
   return null
 }
 
@@ -44,10 +47,15 @@ export default class VotingConnectorTheGraph implements IVotingConnector {
     )
   }
 
-  onVotesForApp(appAddress: string, callback: Function): SubscriptionHandler {
+  onVotesForApp(
+    appAddress: string,
+    callback: Function,
+    first: number,
+    skip: number
+  ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
       queries.ALL_VOTES('subscription'),
-      { appAddress, first: 1000, skip: 0 },
+      { appAddress, first, skip },
       callback,
       (result: QueryResult) => parseVotes(result, this)
     )

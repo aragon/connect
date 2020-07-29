@@ -1,0 +1,17 @@
+{
+  "extends": "@snowpack/app-scripts-react/tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "src",
+    "jsx": "react",
+    "target": "ESNext",
+    "baseUrl": "./",
+    "paths": { "*": ["web_modules/.types/*"] }
+  },
+  "include": ["src", "types"],
+  "exclude": ["node_modules"],
+  "references": [
+    { "path": "../../packages/connect-react" },
+    { "path": "../../packages/connect-voting" }
+  ]
+}
