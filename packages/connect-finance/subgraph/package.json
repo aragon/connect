@@ -9,11 +9,11 @@
     "manifest-rinkeby": "scripts/build-manifest.sh rinkeby",
     "manifest-rinkeby-staging": "env STAGING=true scripts/build-manifest.sh rinkeby",
     "manifest-xdai": "scripts/build-manifest.sh xdai",
-    "deploy-mainnet": "scripts/deploy.sh 0xGabi finance mainnet",
+    "deploy-mainnet": "scripts/deploy.sh aragon finance mainnet",
     "deploy-mainnet-staging": "env STAGING=true scripts/deploy.sh aragon finance mainnet",
-    "deploy-rinkeby": "scripts/deploy.sh 0xGabi finance rinkeby",
+    "deploy-rinkeby": "scripts/deploy.sh aragon finance rinkeby",
     "deploy-rinkeby-staging": "env STAGING=true scripts/deploy.sh aragon finance rinkeby",
-    "deploy-xdai": "scripts/deploy.sh 0xGabi finance xdai"
+    "deploy-xdai": "scripts/deploy.sh aragon finance xdai"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.18.0",
