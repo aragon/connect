@@ -19,6 +19,7 @@
 - [Organizations](connectors/organizations.md)
 - [Tokens app](connectors/tokens-app.md)
 - [Voting app](connectors/voting-app.md)
+- [Finance app](connectors/finance-app.md)
 
 ## API Reference
 
