@@ -1,15 +1,17 @@
+import Organization from './Organization'
 import Repo from './Repo'
 import Role from './Role'
-import CoreEntity from './CoreEntity'
 import {
-  AragonArtifact,
-  AragonManifest,
-  Metadata,
   Abi,
   AppIntent,
+  AragonArtifact,
+  AragonManifest,
+  ConnectionContext,
+  Metadata,
 } from '../types'
 import { resolveManifest, resolveArtifact } from '../utils/metadata'
 import IOrganizationConnector from '../connections/IOrganizationConnector'
+// import IAppConnected from '../connections/IAppConnected'
 
 // TODO:
 // [ ] (ipfs) contentUrl 	String 	The HTTP URL of the app content. Uses the IPFS HTTP provider. E.g. http://gateway.ipfs.io/ipfs/QmdLEDDfi…/ (ContentUri passing through the resolver)
@@ -31,8 +33,8 @@ export interface AppData {
   version?: string
 }
 
-export default class App extends CoreEntity {
-  #metadata!: Metadata
+export default class App {
+  #metadata: Metadata
   readonly address: string
   readonly appId: string
   readonly codeAddress: string
@@ -41,20 +43,14 @@ export default class App extends CoreEntity {
   readonly isUpgradeable?: boolean
   readonly kernelAddress: string
   readonly name?: string
+  readonly organization: Organization
   readonly registry?: string
   readonly registryAddress: string
   readonly repoAddress?: string
   readonly version?: string
 
-  constructor(
-    data: AppData,
-    metadata: Metadata,
-    connector: IOrganizationConnector
-  ) {
-    super(connector)
-
+  constructor(data: AppData, metadata: Metadata, organization: Organization) {
     this.#metadata = metadata
-
     this.address = data.address
     this.appId = data.appId
     this.codeAddress = data.codeAddress
@@ -63,30 +59,30 @@ export default class App extends CoreEntity {
     this.isUpgradeable = data.isUpgradeable
     this.kernelAddress = data.kernelAddress
     this.name = data.name
+    this.organization = organization
     this.registry = data.registry
     this.registryAddress = data.registryAddress
     this.repoAddress = data.repoAddress
     this.version = data.version
   }
 
-  static async create(
-    data: AppData,
-    connector: IOrganizationConnector
-  ): Promise<App> {
+  static async create(data: AppData, organization: Organization): Promise<App> {
     const artifact = await resolveArtifact(data)
     const manifest = await resolveManifest(data)
-
     const metadata: Metadata = [artifact, manifest]
+    return new App(data, metadata, organization)
+  }
 
-    return new App(data, metadata, connector)
+  private orgConnector(): IOrganizationConnector {
+    return this.organization.connection.orgConnector
   }
 
   async repo(): Promise<Repo> {
-    return this._connector.repoForApp(this.address)
+    return this.orgConnector().repoForApp(this.organization, this.address)
   }
 
   async roles(): Promise<Role[]> {
-    return this._connector.rolesForAddress(this.address)
+    return this.orgConnector().rolesForAddress(this.organization, this.address)
   }
 
   get artifact(): AragonArtifact {

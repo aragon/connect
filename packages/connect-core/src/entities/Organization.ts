@@ -1,14 +1,11 @@
-import { ethers } from 'ethers'
 import {
   Address,
   AppFilters,
   AppFiltersParam,
-  Network,
   SubscriptionHandler,
 } from '@aragon/connect-types'
+import { ConnectionContext } from '../types'
 import TransactionIntent from '../transactions/TransactionIntent'
-import { XDAI_WSS_ENDPOINT } from '../params'
-import IOrganizationConnector from '../connections/IOrganizationConnector'
 import { toArrayEntry } from '../utils/misc'
 import App from './App'
 import Permission from './Permission'
@@ -53,85 +50,36 @@ function normalizeAppFilters(filters?: AppFiltersParam): AppFilters {
 }
 
 export default class Organization {
-  readonly location: string
-  #address?: string
-  #provider: ethers.providers.Provider
-  #connected: boolean
+  readonly connection: ConnectionContext
 
-  private _connector: IOrganizationConnector
-
-  constructor(
-    location: string,
-    connector: IOrganizationConnector,
-    provider: any,
-    network: Network
-  ) {
-    this.location = location
-
-    const getEthersProvider = (): ethers.providers.Provider => {
-      try {
-        return new ethers.providers.Web3Provider(provider, network)
-      } catch (e) {
-        return provider
-      }
-    }
-
-    this.#provider = provider
-      ? getEthersProvider()
-      : network.chainId === 100
-      ? new ethers.providers.WebSocketProvider(XDAI_WSS_ENDPOINT, network)
-      : ethers.getDefaultProvider(network)
-
-    this._connector = connector
-    this.#connected = false
+  constructor(connection: ConnectionContext) {
+    this.connection = connection
   }
 
-  async _connect() {
-    this.#address = ethers.utils.isAddress(this.location)
-      ? this.location
-      : await this.#provider.resolveName(this.location)
-
-    if (!ethers.utils.isAddress(this.#address || '')) {
-      throw new Error('Please provide a valid address or ENS domain.')
-    }
-
-    this.#connected = true
-    return true
+  get location() {
+    return this.connection.orgLocation
   }
 
-  async disconnect() {
-    this._connector.disconnect?.()
+  get address(): Address {
+    return this.connection.orgAddress
   }
 
-  private checkConnected() {
-    if (!this.#connected) {
-      throw new Error(
-        'Please call ._connect() before using Organization and its methods.'
-      )
-    }
-  }
-
-  get address(): string {
-    this.checkConnected()
-    return this.#address || '' // The || '' should never happen but TypeScript requires it.
-  }
-
-  get provider(): ethers.providers.Provider {
-    this.checkConnected()
-    return this.#provider
+  get _connection(): ConnectionContext {
+    return this.connection
   }
 
   ///////// APPS ///////////
 
   async app(filters?: AppFiltersParam): Promise<App> {
-    this.checkConnected()
-    return this._connector.appForOrg(this.address, normalizeAppFilters(filters))
+    return this.connection.orgConnector.appForOrg(
+      this,
+      normalizeAppFilters(filters)
+    )
   }
 
   async apps(filters?: AppFiltersParam): Promise<App[]> {
-    this.checkConnected()
-    return this._connector.appsForOrg(
-      this.address,
+    return this.connection.orgConnector.appsForOrg(
+      this,
       normalizeAppFilters(filters)
     )
   }
@@ -140,13 +88,11 @@ export default class Organization {
     filtersOrCallback: AppFiltersParam | OnAppCallback,
     callback?: OnAppCallback
   ): SubscriptionHandler {
-    this.checkConnected()
-
     const filters = (callback ? filtersOrCallback : null) as AppFiltersParam
     const _callback = (callback || filtersOrCallback) as OnAppCallback
 
-    return this._connector.onAppForOrg(
-      this.address,
+    return this.connection.orgConnector.onAppForOrg(
+      this,
       normalizeAppFilters(filters),
       _callback
     )
@@ -156,13 +102,11 @@ export default class Organization {
     filtersOrCallback: AppFiltersParam | OnAppsCallback,
     callback?: OnAppsCallback
   ): SubscriptionHandler {
-    this.checkConnected()
-
     const filters = (callback ? filtersOrCallback : null) as AppFiltersParam
     const _callback = (callback || filtersOrCallback) as OnAppsCallback
 
-    return this._connector.onAppsForOrg(
-      this.address,
+    return this.connection.orgConnector.onAppsForOrg(
+      this,
       normalizeAppFilters(filters),
       _callback
     )
@@ -170,30 +114,23 @@ export default class Organization {
 
   ///////// PERMISSIONS ///////////
   async permissions(): Promise<Permission[]> {
-    this.checkConnected()
-    return this._connector.permissionsForOrg(this.address)
+    return this.connection.orgConnector.permissionsForOrg(this)
   }
 
   onPermissions(callback: Function): SubscriptionHandler {
-    this.checkConnected()
-    return this._connector.onPermissionsForOrg(this.address, callback)
+    return this.connection.orgConnector.onPermissionsForOrg(this, callback)
   }
 
   ///////// INTENTS ///////////
   appIntent(
-    appAddress: string,
-    funcName: string,
-    funcArgs: any[]
+    appAddress: Address,
+    functionName: string,
+    functionArgs: any[]
   ): TransactionIntent {
-    this.checkConnected()
     return new TransactionIntent(
-      {
-        contractAddress: appAddress,
-        functionName: funcName,
-        functionArgs: funcArgs,
-      },
+      { contractAddress: appAddress, functionName, functionArgs },
       this,
-      this.#provider
+      this.connection.ethersProvider
     )
   }
 }

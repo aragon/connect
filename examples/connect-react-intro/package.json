@@ -1,5 +1,6 @@
 {
   "name": "connect-react-intro",
+  "private": true,
   "version": "1.0.0",
   "scripts": {
     "start": "snowpack dev",

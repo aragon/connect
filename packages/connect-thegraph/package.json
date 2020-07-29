@@ -11,7 +11,7 @@
     "build:cjs": "tsc --build ./tsconfig.cjs.json",
     "dev:esm": "yarn build:esm --watch",
     "dev:cjs": "yarn build:cjs --watch",
-    "test": "is-ci \"test:coverage\" \"test:watch\"",
+    "test": "is-ci \"test:coverage\" \"jest\"",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",
     "test:debug": "node --inspect-brk ../../node_modules/jest/bin/jest.js --runInBand --watch",

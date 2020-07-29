@@ -1,25 +1,23 @@
+import { connect } from '@aragon/connect'
+import { App, Organization } from '@aragon/connect-core'
 import ConnectorTheGraph from '../connector'
-import { App } from '@aragon/connect-core'
 import { isAddress, isBytes32 } from '../../../test-helpers'
 
-const ORG_ADDRESS = '0x0c188b183ff758500d1d18b432313d10e9f6b8a4'
+const ORG_NAME = 'piedao.aragonid.eth'
 const APP_ADDRESS = '0xbce807b35dee2fbe457e4588f1c799879446eb54'
 
-const MAINNET_NETWORK = {
-  chainId: 1,
-  name: 'homestead',
-}
+const MAINNET_NETWORK = 1
 
 describe('when connecting to the mainnet subgraph', () => {
+  let org: Organization
   let app: App
-  let connector: ConnectorTheGraph
 
-  beforeAll(() => {
-    connector = new ConnectorTheGraph({ network: MAINNET_NETWORK })
+  beforeAll(async () => {
+    org = await connect(ORG_NAME, 'thegraph', { network: MAINNET_NETWORK })
   })
 
   afterAll(async () => {
-    await connector.disconnect()
+    await org.connection.orgConnector.disconnect?.()
   })
 
   function isValidApp(): void {
@@ -94,7 +92,7 @@ describe('when connecting to the mainnet subgraph', () => {
 
   describe('when querying for a specific app', () => {
     beforeAll(async () => {
-      app = await connector.appByAddress(APP_ADDRESS)
+      app = await org.connection.orgConnector.appByAddress(org, APP_ADDRESS)
     })
 
     isValidApp()
@@ -104,7 +102,7 @@ describe('when connecting to the mainnet subgraph', () => {
     let apps: App[]
 
     beforeAll(async () => {
-      apps = await connector.appsForOrg(ORG_ADDRESS, {})
+      apps = await org.connection.orgConnector.appsForOrg(org, {})
     })
 
     test('apps are found', () => {

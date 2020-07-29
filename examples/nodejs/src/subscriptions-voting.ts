@@ -1,4 +1,4 @@
-import { Voting, Vote, Cast } from '@aragon/connect-thegraph-voting'
+import { Voting, Vote, Cast } from '@aragon/connect-voting'
 import { keepRunning } from './helpers'
 
 const ORG_ADDRESS = '0x7cee20f778a53403d4fc8596e88deb694bc91c98'

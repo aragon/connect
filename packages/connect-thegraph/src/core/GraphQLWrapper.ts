@@ -53,7 +53,7 @@ export default class GraphQLWrapper {
     this.close = () => subscriptionClient.close()
   }
 
-  subscribeToQuery(
+  subscribeToQuery<T>(
     query: DocumentNode,
     args: any = {},
     callback: Function
@@ -82,14 +82,14 @@ export default class GraphQLWrapper {
     )
   }
 
-  subscribeToQueryWithParser(
+  subscribeToQueryWithParser<T>(
     query: DocumentNode,
     args: any = {},
     callback: Function,
     parser: ParseFunction
   ): SubscriptionHandler {
     return this.subscribeToQuery(query, args, async (result: QueryResult) => {
-      callback(await this.parseQueryResult(parser, result))
+      callback(await this.parseQueryResult<T>(parser, result))
     })
   }
 
@@ -118,15 +118,15 @@ export default class GraphQLWrapper {
     parser: ParseFunction
   ): Promise<T> {
     const result = await this.performQuery(query, args)
-    return this.parseQueryResult(parser, result)
+    return this.parseQueryResult<T>(parser, result)
   }
 
-  async parseQueryResult(
+  async parseQueryResult<T>(
     parser: ParseFunction,
     result: QueryResult
-  ): Promise<any> {
+  ): Promise<T> {
     try {
-      return parser(result, this)
+      return parser(result)
     } catch (error) {
       throw new Error(error.message + '\n\n' + this.describeQueryResult(result))
     }

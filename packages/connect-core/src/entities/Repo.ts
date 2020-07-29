@@ -1,12 +1,12 @@
-import CoreEntity from './CoreEntity'
 import {
   AragonArtifact,
-  AragonManifest,
-  Metadata,
   AragonArtifactRole,
+  AragonManifest,
+  ConnectionContext,
+  Metadata,
 } from '../types'
-import IOrganizationConnector from '../connections/IOrganizationConnector'
 import { resolveMetadata, resolveManifest } from '../utils/metadata'
+import Organization from './Organization'
 
 export interface RepoData {
   address: string
@@ -18,7 +18,7 @@ export interface RepoData {
   registryAddress?: string
 }
 
-export default class Repo extends CoreEntity {
+export default class Repo {
   #metadata!: Metadata
   readonly address: string
   readonly contentUri?: string
@@ -26,12 +26,8 @@ export default class Repo extends CoreEntity {
   readonly registry?: string
   readonly registryAddress?: string
 
-  constructor(
-    data: RepoData,
-    metadata: Metadata,
-    connector: IOrganizationConnector
-  ) {
-    super(connector)
+  constructor(data: RepoData, metadata: Metadata, organization: Organization) {
+    this.#metadata = metadata
 
     this.#metadata = metadata
 
@@ -44,7 +40,7 @@ export default class Repo extends CoreEntity {
 
   static async create(
     data: RepoData,
-    connector: IOrganizationConnector
+    organization: Organization
   ): Promise<Repo> {
     const artifact = await resolveMetadata(
       'artifact.json',
@@ -55,7 +51,7 @@ export default class Repo extends CoreEntity {
 
     const metadata: Metadata = [artifact, manifest]
 
-    return new Repo(data, metadata, connector)
+    return new Repo(data, metadata, organization)
   }
 
   get artifact(): AragonArtifact {

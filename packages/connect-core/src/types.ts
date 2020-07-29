@@ -1,4 +1,6 @@
 import { ethers } from 'ethers'
+import { Address, Network } from '@aragon/connect-types'
+import IOrganizationConnector from './connections/IOrganizationConnector'
 
 export type Metadata = (AragonArtifact | AragonManifest)[]
 
@@ -118,4 +120,16 @@ export interface AragonEnvironment {
   gasPrice?: string
   wsRPC?: string
   appId?: string
+}
+
+export type ConnectionContext = {
+  actAs: Address | null
+  ethereumProvider: object | null
+  ethersProvider: ethers.providers.Provider
+  ipfs: (cid: string) => string
+  network: Network
+  orgAddress: Address
+  orgConnector: IOrganizationConnector
+  orgLocation: string
+  verbose: boolean
 }
