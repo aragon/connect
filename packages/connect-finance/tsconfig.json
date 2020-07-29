@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist/esm",
+    "rootDir": "src"
+  },
+  "include": ["src"],
+  "exclude": ["dist", "**/__test__/**"],
+  "references": [{ "path": "../connect-core" }]
+}
