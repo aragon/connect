@@ -45,6 +45,7 @@ export default class Finance {
   }
 
   onBalance(
+    tokenAddress: string,
     { first = 1000, skip = 0 } = {},
     callback: Function
   ): SubscriptionHandler {

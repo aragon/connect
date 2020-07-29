@@ -76,13 +76,14 @@ export default class FinanceConnectorTheGraph implements IFinanceConnector {
 
   onBalanceForToken(
     appAddress: string,
+    tokenAddress: string,
     callback: Function,
     first: number,
     skip: number
   ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
       queries.BALANCE_FOR_TOKEN('subscription'),
-      { appAddress, first, skip },
+      { appAddress, tokenAddress, first, skip },
       callback,
       (result: QueryResult) => parseTransactions(result)
     )

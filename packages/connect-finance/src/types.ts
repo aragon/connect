@@ -23,6 +23,7 @@ export interface IFinanceConnector {
   ): Promise<TokenBalance>
   onBalanceForToken(
     appAddress: string,
+    tokenAddress: string,
     callback: Function,
     first: number,
     skip: number
