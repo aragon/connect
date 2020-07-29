@@ -4,7 +4,7 @@ The data that the Subgraphs contain can be used to answer complex questions. Whi
 
 ## Subgraph schemas
 
-To be able to fetch data from the Subgraph, we first have to understand their [GraphQL schemas](https://graphql.org/learn/schema/). You can find the schemas associated with each Subgraph included officially with Aragon Connect in the [Connectors Reference](../connectors) section.
+To be able to fetch data from the Subgraph, we first have to understand their [GraphQL schemas](https://graphql.org/learn/schema/). You can find the schemas associated with each Subgraph included officially with Aragon Connect in the [Connectors Reference](https://github.com/aragon/connect/tree/e6bc48c8d8b9253e470a64a6c6f9adcb4292a4e6/docs/connectors/README.md) section.
 
 ## Creating a custom query
 
@@ -81,3 +81,4 @@ const subscription = wrapper.subscribeToQuery(
 // Stop receiving updates
 subscription.unsubscribe()
 ```
+

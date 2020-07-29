@@ -15,3 +15,4 @@ A connector that fetches information from a standard Ethereum provider \(EIP 119
 ## ConnectorJson
 
 A connector that read information from a JSON string. Useful for testing / debugging purposes.
+
