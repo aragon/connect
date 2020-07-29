@@ -1,6 +1,6 @@
 {
   "name": "@aragon/connect-ethereum",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "license": "LGPL-3.0-or-later",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -18,7 +18,9 @@
     "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
     "lint": "eslint --ext .ts ./src"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "@types/jest": "^26.0.0",
     "@typescript-eslint/eslint-plugin": "^2.29.0",
@@ -34,7 +36,13 @@
     "@aragon/connect-core": "*"
   },
   "description": "Access and interact with Aragon Organizations and their apps.",
-  "keywords": ["ethereum", "javascript", "web3", "dapp", "aragon"],
+  "keywords": [
+    "ethereum",
+    "javascript",
+    "web3",
+    "dapp",
+    "aragon"
+  ],
   "author": "Aragon Association <legal@aragon.org>",
   "homepage": "https://github.com/aragon/connect",
   "bugs": "https://github.com/aragon/connect/issues",
