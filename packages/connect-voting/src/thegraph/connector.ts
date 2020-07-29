@@ -14,7 +14,7 @@ export function subgraphUrlFromChainId(chainId: number) {
     return 'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby'
   }
   if (chainId === 100) {
-    return 'https://api.thegraph.com/subgraphs/name/0xgabi/aragon-voting-xdai'
+    return 'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-xdai'
   }
   return null
 }
