@@ -51,6 +51,7 @@ export default class Finance {
   ): SubscriptionHandler {
     return this.#connector.onBalanceForToken!(
       this.#appAddress,
+      tokenAddress,
       callback,
       first,
       skip
