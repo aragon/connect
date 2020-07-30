@@ -34,6 +34,13 @@ Note that we are using a direct path to oao because of a [known issue](https://g
 ./node_modules/.bin/oao publish
 ```
 
+Push the version to GitHub:
+
+```console
+git push origin master
+git push origin --tags
+```
+
 ## Publish the documentation on GitBook
 
 GitBook doesn’t support git tags, so we need to create a new branch for each version. We also protect this branch, to prevent any accidental deletion.
