@@ -7,9 +7,7 @@ describe('Agreement versions', () => {
   let connector: AgreementConnectorTheGraph
 
   beforeAll(() => {
-    connector = new AgreementConnectorTheGraph(
-      AGREEMENT_SUBGRAPH_URL
-    )
+    connector = new AgreementConnectorTheGraph(AGREEMENT_SUBGRAPH_URL)
   })
 
   afterAll(async () => {
@@ -20,7 +18,7 @@ describe('Agreement versions', () => {
     let version: Version
 
     beforeAll(async () => {
-      version = await connector.version('3', 1000, 0)
+      version = await connector.version(`${AGREEMENT_APP_ADDRESS}-version-3`)
     })
 
     test('returns that version information', () => {

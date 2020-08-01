@@ -19,14 +19,16 @@
     "aragon"
   ],
   "scripts": {
-    "build": "yarn clean && yarn compile",
-    "dev": "yarn build --watch",
+    "build": "yarn build:esm && yarn build:cjs",
+    "build:esm": "tsc --build",
+    "build:cjs": "tsc --build ./tsconfig.cjs.json",
+    "dev:esm": "yarn build:esm --watch",
+    "dev:cjs": "yarn build:cjs --watch",
     "test": "is-ci \"test:coverage\" \"test:watch\"",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",
     "test:debug": "node --inspect-brk ../../node_modules/jest/bin/jest.js --runInBand --watch",
     "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo",
-    "compile": "tsc",
     "lint": "eslint --ext .ts ./src"
   },
   "dependencies": {

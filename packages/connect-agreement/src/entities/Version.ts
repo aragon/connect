@@ -1,17 +1,8 @@
-import Entity from './AgreementEntity'
-import VersionConnectorTheGraph from '../connector'
+import { VersionData, IAgreementConnector } from '../types'
 
-export interface VersionData {
-  id: string
-  versionId: string
-  content: string
-  title: string
-  arbitrator: string
-  appFeesCashier: string
-  effectiveFrom: string
-}
+export default class Version {
+  #connector: IAgreementConnector
 
-export default class Version extends Entity implements VersionData {
   readonly id!: string
   readonly versionId!: string
   readonly content!: string
@@ -20,8 +11,15 @@ export default class Version extends Entity implements VersionData {
   readonly appFeesCashier!: string
   readonly effectiveFrom!: string
 
-  constructor(data: VersionData, connector: VersionConnectorTheGraph) {
-    super(connector)
-    Object.assign(this, data)
+  constructor(data: VersionData, connector: IAgreementConnector) {
+    this.#connector = connector
+
+    this.id = data.id
+    this.versionId = data.versionId
+    this.content = data.content
+    this.title = data.title
+    this.arbitrator = data.arbitrator
+    this.appFeesCashier = data.appFeesCashier
+    this.effectiveFrom = data.effectiveFrom
   }
 }

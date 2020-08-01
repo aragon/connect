@@ -1,40 +1,48 @@
-import { SubscriptionHandler } from '@aragon/connect-types'
-import Entity from './AgreementEntity'
+import { Address, SubscriptionHandler } from '@aragon/connect-types'
+
 import Version from './Version'
-import AgreementConnectorTheGraph from '../connector'
+import { IAgreementConnector } from '../types'
 
-export interface AgreementData {
-  id: string
-  dao: string
-  stakingFactory: string
-  currentVersionId: string
-}
+export default class Agreement {
+  #appAddress: Address
+  #connector: IAgreementConnector
 
-export default class Agreement extends Entity implements AgreementData {
-  readonly id!: string
-  readonly dao!: string
-  readonly stakingFactory!: string
-  readonly currentVersionId!: string
-
-  constructor(data: AgreementData, connector: AgreementConnectorTheGraph) {
-    super(connector)
-
-    Object.assign(this, data)
+  constructor(connector: IAgreementConnector, appAddress: Address) {
+    this.#connector = connector
+    this.#appAddress = appAddress
   }
 
-  async currentVersion({ first = 1000, skip = 0 } = {}): Promise<Version> {
-    return this._connector.version(this.currentVersionId, first, skip)
+  async dao(): Promise<string> {
+    const data = await this.#connector.agreement(this.#appAddress)
+    return data.dao
+  }
+
+  async stakingFactory(): Promise<string> {
+    const data = await this.#connector.agreement(this.#appAddress)
+    return data.stakingFactory
+  }
+
+  async currentVersion(): Promise<Version> {
+    return this.#connector.currentVersion(this.#appAddress)
   }
 
   onCurrentVersion(callback: Function): SubscriptionHandler {
-    return this._connector.onVersion(this.currentVersionId, callback)
+    return this.#connector.onCurrentVersion(this.#appAddress, callback)
+  }
+
+  async version({ versionId = '' } = {}): Promise<Version> {
+    return this.#connector.version(versionId)
+  }
+
+  onVersion(versionId: string, callback: Function): SubscriptionHandler {
+    return this.#connector.onVersion(versionId, callback)
   }
 
   async versions({ first = 1000, skip = 0 } = {}): Promise<Version[]> {
-    return this._connector.versions(this.id, first, skip)
+    return this.#connector.versions(this.#appAddress, first, skip)
   }
 
   onVersions(callback: Function): SubscriptionHandler {
-    return this._connector.onVersions(this.id, callback)
+    return this.#connector.onVersions(this.#appAddress, callback)
   }
 }
