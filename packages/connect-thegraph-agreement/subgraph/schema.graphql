@@ -57,9 +57,9 @@ type Challenge @entity {
   endDate: BigInt!
   challenger: Bytes!
   settlementOffer: BigInt!
-  arbitratorFeeAmount: BigInt!
-  arbitratorFeeToken: ERC20!
   state: ChallengeState!
+  submitterArbitratorFee: ArbitratorFee
+  challengerArbitratorFee: ArbitratorFee!
   dispute: Dispute @derivedFrom(field: "challenge")
   createdAt: BigInt!
 }
@@ -119,6 +119,12 @@ type ERC20 @entity {
   name: String!
   symbol: String!
   decimals: Int!
+}
+
+type ArbitratorFee @entity {
+  id: ID!
+  token: ERC20!
+  amount: BigInt!
 }
 
 type AragonInfo @entity {
