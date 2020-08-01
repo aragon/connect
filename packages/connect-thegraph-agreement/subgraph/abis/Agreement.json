@@ -691,8 +691,8 @@
           "type": "uint256"
         }
       ],
-      "payable": true,
-      "stateMutability": "payable",
+      "payable": false,
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -1011,14 +1011,6 @@
           "type": "uint256"
         },
         {
-          "name": "arbitratorFeeAmount",
-          "type": "uint256"
-        },
-        {
-          "name": "arbitratorFeeToken",
-          "type": "address"
-        },
-        {
           "name": "state",
           "type": "uint8"
         },
@@ -1047,23 +1039,27 @@
       "constant": true,
       "inputs": [
         {
-          "name": "_actionId",
+          "name": "_challengeId",
           "type": "uint256"
         }
       ],
-      "name": "getMissingArbitratorFees",
+      "name": "getChallengeArbitratorFees",
       "outputs": [
         {
-          "name": "feeToken",
+          "name": "challengerArbitratorFeesAmount",
+          "type": "uint256"
+        },
+        {
+          "name": "challengerArbitratorFeesToken",
           "type": "address"
         },
         {
-          "name": "missingFees",
+          "name": "submitterArbitratorFeesAmount",
           "type": "uint256"
         },
         {
-          "name": "totalFees",
-          "type": "uint256"
+          "name": "submitterArbitratorFeesToken",
+          "type": "address"
         }
       ],
       "payable": false,
@@ -1259,6 +1255,29 @@
         }
       ],
       "name": "canRuleDispute",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "canUnlock",
       "outputs": [
         {
           "name": "",
