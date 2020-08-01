@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@aragon/connect-react@^0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-react/-/connect-react-0.4.2.tgz#8f6a4cc88c8f52d5fe762dd21d92fe37e8e8e685"
+  integrity sha512-oQ67hLTfDhzLJRDvmGRoabDMCi9Nvi+o29MQ/swvDroPHs8EHtW5PAPndZjga69pS3Th12D8sGcFp+CNDePV/Q==
+  dependencies:
+    "@aragon/connect" "*"
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.8.3":
   version "7.10.4"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.10.4.tgz#168da1a36e90da68ae8d49c0f1b48c7c6249213a"
