@@ -1,5 +1,5 @@
 {
-  "name": "@aragon/connect-thegraph-agreement",
+  "name": "@aragon/connect-agreement",
   "version": "0.1.0",
   "license": "LGPL-3.0-or-later",
   "description": "Access and interact with Aragon Organizations and their apps.",
