@@ -32,8 +32,9 @@
     "connect-react": "yarn workspace @aragon/connect-react",
     "connect-ethereum": "yarn workspace @aragon/connect-ethereum",
     "connect-thegraph": "yarn workspace @aragon/connect-thegraph",
-    "connect-thegraph-voting": "yarn workspace @aragon/connect-thegraph-voting",
-    "connect-thegraph-tokens": "yarn workspace @aragon/connect-thegraph-tokens",
+    "connect-finance": "yarn workspace @aragon/connect-finance",
+    "connect-voting": "yarn workspace @aragon/connect-voting",
+    "connect-tokens": "yarn workspace @aragon/connect-tokens",
     "connect-types": "yarn workspace @aragon/connect-types",
     "test": "is-ci \"test:coverage\" \"jest\"",
     "test:coverage": "jest --coverage",
@@ -52,5 +53,5 @@
     "oao": "^1.8.0",
     "ts-jest": "^26.1.0"
   },
-  "version": "0.4.2"
+  "version": "0.5.1"
 }

@@ -3,12 +3,13 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { Network, SubscriptionHandler } from '@aragon/connect-types'
-import { AppFilters } from '@aragon/connect-types'
+import { AppFilters, Network, SubscriptionHandler } from '@aragon/connect-types'
 import {
-  IOrganizationConnector,
-  Permission,
   App,
+  ConnectionContext,
+  IOrganizationConnector,
+  Organization,
+  Permission,
   Repo,
   Role,
 } from '@aragon/connect-core'
@@ -20,9 +21,18 @@ export type ConnectorEthereumConfig = {
 class ConnectorEthereum implements IOrganizationConnector {
   readonly name = 'ethereum'
   readonly network: Network
+  connection?: ConnectionContext
 
   constructor(config: ConnectorEthereumConfig) {
     this.network = config.network
+  }
+
+  async connect(connection: ConnectionContext) {
+    this.connection = connection
+  }
+
+  async disconnect() {
+    delete this.connection
   }
 
   async permissionsForOrg(): Promise<Permission[]> {
@@ -32,7 +42,7 @@ class ConnectorEthereum implements IOrganizationConnector {
   }
 
   onPermissionsForOrg(
-    orgAddress: string,
+    organization: Organization,
     callback: Function
   ): SubscriptionHandler {
     return {
@@ -40,20 +50,20 @@ class ConnectorEthereum implements IOrganizationConnector {
     }
   }
 
-  appForOrg(orgAddress: string, filters: AppFilters): Promise<App> {
+  appForOrg(organization: Organization, filters: AppFilters): Promise<App> {
     return new Promise(resolve => {
       resolve()
     })
   }
 
-  appsForOrg(orgAddress: string, filters: AppFilters): Promise<App[]> {
+  appsForOrg(organization: Organization, filters: AppFilters): Promise<App[]> {
     return new Promise(resolve => {
       resolve([])
     })
   }
 
   onAppForOrg(
-    orgAddress: string,
+    organization: Organization,
     filters: AppFilters,
     callback: Function
   ): SubscriptionHandler {
@@ -63,7 +73,7 @@ class ConnectorEthereum implements IOrganizationConnector {
   }
 
   onAppsForOrg(
-    orgAddress: string,
+    organization: Organization,
     filters: AppFilters,
     callback: Function
   ): SubscriptionHandler {
@@ -72,30 +82,25 @@ class ConnectorEthereum implements IOrganizationConnector {
     }
   }
 
-  repoForApp(appAddress: string): Promise<Repo> {
+  repoForApp(organization: Organization, appAddress: string): Promise<Repo> {
     return new Promise(resolve => {
       resolve()
     })
   }
 
-  appByAddress(appAddress: string): Promise<App> {
+  appByAddress(organization: Organization, appAddress: string): Promise<App> {
     return new Promise(resolve => {
       resolve()
     })
   }
 
-  rolesForAddress(appAddress: string): Promise<Role[]> {
+  rolesForAddress(
+    organization: Organization,
+    appAddress: string
+  ): Promise<Role[]> {
     return new Promise(resolve => {
       resolve([])
     })
-  }
-
-  async app(filters: AppFilters): Promise<App> {
-    return this.appByAddress('')
-  }
-
-  async apps(filters: AppFilters): Promise<App[]> {
-    return []
   }
 }
 

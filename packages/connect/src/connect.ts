@@ -1,9 +1,11 @@
 import { ethers } from 'ethers'
 import {
+  ConnectionContext,
   ConnectorJson,
   ConnectorJsonConfig,
   IOrganizationConnector,
   Organization,
+  toNetwork,
 } from '@aragon/connect-core'
 import ConnectorEthereum, {
   ConnectorEthereumConfig,
@@ -11,23 +13,45 @@ import ConnectorEthereum, {
 import ConnectorTheGraph, {
   ConnectorTheGraphConfig,
 } from '@aragon/connect-thegraph'
-import { Network } from '@aragon/connect-types'
+import { Address, Network, Networkish } from '@aragon/connect-types'
+import { XDAI_WSS_ENDPOINT, DEFAULT_IPFS_URL } from './constants'
 
-export type ConnectOptionsResolveIpfs = (
-  ipfsIdentifier: string,
-  path: string
-) => string
+export type IpfsUrlResolver = (cid: string, path?: string) => string
 
 export type ConnectOptions = {
-  readProvider?: ethers.providers.Provider
-  chainId?: number
-  ipfs?: ConnectOptionsResolveIpfs
+  actAs?: string
+  ethereum?: object
+  ipfs?: IpfsUrlResolver | string
+  network?: Networkish
+  verbose?: boolean
 }
 
 export type ConnectorDeclaration =
   | IOrganizationConnector
   | [string, object | undefined]
   | string
+
+type IpfsResolver = (cid: string, path?: string) => string
+
+function ipfsResolverFromUrlTemplate(urlTemplate: string): IpfsResolver {
+  return function ipfsResolver(cid: string, path?): string {
+    const url = urlTemplate.replace(/\{cid\}/, cid)
+    if (!path) {
+      return url.replace(/\{path\}/, '')
+    }
+    if (!path.startsWith('/')) {
+      path = `/${path}`
+    }
+    return url.replace(/\{path\}/, path)
+  }
+}
+
+function getIpfsResolver(ipfs: ConnectOptions['ipfs']) {
+  if (typeof ipfs === 'function') {
+    return ipfs
+  }
+  return ipfsResolverFromUrlTemplate(ipfs || DEFAULT_IPFS_URL)
+}
 
 function normalizeConnectorConfig(
   connector: ConnectorDeclaration
@@ -72,48 +96,79 @@ function getConnector(
   throw new Error(`Unsupported connector name: ${name}`)
 }
 
-function getNetwork(chainId?: number): Network {
-  if (chainId === 1 || !chainId) {
-    return {
-      chainId: 1,
-      name: 'homestead',
-      ensAddress: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
+function getEthersProvider(
+  ethereumProvider: object | undefined,
+  network: Network
+): ethers.providers.Provider {
+  // Ethers compatibility: ethereum => homestead
+  if (network.name === 'ethereum' && network.chainId === 1) {
+    network = { ...network, name: 'homestead' }
+  }
+
+  if (ethereumProvider) {
+    try {
+      return new ethers.providers.Web3Provider(ethereumProvider, network)
+    } catch (err) {
+      console.error('Invalid provider:', ethereumProvider)
+      throw err
     }
   }
-  if (chainId === 4) {
-    return {
-      chainId: 4,
-      name: 'rinkeby',
-      ensAddress: '0x98df287b6c145399aaa709692c8d308357bc085d',
-    }
+
+  if (network.chainId === 100) {
+    return new ethers.providers.WebSocketProvider(XDAI_WSS_ENDPOINT, network)
   }
-  if (chainId === 100) {
-    return {
-      chainId: 100,
-      name: 'xdai',
-      ensAddress: '0xaafca6b0c89521752e559650206d7c925fd0e530',
-    }
+
+  return ethers.getDefaultProvider(network)
+}
+
+async function resolveAddress(
+  ethersProvider: ethers.providers.Provider,
+  location: string
+): Promise<Address> {
+  const address = ethers.utils.isAddress(location)
+    ? location
+    : await ethersProvider.resolveName(location)
+
+  if (!ethers.utils.isAddress(address)) {
+    throw new Error('Please provide a valid address or ENS domain.')
   }
-  throw new Error(`Invalid chainId provided: ${chainId}`)
+
+  return address
 }
 
 async function connect(
   location: string,
   connector: ConnectorDeclaration,
-  { readProvider, chainId }: ConnectOptions = {}
+  {
+    actAs,
+    ethereum: ethereumProvider,
+    ipfs,
+    network,
+    verbose,
+  }: ConnectOptions = {}
 ): Promise<Organization> {
-  const network = getNetwork(chainId)
-  if (!network) {
-    throw new Error(`Invalid chainId provided: ${chainId}`)
+  const _network = toNetwork(network ?? 'ethereum')
+
+  const ethersProvider = getEthersProvider(ethereumProvider, _network)
+  const orgConnector = getConnector(connector, _network)
+
+  const orgAddress = await resolveAddress(ethersProvider, location)
+
+  const connectionContext = {
+    actAs: actAs || null,
+    ethereumProvider: ethereumProvider || null,
+    ethersProvider,
+    ipfs: getIpfsResolver(ipfs),
+    network: _network,
+    orgAddress,
+    orgConnector,
+    orgLocation: location,
+    verbose: verbose ?? false,
   }
 
-  const _connector = getConnector(connector, network)
-  await _connector.connect?.()
+  await orgConnector.connect?.(connectionContext)
 
-  const org = new Organization(location, _connector, readProvider, network)
-  await org._connect()
-
-  return org
+  return new Organization(connectionContext)
 }
 
 export default connect

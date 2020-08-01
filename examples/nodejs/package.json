@@ -1,7 +1,7 @@
 {
   "name": "nodejs",
   "main": "dist/index.js",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "private": true,
   "scripts": {
     "build": "yarn clean && yarn compile",
@@ -18,13 +18,14 @@
     "start-subscriptions-low-level": "yarn build; node dist/src/subscriptions-low-level.js",
     "start-subscriptions-org": "yarn build; node dist/src/subscriptions-org.js",
     "start-subscriptions-tokens": "yarn build; node dist/src/subscriptions-tokens.js",
-    "start-create-org": "yarn build; node dist/src/create-org.js"
+    "start-create-org": "yarn build; node dist/src/create-org.js",
+    "start-create-karma-template": "yarn build; node dist/src/create-karma-template.js"
   },
   "dependencies": {
     "@aragon/connect": "*",
     "@aragon/connect-thegraph": "*",
-    "@aragon/connect-thegraph-tokens": "*",
-    "@aragon/connect-thegraph-voting": "*",
+    "@aragon/connect-tokens": "*",
+    "@aragon/connect-voting": "*",
     "ethers": "^5.0.0",
     "graphql-tag": "^2.10.3"
   },

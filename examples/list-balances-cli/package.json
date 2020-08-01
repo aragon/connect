@@ -1,0 +1,20 @@
+{
+  "name": "list-balances-cli",
+  "private": true,
+  "version": "0.5.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node ./src/index.ts",
+    "start:rinkeby": "CHAIN_ID=4 ts-node ./src/index.ts"
+  },
+  "devDependencies": {
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.6"
+  },
+  "dependencies": {
+    "@aragon/connect": "*",
+    "@aragon/connect-voting": "*",
+    "token-amount": "^0.1.0"
+  }
+}

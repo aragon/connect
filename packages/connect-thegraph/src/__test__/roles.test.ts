@@ -1,32 +1,31 @@
-import ConnectorTheGraph from '../connector'
-import { Role } from '@aragon/connect-core'
+import { connect } from '@aragon/connect'
+import { Organization, Role } from '@aragon/connect-core'
 import { isAddress, isBytes32 } from '../../../test-helpers'
 
+const ORG_LOCATION = 'piedao.aragonid.eth'
 const APP_ADDRESS = '0xbce807b35dee2fbe457e4588f1c799879446eb54'
 
-const MAINNET_NETWORK = {
-  chainId: 1,
-  name: 'homestead',
-}
-
-// TODO: Test subscriptions
+const MAINNET_NETWORK = 1
 
 describe('when connecting to the mainnet subgraph', () => {
-  let connector: ConnectorTheGraph
+  let org: Organization
 
-  beforeAll(() => {
-    connector = new ConnectorTheGraph({ network: MAINNET_NETWORK })
+  beforeAll(async () => {
+    org = await connect(ORG_LOCATION, 'thegraph', { network: MAINNET_NETWORK })
   })
 
   afterAll(async () => {
-    await connector.disconnect()
+    await org.connection.orgConnector.disconnect?.()
   })
 
   describe('when querying the roles associated with an app', () => {
     let roles: Role[]
 
     beforeAll(async () => {
-      roles = await connector.rolesForAddress(APP_ADDRESS)
+      roles = await org.connection.orgConnector.rolesForAddress(
+        org,
+        APP_ADDRESS
+      )
     })
 
     test('roles are found', () => {
@@ -52,7 +51,7 @@ describe('when connecting to the mainnet subgraph', () => {
 
       test('should have valid permissions', () => {
         expect(role.permissions).toBeDefined()
-        expect(role.permissions!.length).toBeGreaterThan(0)
+        expect(role.permissions?.length || 0).toBeGreaterThan(0)
       })
 
       test('should have a valid app address', () => {

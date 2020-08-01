@@ -1,5 +1,5 @@
 import { connect, describeScript, App } from '@aragon/connect'
-import { Vote, Voting } from '@aragon/connect-thegraph-voting'
+import { Vote, Voting } from '@aragon/connect-voting'
 
 const VOTING_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'

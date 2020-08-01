@@ -1,5 +1,5 @@
 import { connect } from '@aragon/connect'
-import { Cast, Vote, Voting } from '@aragon/connect-thegraph-voting'
+import { Cast, Vote, Voting } from '@aragon/connect-voting'
 
 type Env = { chainId: number; org: string; votingSubgraphUrl: string }
 
