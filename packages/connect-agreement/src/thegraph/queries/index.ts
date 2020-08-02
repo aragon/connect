@@ -58,3 +58,26 @@ export const ALL_VERSIONS = (type: string) => gql`
     }
   }
 `
+
+export const GET_SIGNER = (type: string) => gql`
+  ${type} Signer($signerId: String!) {
+    signer(id: $signerId) {
+      id
+      address
+      agreement { id }
+    }
+  }
+`
+
+export const GET_SIGNATURES = (type: string) => gql`
+  ${type} Signatures($signerId: String!, $first: Int!, $skip: Int!) {
+    signatures(where: { 
+      signer: $signerId
+    }, first: $first, skip: $skip) {
+      id
+      version { id }
+      signer { id }
+      createdAt
+    }
+  }
+`

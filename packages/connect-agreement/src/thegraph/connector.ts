@@ -2,9 +2,11 @@ import { SubscriptionHandler } from '@aragon/connect-types'
 import { GraphQLWrapper, QueryResult } from '@aragon/connect-thegraph'
 
 import * as queries from './queries'
+import Signer from '../entities/Signer'
+import Signature from '../entities/Signature'
 import Version from '../entities/Version'
 import { AgreementData, IAgreementConnector } from '../types'
-import { parseAgreement, parseCurrentVersion, parseVersions, parseVersion } from './parsers'
+import { parseAgreement, parseSigner, parseSignatures, parseCurrentVersion, parseVersions, parseVersion } from './parsers'
 
 export function subgraphUrlFromChainId(chainId: number) {
   if (chainId === 1) {
@@ -60,18 +62,18 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     )
   }
 
-  async version(agreement: string, versionId: string): Promise<Version> {
+  async version(versionId: string): Promise<Version> {
     return this.#gql.performQueryWithParser(
       queries.GET_VERSION('query'),
-      { versionId: `${agreement}-version-${versionId}` },
+      { versionId },
       (result: QueryResult) => parseVersion(result, this)
     )
   }
 
-  onVersion(agreement: string, versionId: string, callback: Function): SubscriptionHandler {
+  onVersion(versionId: string, callback: Function): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
       queries.GET_VERSION('subscription'),
-      { versionId: `${agreement}-version-${versionId}` },
+      { versionId },
       callback,
       (result: QueryResult) => parseVersion(result, this)
     )
@@ -91,6 +93,40 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
       { agreement, first: 1000, skip: 0 },
       callback,
       (result: QueryResult) => parseVersions(result, this)
+    )
+  }
+
+  async signer(signerId: string): Promise<Signer> {
+    return this.#gql.performQueryWithParser(
+      queries.GET_SIGNER('query'),
+      { signerId },
+      (result: QueryResult) => parseSigner(result, this)
+    )
+  }
+
+  onSigner(signerId: string, callback: Function): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser(
+      queries.GET_SIGNER('query'),
+      { signerId },
+      callback,
+      (result: QueryResult) => parseSigner(result, this)
+    )
+  }
+
+  async signatures(signerId: string, first: number, skip: number): Promise<Signature[]> {
+    return this.#gql.performQueryWithParser(
+      queries.GET_SIGNATURES('query'),
+      { signerId, first, skip },
+      (result: QueryResult) => parseSignatures(result, this)
+    )
+  }
+
+  onSignatures(signerId: string, callback: Function): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser(
+      queries.GET_SIGNATURES('query'),
+      { signerId, first: 1000, skip: 0 },
+      callback,
+      (result: QueryResult) => parseSignatures(result, this)
     )
   }
 }
