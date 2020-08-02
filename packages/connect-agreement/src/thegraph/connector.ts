@@ -60,18 +60,18 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     )
   }
 
-  async version(versionId: string): Promise<Version> {
+  async version(agreement: string, versionId: string): Promise<Version> {
     return this.#gql.performQueryWithParser(
       queries.GET_VERSION('query'),
-      { versionId },
+      { versionId: `${agreement}-version-${versionId}` },
       (result: QueryResult) => parseVersion(result, this)
     )
   }
 
-  onVersion(versionId: string, callback: Function): SubscriptionHandler {
+  onVersion(agreement: string, versionId: string, callback: Function): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
       queries.GET_VERSION('subscription'),
-      { versionId },
+      { versionId: `${agreement}-version-${versionId}` },
       callback,
       (result: QueryResult) => parseVersion(result, this)
     )

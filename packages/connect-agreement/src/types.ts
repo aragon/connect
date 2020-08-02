@@ -24,8 +24,8 @@ export interface IAgreementConnector {
   agreement(agreement: string): Promise<AgreementData>
   currentVersion(agreement: string): Promise<Version>
   onCurrentVersion(agreement: string, callback: Function): SubscriptionHandler
-  version(versionId: string): Promise<Version>
-  onVersion(versionId: string, callback: Function): SubscriptionHandler
+  version(agreement: string, versionId: string): Promise<Version>
+  onVersion(agreement: string, versionId: string, callback: Function): SubscriptionHandler
   versions(agreement: string, first: number, skip: number): Promise<Version[]>
   onVersions(agreement: string, callback: Function): SubscriptionHandler
 }
