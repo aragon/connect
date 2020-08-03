@@ -2,9 +2,9 @@
 
 ## Introduction
 
-Aragon Connect is a suite of tools that allow you to easily supercharge apps and websites by integrating them with an Aragon organization. It provides a unified interface for fetching data, subscribing to updates, and generating transactions in the context of Aragon organizations. By default, it balances performance with decentralization, but can be extended and configured to strongly prefer one over the other \(if you learn how to do both--let us know!\). It is compatible with web and Node.js environments.
+Aragon Connect is a suite of tools that allow you to easily supercharge apps and websites by integrating them with an Aragon organization. It provides a unified interface for fetching data, subscribing to updates, and generating transactions in the context of Aragon organizations. By default, it balances performance with decentralization, but can be extended and configured to strongly prefer one over the other (if you learn how to do both--let us know!). It is compatible with web and Node.js environments.
 
-This guide assumes that you are familiar with the way Aragon organizations work. If that’s not the case, we invite you to get up to charge with the [Aragon Basics](aragon-basics.md) guide.
+This guide assumes that you are familiar with the way Aragon organizations work. If that’s not the case, we invite you to get up to charge with the [Aragon Basics](./aragon-basics.md) guide.
 
 ### What does it look like?
 
@@ -28,8 +28,8 @@ The idea of connectors is central to Aragon Connect. A connector is an abstracti
 
 Aragon Connect allows for injecting any type of connector, and includes two by default:
 
-* **The Graph**: fetch data from [Subgraphs](https://thegraph.com/docs/introduction#how-the-graph-works), hosted on [thegraph.com](https://thegraph.com/) by default.
-* **Ethereum \(WIP\)**: fetch data from an Ethereum node directly.
+- **The Graph**: fetch data from [Subgraphs](https://thegraph.com/docs/introduction#how-the-graph-works), hosted on [thegraph.com](https://thegraph.com/) by default.
+- **Ethereum \(WIP\)**: fetch data from an Ethereum node directly.
 
 A connector can be of two types: **organization** or **app**, to fetch data from one or the other. The main package of Aragon Connect only provides organization connectors: app connectors need to be imported separately.
 
@@ -37,10 +37,10 @@ A connector can be of two types: **organization** or **app**, to fetch data from
 
 Aragon Connect consists of a few parts:
 
-* `@aragon/connect`: this is the main library. It provides the main features to connect and interact with organizations, and includes the basic organization connectors.
-* `@aragon/connect-thegraph-voting`: an app connector for fetching data from the Voting app, through The Graph.
-* `@aragon/connect-thegraph-tokens`: an app connector for fetching data from the Tokens app, through The Graph.
-* Additional app connectors published by individual app authors
+- `@aragon/connect`: this is the main library. It provides the main features to connect and interact with organizations, and includes the basic organization connectors.
+- `@aragon/connect-voting`: an app connector for fetching data from the Voting app.
+- `@aragon/connect-tokens`: an app connector for fetching data from the Tokens app.
+- Additional app connectors published by individual app authors
 
 [A few other packages](https://github.com/aragon/connect/tree/master/packages) are also published, but they are only needed to author or extend connectors and not to use the library.
 
@@ -48,21 +48,21 @@ Aragon Connect consists of a few parts:
 
 Start by adding [`@aragon/connect`](https://www.npmjs.com/package/@aragon/connect) to your project:
 
-```text
+```console
 yarn add @aragon/connect
 ```
 
 You can now import it:
 
 ```javascript
-import { connect } from '@aragon/connect'
+import connect from '@aragon/connect'
 ```
 
 If you want to interact with the Voting or the Tokens app, you should also install their respective connectors:
 
 ```text
-yarn add @aragon/connect-thegraph-voting
-yarn add @aragon/connect-thegraph-tokens
+yarn add @aragon/connect-voting
+yarn add @aragon/connect-tokens
 ```
 
 See [“Fetching an app’s state”](getting-started.md#fetching-an-apps-state) below to understand how to use these app connectors.
@@ -73,8 +73,8 @@ As seen above, connecting to an organization can be done by calling the `connect
 
 It requires two parameters:
 
-* The address of the organization, which can be any valid Ethereum address \(`0x…`\) or [ENS domain](https://ens.domains/) \(`….eth`\).
-* The connector you want to use.
+- The address of the organization, which can be any valid Ethereum address \(`0x…`\) or [ENS domain](https://ens.domains/) \(`….eth`\).
+- The connector you want to use.
 
 ```javascript
 const org = await connect('example.aragonid.eth', 'thegraph')
@@ -102,16 +102,13 @@ Apps can be obtained from an [`Organization`](../api-reference/organization.md) 
 Let’s see how to retrieve all the votes from a Voting app:
 
 ```javascript
-import { connect } from '@aragon/connect'
-import Voting from '@aragon/connect-thegraph-voting'
+import connect from '@aragon/connect'
+import connectVoting from '@aragon/connect-voting'
 
 const org = await connect('example.aragonid.eth', 'thegraph')
 
-// Instanciate the Voting app connector using the app address:
-const voting = new Voting(
-  await org.app('voting').address,
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'
-)
+// Connect the Voting app using the corresponding connector:
+const voting = connectVoting(org.app('voting'))
 
 // Fetch votes of the Voting app
 const votes = await voting.votes()
@@ -147,10 +144,11 @@ handler.unsubscribe()
 App connectors also support subscriptions in an identical way:
 
 ```javascript
-const voting = new Voting(
-  votingInfo.address,
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'
-)
+import connect from '@aragon/connect'
+import connectVoting from '@aragon/connect-voting'
+
+const org = await connect('example.aragonid.eth', 'thegraph')
+const voting = connectVoting(org.app('voting'))
 
 const handler = voting.onVotes(votes => {
   console.log('Votes updated:', votes)
@@ -188,7 +186,6 @@ for (const transaction of path.transactions) {
 
 ## Going further
 
-Now that you are familiar with the basics of Aragon Connect, you may want to explore the [examples provided in the repository](https://github.com/aragon/connect/tree/master/examples) and the [API documentation](https://github.com/aragon/connect/tree/84d8f0296e3daec91ebcc20ca3161145b02f7e44/docs/api-reference/README.md).
+Now that you are familiar with the basics of Aragon Connect, you may want to explore the [examples provided in the repository](https://github.com/aragon/connect/tree/master/examples) and the [API documentation](../api-reference/).
 
 If you are using React, you might want to have a look at the [Usage with React](connect-with-react.md) guide.
-

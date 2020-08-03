@@ -1,93 +1,42 @@
 # Voting app
 
-This is an Aragon app specific connector for the Voting app built using The Graph.
+This is an app connector for the Voting app (`voting.aragonpm.eth`). It only supports The Graph for now.
 
-## Connector API
+## API
 
-To create a new instance of the connector, you need the specific Voting app address and the Subgraph URL:
+To connect an app, you need to pass a voting app as a first parameter of the connectVoting() function:
 
-```javascript
-import { Voting } from '@aragon/connect-thegraph-voting'
+```js
+import connect from '@aragon/connect'
+import connectVoting from '@aragon/connect-voting'
 
-const voting = new Voting(VOTING_APP_ADDRESS, VOTING_APP_SUBGRAPH_URL)
+const org = connect('myorg.aragonid.eth', 'thegraph')
+const voting = connectVoting(org.app('voting'))
 ```
 
-Once you have an instance of the `Voting` object, you can use the following API to fetch data.
+It extends the `App` object, which means that every method and properties of [`App`](../api-reference/app.md) are also available on this object.
 
-### voting\#votesForApp\(appAddress, first, skip\)
+Once you have a `Voting` instance, you can use the following API to retrieve its data:
 
-Get the list of votes in the provided Voting app.
+### Voting\#votes\(filters\)
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
-| `appAddress` | `String` | Address of the Voting app. |
-| `first` | `String` | Pagination argument. |
-| `skip` | `String` | Pagination argument. |
-| returns | `Promise<Vote[]>` | Result data parsed as a list of votes. |
+Get the list of votes in the Voting app.
 
-### voting\#onVotesForApp\(appAddress, callback\)
+| Name            | Type              | Description                                   |
+| --------------- | ----------------- | --------------------------------------------- |
+| `filters`       | `Object`          | Optional object allowing to filter the votes. |
+| `filters.first` | `Number`          | Maximum number of votes. Defaults to `1000`.  |
+| `filters.skip`  | `Number`          | Skip a number of votes. Defaults to `0`.      |
+| returns         | `Promise<Vote[]>` | The list of votes.                            |
 
-Subscribe to the list of votes in the provided Voting app.
+### Voting\#onVotes\(filters, callback\)
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
-| `appAddress` | `String` | Address of the Voting app. |
-| `callback` | `Function` | Callback function call on every data update. |
-| returns | `Function` | Unsubscribe function. |
+Subscribe to the list of votes in the Voting app.
 
-### voting\#castsForVote\(voteId, first, skip\)
-
-Get the list of cast votes for a vote.
-
-| Name | Type | Description |
-| :--- | :--- | :--- |
-| `voteId` | `String` | Id of the Vote. |
-| `first` | `String` | Pagination argument. |
-| `skip` | `String` | Pagination argument. |
-| returns | `Promise<Cast[]>` | Result data parsed as a list of casts. |
-
-### voting\#onCastsForVote\(appAddress, callback\)
-
-Subscribe to the list of cast votes for a vote.
-
-| Name | Type | Description |
-| :--- | :--- | :--- |
-| `voteId` | `String` | Id of the Vote. |
-| `callback` | `Function` | Callback function call on every data update. |
-| returns | `Function` | Unsubscribe function. |
-
-## Subgraph schema
-
-The Subgraph schema defines all of the available entities and attributes. It may be useful to gain a fuller, clearer picture of the information you can request.
-
-```yaml
-type Vote @entity {
-  id: ID!
-  orgAddress: Bytes!
-  appAddress: Bytes!
-  creator: Bytes!
-  metadata: String!
-  executed: Boolean!
-  startDate: BigInt!
-  snapshotBlock: BigInt!
-  supportRequiredPct: BigInt!
-  minAcceptQuorum: BigInt!
-  yea: BigInt!
-  nay: BigInt!
-  votingPower: BigInt!
-  script: Bytes!
-  voteNum: BigInt!
-  casts: [Cast!]!
-}
-
-type Cast @entity {
-  id: ID!
-  voteId: ID!
-  voteNum: BigInt!
-  voter: Bytes!
-  supports: Boolean!
-  voterStake: BigInt!
-  vote: Vote! @derivedFrom(field: "casts")
-}
-```
-
+| Name            | Type            | Description                                                         |
+| --------------- | --------------- | ------------------------------------------------------------------- |
+| `filters`       | `Object`        | Optional object allowing to filter the votes.                       |
+| `filters.first` | `Number`        | Maximum number of votes. Defaults to `1000`.                        |
+| `filters.skip`  | `Number`        | Skip a number of votes. Defaults to `0`.                            |
+| `callback`      | `votes => void` | A callback that will get called every time the result gets updated. |
+| returns         | `Function`      | Unsubscribe function.                                               |

@@ -6,33 +6,39 @@ import {
   subscriptionExchange,
   createRequest,
 } from '@urql/core'
-import { SubscriptionOperation } from '@urql/core/dist/types/exchanges/subscription'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { DocumentNode } from 'graphql'
-import { ParseFunction, QueryResult } from '../types'
 import { pipe, subscribe } from 'wonka'
+import { SubscriptionHandler } from '@aragon/connect-types'
+import { ParseFunction, QueryResult, SubscriptionOperation } from '../types'
+
+const AUTO_RECONNECT = true
+const CONNECTION_TIMEOUT = 20 * 1000
+
+function filterSubgraphUrl(url: string): [string, string] {
+  if (!/^(?:https|wss):\/\//.test(url)) {
+    throw new Error('Please provide a valid subgraph URL')
+  }
+  return [url.replace(/^wss/, 'https'), url.replace(/^https/, 'wss')]
+}
 
 export default class GraphQLWrapper {
   #client: Client
   #verbose: boolean
+  close: () => void
 
   constructor(subgraphUrl: string, verbose = false) {
-    if (!subgraphUrl || !subgraphUrl.startsWith('http')) {
-      throw new Error('Please provide a valid subgraph URL')
-    }
+    const [urlHttp, urlWs] = filterSubgraphUrl(subgraphUrl)
 
     const subscriptionClient = new SubscriptionClient(
-      subgraphUrl.replace('http', 'ws'),
-      {
-        reconnect: true,
-        timeout: 20000,
-      },
+      urlWs,
+      { reconnect: AUTO_RECONNECT, timeout: CONNECTION_TIMEOUT },
       ws
     )
 
     this.#client = new Client({
       maskTypename: true,
-      url: subgraphUrl,
+      url: urlHttp,
       fetch,
       exchanges: [
         ...defaultExchanges,
@@ -44,13 +50,14 @@ export default class GraphQLWrapper {
     })
 
     this.#verbose = verbose
+    this.close = () => subscriptionClient.close()
   }
 
-  subscribeToQuery(
+  subscribeToQuery<T>(
     query: DocumentNode,
     args: any = {},
     callback: Function
-  ): { unsubscribe: Function } {
+  ): SubscriptionHandler {
     const request = createRequest(query, args)
 
     return pipe(
@@ -75,14 +82,14 @@ export default class GraphQLWrapper {
     )
   }
 
-  subscribeToQueryWithParser(
+  subscribeToQueryWithParser<T>(
     query: DocumentNode,
     args: any = {},
     callback: Function,
     parser: ParseFunction
-  ): { unsubscribe: Function } {
+  ): SubscriptionHandler {
     return this.subscribeToQuery(query, args, async (result: QueryResult) => {
-      callback(await this.parseQueryResult(parser, result))
+      callback(await this.parseQueryResult<T>(parser, result))
     })
   }
 
@@ -111,15 +118,15 @@ export default class GraphQLWrapper {
     parser: ParseFunction
   ): Promise<T> {
     const result = await this.performQuery(query, args)
-    return this.parseQueryResult(parser, result)
+    return this.parseQueryResult<T>(parser, result)
   }
 
-  async parseQueryResult(
+  async parseQueryResult<T>(
     parser: ParseFunction,
     result: QueryResult
-  ): Promise<any> {
+  ): Promise<T> {
     try {
-      return parser(result, this)
+      return parser(result)
     } catch (error) {
       throw new Error(error.message + '\n\n' + this.describeQueryResult(result))
     }

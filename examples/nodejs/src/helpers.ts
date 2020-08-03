@@ -29,9 +29,11 @@ export async function fetchRepo(name: string, subgraph: string) {
   const wrapper = new GraphQLWrapper(subgraph)
 
   // Invoke the custom query and receive data
-  return wrapper.performQuery(QUERY_REPO_BY_NAME, {
+  const { data } = await wrapper.performQuery(QUERY_REPO_BY_NAME, {
     name,
   })
+
+  return data.repos[0]
 }
 
 export async function getOrgAddress(

@@ -1,11 +1,14 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "@snowpack/app-scripts-react/tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "src",
-    "jsx": "react"
+    "jsx": "react",
+    "target": "ESNext",
+    "baseUrl": "./",
+    "paths": { "*": ["web_modules/.types/*"] }
   },
-  "include": ["src"],
-  "exclude": ["dist"],
-  "references": [{ "path": "../../packages/connect" }]
+  "include": ["src", "types"],
+  "exclude": ["node_modules"],
+  "references": [{ "path": "../../packages/connect-react" }]
 }

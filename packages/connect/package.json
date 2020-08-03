@@ -1,28 +1,26 @@
 {
   "name": "@aragon/connect",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "license": "LGPL-3.0-or-later",
-  "main": "dist-cjs/index.js",
-  "browser": "dist/index.js",
-  "modules": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/cjs/index.d.ts",
   "sideEffects": false,
   "scripts": {
-    "build:fast": "esbuild --platform=browser --sourcemap --loader:.ts=ts --format=esm --target=es2019 --outdir=./dist --bundle ./src/index.ts",
-    "build:types": "rm ./tsconfig.tsbuildinfo && tsc --outDir ./dist --emitDeclarationOnly",
-    "build": "yarn compile",
-    "dev": "yarn build --watch",
+    "build": "yarn build:esm && yarn build:cjs",
+    "build:esm": "tsc --build",
+    "build:cjs": "tsc --build ./tsconfig.cjs.json",
+    "build:types": "rm ./tsconfig.tsbuildinfo && tsc --outDir ./dist/cjs --emitDeclarationOnly",
+    "dev:esm": "yarn build:esm --watch",
+    "dev:cjs": "yarn build:cjs --watch",
     "test": "is-ci \"test:coverage\" \"test:watch\"",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",
     "test:debug": "node --inspect-brk ../../node_modules/jest/bin/jest.js --runInBand --watch",
     "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo",
-    "compile": "tsc --build",
     "lint": "eslint --ext .ts ./src"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "devDependencies": {
     "@types/jest": "^26.0.0",
     "@typescript-eslint/eslint-plugin": "^2.29.0",
@@ -41,13 +39,7 @@
     "@aragon/connect-thegraph": "*"
   },
   "description": "Access and interact with Aragon Organizations and their apps.",
-  "keywords": [
-    "ethereum",
-    "javascript",
-    "web3",
-    "dapp",
-    "aragon"
-  ],
+  "keywords": ["ethereum", "javascript", "web3", "dapp", "aragon"],
   "author": "Aragon Association <legal@aragon.org>",
   "homepage": "https://github.com/aragon/connect",
   "bugs": "https://github.com/aragon/connect/issues",

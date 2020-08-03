@@ -1,0 +1,40 @@
+type TokenManager @entity {
+  id: ID!
+  address: Bytes!
+  orgAddress: Bytes!
+  token: MiniMeToken @derivedFrom(field: "tokenManager")
+}
+
+type MiniMeToken @entity {
+  id: ID!
+  address: Bytes!
+  totalSupply: BigInt!
+  transferable: Boolean!
+  name: String!
+  symbol: String!
+  orgAddress: Bytes
+  appAddress: Bytes
+  tokenManager: TokenManager
+  holders: [TokenHolder!]!
+}
+
+type TokenHolder @entity {
+  id: ID!
+  address: Bytes!
+  tokenAddress: Bytes!
+  balance: BigInt!
+}
+
+type OrphanTokenManagers @entity {
+  id: ID!
+  apps: [Bytes!]!
+}
+
+type AragonInfo @entity {
+  id: ID!
+  version: String!
+  orgs: [Bytes!]!
+  apps: [Bytes!]!
+  tokens: [Bytes!]!
+}
+

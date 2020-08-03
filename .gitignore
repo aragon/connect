@@ -17,9 +17,14 @@ subgraph.yaml
 .pnp.*
 
 tsconfig.tsbuildinfo
+tsconfig.cjs.tsbuildinfo
 
 # IDE specific
 .graphqlconfig
 .vscode
 
 packages/*/yarn-error.log
+
+# Parcel
+.parcel-cache/
+.cache/

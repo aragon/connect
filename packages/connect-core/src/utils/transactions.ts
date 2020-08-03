@@ -22,22 +22,21 @@ export interface TransactionWithTokenData extends Transaction {
 export async function createDirectTransaction(
   sender: string,
   destination: string,
-  abi: Abi,
-  methodJsonDescription: FunctionFragment,
+  methodAbiFragment: FunctionFragment,
   params: any[]
 ): Promise<Transaction> {
   let transactionOptions = {}
 
   // If an extra parameter has been provided, it is the transaction options if it is an object
   if (
-    methodJsonDescription.inputs.length + 1 === params.length &&
+    methodAbiFragment.inputs.length + 1 === params.length &&
     typeof params[params.length - 1] === 'object'
   ) {
     const options = params.pop()
     transactionOptions = { ...transactionOptions, ...options }
   }
 
-  const ethersInterface = new ethers.utils.Interface(abi)
+  const ethersInterface = new ethers.utils.Interface([methodAbiFragment])
 
   // The direct transaction we eventually want to perform
   return {
@@ -45,7 +44,7 @@ export async function createDirectTransaction(
     from: sender,
     to: destination,
     data: ethersInterface.encodeFunctionData(
-      methodJsonDescription.name,
+      ethers.utils.FunctionFragment.from(methodAbiFragment),
       params
     ),
   }
@@ -67,7 +66,7 @@ export async function createDirectTransactionForApp(
     throw new Error(`No ABI specified in artifact for ${destination}`)
   }
 
-  const methodJsonDescription = app.abi.find(method => {
+  const methodAbiFragment = app.abi.find(method => {
     // If the full signature isn't given, just find the first overload declared
     if (!isFullMethodSignature(methodSignature)) {
       return method.name === methodSignature
@@ -83,15 +82,14 @@ export async function createDirectTransactionForApp(
     return currentMethodSignature === methodSignature
   })
 
-  if (!methodJsonDescription) {
+  if (!methodAbiFragment) {
     throw new Error(`${methodSignature} not found on ABI for ${destination}`)
   }
 
   return createDirectTransaction(
     sender,
     destination,
-    app.abi,
-    methodJsonDescription as FunctionFragment,
+    methodAbiFragment as FunctionFragment,
     params
   )
 }

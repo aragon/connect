@@ -1,0 +1,24 @@
+{
+  "network": "mainnet",
+  "dataSources": {
+    "Organizations": [
+      {
+        "name": "DeepDAO",
+        "address": "0x5aAd137d8f7D2Dc6e1B2548c059B1483360bCC6a",
+        "startBlock": "8134920"
+      }
+    ],
+    "OrganizationFactories": [],
+    "OrganizationTemplates": [],
+    "LegacyOrganizationTemplates": [],
+    "TokenFactories": [],
+    "Tokens": [
+      {
+        "name": "BrightID_Main_DAO",
+        "address": "0x0077Cd5Eca22e86177cc465633227652ff02F32d",
+        "startBlock": 8134898
+      }
+    ]
+  }
+}
+

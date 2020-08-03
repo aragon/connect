@@ -1,26 +1,27 @@
-import ConnectorTheGraph from '../connector'
-import { Permission } from '@aragon/connect-core'
+import { connect } from '@aragon/connect'
+import { Organization, Permission } from '@aragon/connect-core'
 import { isAddress, isBytes32 } from '../../../test-helpers'
 
-const ORG_ADDRESS = '0x0c188b183ff758500d1d18b432313d10e9f6b8a4'
+const ORG_LOCATION = 'piedao.aragonid.eth'
 
-const MAINNET_NETWORK = {
-  chainId: 1,
-  name: 'homestead',
-}
+const MAINNET_NETWORK = 1
 
 describe('when connecting to the mainnet subgraph', () => {
-  let connector: ConnectorTheGraph
+  let org: Organization
 
-  beforeAll(() => {
-    connector = new ConnectorTheGraph(MAINNET_NETWORK)
+  beforeAll(async () => {
+    org = await connect(ORG_LOCATION, 'thegraph', { network: MAINNET_NETWORK })
+  })
+
+  afterAll(async () => {
+    await org.connection.orgConnector.disconnect?.()
   })
 
   describe('when querying for the permissions of an org', () => {
     let permissions: Permission[]
 
     beforeAll(async () => {
-      permissions = await connector.permissionsForOrg(ORG_ADDRESS)
+      permissions = await org.permissions()
     })
 
     test('permissions are found', () => {
@@ -32,7 +33,6 @@ describe('when connecting to the mainnet subgraph', () => {
 
       beforeAll(() => {
         permission = permissions[Math.floor(permissions.length / 2)]
-        // console.log(permission)
       })
 
       test('has a valid app address', () => {

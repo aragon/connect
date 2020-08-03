@@ -1,0 +1,48 @@
+{
+  "network": "xdai",
+  "dataSources": {
+    "Organizations": [],
+    "OrganizationFactories": [
+      {
+        "name": "DAOFactory@0.8.1",
+        "address": "0x4037f97fcc94287257e50bd14c7da9cb4df18250",
+        "startBlock": 10076184
+      }
+    ],
+    "OrganizationTemplates": [
+      {
+        "name": "dandelion-org-template.aragonpm.eth@1.0.0",
+        "address": "0x611946cba62fbacc5873b864d485f87ad4fd73ca",
+        "startBlock": 10704312
+      },
+      {
+        "name": "gardens-template.aragonpm.eth@1.0.0",
+        "address": "0x08843b9258b1a6cdfcb9b5fb83f0c361d48c2ca5",
+        "startBlock": 10079605
+      },
+      {
+        "name": "company-template.aragonpm.eth@1.0.0",
+        "address": "0x6015b94e02c6cf3f96c59c8775b252695a00fd9d",
+        "startBlock": 10907075
+      },
+      {
+        "name": "reputation-template.aragonpm.eth@1.0.0",
+        "address": "0x691229a90e23eb33fc5a66134177ebc96603343c",
+        "startBlock": 10908752
+      },
+      {
+        "name": "membership-template.aragonpm.eth@1.0.0",
+        "address": "0xe7ce233fa80811caa7a290c73ea1d43787868692",
+        "startBlock": 10909033
+      },
+      {
+        "name": "bare-template.aragonpm.eth@1.0.0",
+        "address": "0xf66eb91773f7c51dc65b31259952e3bd98cb1207",
+        "startBlock": 11121735
+      }
+    ],
+    "LegacyOrganizationTemplates": [],
+    "TokenFactories": [],
+    "Tokens": []
+  }
+}

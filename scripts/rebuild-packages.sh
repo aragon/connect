@@ -22,7 +22,7 @@ set -eu
 # See https://github.com/guigrpa/oao/issues/96
 
 glob_packages=''
-if [ "$MODE" == "libs-only" ]; then
+if [ "$MODE" = "libs-only" ]; then
   glob_packages='!packages/*'
 fi
 
@@ -30,10 +30,10 @@ function esbuild_cmd()
 {
   format=$1
 
-  outdir="dist"
+  outdir="dist/esm"
   platform="browser"
   if [ "$format" == "cjs" ]; then
-    outdir="dist-cjs"
+    outdir="dist/cjs"
     platform="node"
   fi
 
@@ -110,13 +110,13 @@ oao run-script --ignore-src '!packages/connect-core' build --parallel
 echo 'Building the connectors…'
 oao run-script --ignore-src '!packages/connect-{thegraph,ethereum}' build --parallel
 
-# Build connect and its references, the connectors.
+# Build the main connect library.
 echo 'Building @aragon/connect…'
 oao run-script --ignore-src '!packages/connect' build --parallel
 
-# Build the app connectors.
+# Build the app connectors and the React library.
 echo 'Building the app connectors…'
-oao run-script --ignore-src '!packages/connect-{thegraph-*,react}' build --parallel
+oao run-script --ignore-src '!packages/connect-{voting,tokens,finance,react}' build --parallel
 
 # Build the examples.
 if [ $MODE != "libs-only" ]; then

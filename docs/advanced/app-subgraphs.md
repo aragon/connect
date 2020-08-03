@@ -1,4 +1,4 @@
-# Writing an App Subgraph
+# Writing an app Subgraph
 
 Creating a Subgraph for an Aragon app is not much different from any other kind of Subgraph. If you’re not already familiar with what can be done in a Subgraph, we recommend checking out [The Graph’s documentation](https://thegraph.com/docs).
 
@@ -66,11 +66,13 @@ Run any of the deploy commands with `-staging`. This will use data provided from
 
 For example, if you run `yarn deploy-mainnet-staging`, `manifest/data/mainnet-staging.json` will be used to generate your Subgraph manifest. This JSON file defines a single data source with the PieDAO organization. The resulting deployment will effectively sync very quickly, which should allow you to iterate on your Subgraph without having to wait for long periods of time before you can start testing.
 
+You need to export your The Graph access token as the `GRAPHKEY` environment variable before running a `deploy-` script.
+
 ### 9. Deploy your Subgraph with all data sources
 
-Once you are confident that your Subgraph will behave as expected, you can run `yarn deploy-mainnet` \(without `-staging`!\). This will use `manifest/data/mainnet.json`, which contains many Aragon data sources, such as the templates used by most users to create an organization. This will allow your Subgraph to find all the organizations out there, and as in the example, index all instances of the specified apps.
+Once you are confident that your Subgraph will behave as expected, you can run `GRAPHKEY=<key> yarn deploy-mainnet` \(without `-staging`!\). This will use `manifest/data/mainnet.json`, which contains many Aragon data sources, such as the templates used by most users to create an organization. This will allow your Subgraph to find all the organizations out there, and as in the example, index all instances of the specified apps.
 
-Of course, this deployment will take much more time to index--potentially days.
+Of course, this deployment will take much more time to index − potentially days.
 
 ## Troubleshooting
 
@@ -91,4 +93,3 @@ As a rule of thumb, if your data source will be triggered by a base Aragon data 
 ### My `callHandlers` aren’t working
 
 Unfortunately, [The Graph does not support callHandlers in Rinkeby](https://thegraph.com/docs/define-a-subgraph#call-handlers). For this reason, our templates avoid them altogether. In general, we prefer to code Subgraphs in a way that is compatible with all networks. Alternatively, if you have no other choice than to use this feature, consider hosting your own Subgraph.
-
