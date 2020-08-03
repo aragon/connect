@@ -1,7 +1,13 @@
-import { ERC20 } from '../generated/schema'
-import { ERC20 as ERC20Contract } from '../generated/templates/DisputableVoting/ERC20'
 import { BigInt, Address } from '@graphprotocol/graph-ts'
-import { DisputableVoting, Setting, Vote, CastVote, Voter } from '../generated/schema'
+import { ERC20 as ERC20Contract } from '../generated/templates/DisputableVoting/ERC20'
+import {
+  DisputableVoting as DisputableVotingEntity,
+  Setting as SettingEntity,
+  Vote as VoteEntity,
+  CastVote as CastVoteEntity,
+  Voter as VoterEntity,
+  ERC20 as ERC20Entity
+} from '../generated/schema'
 import {
   DisputableVoting as VotingContract,
   NewSetting as NewSettingEvent,
@@ -23,7 +29,7 @@ export function handleNewSetting(event: NewSettingEvent): void {
 
   const voting = loadOrCreateVoting(event.address)
   const currentSettingId = buildSettingId(event.address, event.params.settingId)
-  const setting = new Setting(currentSettingId)
+  const setting = new SettingEntity(currentSettingId)
   setting.voting = event.address.toHexString()
   setting.settingId = event.params.settingId
   setting.supportRequiredPct = settingData.value0
@@ -43,7 +49,7 @@ export function handleStartVote(event: StartVoteEvent): void {
   const voteId = buildVoteId(event.address, event.params.voteId)
   const votingApp = VotingContract.bind(event.address)
 
-  const vote = new Vote(voteId)
+  const vote = new VoteEntity(voteId)
   const voteData = votingApp.getVote(event.params.voteId)
   vote.voting = event.address.toHexString()
   vote.voteId = event.params.voteId
@@ -66,6 +72,8 @@ export function handleStartVote(event: StartVoteEvent): void {
 }
 
 export function handleCastVote(event: CastVoteEvent): void {
+  updateVoteState(event.address, event.params.voteId)
+
   const voter = loadOrCreateVoter(event.address, event.params.voter)
   voter.save()
 
@@ -106,43 +114,43 @@ export function handleChangeRepresentative(event: ChangeRepresentativeEvent): vo
   voter.save()
 }
 
-function loadOrCreateVoting(votingAddress: Address): DisputableVoting {
-  let voting = DisputableVoting.load(votingAddress.toHexString())
+function loadOrCreateVoting(votingAddress: Address): DisputableVotingEntity {
+  let voting = DisputableVotingEntity.load(votingAddress.toHexString())
   if (voting === null) {
     const votingApp = VotingContract.bind(votingAddress)
-    voting = new DisputableVoting(votingAddress.toHexString())
+    voting = new DisputableVotingEntity(votingAddress.toHexString())
     voting.dao = votingApp.kernel()
     voting.token = buildERC20(votingApp.token())
   }
   return voting!
 }
 
-function loadOrCreateCastVote(votingAddress: Address, voteId: BigInt, voterAddress: Address): CastVote {
+function loadOrCreateCastVote(votingAddress: Address, voteId: BigInt, voterAddress: Address): CastVoteEntity {
   const castVoteId = buildCastVoteId(votingAddress, voteId, voterAddress)
-  let castVote = CastVote.load(castVoteId)
+  let castVote = CastVoteEntity.load(castVoteId)
   if (castVote === null) {
-    castVote = new CastVote(castVoteId)
+    castVote = new CastVoteEntity(castVoteId)
     castVote.vote = buildVoteId(votingAddress, voteId)
   }
   return castVote!
 }
 
-function loadOrCreateVoter(votingAddress: Address, voterAddress: Address): Voter {
-  const voterId = buildVoterId(votingAddress, votingAddress)
-  let voter = Voter.load(voterId)
+function loadOrCreateVoter(votingAddress: Address, voterAddress: Address): VoterEntity {
+  const voterId = buildVoterId(votingAddress, voterAddress)
+  let voter = VoterEntity.load(voterId)
   if (voter === null) {
-    voter = new Voter(voterId)
+    voter = new VoterEntity(voterId)
     voter.voting = votingAddress.toHexString()
     voter.address = voterAddress
   }
   return voter!
 }
 
-function updateVoteState(voting: Address, voteId: BigInt): void {
-  const votingApp = VotingContract.bind(voting)
+function updateVoteState(votingAddress: Address, voteId: BigInt): void {
+  const votingApp = VotingContract.bind(votingAddress)
   const voteData = votingApp.getVote(voteId)
 
-  const vote = Vote.load(buildVoteId(voting, voteId))!
+  const vote = VoteEntity.load(buildVoteId(votingAddress, voteId))!
   vote.yeas = voteData.value0
   vote.nays = voteData.value1
   vote.status = castVoteStatus(voteData.value5)
@@ -155,11 +163,11 @@ function updateVoteState(voting: Address, voteId: BigInt): void {
 
 function buildERC20(address: Address): string {
   const id = address.toHexString()
-  let token = ERC20.load(id)
+  let token = ERC20Entity.load(id)
 
   if (token === null) {
     const tokenContract = ERC20Contract.bind(address)
-    token = new ERC20(id)
+    token = new ERC20Entity(id)
     token.name = tokenContract.name()
     token.symbol = tokenContract.symbol()
     token.decimals = tokenContract.decimals()
