@@ -6,9 +6,9 @@ import { SignerData, IAgreementConnector } from '../types'
 export default class Signer {
   #connector: IAgreementConnector
 
-  readonly id!: string
-  readonly address!: string
-  readonly agreementId!: string
+  readonly id: string
+  readonly address: string
+  readonly agreementId: string
 
   constructor(data: SignerData, connector: IAgreementConnector) {
     this.#connector = connector
