@@ -37,6 +37,7 @@ export interface SignatureData {
 export interface IAgreementConnector {
   disconnect(): Promise<void>
   agreement(agreement: string): Promise<AgreementData>
+  onAgreement(agreement: string, callback: Function): SubscriptionHandler
   currentVersion(agreement: string): Promise<Version>
   onCurrentVersion(agreement: string, callback: Function): SubscriptionHandler
   version(versionId: string): Promise<Version>

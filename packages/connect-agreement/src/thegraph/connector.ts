@@ -45,6 +45,15 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     )
   }
 
+  onAgreement(agreement: string, callback: Function): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser(
+      queries.GET_AGREEMENT('subscription'),
+      { agreement },
+      callback,
+      (result: QueryResult) => parseAgreement(result)
+    )
+  }
+
   async currentVersion(agreement: string): Promise<Version> {
     return this.#gql.performQueryWithParser(
       queries.GET_CURRENT_VERSION('query'),
