@@ -68,8 +68,8 @@ export default class Agreement {
     return this.#connector.versions(this.#appAddress, first, skip)
   }
 
-  onVersions(callback: Function): SubscriptionHandler {
-    return this.#connector.onVersions(this.#appAddress, callback)
+  onVersions({ first = 1000, skip = 0 } = {}, callback: Function): SubscriptionHandler {
+    return this.#connector.onVersions(this.#appAddress, first, skip, callback)
   }
 
   signerId(signerAddress: string): string {

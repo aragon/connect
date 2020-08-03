@@ -96,10 +96,10 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     )
   }
 
-  onVersions(agreement: string, callback: Function): SubscriptionHandler {
+  onVersions(agreement: string, first: number, skip: number, callback: Function): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
       queries.ALL_VERSIONS('subscription'),
-      { agreement, first: 1000, skip: 0 },
+      { agreement, first, skip },
       callback,
       (result: QueryResult) => parseVersions(result, this)
     )
@@ -130,10 +130,10 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     )
   }
 
-  onSignatures(signerId: string, callback: Function): SubscriptionHandler {
+  onSignatures(signerId: string, first: number, skip: number, callback: Function): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
       queries.GET_SIGNATURES('query'),
-      { signerId, first: 1000, skip: 0 },
+      { signerId, first, skip },
       callback,
       (result: QueryResult) => parseSignatures(result, this)
     )

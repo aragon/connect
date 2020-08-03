@@ -32,7 +32,7 @@ export default class Signer {
     return this.#connector.signatures(this.id, first, skip)
   }
 
-  onSignatures(callback: Function): SubscriptionHandler {
-    return this.#connector.onSignatures(this.id, callback)
+  onSignatures({ first = 1000, skip = 0 } = {}, callback: Function): SubscriptionHandler {
+    return this.#connector.onSignatures(this.id, first, skip, callback)
   }
 }
