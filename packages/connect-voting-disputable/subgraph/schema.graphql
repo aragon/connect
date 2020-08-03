@@ -1,0 +1,89 @@
+enum VoteStatus {
+  Scheduled,
+  Challenged,
+  Disputed,
+  Cancelled,
+  Executed
+}
+
+enum VoterState {
+  Absent,
+  Yea,
+  Nay
+}
+
+type DisputableVoting @entity {
+  id: ID!
+  dao: Bytes!
+  token: ERC20
+  setting: Setting
+  votes: [Vote!] @derivedFrom(field: "voting")
+  voters: [Voter!] @derivedFrom(field: "voting")
+}
+
+type Vote @entity {
+  id: ID!
+  voting: DisputableVoting!
+  voteId: BigInt!
+  creator: Bytes!
+  context: String!
+  status: VoteStatus!
+  actionId: BigInt!
+  setting: Setting!
+  startDate: BigInt!
+  votingPower: BigInt!
+  snapshotBlock: BigInt!
+  yeas: BigInt!
+  nays: BigInt!
+  pausedAt: BigInt!
+  pauseDuration: BigInt!
+  quietEndingExtendedSeconds: BigInt!
+  quietEndingSnapshotSupport: VoterState!
+  script: Bytes!
+  castVotes: [CastVote!] @derivedFrom(field: "vote")
+}
+
+type CastVote @entity {
+  id: ID!
+  vote: Vote!
+  voter: Voter!
+  caster: Bytes!
+  supports: Boolean!
+  stake: BigInt!
+  createdAt: BigInt!
+}
+
+type Voter @entity {
+  id: ID!
+  voting: DisputableVoting!
+  address: Bytes!
+  representative: Bytes
+  castVotes: [CastVote!] @derivedFrom(field: "voter")
+}
+
+type Setting @entity {
+  id: ID!
+  voting: DisputableVoting!
+  settingId: BigInt!
+  supportRequiredPct: BigInt!
+  minimumAcceptanceQuorumPct: BigInt!
+  executionDelay: BigInt!
+  overruleWindow: BigInt!
+  quietEndingPeriod: BigInt!
+  quietEndingExtension: BigInt!
+  createdAt: BigInt!
+}
+
+type ERC20 @entity {
+  id: ID!
+  name: String!
+  symbol: String!
+  decimals: Int!
+}
+
+type AragonInfo @entity {
+  id: ID!
+  orgs: [Bytes!]!
+  apps: [Bytes!]!
+  tokens: [Bytes!]!
+}
