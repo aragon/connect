@@ -22,10 +22,10 @@
     "start-create-karma-template": "yarn build; node dist/src/create-karma-template.js"
   },
   "dependencies": {
-    "@aragon/connect": "*",
-    "@aragon/connect-thegraph": "*",
-    "@aragon/connect-tokens": "*",
-    "@aragon/connect-voting": "*",
+    "@aragon/connect": "^0.5.0",
+    "@aragon/connect-thegraph": "^0.5.0",
+    "@aragon/connect-tokens": "^0.5.0",
+    "@aragon/connect-voting": "^0.5.0",
     "ethers": "^5.0.0",
     "graphql-tag": "^2.10.3"
   },

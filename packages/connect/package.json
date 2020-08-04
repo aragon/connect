@@ -33,9 +33,9 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@aragon/connect-core": "*",
-    "@aragon/connect-ethereum": "*",
-    "@aragon/connect-thegraph": "*"
+    "@aragon/connect-core": "^0.5.0",
+    "@aragon/connect-ethereum": "^0.5.0",
+    "@aragon/connect-thegraph": "^0.5.0"
   },
   "description": "Access and interact with Aragon Organizations and their apps.",
   "keywords": [

@@ -34,7 +34,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@aragon/connect": "*"
+    "@aragon/connect": "^0.5.0"
   },
   "peerDependencies": {
     "react": "^16.13.1"

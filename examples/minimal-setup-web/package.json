@@ -9,7 +9,7 @@
     "build": "parcel build index.js"
   },
   "dependencies": {
-    "@aragon/connect-react": "^0.4.2",
+    "@aragon/connect-react": "^0.5.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },

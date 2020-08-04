@@ -34,7 +34,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@aragon/connect-core": "*",
+    "@aragon/connect-core": "^0.5.0",
     "@urql/core": "^1.11.7",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",
