@@ -1,6 +1,6 @@
 {
   "name": "@aragon/connect-ethereum",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "license": "LGPL-3.0-or-later",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -33,7 +33,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@aragon/connect-core": "^0.5.0"
+    "@aragon/connect-core": "^0.5.2"
   },
   "description": "Access and interact with Aragon Organizations and their apps.",
   "keywords": [
