@@ -85,8 +85,9 @@ if [ "$FAST" == "1" ]; then
   fast_build connect-core
   fast_build connect-ethereum
   fast_build connect-thegraph
-  fast_build connect-thegraph-tokens
-  fast_build connect-thegraph-voting
+  fast_build connect-finance
+  fast_build connect-tokens
+  fast_build connect-voting
   fast_build connect
   fast_build connect-react
   echo
