@@ -1,6 +1,6 @@
 import { SubscriptionHandler } from '@aragon/connect-types'
 
-import Signature from '../entities/Signature'
+import Signature from '../models/Signature'
 import { SignerData, IAgreementConnector } from '../types'
 
 export default class Signer {

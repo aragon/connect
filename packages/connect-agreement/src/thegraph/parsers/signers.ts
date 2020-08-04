@@ -1,7 +1,7 @@
 import { QueryResult } from '@aragon/connect-thegraph'
 
-import Signer from '../../entities/Signer'
-import Signature from '../../entities/Signature'
+import Signer from '../../models/Signer'
+import Signature from '../../models/Signature'
 
 export function parseSigner(result: QueryResult, connector: any): Signer {
   const signer = result.data.signer

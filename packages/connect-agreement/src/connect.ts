@@ -1,6 +1,6 @@
 import { createAppConnector } from '@aragon/connect-core'
 
-import Agreement from './entities/Agreement'
+import Agreement from './models/Agreement'
 import AgreementConnectorTheGraph, { subgraphUrlFromChainId } from './thegraph/connector'
 
 type Config = {
