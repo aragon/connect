@@ -12,45 +12,24 @@ yarn oao status
 
 Here you want to verify the current versions, and that private packages are marked as such so they don’t get published by mistake (especially for the examples).
 
-## Build Connect
+## Run the publication script
 
 ```console
-yarn build
+yarn publish-version
 ```
 
-Ensure the build is working and there are no errors.
+This script will:
 
-## Launch the tests
+- Build Connect.
+- Run the tests.
+- Generate the README files.
+- Publish the packages on npm.
+- Generate a branch corresponding to the version tag.
+- Push `master`, the version branch and the version tag to GitHub.
 
-```console
-yarn test
-```
+## Manual tasks on GitHub and GitBook
 
-## Publish on npm
-
-Note that we are using a direct path to oao because of a [known issue](https://github.com/guigrpa/oao#oao-publish) when running it through yarn script.
-
-```console
-./node_modules/.bin/oao publish
-```
-
-Push the version to GitHub:
-
-```console
-git push origin master
-git push origin --tags
-```
-
-## Publish the documentation on GitBook
-
-GitBook doesn’t support git tags, so we need to create a new branch for each version. We also protect this branch, to prevent any accidental deletion.
-
-Create and push the branch (using `v.0.5.0` as an example):
-
-```console
-git checkout -b v0.5.0 v0.5.0
-git push origin refs/heads/v0.5.0:refs/heads/v0.5.0
-```
+GitBook doesn’t support git tags, this is why a branch corresponding to the version tag gets created by the `publish-version` script. We now need to do two things: protect the branch on GitHub, and reorder the versions menu on GitBook.
 
 Protect the branch on GitHub:
 

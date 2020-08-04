@@ -45,6 +45,7 @@
     "build": "MODE=libs-only ./scripts/rebuild-packages.sh",
     "build:examples": "MODE=all ./scripts/rebuild-packages.sh",
     "status": "oao status",
+    "publish-version": "./scripts/publish-version.sh",
     "postinstall": "yarn build"
   },
   "devDependencies": {
