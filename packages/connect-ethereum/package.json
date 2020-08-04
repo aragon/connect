@@ -33,7 +33,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@aragon/connect-core": "*"
+    "@aragon/connect-core": "^0.5.0"
   },
   "description": "Access and interact with Aragon Organizations and their apps.",
   "keywords": [
