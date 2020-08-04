@@ -10,6 +10,5 @@ module.exports = {
   modulePaths: [`<rootDir>/packages/${packageName}/src/`],
   name: packageName,
   displayName: 'DISPUTABLE-VOTING',
-  testTimeout: 30000,
   rootDir: '../..',
 }
