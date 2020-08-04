@@ -1,7 +1,7 @@
 import { QueryResult } from '@aragon/connect-thegraph'
 
 import { VersionData } from '../../types'
-import Version from '../../entities/Version'
+import Version from '../../models/Version'
 
 export function parseCurrentVersion(result: QueryResult, connector: any): Version {
   const agreement = result.data.agreement

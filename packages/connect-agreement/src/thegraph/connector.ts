@@ -2,9 +2,9 @@ import { SubscriptionHandler } from '@aragon/connect-types'
 import { GraphQLWrapper, QueryResult } from '@aragon/connect-thegraph'
 
 import * as queries from './queries'
-import Signer from '../entities/Signer'
-import Signature from '../entities/Signature'
-import Version from '../entities/Version'
+import Signer from '../models/Signer'
+import Signature from '../models/Signature'
+import Version from '../models/Version'
 import { AgreementData, IAgreementConnector } from '../types'
 import { parseAgreement, parseSigner, parseSignatures, parseCurrentVersion, parseVersions, parseVersion } from './parsers'
 
