@@ -56,7 +56,7 @@ export default class DisputableVotingConnectorTheGraph implements IDisputableVot
 
   onDisputableVoting(disputableVoting: string, callback: Function): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
-      queries.GET_DISPUTABLE_VOTING('query'),
+      queries.GET_DISPUTABLE_VOTING('subscription'),
       { disputableVoting },
       callback,
       (result: QueryResult) => parseDisputableVoting(result)
@@ -73,7 +73,7 @@ export default class DisputableVotingConnectorTheGraph implements IDisputableVot
 
   onCurrentSetting(disputableVoting: string, callback: Function): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
-      queries.GET_CURRENT_SETTING('query'),
+      queries.GET_CURRENT_SETTING('subscription'),
       { disputableVoting },
       callback,
       (result: QueryResult) => parseCurrentSetting(result, this)
@@ -90,7 +90,7 @@ export default class DisputableVotingConnectorTheGraph implements IDisputableVot
 
   onSetting(settingId: string, callback: Function): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
-      queries.GET_SETTING('query'),
+      queries.GET_SETTING('subscription'),
       { settingId },
       callback,
       (result: QueryResult) => parseSetting(result, this)
@@ -107,7 +107,7 @@ export default class DisputableVotingConnectorTheGraph implements IDisputableVot
 
   onSettings(disputableVoting: string, first: number, skip: number, callback: Function): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
-      queries.ALL_SETTINGS('query'),
+      queries.ALL_SETTINGS('subscription'),
       { disputableVoting, first, skip },
       callback,
       (result: QueryResult) => parseSettings(result, this)
@@ -124,7 +124,7 @@ export default class DisputableVotingConnectorTheGraph implements IDisputableVot
 
   onVote(voteId: string, callback: Function): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
-      queries.GET_VOTE('query'),
+      queries.GET_VOTE('subscription'),
       { voteId },
       callback,
       (result: QueryResult) => parseVote(result, this)
@@ -158,7 +158,7 @@ export default class DisputableVotingConnectorTheGraph implements IDisputableVot
 
   onCastVote(castVoteId: string, callback: Function): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
-      queries.GET_CAST_VOTE('query'),
+      queries.GET_CAST_VOTE('subscription'),
       { castVoteId },
       callback,
       (result: QueryResult) => parseCastVote(result, this)
@@ -192,7 +192,7 @@ export default class DisputableVotingConnectorTheGraph implements IDisputableVot
 
   onVoter(voterId: string, callback: Function): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
-      queries.GET_VOTER('query'),
+      queries.GET_VOTER('subscription'),
       { voterId },
       callback,
       (result: QueryResult) => parseVoter(result, this)
