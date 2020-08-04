@@ -23,26 +23,14 @@ export default class DisputableVoting {
     return data.id
   }
 
-  onId(callback: Function): SubscriptionHandler {
-    return this.#connector.onDisputableVoting(this.#address, callback)
-  }
-
   async dao(): Promise<string> {
     const data = await this.#connector.disputableVoting(this.#address)
     return data.dao
   }
 
-  onDao(callback: Function): SubscriptionHandler {
-    return this.#connector.onDisputableVoting(this.#address, callback)
-  }
-
   async token(): Promise<string> {
     const data = await this.#connector.disputableVoting(this.#address)
     return data.token
-  }
-
-  onToken(callback: Function): SubscriptionHandler {
-    return this.#connector.onDisputableVoting(this.#address, callback)
   }
 
   settingId(settingNumber: string): string {
