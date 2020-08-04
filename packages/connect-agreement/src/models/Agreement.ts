@@ -22,26 +22,14 @@ export default class Agreement {
     return data.id
   }
 
-  onId(callback: Function): SubscriptionHandler {
-    return this.#connector.onAgreement(this.#address, callback)
-  }
-
   async dao(): Promise<string> {
     const data = await this.#connector.agreement(this.#address)
     return data.dao
   }
 
-  onDao(callback: Function): SubscriptionHandler {
-    return this.#connector.onAgreement(this.#address, callback)
-  }
-
   async stakingFactory(): Promise<string> {
     const data = await this.#connector.agreement(this.#address)
     return data.stakingFactory
-  }
-
-  onStakingFactory(callback: Function): SubscriptionHandler {
-    return this.#connector.onAgreement(this.#address, callback)
   }
 
   async currentVersion(): Promise<Version> {
