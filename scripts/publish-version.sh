@@ -3,9 +3,10 @@ set -eu
 
 # IMPORTANT: run this script from the root directory, it won’t work otherwise.
 
-function confirm {
+confirm() {
   while true; do
-    read -p "$1 [Y/n] " yn
+    printf "%s [Y/n] " "$1"
+    read -r yn
     case $yn in
         [Yy]* ) break;;
         [Nn]* ) echo "Exiting."; exit 0;;
@@ -14,7 +15,7 @@ function confirm {
   done
 }
 
-function package_readme {
+package_readme() {
   cat <<EOF
 # @$1 [<img height="100" align="right" alt="" src="https://user-images.githubusercontent.com/36158/85128259-d201f100-b228-11ea-9770-76ae86cc98b3.png">](https://connect.aragon.org/)
 
@@ -34,8 +35,9 @@ yarn test
 
 # Copy the README files in each package directory.
 confirm "Generate the README files?"
-for package in $(ls packages | grep -v test-helpers); do
-  package_readme "aragon/$package" > "packages/$package/README.md"
+for pkg_json in ./packages/*/package.json; do
+  pkg_name=$(basename "$(dirname "$pkg_json")")
+  package_readme "aragon/$pkg_name" > "packages/$pkg_name/README.md"
 done
 
 # Publish
@@ -43,20 +45,20 @@ confirm "Publish a version of Connect?"
 ./node_modules/.bin/oao publish
 
 # Push the version to GitHub
-tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+tag="$(git describe --tags "$(git rev-list --tags --max-count=1)")"
 
-confirm "Create a version branch for ${tag} and push to GitHub?"
+confirm "Create a version branch for $tag and push to GitHub?"
 
 echo "Push the master branch…"
 git push origin master
 
-echo "Create the ${tag} branch…"
-git checkout -b ${tag} ${tag}
+echo "Create the $tag branch…"
+git checkout -b "$tag" "$tag"
 
-echo "Push the ${tag} tag…"
-git push origin refs/tags/${tag}
+echo "Push the $tag tag…"
+git push origin "refs/tags/$tag"
 
-echo "Push the ${tag} branch…"
-git push origin refs/heads/${tag}:refs/heads/${tag}
+echo "Push the $tag branch…"
+git push origin "refs/heads/$tag:refs/heads/$tag"
 
 echo "Done."
