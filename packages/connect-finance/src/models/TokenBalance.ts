@@ -1,12 +1,6 @@
-import { Address } from '@aragon/connect-types'
+import { TokenBalanceData } from '../types'
 
-export interface TokenBalanceData {
-  id: string
-  token: Address
-  balance: string
-}
-
-export default class TokenBalance implements TokenBalanceData {
+export default class TokenBalance {
   readonly id: string
   readonly token: string
   readonly balance: string

@@ -1,8 +1,8 @@
 import { SubscriptionHandler } from '@aragon/connect-types'
 import { GraphQLWrapper, QueryResult } from '@aragon/connect-thegraph'
 import { IFinanceConnector } from '../types'
-import Transaction from '../entities/Transaction'
-import TokenBalance from '../entities/TokenBalance'
+import Transaction from '../models/Transaction'
+import TokenBalance from '../models/TokenBalance'
 import * as queries from './queries'
 import { parseTransactions, parseTokenBalance } from './parsers'
 
