@@ -1,5 +1,6 @@
 import { QueryResult } from '@aragon/connect-thegraph'
-import Transaction, { TransactionData } from '../../models/Transaction'
+import Transaction from '../../models/Transaction'
+import { TransactionData } from '../../types'
 
 export function parseTransactions(result: QueryResult): Transaction[] {
   const transactions = result.data.transactions
