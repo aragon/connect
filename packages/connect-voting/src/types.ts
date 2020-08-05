@@ -1,6 +1,6 @@
 import { SubscriptionHandler } from '@aragon/connect-types'
-import Vote from './entities/Vote'
-import Cast from './entities/Cast'
+import Vote from './models/Vote'
+import Cast from './models/Cast'
 
 export interface VoteData {
   id: string
@@ -15,6 +15,13 @@ export interface VoteData {
   nay: string
   votingPower: string
   script: string
+}
+
+export interface CastData {
+  id: string
+  voteId: string
+  voter: string
+  supports: boolean
 }
 
 export interface IVotingConnector {

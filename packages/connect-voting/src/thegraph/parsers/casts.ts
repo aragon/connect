@@ -1,5 +1,5 @@
 import { QueryResult } from '@aragon/connect-thegraph'
-import Cast, { CastData } from '../../entities/Cast'
+import Cast, { CastData } from '../../models/Cast'
 
 export function parseCasts(result: QueryResult): Cast[] {
   const casts = result.data.casts
