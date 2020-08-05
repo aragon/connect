@@ -1,11 +1,6 @@
-export interface CastData {
-  id: string
-  voteId: string
-  voter: string
-  supports: boolean
-}
+import { CastData } from '../types'
 
-export default class Cast implements CastData {
+export default class Cast {
   readonly id!: string
   readonly voteId!: string
   readonly voter!: string

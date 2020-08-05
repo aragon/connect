@@ -1,6 +1,6 @@
 import { Address, SubscriptionHandler } from '@aragon/connect-types'
-import Vote from './Vote'
 import { IVotingConnector } from '../types'
+import Vote from './Vote'
 
 export default class Voting {
   #appAddress: Address

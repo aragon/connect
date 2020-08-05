@@ -1,8 +1,8 @@
 import { SubscriptionHandler } from '@aragon/connect-types'
 import { GraphQLWrapper, QueryResult } from '@aragon/connect-thegraph'
 import { IVotingConnector } from '../types'
-import Vote from '../entities/Vote'
-import Cast from '../entities/Cast'
+import Vote from '../models/Vote'
+import Cast from '../models/Cast'
 import * as queries from './queries'
 import { parseVotes, parseCasts } from './parsers'
 

@@ -1,5 +1,5 @@
-export { default as Finance } from './entities/Finance'
-export { default as TokenBalance } from './entities/TokenBalance'
-export { default as Transaction } from './entities/Transaction'
+export { default as Finance } from './models/Finance'
+export { default as TokenBalance } from './models/TokenBalance'
+export { default as Transaction } from './models/Transaction'
 export { default as FinanceConnectorTheGraph } from './thegraph/connector'
 export { default } from './connect'

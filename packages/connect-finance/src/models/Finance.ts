@@ -1,7 +1,7 @@
 import { Address, SubscriptionHandler } from '@aragon/connect-types'
+import { IFinanceConnector } from '../types'
 import Transaction from './Transaction'
 import TokenBalance from './TokenBalance'
-import { IFinanceConnector } from '../types'
 
 export default class Finance {
   #appAddress: Address

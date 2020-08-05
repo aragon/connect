@@ -1,11 +1,4 @@
-export type TokenData = {
-  address: string
-  id: string
-  name: string
-  symbol: string
-  totalSupply: string
-  transferable: boolean
-}
+import { TokenData } from '../types'
 
 export default class Token {
   readonly address: string

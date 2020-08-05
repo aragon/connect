@@ -1,14 +1,5 @@
 import { Address } from '@aragon/connect-types'
-
-export interface TransactionData {
-  id: string
-  token: Address
-  entity: Address
-  isIncoming: boolean
-  amount: string
-  date: string
-  reference: string
-}
+import { TransactionData } from '../types'
 
 export default class Transaction implements TransactionData {
   readonly id: string

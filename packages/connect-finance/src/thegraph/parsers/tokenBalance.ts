@@ -1,5 +1,5 @@
 import { QueryResult } from '@aragon/connect-thegraph'
-import TokenBalance from '../../entities/TokenBalance'
+import TokenBalance from '../../models/TokenBalance'
 
 export function parseTokenBalance(result: QueryResult): TokenBalance {
   const tokenBalance = result.data.tokenBalances[0]

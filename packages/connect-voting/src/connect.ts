@@ -1,5 +1,5 @@
 import { createAppConnector } from '@aragon/connect-core'
-import Voting from './entities/Voting'
+import Voting from './models/Voting'
 import VotingConnectorTheGraph, {
   subgraphUrlFromChainId,
 } from './thegraph/connector'

@@ -1,6 +1,6 @@
 import { createAppConnector, Network } from '@aragon/connect-core'
 import { IFinanceConnector } from './types'
-import Finance from './entities/Finance'
+import Finance from './models/Finance'
 import FinanceConnectorTheGraph, {
   subgraphUrlFromChainId,
 } from './thegraph/connector'
