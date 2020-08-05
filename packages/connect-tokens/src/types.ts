@@ -1,6 +1,21 @@
-import { SubscriptionHandler } from '@aragon/connect-types'
-import Token from './entities/Token'
-import TokenHolder from './entities/TokenHolder'
+import { SubscriptionHandler, Address } from '@aragon/connect-types'
+import Token from './models/Token'
+import TokenHolder from './models/TokenHolder'
+
+export interface TokenData {
+  address: string
+  id: string
+  name: string
+  symbol: string
+  totalSupply: string
+  transferable: boolean
+}
+
+export interface TokenHolderData {
+  id: string
+  address: Address
+  balance: string
+}
 
 export interface ITokensConnector {
   disconnect(): Promise<void>

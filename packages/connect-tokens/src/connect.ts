@@ -1,6 +1,6 @@
 import { createAppConnector, Network } from '@aragon/connect-core'
 import { ITokensConnector } from './types'
-import Tokens from './entities/Tokens'
+import Tokens from './models/Tokens'
 import TokensConnectorTheGraph, {
   subgraphUrlFromChainId,
 } from './thegraph/connector'

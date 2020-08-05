@@ -2,8 +2,8 @@ import { Address, SubscriptionHandler } from '@aragon/connect-types'
 import { GraphQLWrapper } from '@aragon/connect-thegraph'
 import { ITokensConnector } from '../types'
 import * as queries from './queries'
-import Token from '../entities/Token'
-import TokenHolder from '../entities/TokenHolder'
+import Token from '../models/Token'
+import TokenHolder from '../models/TokenHolder'
 import { parseToken, parseTokenHolders } from './parsers'
 
 export function subgraphUrlFromChainId(chainId: number) {

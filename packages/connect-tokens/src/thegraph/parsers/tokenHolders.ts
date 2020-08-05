@@ -1,5 +1,5 @@
 import { QueryResult } from '@aragon/connect-thegraph'
-import TokenHolder, { TokenHolderData } from '../../entities/TokenHolder'
+import TokenHolder, { TokenHolderData } from '../../models/TokenHolder'
 
 export function parseTokenHolders(result: QueryResult): TokenHolder[] {
   const holders = result.data.tokenHolders

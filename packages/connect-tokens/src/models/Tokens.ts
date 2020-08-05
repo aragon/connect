@@ -1,7 +1,7 @@
 import { Address, SubscriptionHandler } from '@aragon/connect-types'
+import { ITokensConnector } from '../types'
 import Token from './Token'
 import TokenHolder from './TokenHolder'
-import { ITokensConnector } from '../types'
 
 export default class Tokens {
   #appAddress: Address

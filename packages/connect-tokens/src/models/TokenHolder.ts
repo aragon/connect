@@ -1,10 +1,5 @@
 import { Address } from '@aragon/connect-types'
-
-export interface TokenHolderData {
-  id: string
-  address: Address
-  balance: string
-}
+import { TokenHolderData } from '../types'
 
 export default class TokenHolder {
   readonly id: string

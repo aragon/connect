@@ -1,5 +1,5 @@
 import { QueryResult } from '@aragon/connect-thegraph'
-import Token, { TokenData } from '../../entities/Token'
+import Token, { TokenData } from '../../models/Token'
 
 export function parseToken(result: QueryResult): Token {
   const token = result.data.miniMeTokens[0]
