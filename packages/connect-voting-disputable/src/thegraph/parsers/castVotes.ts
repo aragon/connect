@@ -18,23 +18,18 @@ function buildCastVote(castVote: any, connector: any): CastVote {
     id,
     voteId: vote.id,
     voterId: voter.id,
-    caster: caster,
-    supports: supports,
-    stake: stake,
-    createdAt: createdAt
+    caster,
+    supports,
+    stake,
+    createdAt
   }
 
   return new CastVote(castVoteData, connector)
 }
 
-export function parseCastVote(result: QueryResult, connector: any): CastVote {
+export function parseCastVote(result: QueryResult, connector: any): CastVote | null {
   const castVote = result.data.castVote
-
-  if (!castVote) {
-    throw new Error('Unable to parse cast vote.')
-  }
-
-  return buildCastVote(castVote, connector)
+  return castVote ? buildCastVote(castVote, connector) : null
 }
 
 export function parseCastVotes(result: QueryResult, connector: any): CastVote[] {

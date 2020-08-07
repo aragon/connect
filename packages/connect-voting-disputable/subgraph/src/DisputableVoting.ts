@@ -1,12 +1,14 @@
 import { BigInt, Address } from '@graphprotocol/graph-ts'
 import { ERC20 as ERC20Contract } from '../generated/templates/DisputableVoting/ERC20'
+import { Agreement as AgreementContract } from '../generated/templates/Agreement/Agreement'
 import {
   DisputableVoting as DisputableVotingEntity,
   Setting as SettingEntity,
   Vote as VoteEntity,
   CastVote as CastVoteEntity,
   Voter as VoterEntity,
-  ERC20 as ERC20Entity
+  ERC20 as ERC20Entity,
+  CollateralRequirement as CollateralRequirementEntity
 } from '../generated/schema'
 import {
   DisputableVoting as VotingContract,
@@ -55,6 +57,7 @@ export function handleStartVote(event: StartVoteEvent): void {
   vote.voteId = event.params.voteId
   vote.creator = event.params.creator
   vote.context = event.params.context.toString()
+  vote.duration = votingApp.voteTime()
   vote.yeas = voteData.value0
   vote.nays = voteData.value1
   vote.votingPower = voteData.value2
@@ -69,6 +72,17 @@ export function handleStartVote(event: StartVoteEvent): void {
   vote.quietEndingSnapshotSupport = castVoterState(voteData.value11)
   vote.script = voteData.value12
   vote.save()
+
+  const agreementApp = AgreementContract.bind(votingApp.getAgreement())
+  const actionData = agreementApp.getAction(vote.actionId)
+  const collateralRequirementData = agreementApp.getCollateralRequirement(event.address, actionData.value2)
+  const collateralRequirement = new CollateralRequirementEntity(voteId)
+  collateralRequirement.vote = voteId
+  collateralRequirement.token = buildERC20(collateralRequirementData.value0)
+  collateralRequirement.actionAmount = collateralRequirementData.value1
+  collateralRequirement.challengeAmount = collateralRequirementData.value2
+  collateralRequirement.challengeDuration = collateralRequirementData.value3
+  collateralRequirement.save()
 }
 
 export function handleCastVote(event: CastVoteEvent): void {

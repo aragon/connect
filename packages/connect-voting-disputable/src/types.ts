@@ -4,6 +4,7 @@ import Vote from './models/Vote'
 import Voter from './models/Voter'
 import Setting from './models/Setting'
 import CastVote from './models/CastVote'
+import CollateralRequirement from './models/CollateralRequirement'
 
 export interface DisputableVotingData {
   id: string
@@ -17,6 +18,7 @@ export interface VoteData {
   votingId: string
   voteId: string
   creator: string
+  duration: string
   context: string
   status: string
   actionId: string
@@ -63,6 +65,15 @@ export interface SettingData {
   createdAt: string
 }
 
+export interface CollateralRequirementData {
+  id: string
+  voteId: string
+  token: string
+  actionAmount: string
+  challengeAmount: string
+  challengeDuration: string
+}
+
 export interface IDisputableVotingConnector {
   disconnect(): Promise<void>
   disputableVoting(disputableVoting: string): Promise<DisputableVotingData>
@@ -77,10 +88,12 @@ export interface IDisputableVotingConnector {
   onVote(voteId: string, callback: Function): SubscriptionHandler
   votes(disputableVoting: string, first: number, skip: number): Promise<Vote[]>
   onVotes(disputableVoting: string, first: number, skip: number, callback: Function): SubscriptionHandler
-  castVote(castVoteId: string): Promise<CastVote>
+  castVote(castVoteId: string): Promise<CastVote | null>
   onCastVote(castVoteId: string, callback: Function): SubscriptionHandler
   castVotes(voteId: string, first: number, skip: number): Promise<CastVote[]>
   onCastVotes(voteId: string, first: number, skip: number, callback: Function): SubscriptionHandler
   voter(voterId: string): Promise<Voter>
   onVoter(voterId: string, callback: Function): SubscriptionHandler
+  collateralRequirement(voteId: string): Promise<CollateralRequirement>
+  onCollateralRequirement(voteId: string, callback: Function): SubscriptionHandler
 }
