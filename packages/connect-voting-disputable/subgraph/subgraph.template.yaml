@@ -26,10 +26,13 @@ templates:
       language: wasm/assemblyscript
       entities:
         - DisputableVoting
+        - Agreement
         - ERC20
       abis:
         - name: DisputableVoting
           file: ./abis/DisputableVoting.json
+        - name: Agreement
+          file: ./abis/Agreement.json
         - name: ERC20
           file: ./abis/MiniMeToken.json
       eventHandlers:

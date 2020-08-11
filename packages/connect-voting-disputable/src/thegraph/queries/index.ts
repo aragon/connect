@@ -84,6 +84,7 @@ export const GET_VOTE = (type: string) => gql`
         id 
       }
       voteId
+      duration
       creator
       context
       status
@@ -115,6 +116,7 @@ export const ALL_VOTES = (type: string) => gql`
         id 
       }
       voteId
+      duration
       creator
       context
       status
@@ -139,6 +141,7 @@ export const ALL_VOTES = (type: string) => gql`
 export const GET_CAST_VOTE = (type: string) => gql`
   ${type} CastVote($castVoteId: String!) {
     castVote(id: $castVoteId) {
+      id
       vote { 
         id 
       }
@@ -181,6 +184,25 @@ export const GET_VOTER = (type: string) => gql`
       representative
       voting { 
         id
+      }
+    }
+  }
+`
+
+export const GET_COLLATERAL_REQUIREMENT = (type: string) => gql`
+  ${type} CollateralRequirement($voteId: String!) {
+    vote(id: $voteId) {
+      collateralRequirement {
+        id
+        actionAmount
+        challengeAmount
+        challengeDuration
+        vote {
+          id
+        }
+        token {
+          id
+        }
       }
     }
   }

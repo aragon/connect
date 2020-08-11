@@ -61,6 +61,14 @@ export default class DisputableVoting {
     return this.#connector.onSettings(this.#address, first, skip, callback)
   }
 
+  async vote(voteId: string): Promise<Vote> {
+    return this.#connector.vote(voteId)
+  }
+
+  onVote(voteId: string, callback: Function): SubscriptionHandler {
+    return this.#connector.onVote(voteId, callback)
+  }
+
   async votes({ first = 1000, skip = 0 } = {}): Promise<Vote[]> {
     return this.#connector.votes(this.#address, first, skip)
   }
@@ -73,11 +81,11 @@ export default class DisputableVoting {
     return `${this.#address}-voterId-${voterAddress.toLowerCase()}`
   }
 
-  async voter(signerAddress: string): Promise<Voter> {
-    return this.#connector.voter(this.voterId(signerAddress))
+  async voter(voterAddress: string): Promise<Voter> {
+    return this.#connector.voter(this.voterId(voterAddress))
   }
 
-  onVoter(signerAddress: string, callback: Function): SubscriptionHandler {
-    return this.#connector.onVoter(this.voterId(signerAddress), callback)
+  onVoter(voterAddress: string, callback: Function): SubscriptionHandler {
+    return this.#connector.onVoter(this.voterId(voterAddress), callback)
   }
 }

@@ -6,6 +6,7 @@ import Vote from '../models/Vote'
 import Voter from '../models/Voter'
 import Setting from '../models/Setting'
 import CastVote from '../models/CastVote'
+import CollateralRequirement from '../models/CollateralRequirement'
 import * as queries from './queries'
 import {
   parseSetting,
@@ -16,7 +17,8 @@ import {
   parseVote,
   parseVotes,
   parseCastVote,
-  parseCastVotes
+  parseCastVotes,
+  parseCollateralRequirement
 } from './parsers'
 
 export function subgraphUrlFromChainId(chainId: number) {
@@ -148,7 +150,7 @@ export default class DisputableVotingConnectorTheGraph implements IDisputableVot
     )
   }
 
-  async castVote(castVoteId: string): Promise<CastVote> {
+  async castVote(castVoteId: string): Promise<CastVote | null> {
     return this.#gql.performQueryWithParser(
       queries.GET_CAST_VOTE('query'),
       { castVoteId },
@@ -196,6 +198,23 @@ export default class DisputableVotingConnectorTheGraph implements IDisputableVot
       { voterId },
       callback,
       (result: QueryResult) => parseVoter(result, this)
+    )
+  }
+
+  async collateralRequirement(voteId: string): Promise<CollateralRequirement> {
+    return this.#gql.performQueryWithParser(
+      queries.GET_COLLATERAL_REQUIREMENT('query'),
+      { voteId },
+      (result: QueryResult) => parseCollateralRequirement(result, this)
+    )
+  }
+
+  onCollateralRequirement(voteId: string, callback: Function): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser(
+      queries.GET_COLLATERAL_REQUIREMENT('subscription'),
+      { voteId },
+      callback,
+      (result: QueryResult) => parseCollateralRequirement(result, this)
     )
   }
 }
