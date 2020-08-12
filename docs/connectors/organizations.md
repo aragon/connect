@@ -6,38 +6,7 @@ Currently a single flavor of this connector is available and comes built into th
 
 ## Connector Interface
 
-The connector must implement the following interface to be compatible with Aragon Connect:
-
-```typescript
-export type AppFilters = {
-  address?: string[]
-  name?: string[]
-}
-
-export interface ConnectorInterface {
-  appByAddress(appAddress: string): Promise<App>
-  appForOrg(orgAddress: string, filters?: AppFilters): Promise<App>
-  appsForOrg(orgAddress: string, filters?: AppFilters): Promise<App[]>
-  chainId?: number
-  onAppsForOrg(
-    orgAddress: string,
-    filters: AppFilters,
-    callback: Function
-  ): { unsubscribe: () => void }
-  onAppForOrg(
-    orgAddress: string,
-    filters: AppFilters,
-    callback: Function
-  ): { unsubscribe: () => void }
-  onPermissionsForOrg(
-    orgAddress: string,
-    callback: Function
-  ): { unsubscribe: () => void }
-  permissionsForOrg(orgAddress: string): Promise<Permission[]>
-  repoForApp(appAddress: string): Promise<Repo>
-  rolesForAddress(appAddress: string): Promise<Role[]>
-}
-```
+An organization connector must implement the [IOrganizationConnector](https://github.com/aragon/connect/blob/master/packages/connect-core/src/connections/IOrganizationConnector.ts) interface to be compatible with Aragon Connect.
 
 ## The Graph Connector
 
