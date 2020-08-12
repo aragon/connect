@@ -20,7 +20,7 @@ export function useCancellableAsync<Result>(
     setLoading(true)
 
     asyncCall(stop)
-      .then(result => {
+      .then((result) => {
         if (!cancelled) {
           setResult(result)
           setLoading(false)

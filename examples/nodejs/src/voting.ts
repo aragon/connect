@@ -43,7 +43,7 @@ function voteId(vote: Vote) {
 async function main() {
   const org = await connect(env.org, 'thegraph', { chainId: env.chainId })
   const apps = await org.apps()
-  const votingApp = apps.find(app => app.appName === 'voting.aragonpm.eth')
+  const votingApp = apps.find((app) => app.appName === 'voting.aragonpm.eth')
 
   console.log('\nOrganization:', org.location, `(${org.address})`)
 
@@ -60,7 +60,8 @@ async function main() {
   const votes = await voting.votes()
 
   console.log(
-    votes.map(vote => `\n * ${voteId(vote)} ${voteTitle(vote)}`).join('') + '\n'
+    votes.map((vote) => `\n * ${voteId(vote)} ${voteTitle(vote)}`).join('') +
+      '\n'
   )
 
   if (votes.length === 0) {
@@ -85,7 +86,7 @@ async function main() {
 
 main()
   .then(() => process.exit(0))
-  .catch(err => {
+  .catch((err) => {
     console.error('')
     console.error(err)
     console.log(

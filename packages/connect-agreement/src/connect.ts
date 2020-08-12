@@ -1,7 +1,9 @@
 import { createAppConnector } from '@aragon/connect-core'
 
 import Agreement from './models/Agreement'
-import AgreementConnectorTheGraph, { subgraphUrlFromChainId } from './thegraph/connector'
+import AgreementConnectorTheGraph, {
+  subgraphUrlFromChainId,
+} from './thegraph/connector'
 
 type Config = {
   subgraphUrl: string
@@ -15,8 +17,12 @@ export default createAppConnector<Agreement, Config>(
       )
     }
 
-    const subgraphUrl = config.subgraphUrl ?? subgraphUrlFromChainId(network.chainId)
-    const agreementConnector = new AgreementConnectorTheGraph(subgraphUrl, verbose)
+    const subgraphUrl =
+      config.subgraphUrl ?? subgraphUrlFromChainId(network.chainId)
+    const agreementConnector = new AgreementConnectorTheGraph(
+      subgraphUrl,
+      verbose
+    )
     return new Agreement(agreementConnector, app.address)
   }
 )

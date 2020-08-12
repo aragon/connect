@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import { GraphQLWrapper } from '@aragon/connect-thegraph'
 
 export async function keepRunning() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve()
     }, 1000000000)

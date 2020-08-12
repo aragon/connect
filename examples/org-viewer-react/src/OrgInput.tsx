@@ -10,7 +10,7 @@ type OrgInputProps = {
 }
 
 export default function OrgInput({ orgName, onChange }: OrgInputProps) {
-  const onInputChange = useCallback(event => {
+  const onInputChange = useCallback((event) => {
     onChange(event.target.value)
   }, [])
 

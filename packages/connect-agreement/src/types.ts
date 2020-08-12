@@ -43,9 +43,23 @@ export interface IAgreementConnector {
   version(versionId: string): Promise<Version>
   onVersion(versionId: string, callback: Function): SubscriptionHandler
   versions(agreement: string, first: number, skip: number): Promise<Version[]>
-  onVersions(agreement: string, first: number, skip: number, callback: Function): SubscriptionHandler
+  onVersions(
+    agreement: string,
+    first: number,
+    skip: number,
+    callback: Function
+  ): SubscriptionHandler
   signer(signerId: string): Promise<Signer>
   onSigner(signerId: string, callback: Function): SubscriptionHandler
-  signatures(signerId: string, first: number, skip: number): Promise<Signature[]>
-  onSignatures(signerId: string, first: number, skip: number, callback: Function): SubscriptionHandler
+  signatures(
+    signerId: string,
+    first: number,
+    skip: number
+  ): Promise<Signature[]>
+  onSignatures(
+    signerId: string,
+    first: number,
+    skip: number,
+    callback: Function
+  ): SubscriptionHandler
 }

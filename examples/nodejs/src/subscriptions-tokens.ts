@@ -27,7 +27,7 @@ async function main() {
 
 main()
   .then(() => process.exit(0))
-  .catch(err => {
+  .catch((err) => {
     console.log(`Error: `, err)
     console.log(
       '\nPlease report any problem to https://github.com/aragon/connect/issues'
