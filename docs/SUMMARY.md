@@ -33,3 +33,4 @@
 - [TransactionIntent](api-reference/transaction-intent.md)
 - [TransactionPath](api-reference/transaction-path.md)
 - [TransactionRequest](api-reference/transaction-request.md)
+- [Types](api-reference/types.md)
