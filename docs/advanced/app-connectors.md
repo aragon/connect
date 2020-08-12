@@ -30,13 +30,84 @@ If you haven’t already created an app Subgraph yet, please follow the steps in
 
 ### Create the Connector
 
-Coming soon!
+Implementing a connector consists of calling the `createAppConnector()`, which takes care of doing some necessary checks as well as passing contextual information to the callback.
 
-#### Define the queries
+This is how an app connector can get implemented in the simplest way:
 
-#### Call the queries from the connector
+```js
+import { createAppConnector } from '@aragon/connect-core'
 
-#### Define the entities
+export default createAppConnector(() => ({
+  total: () => fetchTotal(),
+}))
+```
+
+From the point of view of a consumer of your connector, the resulting object will be a function that can get used to connect an app.
+
+For example, this is how app authors can initiate a connection to the Voting app. In this example, `connectVoting` got returned by `createAppConnector()`:
+
+```js
+import connect from '@aragon/connect'
+import connectVoting from '@aragon/connect-voting'
+
+// Connect to an organization on mainnet via The Graph.
+const org = await connect('myorg.aragonid.eth', 'thegraph')
+
+// Get and connect to the voting app.
+const voting = await connectVoting(org.app('voting'))
+
+// Fetch the votes from the voting app.
+const votes = await voting.votes()
+```
+
+Following the same example, this is how the connector for the Voting app is implemented:
+
+```js
+import { createAppConnector } from '@aragon/connect-core'
+import Voting from './entities/Voting'
+import VotingConnectorTheGraph, {
+  subgraphUrlFromChainId,
+} from './thegraph/connector'
+
+export default createAppConnector(
+  ({ app, config, connector, network, verbose }) => {
+    if (connector !== 'thegraph') {
+      console.warn(
+        `Connector unsupported: ${connector}. Using "thegraph" instead.`
+      )
+    }
+
+    return new MyAppConnector(
+      new VotingConnectorTheGraph(
+        config.subgraphUrl ?? subgraphUrlFromChainId(network.chainId),
+        verbose
+      ),
+      app.address
+    )
+  }
+)
+```
+
+#### `createAppConnector\(callback\)`
+
+Here are the parameters passed to the `createAppConnector()` callback:
+
+| Name        | Type                             | Description                                                                                                                                                                                 |
+| ----------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `app`       | [`App`](../api-reference/app.md) | The App instance passed to the connector.                                                                                                                                                   |
+| `connector` | `String`                         | The identifier of the main connector, as defined in `connect()`. It is indicative: app connectors can use it to use the same mechanism on their side. For now, it can only be `"thegraph"`. |
+| `network`   | `String`                         | The current network, as defined in `connect()`. App connectors should follow it or throw an error, as connecting to a different network will create unexpected results.                     |
+| `verbose`   | `Boolean`                        | The verbosity status, as defined in `connect()`. It is indicative and app connectors might choose to ignore it.                                                                             |
+| `config`    | `Object`                         | A configuration object passed to your connector by `appConnect()` (see below).                                                                                                              |
+
+#### appConnect\(app, connector\)
+
+The function returned by `createAppConnector()`, called by app authors, takes these parameters:
+
+| Name        | Type                             | Description                                                                                                                                                                      |
+| ----------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `app`       | [`App`](../api-reference/app.md) | An app instance, generally returned by `Organization#app()` or `Organization#apps()`.                                                                                            |
+| `connector` | `[String, Object]` or `String`   | Accepts a string describing the main source of your connector (e.g. `"thegraph"`). In its array form, it also accepts a configuration object that gets passed to your connector. |
 
 ## Troubleshooting
 
