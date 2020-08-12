@@ -1,7 +1,7 @@
 {
   "name": "org-viewer-react",
   "main": "dist/index.js",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "private": true,
   "sideEffects": false,
   "scripts": {
@@ -12,7 +12,7 @@
     "compile": "tsc"
   },
   "dependencies": {
-    "@aragon/connect-react": "^0.5.2",
+    "@aragon/connect-react": "^0.5.3",
     "@emotion/core": "^10.0.28",
     "@types/react": "^16.9.35",
     "react": "^16.13.1",
