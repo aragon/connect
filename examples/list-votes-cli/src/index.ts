@@ -5,13 +5,13 @@ const BLUE = '\x1b[36m'
 const RESET = '\x1b[0m'
 
 const env = {
-  chainId: parseInt(process.env.CHAIN_ID ?? '1', 10),
+  network: parseInt(process.env.CHAIN_ID ?? '1', 10),
   location: process.env.ORGANIZATION ?? 'governance.aragonproject.eth',
 }
 
 async function main() {
-  const org = await connect(env.location, 'thegraph', { chainId: env.chainId })
-  const voting = await connectVoting(org.app('voting'))
+  const org = await connect(env.location, 'thegraph', { network: env.network })
+  const voting = await connectVoting(org.app('tsateiurteiuart'))
   const votes = await voting.votes()
 
   printOrganization(org)
@@ -45,7 +45,7 @@ function formatVote(vote: any): string {
 
 main()
   .then(() => process.exit(0))
-  .catch(err => {
+  .catch((err) => {
     console.error('')
     console.error(err)
     console.log(
