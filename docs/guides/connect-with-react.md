@@ -71,13 +71,13 @@ ReactDOM.render(
 
 This component is required in order to use the provided hooks.
 
-| Props                  | Type                                          | Description                                                                                              |
-| ---------------------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `location`             | `String`                                      | The Ethereum address or ENS domain of an Aragon organization.                                            |
-| `connector`            | `Connector` or `[String, Object]` or `String` | Accepts a `Connector` instance, and either a string or a tuple for embedded connectors and their config. |
-| `options`              | `Object`                                      | The optional configuration object.                                                                       |
-| `options.readProvider` | `EthereumProvider`                            | An [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compatible object.                                |
-| `options.network`      | [`Networkish`](./types.md#networkish)         | The network to connect to. Defaults to `1`.                                                              |
+| Props              | Type                                          | Description                                                                                              |
+| ------------------ | --------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `location`         | `String`                                      | The Ethereum address or ENS domain of an Aragon organization.                                            |
+| `connector`        | `Connector` or `[String, Object]` or `String` | Accepts a `Connector` instance, and either a string or a tuple for embedded connectors and their config. |
+| `options`          | `Object`                                      | The optional configuration object.                                                                       |
+| `options.ethereum` | `EthereumProvider`                            | An [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compatible object.                                |
+| `options.network`  | [`Networkish`](./types.md#networkish)         | The network to connect to. Defaults to `1`.                                                              |
 
 ### useOrganization()
 
