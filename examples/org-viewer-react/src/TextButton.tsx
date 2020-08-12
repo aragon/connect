@@ -9,7 +9,7 @@ export default function TextButton({ ...props }) {
         border: 0;
         background: none;
         padding: 0;
-        color: #DF33A4;
+        color: #df33a4;
         cursor: pointer;
         &:active {
           transform: translateY(0.5px);

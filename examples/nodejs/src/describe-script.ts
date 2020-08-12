@@ -20,7 +20,7 @@ async function main() {
 
   const votes = await voting.votes()
 
-  const { script } = votes.find(vote => voteId(vote) === '#54')!
+  const { script } = votes.find((vote) => voteId(vote) === '#54')!
 
   const description = await describeScript(script, apps)
 
@@ -30,7 +30,7 @@ async function main() {
 
 main()
   .then(() => process.exit(0))
-  .catch(err => {
+  .catch((err) => {
     console.error('')
     console.error(err)
     console.log(

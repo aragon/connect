@@ -6,16 +6,16 @@ export function toArrayEntry<T>(value: T | T[]): T[] {
 }
 
 export function networkFromChainId(chainId: number): Network | null {
-  return NETWORKS.find(network => network.chainId === chainId) || null
+  return NETWORKS.find((network) => network.chainId === chainId) || null
 }
 
 export function networkFromName(name: string): Network | null {
-  return NETWORKS.find(network => network.name === name) || null
+  return NETWORKS.find((network) => network.name === name) || null
 }
 
 export function ensAddressFromChainId(chainId: number): Address | null {
   return (
-    NETWORKS.find(network => network.chainId === chainId)?.ensAddress || null
+    NETWORKS.find((network) => network.chainId === chainId)?.ensAddress || null
   )
 }
 
@@ -28,7 +28,7 @@ export function toNetwork(value: Networkish): Network {
       throw new Error(
         `Network: invalid chainId provided: ${value}. ` +
           `Please use one of the following: ${NETWORKS.map(
-            network => network.name
+            (network) => network.name
           ).join(', ')}.`
       )
     }
@@ -41,7 +41,7 @@ export function toNetwork(value: Networkish): Network {
       throw new Error(
         `Network: invalid name provided: ${value}. ` +
           `Please use one of the following: ${NETWORKS.map(
-            network => network.chainId
+            (network) => network.chainId
           ).join(', ')}.`
       )
     }
@@ -66,7 +66,7 @@ export function toNetwork(value: Networkish): Network {
     throw new Error(
       `Network: no ensAddress provided. ` +
         `Please set one, or use one of the following chainId: ${NETWORKS.map(
-          network => network.name
+          (network) => network.name
         ).join(', ')}.`
     )
   }

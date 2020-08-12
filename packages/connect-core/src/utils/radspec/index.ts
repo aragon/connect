@@ -20,7 +20,7 @@ export async function tryEvaluatingRadspec(
   apps: App[],
   provider?: ethers.providers.Provider // Decorated intent with description, if one could be made
 ): Promise<string> {
-  const app = apps.find(app => addressesEqual(app.address, intent.to))
+  const app = apps.find((app) => addressesEqual(app.address, intent.to))
 
   // If the intent matches an installed app, use only that app to search for a
   // method match, otherwise fallback to searching all installed apps

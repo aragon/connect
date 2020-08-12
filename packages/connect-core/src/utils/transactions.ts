@@ -66,7 +66,7 @@ export async function createDirectTransactionForApp(
     throw new Error(`No ABI specified in artifact for ${destination}`)
   }
 
-  const methodAbiFragment = app.abi.find(method => {
+  const methodAbiFragment = app.abi.find((method) => {
     // If the full signature isn't given, just find the first overload declared
     if (!isFullMethodSignature(methodSignature)) {
       return method.name === methodSignature

@@ -61,7 +61,7 @@ export async function describeTransactionPath(
   provider?: ethers.providers.Provider
 ): Promise<TransactionRequest[]> {
   return Promise.all(
-    path.map(step => describeTransaction(step, apps, provider))
+    path.map((step) => describeTransaction(step, apps, provider))
   )
 }
 

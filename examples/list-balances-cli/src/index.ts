@@ -49,7 +49,7 @@ function printBalances(holders: any, tokenSymbol: string): void {
 
 main()
   .then(() => process.exit(0))
-  .catch(err => {
+  .catch((err) => {
     console.error('')
     console.error(err)
     console.log(

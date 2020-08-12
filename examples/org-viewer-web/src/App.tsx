@@ -88,7 +88,7 @@ export default function App() {
           Enter an org location:
         </div>
         <input
-          onChange={event => openOrg(event.target.value)}
+          onChange={(event) => openOrg(event.target.value)}
           placeholder="e.g. xyz.aragonid.eth"
           type="text"
           value={orgName}

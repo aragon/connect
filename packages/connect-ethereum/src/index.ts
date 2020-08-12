@@ -36,7 +36,7 @@ class ConnectorEthereum implements IOrganizationConnector {
   }
 
   async permissionsForOrg(): Promise<Permission[]> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve([])
     })
   }
@@ -51,13 +51,13 @@ class ConnectorEthereum implements IOrganizationConnector {
   }
 
   appForOrg(organization: Organization, filters: AppFilters): Promise<App> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve()
     })
   }
 
   appsForOrg(organization: Organization, filters: AppFilters): Promise<App[]> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve([])
     })
   }
@@ -83,13 +83,13 @@ class ConnectorEthereum implements IOrganizationConnector {
   }
 
   repoForApp(organization: Organization, appAddress: string): Promise<Repo> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve()
     })
   }
 
   appByAddress(organization: Organization, appAddress: string): Promise<App> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve()
     })
   }
@@ -98,7 +98,7 @@ class ConnectorEthereum implements IOrganizationConnector {
     organization: Organization,
     appAddress: string
   ): Promise<Role[]> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve([])
     })
   }
