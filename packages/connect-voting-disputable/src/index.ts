@@ -1,3 +1,4 @@
+export { default as ERC20 } from './models/ERC20'
 export { default as Vote } from './models/Vote'
 export { default as Voter } from './models/Voter'
 export { default as Setting } from './models/Setting'

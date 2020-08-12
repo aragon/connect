@@ -1,5 +1,6 @@
 import { Address, SubscriptionHandler } from '@aragon/connect-types'
 
+import ERC20 from './ERC20'
 import Vote from './Vote'
 import Voter from './Voter'
 import Setting from './Setting'
@@ -28,9 +29,9 @@ export default class DisputableVoting {
     return data.dao
   }
 
-  async token(): Promise<string> {
+  async token(): Promise<ERC20> {
     const data = await this.#connector.disputableVoting(this.#address)
-    return data.token
+    return this.#connector.ERC20(data.token)
   }
 
   settingId(settingNumber: string): string {

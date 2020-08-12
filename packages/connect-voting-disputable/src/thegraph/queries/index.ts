@@ -89,6 +89,10 @@ export const GET_VOTE = (type: string) => gql`
       context
       status
       actionId
+      challengeId
+      challenger
+      challengeEndDate
+      disputeId
       setting { 
         id 
       }
@@ -102,6 +106,7 @@ export const GET_VOTE = (type: string) => gql`
       quietEndingExtendedSeconds
       quietEndingSnapshotSupport
       script
+      executedAt
     }
   }
 `
@@ -121,6 +126,10 @@ export const ALL_VOTES = (type: string) => gql`
       context
       status
       actionId
+      challengeId
+      challenger
+      challengeEndDate
+      disputeId
       setting { 
         id 
       }
@@ -134,6 +143,7 @@ export const ALL_VOTES = (type: string) => gql`
       quietEndingExtendedSeconds
       quietEndingSnapshotSupport
       script
+      executedAt
     }
   }
 `
@@ -204,6 +214,17 @@ export const GET_COLLATERAL_REQUIREMENT = (type: string) => gql`
           id
         }
       }
+    }
+  }
+`
+
+export const GET_ERC20 = (type: string) => gql`
+  ${type} ERC20($tokenAddress: String!) {
+    erc20(id: $tokenAddress) {
+      id
+      name
+      symbol
+      decimals
     }
   }
 `

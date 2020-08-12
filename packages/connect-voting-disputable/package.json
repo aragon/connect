@@ -40,6 +40,7 @@
     "graphql-tag": "^2.10.3"
   },
   "devDependencies": {
+    "@aragon/contract-helpers-test": "^0.1.0-rc.3",
     "@types/jest": "^26.0.0",
     "@types/react": "^16.9.34",
     "@typescript-eslint/eslint-plugin": "^2.29.0",

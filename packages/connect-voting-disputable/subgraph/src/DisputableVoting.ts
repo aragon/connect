@@ -63,6 +63,9 @@ export function handleStartVote(event: StartVoteEvent): void {
   vote.votingPower = voteData.value2
   vote.setting = buildSettingId(event.address, voteData.value3)
   vote.actionId = voteData.value4
+  vote.challengeId = BigInt.fromI32(0)
+  vote.challenger = Address.fromString('0x0000000000000000000000000000000000000000')
+  vote.challengeEndDate = BigInt.fromI32(0)
   vote.status = castVoteStatus(voteData.value5)
   vote.startDate = voteData.value6
   vote.snapshotBlock = voteData.value7
@@ -71,6 +74,7 @@ export function handleStartVote(event: StartVoteEvent): void {
   vote.quietEndingExtendedSeconds = voteData.value10
   vote.quietEndingSnapshotSupport = castVoterState(voteData.value11)
   vote.script = voteData.value12
+  vote.executedAt = BigInt.fromI32(0)
   vote.save()
 
   const agreementApp = AgreementContract.bind(votingApp.getAgreement())
@@ -104,6 +108,15 @@ export function handleCastVote(event: CastVoteEvent): void {
 
 export function handlePauseVote(event: PauseVoteEvent): void {
   updateVoteState(event.address, event.params.voteId)
+
+  const votingApp = VotingContract.bind(event.address)
+  const agreementApp = AgreementContract.bind(votingApp.getAgreement())
+  const challengeData = agreementApp.getChallenge(event.params.challengeId)
+  const vote = VoteEntity.load(buildVoteId(event.address, event.params.voteId))!
+  vote.challenger = challengeData.value1
+  vote.challengeId = event.params.challengeId
+  vote.challengeEndDate = challengeData.value2
+  vote.save()
 }
 
 export function handleResumeVote(event: ResumeVoteEvent): void {
@@ -116,6 +129,10 @@ export function handleCancelVote(event: CancelVoteEvent): void {
 
 export function handleExecuteVote(event: ExecuteVoteEvent): void {
   updateVoteState(event.address, event.params.voteId)
+
+  const vote = VoteEntity.load(buildVoteId(event.address, event.params.voteId))!
+  vote.executedAt = event.block.timestamp
+  vote.save()
 }
 
 export function handleVoteQuietEndingExtension(event: VoteQuietEndingExtensionEvent): void {

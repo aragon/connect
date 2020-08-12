@@ -13,6 +13,10 @@ function buildVote(vote: any, connector: any): Vote {
     context,
     status,
     actionId,
+    challengeId,
+    challenger,
+    challengeEndDate,
+    disputeId,
     setting,
     startDate,
     votingPower,
@@ -23,7 +27,8 @@ function buildVote(vote: any, connector: any): Vote {
     pauseDuration,
     quietEndingExtendedSeconds,
     quietEndingSnapshotSupport,
-    script
+    script,
+    executedAt
   } = vote
 
   const voteData: VoteData = {
@@ -35,6 +40,10 @@ function buildVote(vote: any, connector: any): Vote {
     context,
     status,
     actionId,
+    challengeId,
+    challenger,
+    challengeEndDate,
+    disputeId,
     settingId: setting.id,
     startDate,
     votingPower,
@@ -45,7 +54,8 @@ function buildVote(vote: any, connector: any): Vote {
     pauseDuration,
     quietEndingExtendedSeconds,
     quietEndingSnapshotSupport,
-    script
+    script,
+    executedAt
   }
 
   return new Vote(voteData, connector)

@@ -1,9 +1,13 @@
 import { BigNumber } from 'ethers'
 import { SubscriptionHandler } from '@aragon/connect-types'
 
+import Setting from './Setting'
 import CastVote from './CastVote'
+import DisputableVoting from './DisputableVoting'
 import CollateralRequirement from './CollateralRequirement'
 import { IDisputableVotingConnector, VoteData } from '../types'
+
+import { bn, formatBn, PCT_BASE, PCT_DECIMALS } from '../helpers/numbers'
 
 export default class Vote {
   #connector: IDisputableVotingConnector
@@ -16,6 +20,10 @@ export default class Vote {
   readonly context: string
   readonly status: string
   readonly actionId: string
+  readonly challengeId: string
+  readonly challenger: string
+  readonly challengeEndDate: string
+  readonly disputeId: string
   readonly settingId: string
   readonly startDate: string
   readonly votingPower: string
@@ -27,6 +35,7 @@ export default class Vote {
   readonly quietEndingExtendedSeconds: string
   readonly quietEndingSnapshotSupport: string
   readonly script: string
+  readonly executedAt: string
 
   constructor(data: VoteData, connector: IDisputableVotingConnector) {
     this.#connector = connector
@@ -39,6 +48,10 @@ export default class Vote {
     this.context = data.context
     this.status = data.status
     this.actionId = data.actionId
+    this.challengeId = data.challengeId
+    this.challenger = data.challenger
+    this.challengeEndDate = data.challengeEndDate
+    this.disputeId = data.disputeId
     this.settingId = data.settingId
     this.startDate = data.startDate
     this.votingPower = data.votingPower
@@ -50,12 +63,13 @@ export default class Vote {
     this.quietEndingExtendedSeconds = data.quietEndingExtendedSeconds
     this.quietEndingSnapshotSupport = data.quietEndingSnapshotSupport
     this.script = data.script
+    this.executedAt = data.executedAt
   }
 
   get endDate(): string {
-    const originalEndDate = BigNumber.from(this.startDate).add(BigNumber.from(this.duration))
-    const endDateAfterPause = originalEndDate.add(BigNumber.from(this.pauseDuration))
-    return endDateAfterPause.add(BigNumber.from(this.quietEndingExtendedSeconds)).toString()
+    const originalEndDate = bn(this.startDate).add(bn(this.duration))
+    const endDateAfterPause = originalEndDate.add(bn(this.pauseDuration))
+    return endDateAfterPause.add(bn(this.quietEndingExtendedSeconds)).toString()
   }
 
   get yeasPct(): string {
@@ -67,8 +81,33 @@ export default class Vote {
   }
 
   votingPowerPct(num: string): string {
-    const votingPower = BigNumber.from(this.votingPower)
-    return BigNumber.from(num).mul(BigNumber.from(100)).div(votingPower).toString()
+    const votingPower = bn(this.votingPower)
+    return bn(num).mul(PCT_BASE).div(votingPower).toString()
+  }
+
+  async formattedYeas(): Promise<string> {
+    return formatBn(this.yeas, await this._tokenDecimals())
+  }
+
+  async formattedYeasPct(): Promise<string> {
+    return formatBn(this.yeasPct, PCT_DECIMALS)
+  }
+
+  async formattedNays(): Promise<string> {
+    return formatBn(this.nays, await this._tokenDecimals())
+  }
+
+  async formattedNaysPct(): Promise<string> {
+    return formatBn(this.naysPct, PCT_DECIMALS)
+  }
+
+  async isAccepted(): Promise<boolean> {
+    const yeas = bn(this.yeas)
+    const nays = bn(this.nays)
+    const setting = await this.setting()
+
+    return this._isValuePct(yeas, yeas.add(nays), bn(setting.supportRequiredPct)) &&
+           this._isValuePct(yeas, bn(this.votingPower), bn(setting.minimumAcceptanceQuorumPct))
   }
 
   castVoteId(voterAddress: string): string {
@@ -97,5 +136,26 @@ export default class Vote {
 
   onCollateralRequirement(callback: Function): SubscriptionHandler {
     return this.#connector.onCollateralRequirement(this.id, callback)
+  }
+
+  async setting(): Promise<Setting> {
+    return this.#connector.setting(this.settingId)
+  }
+
+  onSetting(callback: Function): SubscriptionHandler {
+    return this.#connector.onSetting(this.settingId, callback)
+  }
+
+  _disputableVoting(): DisputableVoting {
+    return new DisputableVoting(this.#connector, this.votingId)
+  }
+
+  async _tokenDecimals(): Promise<string> {
+    const erc20 = await this._disputableVoting().token()
+    return erc20.decimals
+  }
+
+  _isValuePct(value: BigNumber, total: BigNumber, pct: BigNumber): boolean {
+    return !total.eq(bn('0')) && (value.mul(PCT_BASE).div(total)).gt(pct)
   }
 }
