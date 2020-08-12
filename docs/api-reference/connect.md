@@ -12,7 +12,7 @@ Connects and returns an `Organization` for `location`.
 | `connector`            | `Connector` or `[String, Object]` or `String` | Accepts a `Connector` instance, and either a string or a tuple for embedded connectors and their config. |
 | `options`              | `Object`                                      | The optional configuration object.                                                                       |
 | `options.readProvider` | `EthereumProvider`                            | An [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compatible object.                                |
-| `options.chainId`      | `Number`                                      | The [Chain ID](https://chainid.network/) to connect to. Defaults to `1`.                                 |
+| `options.network`      | [`Networkish`](./types.md#networkish)         | The network to connect to. Defaults to `1`.                                                              |
 | returns                | `Promise<Organization>`                       | An `Organization` instance.                                                                              |
 
 ### Errors
@@ -33,7 +33,7 @@ try {
   const org1 = await connect('org1.aragonid.eth', 'thegraph')
 
   // Specify a different Chain ID
-  const org3 = await connect('org3.aragonid.eth', 'thegraph', { chainId: 4 })
+  const org3 = await connect('org3.aragonid.eth', 'thegraph', { network: 4 })
 
   // Specify a configuration for the connector
   const org3 = await connect('org3.aragonid.eth', [
