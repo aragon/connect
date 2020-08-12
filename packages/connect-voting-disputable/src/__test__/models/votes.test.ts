@@ -31,7 +31,9 @@ describe('DisputableVoting', () => {
     test('computes the current outcome properly', async () => {
       const vote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-4`)
 
+      expect(vote.hasEnded).toBe(true)
       expect(await vote.isAccepted()).toBe(false)
+      expect(await vote.status()).toBe('Rejected')
 
       expect(vote.yeas).toBe('1000000000000000000')
       expect(vote.yeasPct).toBe('250000000000000000')

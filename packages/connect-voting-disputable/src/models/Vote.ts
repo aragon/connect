@@ -6,8 +6,7 @@ import CastVote from './CastVote'
 import DisputableVoting from './DisputableVoting'
 import CollateralRequirement from './CollateralRequirement'
 import { IDisputableVotingConnector, VoteData } from '../types'
-
-import { bn, formatBn, PCT_BASE, PCT_DECIMALS } from '../helpers/numbers'
+import { toMilliseconds, bn, formatBn, PCT_BASE, PCT_DECIMALS } from '../helpers'
 
 export default class Vote {
   #connector: IDisputableVotingConnector
@@ -18,7 +17,7 @@ export default class Vote {
   readonly creator: string
   readonly duration: string
   readonly context: string
-  readonly status: string
+  readonly voteStatus: string
   readonly actionId: string
   readonly challengeId: string
   readonly challenger: string
@@ -46,7 +45,7 @@ export default class Vote {
     this.duration = data.duration
     this.creator = data.creator
     this.context = data.context
-    this.status = data.status
+    this.voteStatus = data.status
     this.actionId = data.actionId
     this.challengeId = data.challengeId
     this.challenger = data.challenger
@@ -64,6 +63,11 @@ export default class Vote {
     this.quietEndingSnapshotSupport = data.quietEndingSnapshotSupport
     this.script = data.script
     this.executedAt = data.executedAt
+  }
+
+  get hasEnded(): boolean {
+    const now = new Date().getTime()
+    return now >= toMilliseconds(this.endDate)
   }
 
   get endDate(): string {
@@ -99,6 +103,14 @@ export default class Vote {
 
   async formattedNaysPct(): Promise<string> {
     return formatBn(this.naysPct, PCT_DECIMALS)
+  }
+
+  async status(): Promise<string> {
+    if (this.hasEnded && this.voteStatus === 'Scheduled') {
+      const wasAccepted = await this.isAccepted()
+      return wasAccepted ? 'Accepted' : 'Rejected'
+    }
+    return this.voteStatus
   }
 
   async isAccepted(): Promise<boolean> {

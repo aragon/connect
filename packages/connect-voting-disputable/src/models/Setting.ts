@@ -1,5 +1,5 @@
 import { SettingData } from '../types'
-import { formatBn, PCT_DECIMALS } from '../helpers/numbers'
+import { formatBn, PCT_DECIMALS } from '../helpers'
 
 
 export default class Setting {

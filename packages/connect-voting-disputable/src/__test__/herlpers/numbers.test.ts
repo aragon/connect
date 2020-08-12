@@ -1,4 +1,4 @@
-import { bn, formatBn } from '../../helpers/numbers'
+import { bn, formatBn } from '../../helpers'
 
 describe('Number helpers', () => {
   describe('formatBn', () => {
