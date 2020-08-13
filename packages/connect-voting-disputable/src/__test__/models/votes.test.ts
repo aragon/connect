@@ -35,6 +35,9 @@ describe('DisputableVoting', () => {
       expect(await vote.isAccepted()).toBe(false)
       expect(await vote.status()).toBe('Rejected')
 
+      expect(vote.votingPower).toBe('4000000000000000000')
+      expect(await vote.formattedVotingPower()).toBe('4.00')
+
       expect(vote.yeas).toBe('1000000000000000000')
       expect(vote.yeasPct).toBe('250000000000000000')
       expect(await vote.formattedYeas()).toBe('1.00')

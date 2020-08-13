@@ -105,6 +105,10 @@ export default class Vote {
     return formatBn(this.naysPct, PCT_DECIMALS)
   }
 
+  async formattedVotingPower(): Promise<string> {
+    return formatBn(this.votingPower, await this._tokenDecimals())
+  }
+
   async status(): Promise<string> {
     if (this.hasEnded && this.voteStatus === 'Scheduled') {
       const wasAccepted = await this.isAccepted()
