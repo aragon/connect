@@ -10,13 +10,16 @@ The connectors are composed of a root project which implements a base connector 
 
 ### The connector
 
-The `src` folder contains a connector implementation for The Graph which uses `@aragon/connect-thegraph` to perform GraphQL queries, parse them, and present the result in the form of entity objects compatible with the `@aragon/connect` API.
+The `src` folder contains:
 
-Use `index.ts` to pick which entities and objects are exposed to other packages.
+- `models` folder: objects compatible with the `@aragon/connect` API.
+- `thegraph` folder: a connector implementation for The Graph which uses `@aragon/connect-thegraph` to perform GraphQL queries, parse them and present the result in the form of models objects. The `connector.ts` that has the app functions.
 
-In `connector.ts`, add functions that the entities of your connector will use. For example, the `Vote` entity will call its `castsForVote(...): Promise<Cast[]>` function. These functions all follow the same structure of \(1\) performing a query, \(2\) parsing the results of a query, and \(3\) wrapping and returning the results in the appropriate entity.
+Use `index.ts` to pick which models and objects are exposed to other packages.
 
-Each of the steps described above is separated in the `entities`, `parsers`, and `queries` folders for clarity.
+Use `connect.ts` to create the connector logic using `createAppConnector()` from `'@aragon/connect-core'`.
+
+In `connector.ts`, add functions that the models of your connector will use. For example, the `Vote` model will call its `castsForVote(...): Promise<Cast[]>` function. These functions all follow the same structure of \(1\) performing a query, \(2\) parsing the results of a query, and \(3\) wrapping and returning the results in the appropriate model.
 
 Queries are defined using [`graphql-tag`](https://github.com/apollographql/graphql-tag), which allows using fragments. [Fragments](https://graphql.org/learn/queries/#fragments) are useful when your queries become complicated and you want to reuse "fragments" of queries.
 
@@ -44,7 +47,7 @@ export default createAppConnector(() => ({
 
 From the point of view of a consumer of your connector, the resulting object will be a function that can get used to connect an app.
 
-For example, this is how app authors can initiate a connection to the Voting app. In this example, `connectVoting` got returned by `createAppConnector()`:
+For example, this is how app authors can initiate a connection to the Voting app. In this example, `connectVoting` got returned by the implementation of `createAppConnector()` of the Voting connector:
 
 ```js
 import connect from '@aragon/connect'
@@ -64,7 +67,7 @@ Following the same example, this is how the connector for the Voting app is impl
 
 ```js
 import { createAppConnector } from '@aragon/connect-core'
-import Voting from './entities/Voting'
+import Voting from './models/Voting'
 import VotingConnectorTheGraph, {
   subgraphUrlFromChainId,
 } from './thegraph/connector'
@@ -77,7 +80,7 @@ export default createAppConnector(
       )
     }
 
-    return new MyAppConnector(
+    return new Voting(
       new VotingConnectorTheGraph(
         config.subgraphUrl ?? subgraphUrlFromChainId(network.chainId),
         verbose
@@ -88,9 +91,9 @@ export default createAppConnector(
 )
 ```
 
-#### `createAppConnector\(callback\)`
+#### createAppConnector\(callback\)
 
-Here are the parameters passed to the `createAppConnector()` callback:
+Parameters passed to the `createAppConnector()` callback:
 
 | Name        | Type                             | Description                                                                                                                                                                                 |
 | ----------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -102,7 +105,7 @@ Here are the parameters passed to the `createAppConnector()` callback:
 
 #### appConnect\(app, connector\)
 
-The function returned by `createAppConnector()`, called by app authors, takes these parameters:
+The function returned by `createAppConnector()`, called by app authors. Takes these parameters:
 
 | Name        | Type                             | Description                                                                                                                                                                      |
 | ----------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
