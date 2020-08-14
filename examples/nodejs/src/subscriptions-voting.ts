@@ -11,7 +11,15 @@ async function main() {
 
   const votesSubscription = voting.onVotes({}, (votes: Vote[]) => {
     console.log('\nVotes: ')
-    votes.map(console.log)
+    votes
+      .map((vote, index) => ({
+        index,
+        title: vote.metadata,
+        id: vote.id,
+      }))
+      .forEach((vote) => {
+        console.log(vote)
+      })
     console.log(
       `\nTry creating a new vote at https://rinkeby.aragon.org/#/${ORG_ADDRESS}/${VOTING_APP_ADDRESS}/\n`
     )
@@ -23,7 +31,9 @@ async function main() {
 
   const castsSubscription = vote1.onCasts((casts: Cast[]) => {
     console.log(`\nCasts:`)
-    casts.map(console.log)
+    casts.forEach((cast) => {
+      console.log(cast)
+    })
     console.log(
       `\nTry casting a vote on https://rinkeby.aragon.org/#/${ORG_ADDRESS}/${VOTING_APP_ADDRESS}/vote/1 (You must first mint yourself a token in the Token Manager)\n`
     )
