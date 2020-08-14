@@ -8,18 +8,18 @@ const RESET = '\x1b[0m'
 const DECIMALS = 18
 
 const env = {
-  chainId: parseInt(process.env.CHAIN_ID ?? '1', 10),
+  network: parseInt(process.env.CHAIN_ID ?? '1', 10),
   location: process.env.ORGANIZATION ?? 'piedao.aragonid.eth',
 }
 
 async function main() {
-  const org = await connect(env.location, 'thegraph', { chainId: env.chainId })
+  const org = await connect(env.location, 'thegraph', { network: env.network })
   const tokens = await connectTokens(org.app('token-manager'))
   const token = await tokens.token()
   const holders = await tokens.holders()
 
   printOrganization(org)
-  printBalances(holders, await token.symbol)
+  printBalances(holders, token.symbol)
 }
 
 function printOrganization(organization: any): void {
