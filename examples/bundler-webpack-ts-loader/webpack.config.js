@@ -22,7 +22,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
-    mainFields: ['module', 'browser', 'main'],
+    mainFields: ['main', 'module', 'browser'],
   },
   output: {
     filename: 'bundle.js',
