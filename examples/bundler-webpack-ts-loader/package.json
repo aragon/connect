@@ -1,0 +1,27 @@
+{
+  "name": "bundler-webpack-ts-loader",
+  "main": "dist/index.js",
+  "version": "0.5.3",
+  "private": true,
+  "sideEffects": false,
+  "scripts": {
+    "start": "yarn clean && webpack-dev-server",
+    "build": "yarn clean && webpack --env production",
+    "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo"
+  },
+  "dependencies": {
+    "@aragon/connect": "^0.5.3",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8",
+    "html-webpack-plugin": "^4.3.0",
+    "ts-loader": "^7.0.2",
+    "typescript": "^3.8.3",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  }
+}
