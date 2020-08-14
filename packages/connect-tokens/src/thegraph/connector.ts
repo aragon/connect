@@ -44,7 +44,7 @@ export default class TokensConnectorTheGraph implements ITokensConnector {
     const token = await gql.performQueryWithParser<Token>(
       queries.TOKEN('query'),
       { tokenManagerAddress: appAddress },
-      result => parseToken(result)
+      (result) => parseToken(result)
     )
 
     return new TokensConnectorTheGraph(gql, token)
@@ -66,7 +66,7 @@ export default class TokensConnectorTheGraph implements ITokensConnector {
     return this.#gql.performQueryWithParser<TokenHolder[]>(
       queries.TOKEN_HOLDERS('query'),
       { tokenAddress, first, skip },
-      result => parseTokenHolders(result)
+      (result) => parseTokenHolders(result)
     )
   }
 
@@ -78,7 +78,7 @@ export default class TokensConnectorTheGraph implements ITokensConnector {
       queries.TOKEN_HOLDERS('subscription'),
       { tokenAddress, first: 1000, skip: 0 },
       callback,
-      result => parseTokenHolders(result)
+      (result) => parseTokenHolders(result)
     )
   }
 }

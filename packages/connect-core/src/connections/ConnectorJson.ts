@@ -58,13 +58,13 @@ class ConnectorJson implements IOrganizationConnector {
   }
 
   appForOrg(organization: Organization): Promise<App> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve()
     })
   }
 
   appsForOrg(organization: Organization): Promise<App[]> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve([])
     })
   }
@@ -90,13 +90,13 @@ class ConnectorJson implements IOrganizationConnector {
   }
 
   repoForApp(organization: Organization, appAddress: string): Promise<Repo> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve()
     })
   }
 
   appByAddress(organization: Organization, appAddress: string): Promise<App> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve()
     })
   }
@@ -105,7 +105,7 @@ class ConnectorJson implements IOrganizationConnector {
     organization: Organization,
     appAddress: string
   ): Promise<Role[]> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve([])
     })
   }

@@ -10,14 +10,20 @@ export function parseSigner(result: QueryResult, connector: any): Signer {
     throw new Error('Unable to parse signer.')
   }
 
-  return new Signer({
-    id: signer.id,
-    address: signer.address,
-    agreementId: signer.agreement.id
-  }, connector)
+  return new Signer(
+    {
+      id: signer.id,
+      address: signer.address,
+      agreementId: signer.agreement.id,
+    },
+    connector
+  )
 }
 
-export function parseSignatures(result: QueryResult, connector: any): Signature[] {
+export function parseSignatures(
+  result: QueryResult,
+  connector: any
+): Signature[] {
   const signatures = result.data.signatures
 
   if (!signatures) {
@@ -25,11 +31,14 @@ export function parseSignatures(result: QueryResult, connector: any): Signature[
   }
 
   return signatures.map((data: any) => {
-    return new Signature({
-      id: data.id,
-      signerId: data.signer.id,
-      versionId: data.version.id,
-      createdAt: data.createdAt
-    }, connector)
+    return new Signature(
+      {
+        id: data.id,
+        signerId: data.signer.id,
+        versionId: data.version.id,
+        createdAt: data.createdAt,
+      },
+      connector
+    )
   })
 }

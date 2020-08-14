@@ -97,7 +97,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
     return this.#gql.performQueryWithParser<Role[]>(
       queries.ROLE_BY_APP_ADDRESS('query'),
       { appAddress: appAddress.toLowerCase() },
-      result => parseRoles(result, organization)
+      (result) => parseRoles(result, organization)
     )
   }
 
@@ -105,7 +105,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
     return this.#gql.performQueryWithParser<Permission[]>(
       queries.ORGANIZATION_PERMISSIONS('query'),
       { orgAddress: organization.address.toLowerCase() },
-      result => parsePermissions(result, organization)
+      (result) => parsePermissions(result, organization)
     )
   }
 
@@ -117,7 +117,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
       queries.ORGANIZATION_PERMISSIONS('subscription'),
       { orgAddress: organization.address.toLowerCase() },
       callback,
-      result => parsePermissions(result, organization)
+      (result) => parsePermissions(result, organization)
     )
   }
 
@@ -128,7 +128,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
     return this.#gql.performQueryWithParser<App>(
       queries.APP_BY_ADDRESS('query'),
       { appAddress: appAddress.toLowerCase() },
-      result => parseApp(result, organization)
+      (result) => parseApp(result, organization)
     )
   }
 
@@ -143,7 +143,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
         first: 1,
         orgAddress: organization.address.toLowerCase(),
       },
-      result => parseApps(result, organization)
+      (result) => parseApps(result, organization)
     )
     return apps[0]
   }
@@ -158,7 +158,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
         appFilter: appFiltersToQueryFilter(filters),
         orgAddress: organization.address.toLowerCase(),
       },
-      result => parseApps(result, organization)
+      (result) => parseApps(result, organization)
     )
   }
 
@@ -175,7 +175,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
         orgAddress: organization.address.toLowerCase(),
       },
       (apps: App[]) => callback(apps[0]),
-      result => parseApps(result, organization)
+      (result) => parseApps(result, organization)
     )
   }
 
@@ -191,7 +191,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
         orgAddress: organization.address.toLowerCase(),
       },
       callback,
-      result => parseApps(result, organization)
+      (result) => parseApps(result, organization)
     )
   }
 
@@ -202,7 +202,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
     return this.#gql.performQueryWithParser(
       queries.REPO_BY_APP_ADDRESS('query'),
       { appAddress: appAddress.toLowerCase() },
-      result => parseRepo(result, organization)
+      (result) => parseRepo(result, organization)
     )
   }
 }

@@ -14,39 +14,29 @@
   ],
   "functions": [
     {
-      "sig":"initialize()",
-      "roles":[
-
-      ],
-      "notice":"Initialize the registry"
+      "sig": "initialize()",
+      "roles": [],
+      "notice": "Initialize the registry"
     },
     {
-      "sig":"addScriptExecutor(address)",
-      "roles":[
-          "REGISTRY_ADD_EXECUTOR_ROLE"
-      ],
-      "notice":"Add a new script executor with address `_executor` to the registry"
+      "sig": "addScriptExecutor(address)",
+      "roles": ["REGISTRY_ADD_EXECUTOR_ROLE"],
+      "notice": "Add a new script executor with address `_executor` to the registry"
     },
     {
-      "sig":"disableScriptExecutor(uint256)",
-      "roles":[
-          "REGISTRY_MANAGER_ROLE"
-      ],
-      "notice":"Disable script executor with ID `_executorId`"
+      "sig": "disableScriptExecutor(uint256)",
+      "roles": ["REGISTRY_MANAGER_ROLE"],
+      "notice": "Disable script executor with ID `_executorId`"
     },
     {
-      "sig":"enableScriptExecutor(uint256)",
-      "roles":[
-          "REGISTRY_MANAGER_ROLE"
-      ],
-      "notice":"Enable script executor with ID `_executorId`"
+      "sig": "enableScriptExecutor(uint256)",
+      "roles": ["REGISTRY_MANAGER_ROLE"],
+      "notice": "Enable script executor with ID `_executorId`"
     },
     {
-      "sig":"transferToVault(address)",
-      "roles":[
-
-      ],
-      "notice":"Send funds to recovery Vault. This contract should never receive funds, but in case it does, this function allows one to recover them."
-    } 
+      "sig": "transferToVault(address)",
+      "roles": [],
+      "notice": "Send funds to recovery Vault. This contract should never receive funds, but in case it does, this function allows one to recover them."
+    }
   ]
 }

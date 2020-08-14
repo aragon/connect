@@ -48,6 +48,6 @@ export default class Permission implements PermissionData {
       this.#organization,
       this.appAddress
     )
-    return roles.find(role => role.hash === this.roleHash)
+    return roles.find((role) => role.hash === this.roleHash)
   }
 }

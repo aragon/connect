@@ -90,7 +90,7 @@ To do so, use the [Chain ID](https://chainid.network/) assigned to the network:
 
 ```javascript
 // Connect to the Rinkeby test network
-const org = await connect('example.aragonid.eth', 'thegraph', { chainId: 4 })
+const org = await connect('example.aragonid.eth', 'thegraph', { network: 4 })
 ```
 
 Note: other than the Ethereum main network \(default\), only [Rinkeby](https://docs.ethhub.io/using-ethereum/test-networks/#rinkeby) and [xDAI](https://www.xdaichain.com/) are supported by the `thegraph` connector at the moment.
@@ -125,7 +125,7 @@ import { connect } from '@aragon/connect'
 
 const org = await connect('example.aragonid.eth', 'thegraph')
 
-const handler = org.onApps(apps => {
+const handler = org.onApps((apps) => {
   console.log('Apps updated:', apps)
 })
 ```
@@ -133,7 +133,7 @@ const handler = org.onApps(apps => {
 The returned handler can be used to stop receiving updates:
 
 ```javascript
-const handler = org.onApps(apps => {
+const handler = org.onApps((apps) => {
   console.log('Apps updated:', apps)
 })
 
@@ -150,7 +150,7 @@ import connectVoting from '@aragon/connect-voting'
 const org = await connect('example.aragonid.eth', 'thegraph')
 const voting = connectVoting(org.app('voting'))
 
-const handler = voting.onVotes(votes => {
+const handler = voting.onVotes((votes) => {
   console.log('Votes updated:', votes)
 })
 
