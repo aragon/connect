@@ -5,7 +5,9 @@ import { pipe, subscribe } from 'wonka'
 import { SubscriptionHandler } from '@aragon/connect-types'
 import { ParseFunction, QueryResult } from '../types'
 
-const POLL_INTERVAL = 5 * 1000
+// Average block time is about 13 seconds on the 2020-08-14
+// See https://etherscan.io/chart/blocktime
+const POLL_INTERVAL = 13 * 1000
 
 export default class GraphQLWrapper {
   #client: Client
