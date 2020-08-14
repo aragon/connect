@@ -10,6 +10,8 @@ The connectors are composed of a root project which implements a base connector 
 
 ### The connector
 
+We are using and recommend the following structure to implement app connectors.
+
 The `src` folder contains:
 
 - `models` folder: objects compatible with the `@aragon/connect` API.
@@ -47,7 +49,7 @@ export default createAppConnector(() => ({
 
 From the point of view of a consumer of your connector, the resulting object will be a function that can get used to connect an app.
 
-For example, this is how app authors can initiate a connection to the Voting app. In this example, `connectVoting` got returned by the implementation of `createAppConnector()` of the Voting connector:
+For example, this is how app authors can initiate a connection to the Voting app. In this example, `connectVoting` got returned by `createAppConnector()`:
 
 ```js
 import connect from '@aragon/connect'
