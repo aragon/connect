@@ -20,7 +20,7 @@ This is an easier way to do `TransactionIntent.paths(account, options)[0].transa
 
 ### TransactionIntent\#paths\(account, options\)
 
-Get all the possible transaction paths for a given address. This can be useful to let users pick between multiple paths. Otherwise, `TransactionIntent#transactions()` can be called directly.
+Get the shortest transaction path for a given address. Note, `TransactionIntent#transactions()` can be called directly.
 
 | Name           | Type                         | Description                                                                                               |
 | -------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------- |
@@ -28,4 +28,4 @@ Get all the possible transaction paths for a given address. This can be useful t
 | `options`      | `Object`                     | Options object.                                                                                           |
 | `options.as`   | `String`                     | Address of an Aragon organization, or its agent app, through which the paths should get created.          |
 | `options.path` | `String[]`                   | An array of address that conform a transaction path, it will be verified without calculating other paths. |
-| returns        | `Promise<TransactionPath[]>` | Array of all the possible transaction paths.                                                              |
+| returns        | `Promise<TransactionPath>` | Shortest transaction path for the intent.                                                              |
