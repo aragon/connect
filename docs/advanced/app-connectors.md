@@ -12,14 +12,14 @@ The connectors are composed of a root project which implements a base connector 
 
 The `src` folder contains:
 
-- `models` folder: objects compatible with the `@aragon/connect` API.
-- `thegraph` folder: a connector implementation for The Graph which uses `@aragon/connect-thegraph` to perform GraphQL queries, parse them and present the result in the form of models objects. The `connector.ts` that has the app functions.
+- `models` folder: objects compatible with the `@aragon/connect` API. This is what the consumers of your app connector are going to interact with.
+- `thegraph` folder: a connector implementation for The Graph which uses `@aragon/connect-thegraph` to perform GraphQL queries, parse them and present the result in the form of models objects. This part is only used internally, and `connector.ts` contains the methods responsible to fetch the app data from The Graph.
 
 Use `index.ts` to pick which models and objects are exposed to other packages.
 
-Use `connect.ts` to create the connector logic using `createAppConnector()` from `'@aragon/connect-core'`.
+Use `connect.ts` to create the connector logic [using `createAppConnector()`](#create-the-connector) from `'@aragon/connect-core'`.
 
-In `connector.ts`, add functions that the models of your connector will use. For example, the `Vote` model will call its `castsForVote(...): Promise<Cast[]>` function. These functions all follow the same structure of \(1\) performing a query, \(2\) parsing the results of a query, and \(3\) wrapping and returning the results in the appropriate model.
+In `thegraph/connector.ts` (assuming your connector is using The Graph), add functions that the models of your connector will use. For example, the `Vote` model of `@aragon/connect-voting` [will call its `castsForVote(...): Promise<Cast[]>` function](https://github.com/aragon/connect/blob/12dec7e5147220d29fb960bff01ff95e9ccca1bf/packages/connect-voting/src/models/Vote.ts#L39). These functions all follow the same structure of \(1\) performing a query, \(2\) parsing the results of a query, and \(3\) wrapping and returning the results in the appropriate model.
 
 Queries are defined using [`graphql-tag`](https://github.com/apollographql/graphql-tag), which allows using fragments. [Fragments](https://graphql.org/learn/queries/#fragments) are useful when your queries become complicated and you want to reuse "fragments" of queries.
 
@@ -105,7 +105,7 @@ Parameters passed to the `createAppConnector()` callback:
 
 #### appConnect\(app, connector\)
 
-The function returned by `createAppConnector()`, called by app authors. Takes these parameters:
+The function returned by `createAppConnector()`, called by app authors. It takes these parameters:
 
 | Name        | Type                             | Description                                                                                                                                                                      |
 | ----------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
