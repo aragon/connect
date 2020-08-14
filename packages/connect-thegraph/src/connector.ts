@@ -28,6 +28,7 @@ import {
 export type ConnectorTheGraphConfig = {
   network: Networkish
   orgSubgraphUrl?: string
+  pollInterval?: number
   verbose?: boolean
 }
 
@@ -62,11 +63,13 @@ function appFiltersToQueryFilter(appFilters: AppFilters) {
 
 class ConnectorTheGraph implements IOrganizationConnector {
   #gql: GraphQLWrapper
+  connection?: ConnectionContext
+  readonly config: ConnectorTheGraphConfig
   readonly name = 'thegraph'
   readonly network: Network
-  connection?: ConnectionContext
 
   constructor(config: ConnectorTheGraphConfig) {
+    this.config = config
     this.network = toNetwork(config.network)
 
     const orgSubgraphUrl =
@@ -78,7 +81,10 @@ class ConnectorTheGraph implements IOrganizationConnector {
       )
     }
 
-    this.#gql = new GraphQLWrapper(orgSubgraphUrl, config.verbose)
+    this.#gql = new GraphQLWrapper(orgSubgraphUrl, {
+      pollInterval: config.pollInterval,
+      verbose: config.verbose,
+    })
   }
 
   async connect(connection: ConnectionContext) {

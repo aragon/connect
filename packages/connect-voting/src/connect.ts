@@ -5,22 +5,29 @@ import VotingConnectorTheGraph, {
 } from './thegraph/connector'
 
 type Config = {
-  subgraphUrl: string
+  pollInterval?: number
+  subgraphUrl?: string
 }
 
 export default createAppConnector<Voting, Config>(
-  ({ app, config, connector, network, verbose }) => {
+  ({ app, config, connector, network, orgConnector, verbose }) => {
     if (connector !== 'thegraph') {
       console.warn(
         `Connector unsupported: ${connector}. Using "thegraph" instead.`
       )
     }
 
+    const subgraphUrl =
+      config.subgraphUrl ?? subgraphUrlFromChainId(network.chainId) ?? undefined
+
+    let pollInterval
+    if (orgConnector.name === 'thegraph') {
+      pollInterval =
+        config?.pollInterval ?? orgConnector.config?.pollInterval ?? undefined
+    }
+
     return new Voting(
-      new VotingConnectorTheGraph(
-        config.subgraphUrl ?? subgraphUrlFromChainId(network.chainId),
-        verbose
-      ),
+      new VotingConnectorTheGraph({ pollInterval, subgraphUrl, verbose }),
       app.address
     )
   }

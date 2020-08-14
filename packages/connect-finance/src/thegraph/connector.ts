@@ -19,16 +19,25 @@ export function subgraphUrlFromChainId(chainId: number) {
   return null
 }
 
+type FinanceConnectorTheGraphConfig = {
+  pollInterval?: number
+  subgraphUrl?: string
+  verbose?: boolean
+}
+
 export default class FinanceConnectorTheGraph implements IFinanceConnector {
   #gql: GraphQLWrapper
 
-  constructor(subgraphUrl: string, verbose = false) {
-    if (!subgraphUrl) {
+  constructor(config: FinanceConnectorTheGraphConfig) {
+    if (!config.subgraphUrl) {
       throw new Error(
         'FinanceConnectorTheGraph requires subgraphUrl to be passed.'
       )
     }
-    this.#gql = new GraphQLWrapper(subgraphUrl, verbose)
+    this.#gql = new GraphQLWrapper(config.subgraphUrl, {
+      pollInterval: config.pollInterval,
+      verbose: config.verbose,
+    })
   }
 
   async disconnect() {

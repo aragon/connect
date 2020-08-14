@@ -9,6 +9,7 @@ import Role from '../entities/Role'
 export default interface IOrganizationConnector {
   readonly name: string
   readonly network: Network
+  readonly config: any
   appByAddress(organization: Organization, appAddress: string): Promise<App>
   appForOrg(organization: Organization, filters?: AppFilters): Promise<App>
   appsForOrg(organization: Organization, filters?: AppFilters): Promise<App[]>

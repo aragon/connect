@@ -11,7 +11,7 @@ import { ParseFunction, QueryResult } from '../types'
 
 // Average block time is about 13 seconds on the 2020-08-14
 // See https://etherscan.io/chart/blocktime
-const POLL_INTERVAL = 13 * 1000
+const POLL_INTERVAL_DEFAULT = 13 * 1000
 
 function createRequest(query: DocumentNode, args: object): GraphQLRequest {
   // Make every operation type a query, until GraphQL subscriptions get added again.
@@ -27,18 +27,31 @@ function createRequest(query: DocumentNode, args: object): GraphQLRequest {
   return createRequestUrql(query, args)
 }
 
+type GraphQLWrapperOptions = {
+  verbose?: boolean
+  pollInterval?: number
+}
+
 export default class GraphQLWrapper {
   #client: Client
+  #pollInterval: number
   #verbose: boolean
 
-  constructor(subgraphUrl: string, verbose = false) {
-    this.#client = new Client({
-      maskTypename: true,
-      url: subgraphUrl,
-      fetch,
-    })
+  constructor(
+    subgraphUrl: string,
+    options: GraphQLWrapperOptions | boolean = {}
+  ) {
+    if (typeof options === 'boolean') {
+      console.warn(
+        'GraphQLWrapper: please use `new GraphQLWrapper(url, { verbose })` rather than `new GraphQLWrapper(url, verbose)`.'
+      )
+      options = { verbose: options }
+    }
 
-    this.#verbose = verbose
+    this.#verbose = options.verbose ?? false
+    this.#pollInterval = options.pollInterval ?? POLL_INTERVAL_DEFAULT
+
+    this.#client = new Client({ maskTypename: true, url: subgraphUrl, fetch })
   }
 
   close(): void {
@@ -55,7 +68,7 @@ export default class GraphQLWrapper {
 
     return pipe(
       this.#client.executeQuery(request, {
-        pollInterval: POLL_INTERVAL,
+        pollInterval: this.#pollInterval,
         requestPolicy: 'cache-and-network',
       }),
       subscribe((result: QueryResult) => {
