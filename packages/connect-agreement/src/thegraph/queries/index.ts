@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export const GET_AGREEMENT = (type: string) => gql`
-  ${type} Agreement($agreement: String!) {
+  query Agreement($agreement: String!) {
     agreement(id: $agreement) {
       id
       dao
@@ -14,7 +14,7 @@ export const GET_AGREEMENT = (type: string) => gql`
 `
 
 export const GET_CURRENT_VERSION = (type: string) => gql`  
-  ${type} Agreement($agreement: String!) {
+  query Agreement($agreement: String!) {
     agreement(id: $agreement) {
       currentVersion {
         id
@@ -30,7 +30,7 @@ export const GET_CURRENT_VERSION = (type: string) => gql`
 `
 
 export const GET_VERSION = (type: string) => gql`  
-  ${type} Version($versionId: String!) {
+  query Version($versionId: String!) {
     version(id: $versionId) {
       id
       versionId
@@ -44,7 +44,7 @@ export const GET_VERSION = (type: string) => gql`
 `
 
 export const ALL_VERSIONS = (type: string) => gql`
-  ${type} Versions($agreement: String!, $first: Int!, $skip: Int!) {
+  query Versions($agreement: String!, $first: Int!, $skip: Int!) {
     versions(where: {
       agreement: $agreement
     }, first: $first, skip: $skip) {
@@ -60,7 +60,7 @@ export const ALL_VERSIONS = (type: string) => gql`
 `
 
 export const GET_SIGNER = (type: string) => gql`
-  ${type} Signer($signerId: String!) {
+  query Signer($signerId: String!) {
     signer(id: $signerId) {
       id
       address
@@ -70,7 +70,7 @@ export const GET_SIGNER = (type: string) => gql`
 `
 
 export const GET_SIGNATURES = (type: string) => gql`
-  ${type} Signatures($signerId: String!, $first: Int!, $skip: Int!) {
+  query Signatures($signerId: String!, $first: Int!, $skip: Int!) {
     signatures(where: { 
       signer: $signerId
     }, first: $first, skip: $skip) {

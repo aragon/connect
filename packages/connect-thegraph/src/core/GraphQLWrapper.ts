@@ -1,56 +1,31 @@
 import fetch from 'isomorphic-unfetch'
-import ws from 'isomorphic-ws'
-import {
-  Client,
-  defaultExchanges,
-  subscriptionExchange,
-  createRequest,
-} from '@urql/core'
-import { SubscriptionClient } from 'subscriptions-transport-ws'
+import { Client, createRequest } from '@urql/core'
 import { DocumentNode } from 'graphql'
 import { pipe, subscribe } from 'wonka'
 import { SubscriptionHandler } from '@aragon/connect-types'
-import { ParseFunction, QueryResult, SubscriptionOperation } from '../types'
+import { ParseFunction, QueryResult } from '../types'
 
-const AUTO_RECONNECT = true
-const CONNECTION_TIMEOUT = 20 * 1000
-
-function filterSubgraphUrl(url: string): [string, string] {
-  if (!/^(?:https|wss):\/\//.test(url)) {
-    throw new Error('Please provide a valid subgraph URL')
-  }
-  return [url.replace(/^wss/, 'https'), url.replace(/^https/, 'wss')]
-}
+// const AUTO_RECONNECT = true
+// const CONNECTION_TIMEOUT = 20 * 1000
+const POLL_INTERVAL = 5 * 1000
 
 export default class GraphQLWrapper {
   #client: Client
   #verbose: boolean
-  close: () => void
 
   constructor(subgraphUrl: string, verbose = false) {
-    const [urlHttp, urlWs] = filterSubgraphUrl(subgraphUrl)
-
-    const subscriptionClient = new SubscriptionClient(
-      urlWs,
-      { reconnect: AUTO_RECONNECT, timeout: CONNECTION_TIMEOUT },
-      ws
-    )
-
     this.#client = new Client({
       maskTypename: true,
-      url: urlHttp,
+      url: subgraphUrl,
       fetch,
-      exchanges: [
-        ...defaultExchanges,
-        subscriptionExchange({
-          forwardSubscription: (operation: SubscriptionOperation) =>
-            subscriptionClient.request(operation),
-        }),
-      ],
     })
 
     this.#verbose = verbose
-    this.close = () => subscriptionClient.close()
+  }
+
+  close(): void {
+    // Do nothing for now.
+    // Will be used when GraphQL subscriptions will be added again.
   }
 
   subscribeToQuery<T>(
@@ -61,7 +36,9 @@ export default class GraphQLWrapper {
     const request = createRequest(query, args)
 
     return pipe(
-      this.#client.executeSubscription(request),
+      this.#client.executeQuery(request, {
+        pollInterval: POLL_INTERVAL,
+      }),
       subscribe((result: QueryResult) => {
         if (this.#verbose) {
           console.log(this.describeQueryResult(result))
