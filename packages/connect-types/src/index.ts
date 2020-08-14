@@ -7,7 +7,7 @@ export type Network = {
 }
 
 export type Networkish =
-  | { name: string; chainId: number; ensAddress?: Address }
+  | { chainId?: number; ensAddress?: Address; name?: string }
   | string
   | number
 
