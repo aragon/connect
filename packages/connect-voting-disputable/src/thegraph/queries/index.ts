@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export const GET_DISPUTABLE_VOTING = (type: string) => gql`
-  query DisputableVoting($disputableVoting: String!) {
+  ${type} DisputableVoting($disputableVoting: String!) {
     disputableVoting(id: $disputableVoting) {
       id
       dao
@@ -16,7 +16,7 @@ export const GET_DISPUTABLE_VOTING = (type: string) => gql`
 `
 
 export const GET_CURRENT_SETTING = (type: string) => gql`
-  query DisputableVoting($disputableVoting: String!) {
+  ${type} DisputableVoting($disputableVoting: String!) {
     disputableVoting(id: $disputableVoting) {
       setting {
         id
@@ -37,7 +37,7 @@ export const GET_CURRENT_SETTING = (type: string) => gql`
 `
 
 export const GET_SETTING = (type: string) => gql`
-  query Setting($settingId: String!) {
+  ${type} Setting($settingId: String!) {
     setting(id: $settingId) {
       id
       settingId
@@ -56,7 +56,7 @@ export const GET_SETTING = (type: string) => gql`
 `
 
 export const ALL_SETTINGS = (type: string) => gql`
-  query Settings($disputableVoting: String!, $first: Int!, $skip: Int!) {
+  ${type} Settings($disputableVoting: String!, $first: Int!, $skip: Int!) {
     settings(where: {
       voting: $disputableVoting
     }, first: $first, skip: $skip) {
@@ -77,7 +77,7 @@ export const ALL_SETTINGS = (type: string) => gql`
 `
 
 export const GET_VOTE = (type: string) => gql`
-  query Vote($voteId: String!) {
+  ${type} Vote($voteId: String!) {
     vote(id: $voteId) {
       id
       voting { 
@@ -107,7 +107,7 @@ export const GET_VOTE = (type: string) => gql`
 `
 
 export const ALL_VOTES = (type: string) => gql`
-  query Votes($disputableVoting: String!, $first: Int!, $skip: Int!) {
+  ${type} Votes($disputableVoting: String!, $first: Int!, $skip: Int!) {
     votes(where: {
       voting: $disputableVoting
     }, first: $first, skip: $skip) {
@@ -139,7 +139,7 @@ export const ALL_VOTES = (type: string) => gql`
 `
 
 export const GET_CAST_VOTE = (type: string) => gql`
-  query CastVote($castVoteId: String!) {
+  ${type} CastVote($castVoteId: String!) {
     castVote(id: $castVoteId) {
       id
       vote { 
@@ -157,7 +157,7 @@ export const GET_CAST_VOTE = (type: string) => gql`
 `
 
 export const ALL_CAST_VOTES = (type: string) => gql`
-  query CastVotes($voteId: ID!, $first: Int!, $skip: Int!) {
+  ${type} CastVotes($voteId: ID!, $first: Int!, $skip: Int!) {
     castVotes(where: {
       vote: $voteId
     }, first: $first, skip: $skip) {
@@ -177,7 +177,7 @@ export const ALL_CAST_VOTES = (type: string) => gql`
 `
 
 export const GET_VOTER = (type: string) => gql`
-  query Voter($voterId: String!) {
+  ${type} Voter($voterId: String!) {
     voter(id: $voterId) {
       id
       address
@@ -190,7 +190,7 @@ export const GET_VOTER = (type: string) => gql`
 `
 
 export const GET_COLLATERAL_REQUIREMENT = (type: string) => gql`
-  query CollateralRequirement($voteId: String!) {
+  ${type} CollateralRequirement($voteId: String!) {
     vote(id: $voteId) {
       collateralRequirement {
         id

@@ -4,7 +4,7 @@ import * as fragments from './fragments'
 type Query = 'query' | 'subscription'
 
 export const ORGANIZATION_APPS = (type: Query) => gql`
-  query Organization($orgAddress: String!, $appFilter: App_filter!, $first: Int) {
+  ${type} Organization($orgAddress: String!, $appFilter: App_filter!, $first: Int) {
     organization(id: $orgAddress) {
       apps(where: $appFilter, first: $first) {
         ...App_app
@@ -15,7 +15,7 @@ export const ORGANIZATION_APPS = (type: Query) => gql`
 `
 
 export const APP_BY_ADDRESS = (type: Query) => gql`
-  query App($appAddress: String!) {
+  ${type} App($appAddress: String!) {
     app(id: $appAddress) {
       ...App_app
     }
@@ -24,7 +24,7 @@ export const APP_BY_ADDRESS = (type: Query) => gql`
 `
 
 export const REPO_BY_APP_ADDRESS = (type: Query) => gql`
-  query App($appAddress: String!) {
+  ${type} App($appAddress: String!) {
     app(id: $appAddress) {
       repo {
         ...Repo_repo
@@ -39,7 +39,7 @@ export const REPO_BY_APP_ADDRESS = (type: Query) => gql`
 `
 
 export const ORGANIZATION_PERMISSIONS = (type: Query) => gql`
-  query Organization($orgAddress: String!) {
+  ${type} Organization($orgAddress: String!) {
     organization(id: $orgAddress) {
       permissions {
         ...Permission_permission
@@ -50,7 +50,7 @@ export const ORGANIZATION_PERMISSIONS = (type: Query) => gql`
 `
 
 export const ROLE_BY_APP_ADDRESS = (type: Query) => gql`
-  query App($appAddress: String!) {
+  ${type} App($appAddress: String!) {
     app(id: $appAddress) {
       appId
       version{

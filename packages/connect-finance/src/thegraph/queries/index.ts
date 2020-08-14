@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export const ALL_TRANSACTIONS = (type: string) => gql`
-  query Transactions($appAddress: String!, $first: Int!, $skip: Int!) {
+  ${type} Transactions($appAddress: String!, $first: Int!, $skip: Int!) {
     transactions(where: {
       appAddress: $appAddress
     }, first: $first, skip: $skip) {
@@ -19,7 +19,7 @@ export const ALL_TRANSACTIONS = (type: string) => gql`
 `
 
 export const BALANCE_FOR_TOKEN = (type: string) => gql`
-  query TokenBalances($appAddress: String!, $tokenAddress: String!, $first: Int!, $skip: Int!) {
+  ${type} TokenBalances($appAddress: String!, $tokenAddress: String!, $first: Int!, $skip: Int!) {
     tokenBalances(where: {
       token: $tokenAddress,
       appAddress: $appAddress

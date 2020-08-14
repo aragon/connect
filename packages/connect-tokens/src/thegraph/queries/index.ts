@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export const TOKEN = (type: string) => gql`
-  query MiniMeToken($tokenManagerAddress: String!) {
+  ${type} MiniMeToken($tokenManagerAddress: String!) {
     miniMeTokens(where: {
       appAddress: $tokenManagerAddress
     }) {
@@ -18,7 +18,7 @@ export const TOKEN = (type: string) => gql`
 `
 
 export const TOKEN_HOLDERS = (type: string) => gql`
-  query TokenHolders($tokenAddress: String!, $first: Int!, $skip: Int!) {
+  ${type} TokenHolders($tokenAddress: String!, $first: Int!, $skip: Int!) {
     tokenHolders(where: {
       tokenAddress: $tokenAddress
     }, first: $first, skip: $skip) {

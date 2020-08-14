@@ -1,5 +1,9 @@
 import fetch from 'isomorphic-unfetch'
-import { Client, createRequest } from '@urql/core'
+import {
+  Client,
+  GraphQLRequest,
+  createRequest as createRequestUrql,
+} from '@urql/core'
 import { DocumentNode } from 'graphql'
 import { pipe, subscribe } from 'wonka'
 import { SubscriptionHandler } from '@aragon/connect-types'
@@ -8,6 +12,20 @@ import { ParseFunction, QueryResult } from '../types'
 // Average block time is about 13 seconds on the 2020-08-14
 // See https://etherscan.io/chart/blocktime
 const POLL_INTERVAL = 13 * 1000
+
+function createRequest(query: DocumentNode, args: object): GraphQLRequest {
+  // Make every operation type a query, until GraphQL subscriptions get added again.
+  if (query.definitions) {
+    query = {
+      ...query,
+      definitions: query.definitions.map((definition) => ({
+        ...definition,
+        operation: 'query',
+      })),
+    }
+  }
+  return createRequestUrql(query, args)
+}
 
 export default class GraphQLWrapper {
   #client: Client
@@ -28,7 +46,7 @@ export default class GraphQLWrapper {
     // Will be used when GraphQL subscriptions will be added again.
   }
 
-  subscribeToQuery<T>(
+  subscribeToQuery(
     query: DocumentNode,
     args: any = {},
     callback: Function
