@@ -1,15 +1,15 @@
-import { Voting, Vote, Cast } from '@aragon/connect-voting'
+import connect from '@aragon/connect'
+import connectVoting, { Voting, Vote, Cast } from '@aragon/connect-voting'
 import { keepRunning } from './helpers'
 
 const ORG_ADDRESS = '0x7cee20f778a53403d4fc8596e88deb694bc91c98'
 const VOTING_APP_ADDRESS = '0xf7f9a33ed13b01324884bd87137609251b5f7c88'
-const ALL_VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby'
 
 async function main() {
-  const voting = new Voting(VOTING_APP_ADDRESS, ALL_VOTING_SUBGRAPH_URL)
+  const org = await connect(ORG_ADDRESS, 'thegraph', { network: 4 })
+  const voting = await connectVoting(org.app(VOTING_APP_ADDRESS))
 
-  const votesSubscription = voting.onVotes((votes: Vote[]) => {
+  const votesSubscription = voting.onVotes({}, (votes: Vote[]) => {
     console.log('\nVotes: ')
     votes.map(console.log)
     console.log(

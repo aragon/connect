@@ -10,7 +10,7 @@ async function main() {
   permissions.map(console.log)
 
   console.log('\nA role from a permission:')
-  const role = await permissions[4].getRole()
+  const role = await permissions[4].role()
   console.log(role)
 
   console.log('\nApps:')
@@ -34,7 +34,7 @@ async function main() {
   console.log(appByAddress)
 
   console.log('\nAn app from a permission:')
-  const appFromPermission = await permissions[1].getApp()
+  const appFromPermission = await permissions[1].app()
   console.log(appFromPermission)
 }
 
