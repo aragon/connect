@@ -36,6 +36,7 @@ export default class GraphQLWrapper {
     return pipe(
       this.#client.executeQuery(request, {
         pollInterval: POLL_INTERVAL,
+        requestPolicy: 'cache-and-network',
       }),
       subscribe((result: QueryResult) => {
         if (this.#verbose) {
