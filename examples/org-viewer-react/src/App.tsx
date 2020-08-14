@@ -13,8 +13,8 @@ export default function App() {
   return (
     <Connect
       location={filterOrgName(orgName)}
-      connector={['thegraph', { orgSubgraphUrl: env.orgSubgraphUrl }]}
-      options={{ chainId: env.chainId }}
+      connector="thegraph"
+      options={{ network: env.chainId }}
     >
       <Main>
         <OrgInput onChange={openOrg} orgName={orgName} />

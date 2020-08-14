@@ -51,11 +51,7 @@ export default function App() {
 
   const [org = null, loading] = useCancellableAsync(
     async () =>
-      connect(
-        filterOrgName(orgName),
-        ['thegraph', { orgSubgraphUrl: env.orgSubgraphUrl }],
-        { chainId: env.chainId }
-      ),
+      connect(filterOrgName(orgName), 'thegraph', { network: env.chainId }),
     [orgName]
   )
 

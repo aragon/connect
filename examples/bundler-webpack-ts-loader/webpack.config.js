@@ -1,7 +1,5 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin
 
 module.exports = {
   entry: './src/index.tsx',
@@ -34,8 +32,5 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist'),
     port: 1234,
   },
-  plugins: [
-    ...(process.env.BUNDLE_STATS === '1' ? [new BundleAnalyzerPlugin()] : []),
-    new HtmlWebpackPlugin({ title: 'Org Viewer' }),
-  ],
+  plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })],
 }

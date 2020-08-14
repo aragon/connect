@@ -1,16 +1,16 @@
 {
-  "name": "org-viewer-react",
+  "name": "bundler-webpack-ts-loader",
+  "main": "dist/index.js",
   "version": "0.5.3",
   "private": true,
+  "sideEffects": false,
   "scripts": {
     "start": "yarn clean && webpack-dev-server",
-    "build": "yarn clean && webpack --production",
-    "build:stats": "yarn clean && webpack --env production --json > webpack-stats.json",
+    "build": "yarn clean && webpack --env production",
     "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@aragon/connect-react": "^0.5.3",
-    "@emotion/core": "^10.0.28",
+    "@aragon/connect": "^0.5.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
@@ -21,7 +21,6 @@
     "ts-loader": "^7.0.2",
     "typescript": "^3.8.3",
     "webpack": "^4.44.1",
-    "webpack-bundle-analyzer": "^3.8.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
   }
