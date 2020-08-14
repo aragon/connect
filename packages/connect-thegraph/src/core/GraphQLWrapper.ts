@@ -5,8 +5,6 @@ import { pipe, subscribe } from 'wonka'
 import { SubscriptionHandler } from '@aragon/connect-types'
 import { ParseFunction, QueryResult } from '../types'
 
-// const AUTO_RECONNECT = true
-// const CONNECTION_TIMEOUT = 20 * 1000
 const POLL_INTERVAL = 5 * 1000
 
 export default class GraphQLWrapper {
