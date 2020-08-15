@@ -8,7 +8,9 @@ describe('when connecting to a voting app', () => {
   let connector: VotingConnectorTheGraph
 
   beforeAll(() => {
-    connector = new VotingConnectorTheGraph(VOTING_SUBGRAPH_URL)
+    connector = new VotingConnectorTheGraph({
+      subgraphUrl: VOTING_SUBGRAPH_URL,
+    })
   })
 
   afterAll(async () => {
