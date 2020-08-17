@@ -47,6 +47,7 @@ export default class GraphQLWrapper {
       )
       options = { verbose: options }
     }
+    options = options as GraphQLWrapperOptions
 
     this.#verbose = options.verbose ?? false
     this.#pollInterval = options.pollInterval ?? POLL_INTERVAL_DEFAULT
