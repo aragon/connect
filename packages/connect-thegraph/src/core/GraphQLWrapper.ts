@@ -28,8 +28,8 @@ function createRequest(query: DocumentNode, args: object): GraphQLRequest {
 }
 
 type GraphQLWrapperOptions = {
-  verbose?: boolean
   pollInterval?: number
+  verbose?: boolean
 }
 
 export default class GraphQLWrapper {
