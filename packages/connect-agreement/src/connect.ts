@@ -26,9 +26,12 @@ export default createAppConnector<Agreement, Config>(
         config?.pollInterval ?? orgConnector.config?.pollInterval ?? undefined
     }
 
-    return new Agreement(
-      new AgreementConnectorTheGraph({ pollInterval, subgraphUrl, verbose }),
-      app.address
-    )
+    const connectorTheGraph = new AgreementConnectorTheGraph({
+      pollInterval,
+      subgraphUrl,
+      verbose,
+    })
+
+    return new Agreement(connectorTheGraph, app.address)
   }
 )

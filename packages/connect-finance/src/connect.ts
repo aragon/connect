@@ -26,9 +26,12 @@ export default createAppConnector<Finance, Config>(
         config?.pollInterval ?? orgConnector.config?.pollInterval ?? undefined
     }
 
-    return new Finance(
-      new FinanceConnectorTheGraph({ pollInterval, subgraphUrl, verbose }),
-      app.address
-    )
+    const connectorTheGraph = new FinanceConnectorTheGraph({
+      pollInterval,
+      subgraphUrl,
+      verbose,
+    })
+
+    return new Finance(connectorTheGraph, app.address)
   }
 )

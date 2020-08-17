@@ -26,9 +26,12 @@ export default createAppConnector<Voting, Config>(
         config?.pollInterval ?? orgConnector.config?.pollInterval ?? undefined
     }
 
-    return new Voting(
-      new VotingConnectorTheGraph({ pollInterval, subgraphUrl, verbose }),
-      app.address
-    )
+    const connectorTheGraph = new VotingConnectorTheGraph({
+      pollInterval,
+      subgraphUrl,
+      verbose,
+    })
+
+    return new Voting(connectorTheGraph, app.address)
   }
 )

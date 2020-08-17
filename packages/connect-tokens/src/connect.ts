@@ -26,13 +26,13 @@ export default createAppConnector<Tokens, Config>(
         config?.pollInterval ?? orgConnector.config?.pollInterval ?? undefined
     }
 
-    const tokensConnector = await TokensConnectorTheGraph.create({
+    const connectorTheGraph = await TokensConnectorTheGraph.create({
       appAddress: app.address,
       pollInterval,
       subgraphUrl,
       verbose,
     })
 
-    return new Tokens(tokensConnector, app.address)
+    return new Tokens(connectorTheGraph, app.address)
   }
 )
