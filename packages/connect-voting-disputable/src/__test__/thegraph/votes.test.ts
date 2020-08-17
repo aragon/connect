@@ -1,7 +1,8 @@
 import { DisputableVotingConnectorTheGraph, Vote, CastVote } from '../../../src'
 
 const VOTING_APP_ADDRESS = '0x26e14ed789b51b5b226d69a5d40f72dc2d0180fe'
-const VOTING_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-dvoting-rinkeby-staging'
+const VOTING_SUBGRAPH_URL =
+  'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-dvoting-rinkeby-staging'
 
 describe('DisputableVoting votes', () => {
   let connector: DisputableVotingConnectorTheGraph
@@ -47,15 +48,23 @@ describe('DisputableVoting votes', () => {
       expect(castVotes.length).toBeGreaterThan(1)
 
       const firstCastVote = castVotes[0]
-      expect(firstCastVote.id).toBe(`${VOTING_APP_ADDRESS}-vote-4-cast-0x0090aed150056316e37fe6dfa10dc63e79d173b6`)
-      expect(firstCastVote.caster).toBe('0x0090aed150056316e37fe6dfa10dc63e79d173b6')
+      expect(firstCastVote.id).toBe(
+        `${VOTING_APP_ADDRESS}-vote-4-cast-0x0090aed150056316e37fe6dfa10dc63e79d173b6`
+      )
+      expect(firstCastVote.caster).toBe(
+        '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
+      )
       expect(firstCastVote.createdAt).toEqual('1596383834')
       expect(firstCastVote.stake).toBe('1000000000000000000')
       expect(firstCastVote.supports).toBe(true)
 
       const secondCastVote = castVotes[1]
-      expect(secondCastVote.id).toBe(`${VOTING_APP_ADDRESS}-vote-4-cast-0xa9ac50dce74c46025dc9dceafb4fa21f0dc142ea`)
-      expect(secondCastVote.caster).toBe('0xa9ac50dce74c46025dc9dceafb4fa21f0dc142ea')
+      expect(secondCastVote.id).toBe(
+        `${VOTING_APP_ADDRESS}-vote-4-cast-0xa9ac50dce74c46025dc9dceafb4fa21f0dc142ea`
+      )
+      expect(secondCastVote.caster).toBe(
+        '0xa9ac50dce74c46025dc9dceafb4fa21f0dc142ea'
+      )
       expect(secondCastVote.createdAt).toEqual('1596394454')
       expect(secondCastVote.stake).toBe('1000000000000000000')
       expect(secondCastVote.supports).toBe(false)
@@ -97,4 +106,3 @@ describe('DisputableVoting votes', () => {
     })
   })
 })
-

@@ -10,7 +10,10 @@ export default class CollateralRequirement {
   readonly challengeAmount: string
   readonly challengeDuration: string
 
-  constructor(data: CollateralRequirementData, connector: IDisputableVotingConnector) {
+  constructor(
+    data: CollateralRequirementData,
+    connector: IDisputableVotingConnector
+  ) {
     this.#connector = connector
 
     this.id = data.id
