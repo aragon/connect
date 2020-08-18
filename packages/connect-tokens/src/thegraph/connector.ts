@@ -19,6 +19,13 @@ export function subgraphUrlFromChainId(chainId: number) {
   return null
 }
 
+type TokensConnectorTheGraphConfig = {
+  appAddress?: Address
+  pollInterval?: number
+  subgraphUrl?: string
+  verbose?: boolean
+}
+
 export default class TokensConnectorTheGraph implements ITokensConnector {
   #gql: GraphQLWrapper
   #token: Token
@@ -29,21 +36,28 @@ export default class TokensConnectorTheGraph implements ITokensConnector {
   }
 
   static async create(
-    subgraphUrl: string,
-    appAddress: Address,
-    verbose: boolean = false
+    config: TokensConnectorTheGraphConfig
   ): Promise<TokensConnectorTheGraph> {
-    if (!subgraphUrl) {
+    if (!config.subgraphUrl) {
       throw new Error(
         'TokensConnectorTheGraph requires subgraphUrl to be passed.'
       )
     }
 
-    const gql = new GraphQLWrapper(subgraphUrl, verbose)
+    if (!config.appAddress) {
+      throw new Error(
+        'TokensConnectorTheGraph requires appAddress to be passed.'
+      )
+    }
+
+    const gql = new GraphQLWrapper(config.subgraphUrl, {
+      pollInterval: config.pollInterval,
+      verbose: config.verbose,
+    })
 
     const token = await gql.performQueryWithParser<Token>(
       queries.TOKEN('query'),
-      { tokenManagerAddress: appAddress },
+      { tokenManagerAddress: config.appAddress },
       (result) => parseToken(result)
     )
 

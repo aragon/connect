@@ -8,7 +8,7 @@
   "references": [
     { "path": "../../packages/connect" },
     { "path": "../../packages/connect-thegraph" },
-    { "path": "../../packages/connect-thegraph-tokens" },
-    { "path": "../../packages/connect-thegraph-voting" }
+    { "path": "../../packages/connect-tokens" },
+    { "path": "../../packages/connect-voting" }
   ]
 }

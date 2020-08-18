@@ -1,7 +1,6 @@
 type EnvType = {
   addresses: string[]
   chainId: number
-  orgSubgraphUrl?: string
 }
 
 const ENV_NAME = 'mainnet'
@@ -16,15 +15,6 @@ const ENVIRONMENTS = new Map([
         'governance.aragonproject.eth',
         'brightid.aragonid.eth',
       ],
-    },
-  ],
-  [
-    'mainnet_staging',
-    {
-      chainId: 1,
-      orgSubgraphUrl:
-        'https://api.thegraph.com/subgraphs/name/aragon/aragon-mainnet-staging',
-      addresses: ['piedao.aragonid.eth'],
     },
   ],
   [

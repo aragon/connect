@@ -1,5 +1,6 @@
 export * from './descriptions'
 export * from './misc'
+export * from './network'
 export * from './app-connectors'
 export { decodeCallScript, encodeCallScript } from './callScript'
 export { fetchMetadata } from './metadata'

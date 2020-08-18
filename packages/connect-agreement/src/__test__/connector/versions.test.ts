@@ -8,7 +8,9 @@ describe('Agreement versions', () => {
   let connector: AgreementConnectorTheGraph
 
   beforeAll(() => {
-    connector = new AgreementConnectorTheGraph(AGREEMENT_SUBGRAPH_URL)
+    connector = new AgreementConnectorTheGraph({
+      subgraphUrl: AGREEMENT_SUBGRAPH_URL,
+    })
   })
 
   afterAll(async () => {

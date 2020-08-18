@@ -1,6 +1,6 @@
 {
   "name": "@aragon/connect-tokens",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "license": "LGPL-3.0-or-later",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -33,8 +33,8 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@aragon/connect-core": "^0.5.3",
-    "@aragon/connect-thegraph": "^0.5.3",
+    "@aragon/connect-core": "^0.6.0",
+    "@aragon/connect-thegraph": "^0.6.0",
     "graphql-tag": "^2.10.3"
   },
   "description": "Access and interact with Aragon Organizations and their apps.",

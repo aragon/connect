@@ -28,7 +28,10 @@ export type ConnectOptions = {
 
 export type ConnectorDeclaration =
   | IOrganizationConnector
-  | [string, object | undefined]
+  | ['ethereum', ConnectorEthereumConfig | undefined]
+  | ['json', ConnectorJsonConfig | undefined]
+  | ['thegraph', ConnectorTheGraphConfig | undefined]
+  | [string, any]
   | string
 
 type IpfsResolver = (cid: string, path?: string) => string

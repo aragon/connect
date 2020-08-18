@@ -8,9 +8,6 @@ module.exports = {
   devtool: 'inline-source-map',
   target: 'web',
   mode: process.env.NODE_ENV || 'development',
-  stats: {
-    preset: process.env.NODE_ENV === 'production' ? 'errors-only' : 'normal',
-  },
   module: {
     rules: [
       {
@@ -27,7 +24,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
-    mainFields: ['module', 'browser', 'main'],
+    mainFields: ['main', 'module', 'browser'],
   },
   output: {
     filename: 'bundle.js',

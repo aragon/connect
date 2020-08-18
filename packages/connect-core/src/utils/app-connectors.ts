@@ -4,10 +4,11 @@ import App from '../entities/App'
 
 type AppConnectContext = {
   app: App
-  connector: string
   config: object
+  connector: string
   ipfs: ConnectionContext['ipfs']
   network: Network
+  orgConnector: ConnectionContext['orgConnector']
   verbose: boolean
 }
 
@@ -56,7 +57,12 @@ export function createAppConnector<
 
     const { connection } = app.organization
     const { orgConnector } = connection
+
+    // App connector config.
     const [connectorName, connectorConfig] = normalizeConnectorConfig<Config>(
+      // Contrary to the main connect() function, app connectors don’t require
+      // the connector to be passed. In this case, the name of the org
+      // connector (e.g. `name`) is used instead.
       connector || orgConnector.name
     )
 
@@ -66,6 +72,7 @@ export function createAppConnector<
       connector: connectorName,
       ipfs: connection.ipfs,
       network: orgConnector.network,
+      orgConnector,
       verbose: connection.verbose,
     })
 

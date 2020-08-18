@@ -15,17 +15,10 @@ Connects and returns an `Organization` for `location`.
 | `options.network`  | [`Networkish`](./types.md#networkish)         | The network to connect to. Defaults to `1`.                                                              |
 | returns            | `Promise<Organization>`                       | An `Organization` instance.                                                                              |
 
-### Errors
-
-| Type                   | Description                                            |
-| ---------------------- | ------------------------------------------------------ |
-| `ConnectionError`      | Gets thrown if the connection fails.                   |
-| `OrganizationNotFound` | Gets thrown if the organization doesn’t seem to exist. |
-
 ### Example
 
 ```javascript
-import { connect } from '@aragon/connect'
+import connect from '@aragon/connect'
 
 // Connections should get wrapped in a try / catch to capture connection errors
 try {

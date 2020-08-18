@@ -9,7 +9,9 @@ describe('when connecting to a finance app', () => {
   let connector: FinanceConnectorTheGraph
 
   beforeAll(() => {
-    connector = new FinanceConnectorTheGraph(FINANCE_SUBGRAPH_URL)
+    connector = new FinanceConnectorTheGraph({
+      subgraphUrl: FINANCE_SUBGRAPH_URL,
+    })
   })
 
   afterAll(async () => {

@@ -11,7 +11,7 @@ const env = {
 
 async function main() {
   const org = await connect(env.location, 'thegraph', { network: env.network })
-  const voting = await connectVoting(org.app('tsateiurteiuart'))
+  const voting = await connectVoting(org.app('voting'))
   const votes = await voting.votes()
 
   printOrganization(org)

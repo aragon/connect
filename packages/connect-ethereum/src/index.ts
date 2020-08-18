@@ -19,11 +19,13 @@ export type ConnectorEthereumConfig = {
 }
 
 class ConnectorEthereum implements IOrganizationConnector {
+  connection?: ConnectionContext
+  readonly config: ConnectorEthereumConfig
   readonly name = 'ethereum'
   readonly network: Network
-  connection?: ConnectionContext
 
   constructor(config: ConnectorEthereumConfig) {
+    this.config = config
     this.network = config.network
   }
 

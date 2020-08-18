@@ -19,13 +19,15 @@ export type ConnectorJsonConfig = {
 
 class ConnectorJson implements IOrganizationConnector {
   #permissions: Permission[]
+  connection?: ConnectionContext
+  readonly config: ConnectorJsonConfig
   readonly name = 'json'
   readonly network: Network
-  connection?: ConnectionContext
 
-  constructor({ permissions, network }: ConnectorJsonConfig) {
-    this.#permissions = permissions
-    this.network = network
+  constructor(config: ConnectorJsonConfig) {
+    this.config = config
+    this.network = config.network
+    this.#permissions = config.permissions
   }
 
   async connect(connection: ConnectionContext) {
