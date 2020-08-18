@@ -1,6 +1,9 @@
-import { ethers } from 'ethers'
 import {
-  ConnectionContext,
+  getDefaultProvider as getDefaultEthersProvider,
+  providers as ethersProviders,
+  utils as ethersUtils,
+} from 'ethers'
+import {
   ConnectorJson,
   ConnectorJsonConfig,
   IOrganizationConnector,
@@ -102,7 +105,7 @@ function getConnector(
 function getEthersProvider(
   ethereumProvider: object | undefined,
   network: Network
-): ethers.providers.Provider {
+): ethersProviders.Provider {
   // Ethers compatibility: ethereum => homestead
   if (network.name === 'ethereum' && network.chainId === 1) {
     network = { ...network, name: 'homestead' }
@@ -110,7 +113,7 @@ function getEthersProvider(
 
   if (ethereumProvider) {
     try {
-      return new ethers.providers.Web3Provider(ethereumProvider, network)
+      return new ethersProviders.Web3Provider(ethereumProvider, network)
     } catch (err) {
       console.error('Invalid provider:', ethereumProvider)
       throw err
@@ -118,21 +121,21 @@ function getEthersProvider(
   }
 
   if (network.chainId === 100) {
-    return new ethers.providers.WebSocketProvider(XDAI_WSS_ENDPOINT, network)
+    return new ethersProviders.WebSocketProvider(XDAI_WSS_ENDPOINT, network)
   }
 
-  return ethers.getDefaultProvider(network)
+  return getDefaultEthersProvider(network)
 }
 
 async function resolveAddress(
-  ethersProvider: ethers.providers.Provider,
+  ethersProvider: ethersProviders.Provider,
   location: string
 ): Promise<Address> {
-  const address = ethers.utils.isAddress(location)
+  const address = ethersUtils.isAddress(location)
     ? location
     : await ethersProvider.resolveName(location)
 
-  if (!ethers.utils.isAddress(address)) {
+  if (!ethersUtils.isAddress(address)) {
     throw new Error('Please provide a valid address or ENS domain.')
   }
 
