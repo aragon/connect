@@ -8,7 +8,7 @@ An intent describing an action in the organization. It provides methods to retri
 
 Get the transactions to execute for the shortest transaction path.
 
-This is an easier way to do `TransactionIntent.paths(account, options)[0].transactions`
+This is an easier way to do `TransactionIntent.paths(account)[0].transactions`
 
 | Name           | Type                            | Description                                                                                               |
 | -------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------- |
