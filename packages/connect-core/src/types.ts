@@ -1,15 +1,130 @@
 import { ethers } from 'ethers'
 import { Address, Network } from '@aragon/connect-types'
+
 import IOrganizationConnector from './connections/IOrganizationConnector'
-
-export type Metadata = (AragonArtifact | AragonManifest)[]
-
-// Type definition: https://github.com/ethers-io/ethers.js/blob/ethers-v5-beta/packages/abi/lib/fragments.d.ts#L68
-export type FunctionFragment = ethers.utils.FunctionFragment
+import App from './entities/App'
+import Transaction from './entities/Transaction'
 
 export type Abi = (ethers.utils.EventFragment | ethers.utils.FunctionFragment)[]
 
-export interface AppIntent {
+export type ConnectionContext = {
+  actAs: Address | null
+  ethereumProvider: object | null
+  ethersProvider: ethers.providers.Provider
+  ipfs: (cid: string) => string
+  network: Network
+  orgAddress: Address
+  orgConnector: IOrganizationConnector
+  orgLocation: string
+  verbose: boolean
+}
+
+export type AppOrAddress = App | Address
+
+export type ForwardingPathDeclaration = AppOrAddress[]
+
+export type PathOptions = {
+  // The account to sign the transactions with. It is optional
+  // when `actAs` has been set with the connection. If not,
+  // the address has to be passed.
+  actAs: Address
+
+  // Optionally declare a forwarding path. When not specified,
+  // the shortest path is used instead.
+  path: ForwardingPathDeclaration
+}
+
+export interface Annotation {
+  type: string
+  value: any
+}
+
+export interface PostProcessDescription {
+  description: string
+  annotatedDescription?: Annotation[]
+}
+
+////// ENTITES /////
+
+export interface AppData {
+  address: string
+  appId: string
+  artifact?: string | null
+  codeAddress: string
+  contentUri?: string
+  isForwarder?: boolean
+  isUpgradeable?: boolean
+  kernelAddress: string
+  manifest?: string | null
+  name?: string
+  registry?: string
+  registryAddress: string
+  repoAddress?: string
+  version?: string
+}
+
+export interface ForwardingPathData {
+  apps: App[]
+  destination: App
+  transactions: Transaction[]
+}
+
+export interface ForwardingPathDescriptionData {
+  apps: App[]
+  describeSteps: PostProcessDescription[]
+}
+
+export interface IntentData {
+  appAddress: string
+  functionName: string
+  functionArgs: any[]
+}
+
+export interface ParamData {
+  argumentId: number
+  operationType: number
+  argumentValue: BigInt
+}
+
+export interface PermissionData {
+  allowed: boolean
+  appAddress: string
+  granteeAddress: string
+  params: ParamData[]
+  roleHash: string
+}
+
+export interface RepoData {
+  address: string
+  artifact?: string | null
+  contentUri?: string
+  manifest?: string | null
+  name: string
+  registry?: string
+  registryAddress?: string
+}
+
+export interface RoleData {
+  appAddress: string
+  appId: string
+  artifact?: string | null
+  contentUri?: string | null
+  hash: string
+  manager?: string
+  grantees?: PermissionData[] | null
+}
+
+export interface TransactionData {
+  data: string
+  from: Address
+  to: Address
+}
+
+////// METADATA //////
+
+export type Metadata = (AragonArtifact | AragonManifest)[]
+
+export interface AppMethod {
   roles: string[]
   sig: string
   /**
@@ -22,7 +137,7 @@ export interface AppIntent {
    * The function's ABI element is included for convenience of the client
    * null if ABI is not found for this signature
    */
-  abi: FunctionFragment | null
+  abi: ethers.utils.FunctionFragment | null
 }
 
 // The aragon manifest requires the use of camelcase for some names
@@ -60,12 +175,12 @@ export interface AragonArtifact extends AragonAppJson {
    * Includes metadata needed for radspec and transaction pathing
    * initialize() function should also be included for completeness
    */
-  functions: AppIntent[]
+  functions: AppMethod[]
   /**
    * Functions that are no longer available at `version`
    */
   deprecatedFunctions: {
-    [version: string]: AppIntent[]
+    [version: string]: AppMethod[]
   }
   /**
    * The flaten source code of the contracts must be included in
@@ -120,16 +235,4 @@ export interface AragonEnvironment {
   gasPrice?: string
   wsRPC?: string
   appId?: string
-}
-
-export type ConnectionContext = {
-  actAs: Address | null
-  ethereumProvider: object | null
-  ethersProvider: ethers.providers.Provider
-  ipfs: (cid: string) => string
-  network: Network
-  orgAddress: Address
-  orgConnector: IOrganizationConnector
-  orgLocation: string
-  verbose: boolean
 }

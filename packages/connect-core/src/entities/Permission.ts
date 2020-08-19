@@ -1,29 +1,16 @@
-import IOrganizationConnector from '../connections/IOrganizationConnector'
 import App from './App'
 import Organization from './Organization'
 import Role from './Role'
-
-export interface ParamData {
-  argumentId: number
-  operationType: number
-  argumentValue: BigInt
-}
-
-export interface PermissionData {
-  allowed: boolean
-  appAddress: string
-  granteeAddress: string
-  params: ParamData[]
-  roleHash: string
-}
+import IOrganizationConnector from '../connections/IOrganizationConnector'
+import { PermissionData, ParamData } from '../types'
 
 export default class Permission implements PermissionData {
   #organization: Organization
-  readonly allowed!: boolean
-  readonly appAddress!: string
-  readonly granteeAddress!: string
-  readonly params!: ParamData[]
-  readonly roleHash!: string
+  readonly allowed: boolean
+  readonly appAddress: string
+  readonly granteeAddress: string
+  readonly params: ParamData[]
+  readonly roleHash: string
 
   constructor(data: PermissionData, organization: Organization) {
     this.#organization = organization
