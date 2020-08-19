@@ -1,7 +1,8 @@
 import { ethers } from 'ethers'
 
-import { AppMethod, TransactionData } from '../types'
+import { AppMethod } from '../types'
 import App from '../entities/App'
+import Transaction from '../entities/Transaction'
 
 export const apmAppId = (appName: string): string =>
   ethers.utils.namehash(`${appName}.aragonpm.eth`)
@@ -53,7 +54,7 @@ export function getAppMethod(
  */
 export function findAppMethodFromIntent(
   app: App,
-  transaction: TransactionData
+  transaction: Transaction
 ): AppMethod | undefined {
   const methodId = transaction.data.substring(0, 10)
 
