@@ -35,6 +35,7 @@ export default class Vote {
   readonly quietEndingSnapshotSupport: string
   readonly script: string
   readonly executedAt: string
+  readonly tokenDecimals: string
 
   constructor(data: VoteData, connector: IDisputableVotingConnector) {
     this.#connector = connector
@@ -63,6 +64,7 @@ export default class Vote {
     this.quietEndingSnapshotSupport = data.quietEndingSnapshotSupport
     this.script = data.script
     this.executedAt = data.executedAt
+    this.tokenDecimals = data.tokenDecimals
   }
 
   get hasEnded(): boolean {
@@ -89,24 +91,24 @@ export default class Vote {
     return bn(num).mul(PCT_BASE).div(votingPower).toString()
   }
 
-  async formattedYeas(): Promise<string> {
-    return formatBn(this.yeas, await this._tokenDecimals())
+  formattedYeas(): string {
+    return formatBn(this.yeas, this.tokenDecimals)
   }
 
-  async formattedYeasPct(): Promise<string> {
+  formattedYeasPct(): string {
     return formatBn(this.yeasPct, PCT_DECIMALS)
   }
 
-  async formattedNays(): Promise<string> {
-    return formatBn(this.nays, await this._tokenDecimals())
+  formattedNays(): string {
+    return formatBn(this.nays, this.tokenDecimals)
   }
 
-  async formattedNaysPct(): Promise<string> {
+  formattedNaysPct(): string {
     return formatBn(this.naysPct, PCT_DECIMALS)
   }
 
-  async formattedVotingPower(): Promise<string> {
-    return formatBn(this.votingPower, await this._tokenDecimals())
+  formattedVotingPower(): string {
+    return formatBn(this.votingPower, this.tokenDecimals)
   }
 
   async status(): Promise<string> {
@@ -122,8 +124,8 @@ export default class Vote {
     const nays = bn(this.nays)
     const setting = await this.setting()
 
-    return this._isValuePct(yeas, yeas.add(nays), bn(setting.supportRequiredPct)) &&
-           this._isValuePct(yeas, bn(this.votingPower), bn(setting.minimumAcceptanceQuorumPct))
+    return this._hasReachedValuePct(yeas, yeas.add(nays), bn(setting.supportRequiredPct)) &&
+           this._hasReachedValuePct(yeas, bn(this.votingPower), bn(setting.minimumAcceptanceQuorumPct))
   }
 
   castVoteId(voterAddress: string): string {
@@ -166,12 +168,7 @@ export default class Vote {
     return new DisputableVoting(this.#connector, this.votingId)
   }
 
-  async _tokenDecimals(): Promise<string> {
-    const erc20 = await this._disputableVoting().token()
-    return erc20.decimals
-  }
-
-  _isValuePct(value: BigNumber, total: BigNumber, pct: BigNumber): boolean {
+  _hasReachedValuePct(value: BigNumber, total: BigNumber, pct: BigNumber): boolean {
     return !total.eq(bn('0')) && (value.mul(PCT_BASE).div(total)).gt(pct)
   }
 }

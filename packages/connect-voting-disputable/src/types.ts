@@ -39,6 +39,7 @@ export interface VoteData {
   quietEndingSnapshotSupport: string
   script: string
   executedAt: string
+  tokenDecimals: string
 }
 
 export interface CastVoteData {

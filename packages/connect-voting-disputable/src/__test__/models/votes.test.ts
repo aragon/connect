@@ -53,17 +53,17 @@ describe('DisputableVoting', () => {
       expect(await vote.status()).toBe('Rejected')
 
       expect(vote.votingPower).toBe('4000000000000000000')
-      expect(await vote.formattedVotingPower()).toBe('4.00')
+      expect(vote.formattedVotingPower).toBe('4.00')
 
       expect(vote.yeas).toBe('1000000000000000000')
       expect(vote.yeasPct).toBe('250000000000000000')
-      expect(await vote.formattedYeas()).toBe('1.00')
-      expect(await vote.formattedYeasPct()).toBe('25.00')
+      expect(vote.formattedYeas).toBe('1.00')
+      expect(vote.formattedYeasPct).toBe('25.00')
 
       expect(vote.nays).toBe('1000000000000000000')
       expect(vote.naysPct).toBe('250000000000000000')
-      expect(await vote.formattedNays()).toBe('1.00')
-      expect(await vote.formattedNaysPct()).toBe('25.00')
+      expect(vote.formattedNays).toBe('1.00')
+      expect(vote.formattedNaysPct).toBe('25.00')
     })
   })
 

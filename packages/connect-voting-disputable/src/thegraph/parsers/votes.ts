@@ -28,7 +28,7 @@ function buildVote(vote: any, connector: any): Vote {
     quietEndingExtendedSeconds,
     quietEndingSnapshotSupport,
     script,
-    executedAt
+    executedAt,
   } = vote
 
   const voteData: VoteData = {
@@ -55,7 +55,8 @@ function buildVote(vote: any, connector: any): Vote {
     quietEndingExtendedSeconds,
     quietEndingSnapshotSupport,
     script,
-    executedAt
+    executedAt,
+    tokenDecimals: voting.token.decimals
   }
 
   return new Vote(voteData, connector)

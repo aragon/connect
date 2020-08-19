@@ -82,6 +82,9 @@ export const GET_VOTE = (type: string) => gql`
       id
       voting { 
         id 
+        token {
+          decimals
+        }
       }
       voteId
       duration
@@ -119,6 +122,9 @@ export const ALL_VOTES = (type: string) => gql`
       id
       voting { 
         id 
+        token {
+          decimals
+        }
       }
       voteId
       duration
