@@ -5,7 +5,7 @@ const ORG_ADDRESS = '0xd697d1f417c621a6a54d9a7fa2805596ca393222'
 
 async function main() {
   const org = (await connect(ORG_ADDRESS, 'thegraph', {
-    chainId: 4,
+    network: 4,
   })) as Organization
 
   const subscription = org.onPermissions((permissions: Permission[]) => {
@@ -23,7 +23,7 @@ async function main() {
 
 main()
   .then(() => process.exit(0))
-  .catch(err => {
+  .catch((err) => {
     console.log(`Error: `, err)
     console.log(
       '\nPlease report any problem to https://github.com/aragon/connect/issues'

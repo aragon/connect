@@ -29,7 +29,7 @@ function validateMethod(
   }
 
   // Find the relevant method information
-  const method = methods.find(method =>
+  const method = methods.find((method) =>
     isFullMethodSignature(methodSignature)
       ? method.sig === methodSignature
       : // If the full signature isn't given, just select the first overload declared
@@ -89,7 +89,7 @@ async function calculateForwardingPath(
 
   // Get a list of all forwarders (excluding the forwarders with direct permission)
   const filterForwarders = forwarders.filter(
-    forwarder => !includesAddress(forwardersWithPermission, forwarder)
+    (forwarder) => !includesAddress(forwardersWithPermission, forwarder)
   )
 
   // Set up the path finding queue
@@ -97,7 +97,7 @@ async function calculateForwardingPath(
   // In other words: it is an array of tuples, where the first index of the tuple
   // is the current path and the second index of the tuple is the
   // queue (a list of unexplored forwarder addresses) for that path
-  const queue: any = forwardersWithPermission.map(forwarderWithPermission => {
+  const queue: any = forwardersWithPermission.map((forwarderWithPermission) => {
     // TODO: Fix types (type queue = [DirectTransaction[], string[]][])
     return [
       [
@@ -161,7 +161,7 @@ async function calculateForwardingPath(
           // Avoid including the current forwarder as a candidate for the next step
           // in the path. Note that this is naive and may result in repeating cycles,
           // but the maximum path length would prevent against infinite loops
-          forwarders.filter(nextForwarder => nextForwarder !== forwarder),
+          forwarders.filter((nextForwarder) => nextForwarder !== forwarder),
         ])
       }
     }
@@ -189,7 +189,7 @@ export async function calculateTransactionPath(
   finalForwarder?: string //Address of the final forwarder that can perfom the action. Needed for actions that aren't in the ACL but whose execution depends on other factors
 ): Promise<PathData> {
   // Get the destination app
-  const destinationApp = apps.find(app => app.address == destination)
+  const destinationApp = apps.find((app) => app.address == destination)
   if (!destinationApp) {
     throw new Error(
       `Transaction path destination (${destination}) is not an installed app`
@@ -227,8 +227,8 @@ export async function calculateTransactionPath(
 
   // Failing this, attempt transaction pathing algorithm with forwarders
   const forwarders = apps
-    .filter(app => app.isForwarder === true)
-    .map(app => app.address)
+    .filter((app) => app.isForwarder === true)
+    .map((app) => app.address)
 
   let forwardersWithPermission: string[] = []
   if (finalForwarderProvided) {
@@ -246,10 +246,10 @@ export async function calculateTransactionPath(
   } else {
     // Find entities with the required permissions
     const role = (await destinationApp.roles()).find(
-      role => role.name === method.roles[0]
+      (role) => role.name === method.roles[0]
     )
     const allowedEntities =
-      role?.permissions?.map(permission => permission.granteeAddress) || []
+      role?.permissions?.map((permission) => permission.granteeAddress) || []
 
     // No one has access, so of course we don't as well
     if (allowedEntities.length === 0) {
@@ -271,7 +271,7 @@ export async function calculateTransactionPath(
     }
 
     // Find forwarders with permission to perform the action
-    forwardersWithPermission = forwarders.filter(forwarder =>
+    forwardersWithPermission = forwarders.filter((forwarder) =>
       includesAddress(allowedEntities, forwarder)
     )
   }

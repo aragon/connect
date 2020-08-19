@@ -1,5 +1,5 @@
 import { connect, describeScript, App } from '@aragon/connect'
-import { Vote, Voting } from '@aragon/connect-voting'
+import connectVoting, { Vote } from '@aragon/connect-voting'
 
 const VOTING_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'
@@ -14,13 +14,10 @@ function voteId(vote: Vote) {
 async function main() {
   const org = await connect('beehive.aragonid.eth', 'thegraph')
   const apps = await org.apps()
-  const votingApp = apps.find((app: App) => app.name === 'voting')!
-
-  const voting = new Voting(votingApp.address, VOTING_SUBGRAPH_URL)
-
+  const voting = await connectVoting(org.app('voting'))
   const votes = await voting.votes()
 
-  const { script } = votes.find(vote => voteId(vote) === '#54')!
+  const { script } = votes.find((vote) => voteId(vote) === '#54')!
 
   const description = await describeScript(script, apps)
 
@@ -30,7 +27,7 @@ async function main() {
 
 main()
   .then(() => process.exit(0))
-  .catch(err => {
+  .catch((err) => {
     console.error('')
     console.error(err)
     console.log(

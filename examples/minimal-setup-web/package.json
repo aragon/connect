@@ -1,15 +1,15 @@
 {
   "name": "minimal-setup-web",
   "private": true,
-  "version": "0.5.2",
+  "version": "0.6.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "parcel index.js",
-    "build": "parcel build index.js"
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
   },
   "dependencies": {
-    "@aragon/connect-react": "^0.5.2",
+    "@aragon/connect-react": "^0.6.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },

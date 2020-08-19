@@ -59,12 +59,12 @@ export default class TransactionIntent {
     )
 
     return new TransactionPath({
-      apps: apps.filter(app =>
+      apps: apps.filter((app) =>
         path
-          .map(transaction => transaction.to)
-          .some(address => address === app.address)
+          .map((transaction) => transaction.to)
+          .some((address) => address === app.address)
       ),
-      destination: apps.find(app => app.address == this.contractAddress)!,
+      destination: apps.find((app) => app.address == this.contractAddress)!,
       forwardingFeePretransaction,
       transactions: describedPath,
     })

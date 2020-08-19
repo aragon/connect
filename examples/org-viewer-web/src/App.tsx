@@ -51,11 +51,7 @@ export default function App() {
 
   const [org = null, loading] = useCancellableAsync(
     async () =>
-      connect(
-        filterOrgName(orgName),
-        ['thegraph', { orgSubgraphUrl: env.orgSubgraphUrl }],
-        { chainId: env.chainId }
-      ),
+      connect(filterOrgName(orgName), 'thegraph', { network: env.chainId }),
     [orgName]
   )
 
@@ -88,7 +84,7 @@ export default function App() {
           Enter an org location:
         </div>
         <input
-          onChange={event => openOrg(event.target.value)}
+          onChange={(event) => openOrg(event.target.value)}
           placeholder="e.g. xyz.aragonid.eth"
           type="text"
           value={orgName}

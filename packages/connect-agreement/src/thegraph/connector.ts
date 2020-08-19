@@ -6,7 +6,14 @@ import Signer from '../models/Signer'
 import Signature from '../models/Signature'
 import Version from '../models/Version'
 import { AgreementData, IAgreementConnector } from '../types'
-import { parseAgreement, parseSigner, parseSignatures, parseCurrentVersion, parseVersions, parseVersion } from './parsers'
+import {
+  parseAgreement,
+  parseSigner,
+  parseSignatures,
+  parseCurrentVersion,
+  parseVersions,
+  parseVersion,
+} from './parsers'
 
 export function subgraphUrlFromChainId(chainId: number) {
   if (chainId === 1) {
@@ -21,16 +28,25 @@ export function subgraphUrlFromChainId(chainId: number) {
   return null
 }
 
+type AgreementConnectorTheGraphConfig = {
+  pollInterval?: number
+  subgraphUrl?: string
+  verbose?: boolean
+}
+
 export default class AgreementConnectorTheGraph implements IAgreementConnector {
   #gql: GraphQLWrapper
 
-  constructor(subgraphUrl: string, verbose: boolean = false) {
-    if (!subgraphUrl) {
+  constructor(config: AgreementConnectorTheGraphConfig) {
+    if (!config.subgraphUrl) {
       throw new Error(
         'AgreementConnectorTheGraph requires subgraphUrl to be passed.'
       )
     }
-    this.#gql = new GraphQLWrapper(subgraphUrl, verbose)
+    this.#gql = new GraphQLWrapper(config.subgraphUrl, {
+      pollInterval: config.pollInterval,
+      verbose: config.verbose,
+    })
   }
 
   async disconnect() {
@@ -88,7 +104,11 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     )
   }
 
-  async versions(agreement: string, first: number, skip: number): Promise<Version[]> {
+  async versions(
+    agreement: string,
+    first: number,
+    skip: number
+  ): Promise<Version[]> {
     return this.#gql.performQueryWithParser(
       queries.ALL_VERSIONS('query'),
       { agreement, first, skip },
@@ -96,7 +116,12 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     )
   }
 
-  onVersions(agreement: string, first: number, skip: number, callback: Function): SubscriptionHandler {
+  onVersions(
+    agreement: string,
+    first: number,
+    skip: number,
+    callback: Function
+  ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
       queries.ALL_VERSIONS('subscription'),
       { agreement, first, skip },
@@ -122,7 +147,11 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     )
   }
 
-  async signatures(signerId: string, first: number, skip: number): Promise<Signature[]> {
+  async signatures(
+    signerId: string,
+    first: number,
+    skip: number
+  ): Promise<Signature[]> {
     return this.#gql.performQueryWithParser(
       queries.GET_SIGNATURES('query'),
       { signerId, first, skip },
@@ -130,7 +159,12 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     )
   }
 
-  onSignatures(signerId: string, first: number, skip: number, callback: Function): SubscriptionHandler {
+  onSignatures(
+    signerId: string,
+    first: number,
+    skip: number,
+    callback: Function
+  ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser(
       queries.GET_SIGNATURES('query'),
       { signerId, first, skip },

@@ -2,7 +2,8 @@ import gql from 'graphql-tag'
 import { GraphQLWrapper } from '@aragon/connect-thegraph'
 
 const VOTING_APP_ADDRESS = '0xc73e86aab9d232495399d62fc80a36ae52952b81'
-const ALL_VOTING_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby'
+const ALL_VOTING_SUBGRAPH_URL =
+  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby'
 
 const QUERY = `
 query {
@@ -28,6 +29,8 @@ main()
   .then(() => process.exit(0))
   .catch((err) => {
     console.log(`Error: `, err)
-    console.log('\nPlease report any problem to https://github.com/aragon/connect/issues')
+    console.log(
+      '\nPlease report any problem to https://github.com/aragon/connect/issues'
+    )
     process.exit(1)
   })

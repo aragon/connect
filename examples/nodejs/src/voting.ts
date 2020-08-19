@@ -1,18 +1,18 @@
 import { connect } from '@aragon/connect'
-import { Cast, Vote, Voting } from '@aragon/connect-voting'
+import connectVoting, { Cast, Vote, Voting } from '@aragon/connect-voting'
 
-type Env = { chainId: number; org: string; votingSubgraphUrl: string }
+type Env = { network: number; org: string; votingSubgraphUrl: string }
 
 const envs = new Map(
   Object.entries({
     rinkeby: {
-      chainId: 4,
+      network: 4,
       org: 'gardens.aragonid.eth',
       votingSubgraphUrl:
         'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby',
     },
     mainnet: {
-      chainId: 1,
+      network: 1,
       org: 'governance.aragonproject.eth',
       votingSubgraphUrl:
         'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet',
@@ -41,26 +41,18 @@ function voteId(vote: Vote) {
 }
 
 async function main() {
-  const org = await connect(env.org, 'thegraph', { chainId: env.chainId })
-  const apps = await org.apps()
-  const votingApp = apps.find(app => app.appName === 'voting.aragonpm.eth')
+  const org = await connect(env.org, 'thegraph', { network: env.network })
+  const voting = await connectVoting(org.app('voting'))
 
   console.log('\nOrganization:', org.location, `(${org.address})`)
-
-  if (!votingApp?.address) {
-    console.log('\nNo voting app found in this organization')
-    return
-  }
-
-  console.log(`\nVoting app: ${votingApp.address}`)
-
-  const voting = new Voting(votingApp.address, env.votingSubgraphUrl)
+  console.log(`\nVoting app: ${voting.address}`)
 
   console.log(`\nVotes:`)
   const votes = await voting.votes()
 
   console.log(
-    votes.map(vote => `\n * ${voteId(vote)} ${voteTitle(vote)}`).join('') + '\n'
+    votes.map((vote) => `\n * ${voteId(vote)} ${voteTitle(vote)}`).join('') +
+      '\n'
   )
 
   if (votes.length === 0) {
@@ -85,7 +77,7 @@ async function main() {
 
 main()
   .then(() => process.exit(0))
-  .catch(err => {
+  .catch((err) => {
     console.error('')
     console.error(err)
     console.log(

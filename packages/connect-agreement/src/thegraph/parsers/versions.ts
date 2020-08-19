@@ -3,7 +3,10 @@ import { QueryResult } from '@aragon/connect-thegraph'
 import { VersionData } from '../../types'
 import Version from '../../models/Version'
 
-export function parseCurrentVersion(result: QueryResult, connector: any): Version {
+export function parseCurrentVersion(
+  result: QueryResult,
+  connector: any
+): Version {
   const agreement = result.data.agreement
 
   if (!agreement || !agreement.currentVersion) {

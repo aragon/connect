@@ -25,14 +25,19 @@ export default class Signer {
   async hasSigned(versionNumber: string): Promise<boolean> {
     const versionId = `${this.agreementId}-version-${versionNumber}`
     const signatures = await this.signatures()
-    return signatures.some((signature: Signature) => signature.versionId === versionId)
+    return signatures.some(
+      (signature: Signature) => signature.versionId === versionId
+    )
   }
 
   async signatures({ first = 1000, skip = 0 } = {}): Promise<Signature[]> {
     return this.#connector.signatures(this.id, first, skip)
   }
 
-  onSignatures({ first = 1000, skip = 0 } = {}, callback: Function): SubscriptionHandler {
+  onSignatures(
+    { first = 1000, skip = 0 } = {},
+    callback: Function
+  ): SubscriptionHandler {
     return this.#connector.onSignatures(this.id, first, skip, callback)
   }
 }

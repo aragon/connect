@@ -4,10 +4,11 @@ import App from '../entities/App'
 
 type AppConnectContext = {
   app: App
-  connector: string
   config: object
+  connector: string
   ipfs: ConnectionContext['ipfs']
   network: Network
+  orgConnector: ConnectionContext['orgConnector']
   verbose: boolean
 }
 
@@ -25,6 +26,15 @@ function normalizeConnectorConfig<Config extends object>(
   throw new Error('The connector should be passed as a string or an array.')
 }
 
+// Check if an app is valid. We are not using instanceof here, because the
+// passed app might come from the final app dependency, while @connect-core
+// might come from the app connector they are using, with two different
+// versions. It also makes it easier to work with linked dependencies, as it
+// creates the same kind of issues.
+function isAppValid(app: any): boolean {
+  return app && app.name && app.address && app.appId && app.version
+}
+
 export function createAppConnector<
   ConnectedApp extends object,
   Config extends object
@@ -39,13 +49,20 @@ export function createAppConnector<
   ): Promise<App & ConnectedApp> {
     app = await app
 
-    if (!(app instanceof App)) {
-      throw new Error(`App connector: the passed value is not an App.`)
+    if (!isAppValid(app)) {
+      throw new Error(
+        `App connector: the passed value doesn’t appear to be an App.`
+      )
     }
 
     const { connection } = app.organization
     const { orgConnector } = connection
+
+    // App connector config.
     const [connectorName, connectorConfig] = normalizeConnectorConfig<Config>(
+      // Contrary to the main connect() function, app connectors don’t require
+      // the connector to be passed. In this case, the name of the org
+      // connector (e.g. `name`) is used instead.
       connector || orgConnector.name
     )
 
@@ -55,6 +72,7 @@ export function createAppConnector<
       connector: connectorName,
       ipfs: connection.ipfs,
       network: orgConnector.network,
+      orgConnector,
       verbose: connection.verbose,
     })
 

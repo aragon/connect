@@ -1,13 +1,24 @@
-import { DisputableVoting, Vote, ERC20, CastVote, CollateralRequirement, DisputableVotingConnectorTheGraph } from '../../../src'
+import {
+  ERC20,
+  Vote,
+  CastVote,
+  DisputableVoting,
+  CollateralRequirement,
+  DisputableVotingConnectorTheGraph,
+} from '../../../src'
+
 
 const VOTING_APP_ADDRESS = '0x26e14ed789b51b5b226d69a5d40f72dc2d0180fe'
-const VOTING_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-dvoting-rinkeby-staging'
+const VOTING_SUBGRAPH_URL =
+  'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-dvoting-rinkeby-staging'
 
 describe('DisputableVoting', () => {
   let voting: DisputableVoting
 
   beforeAll(() => {
-    const connector = new DisputableVotingConnectorTheGraph(VOTING_SUBGRAPH_URL)
+    const connector = new DisputableVotingConnectorTheGraph({
+      subgraphUrl: VOTING_SUBGRAPH_URL,
+    })
     voting = new DisputableVoting(connector, VOTING_APP_ADDRESS)
   })
 
@@ -18,11 +29,17 @@ describe('DisputableVoting', () => {
   describe('end date', () => {
     test('computes the end date properly', async () => {
       const scheduledVote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-0`)
-      const expectedScheduledVoteEndDate = parseInt(scheduledVote.startDate) + parseInt(scheduledVote.duration)
-      expect(scheduledVote.endDate).toBe(expectedScheduledVoteEndDate.toString())
+      const expectedScheduledVoteEndDate =
+        parseInt(scheduledVote.startDate) + parseInt(scheduledVote.duration)
+      expect(scheduledVote.endDate).toBe(
+        expectedScheduledVoteEndDate.toString()
+      )
 
       const settledVote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-2`)
-      const expectedSettledVoteEndDate = parseInt(settledVote.startDate) + parseInt(settledVote.duration) + parseInt(settledVote.pauseDuration)
+      const expectedSettledVoteEndDate =
+        parseInt(settledVote.startDate) +
+        parseInt(settledVote.duration) +
+        parseInt(settledVote.pauseDuration)
       expect(settledVote.endDate).toBe(expectedSettledVoteEndDate.toString())
     })
   })
@@ -124,7 +141,9 @@ describe('DisputableVoting', () => {
 
     test('has a collateral requirement associated', async () => {
       expect(collateralRequirement.id).toBe(voteId)
-      expect(collateralRequirement.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
+      expect(collateralRequirement.tokenId).toBe(
+        '0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42'
+      )
       expect(collateralRequirement.actionAmount).toBe('0')
       expect(collateralRequirement.challengeAmount).toBe('0')
       expect(collateralRequirement.challengeDuration).toBe('259200')

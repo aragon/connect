@@ -1,15 +1,16 @@
 import { VotingConnectorTheGraph, Vote, Cast } from '../../src'
 
-const VOTING_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'
+const VOTING_SUBGRAPH_URL =
+  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'
 const VOTING_APP_ADDRESS = '0x277bfcf7c2e162cb1ac3e9ae228a3132a75f83d4'
 
 describe('when connecting to a voting app', () => {
   let connector: VotingConnectorTheGraph
 
   beforeAll(() => {
-    connector = new VotingConnectorTheGraph(
-      VOTING_SUBGRAPH_URL
-    )
+    connector = new VotingConnectorTheGraph({
+      subgraphUrl: VOTING_SUBGRAPH_URL,
+    })
   })
 
   afterAll(async () => {
@@ -20,10 +21,7 @@ describe('when connecting to a voting app', () => {
     let votes: Vote[]
 
     beforeAll(async () => {
-      votes = await connector.votesForApp(
-        VOTING_APP_ADDRESS,
-        1000, 0
-      )
+      votes = await connector.votesForApp(VOTING_APP_ADDRESS, 1000, 0)
     })
 
     test('returns a list of votes', () => {
@@ -54,7 +52,9 @@ describe('when connecting to a voting app', () => {
       })
 
       test('should have a valid creator', () => {
-        expect(vote.creator).toEqual('0xcafe1a77e84698c83ca8931f54a755176ef75f2c')
+        expect(vote.creator).toEqual(
+          '0xcafe1a77e84698c83ca8931f54a755176ef75f2c'
+        )
       })
 
       test('should have valid metadata', () => {
@@ -97,4 +97,3 @@ Link: https://github.com/aragon/AGPs/blob/master/AGPs/AGP-5.md`)
     })
   })
 })
-

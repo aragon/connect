@@ -13,6 +13,6 @@ export function parseAgreement(result: QueryResult): AgreementData {
     id: agreement.id,
     dao: agreement.dao,
     stakingFactory: agreement.stakingFactory,
-    currentVersionId: agreement.currentVersion.id
+    currentVersionId: agreement.currentVersion.id,
   }
 }

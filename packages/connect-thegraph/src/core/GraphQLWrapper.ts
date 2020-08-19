@@ -1,59 +1,66 @@
 import fetch from 'isomorphic-unfetch'
-import ws from 'isomorphic-ws'
 import {
   Client,
-  defaultExchanges,
-  subscriptionExchange,
-  createRequest,
+  GraphQLRequest,
+  createRequest as createRequestUrql,
 } from '@urql/core'
-import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { DocumentNode } from 'graphql'
 import { pipe, subscribe } from 'wonka'
 import { SubscriptionHandler } from '@aragon/connect-types'
-import { ParseFunction, QueryResult, SubscriptionOperation } from '../types'
+import { ParseFunction, QueryResult } from '../types'
 
-const AUTO_RECONNECT = true
-const CONNECTION_TIMEOUT = 20 * 1000
+// Average block time is about 13 seconds on the 2020-08-14
+// See https://etherscan.io/chart/blocktime
+const POLL_INTERVAL_DEFAULT = 13 * 1000
 
-function filterSubgraphUrl(url: string): [string, string] {
-  if (!/^(?:https|wss):\/\//.test(url)) {
-    throw new Error('Please provide a valid subgraph URL')
+function createRequest(query: DocumentNode, args: object): GraphQLRequest {
+  // Make every operation type a query, until GraphQL subscriptions get added again.
+  if (query.definitions) {
+    query = {
+      ...query,
+      definitions: query.definitions.map((definition) => ({
+        ...definition,
+        operation: 'query',
+      })),
+    }
   }
-  return [url.replace(/^wss/, 'https'), url.replace(/^https/, 'wss')]
+  return createRequestUrql(query, args)
+}
+
+type GraphQLWrapperOptions = {
+  pollInterval?: number
+  verbose?: boolean
 }
 
 export default class GraphQLWrapper {
   #client: Client
+  #pollInterval: number
   #verbose: boolean
-  close: () => void
 
-  constructor(subgraphUrl: string, verbose = false) {
-    const [urlHttp, urlWs] = filterSubgraphUrl(subgraphUrl)
+  constructor(
+    subgraphUrl: string,
+    options: GraphQLWrapperOptions | boolean = {}
+  ) {
+    if (typeof options === 'boolean') {
+      console.warn(
+        'GraphQLWrapper: please use `new GraphQLWrapper(url, { verbose })` rather than `new GraphQLWrapper(url, verbose)`.'
+      )
+      options = { verbose: options }
+    }
+    options = options as GraphQLWrapperOptions
 
-    const subscriptionClient = new SubscriptionClient(
-      urlWs,
-      { reconnect: AUTO_RECONNECT, timeout: CONNECTION_TIMEOUT },
-      ws
-    )
+    this.#verbose = options.verbose ?? false
+    this.#pollInterval = options.pollInterval ?? POLL_INTERVAL_DEFAULT
 
-    this.#client = new Client({
-      maskTypename: true,
-      url: urlHttp,
-      fetch,
-      exchanges: [
-        ...defaultExchanges,
-        subscriptionExchange({
-          forwardSubscription: (operation: SubscriptionOperation) =>
-            subscriptionClient.request(operation),
-        }),
-      ],
-    })
-
-    this.#verbose = verbose
-    this.close = () => subscriptionClient.close()
+    this.#client = new Client({ maskTypename: true, url: subgraphUrl, fetch })
   }
 
-  subscribeToQuery<T>(
+  close(): void {
+    // Do nothing for now.
+    // Will be used when GraphQL subscriptions will be added again.
+  }
+
+  subscribeToQuery(
     query: DocumentNode,
     args: any = {},
     callback: Function
@@ -61,7 +68,10 @@ export default class GraphQLWrapper {
     const request = createRequest(query, args)
 
     return pipe(
-      this.#client.executeSubscription(request),
+      this.#client.executeQuery(request, {
+        pollInterval: this.#pollInterval,
+        requestPolicy: 'cache-and-network',
+      }),
       subscribe((result: QueryResult) => {
         if (this.#verbose) {
           console.log(this.describeQueryResult(result))

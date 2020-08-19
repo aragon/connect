@@ -19,11 +19,13 @@ export type ConnectorEthereumConfig = {
 }
 
 class ConnectorEthereum implements IOrganizationConnector {
+  connection?: ConnectionContext
+  readonly config: ConnectorEthereumConfig
   readonly name = 'ethereum'
   readonly network: Network
-  connection?: ConnectionContext
 
   constructor(config: ConnectorEthereumConfig) {
+    this.config = config
     this.network = config.network
   }
 
@@ -36,7 +38,7 @@ class ConnectorEthereum implements IOrganizationConnector {
   }
 
   async permissionsForOrg(): Promise<Permission[]> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve([])
     })
   }
@@ -51,13 +53,13 @@ class ConnectorEthereum implements IOrganizationConnector {
   }
 
   appForOrg(organization: Organization, filters: AppFilters): Promise<App> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve()
     })
   }
 
   appsForOrg(organization: Organization, filters: AppFilters): Promise<App[]> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve([])
     })
   }
@@ -83,13 +85,13 @@ class ConnectorEthereum implements IOrganizationConnector {
   }
 
   repoForApp(organization: Organization, appAddress: string): Promise<Repo> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve()
     })
   }
 
   appByAddress(organization: Organization, appAddress: string): Promise<App> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve()
     })
   }
@@ -98,7 +100,7 @@ class ConnectorEthereum implements IOrganizationConnector {
     organization: Organization,
     appAddress: string
   ): Promise<Role[]> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve([])
     })
   }

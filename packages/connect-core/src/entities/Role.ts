@@ -25,7 +25,7 @@ export default class Role {
 
   constructor(data: RoleData, metadata: Metadata, organization: Organization) {
     const { roles } = metadata[0] as AragonArtifact
-    const role = roles?.find(role => role.bytes === data.hash)
+    const role = roles?.find((role) => role.bytes === data.hash)
 
     this.appAddress = data.appAddress
     this.description = role?.name
@@ -34,7 +34,7 @@ export default class Role {
     this.name = role?.id
     this.params = role?.params
     this.permissions = data.grantees?.map(
-      grantee => new Permission(grantee, organization)
+      (grantee) => new Permission(grantee, organization)
     )
   }
 

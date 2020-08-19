@@ -56,7 +56,10 @@ export default class Agreement {
     return this.#connector.versions(this.#address, first, skip)
   }
 
-  onVersions({ first = 1000, skip = 0 } = {}, callback: Function): SubscriptionHandler {
+  onVersions(
+    { first = 1000, skip = 0 } = {},
+    callback: Function
+  ): SubscriptionHandler {
     return this.#connector.onVersions(this.#address, first, skip, callback)
   }
 
