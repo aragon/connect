@@ -4,28 +4,22 @@ An intent describing an action in the organization. It provides methods to retri
 
 ## Methods
 
-### TransactionIntent\#transactions\(account, options\)
+### TransactionIntent\#transactions\(account\)
 
 Get the transactions to execute for the shortest transaction path.
 
-This is an easier way to do `TransactionIntent.paths(account, options)[0].transactions`
+This is an easier way to do `TransactionIntent.paths(account)[0].transactions`
 
 | Name           | Type                            | Description                                                                                               |
 | -------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | `account`      | `String`                        | The account that will sign the transaction.                                                               |
-| `options`      | `Object`                        | Options object.                                                                                           |
-| `options.as`   | `String`                        | Address of an Aragon organization, or its agent app, through which the paths should get created.          |
-| `options.path` | `String[]`                      | An array of address that conform a transaction path, it will be verified without calculating other paths. |
 | returns        | `Promise<TransactionRequest[]>` | The transactions corresponding to the shortest transaction path.                                          |
 
-### TransactionIntent\#paths\(account, options\)
+### TransactionIntent\#paths\(account\)
 
 Get the shortest transaction path for a given address. Note, `TransactionIntent#transactions()` can be called directly.
 
 | Name           | Type                         | Description                                                                                               |
 | -------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------- |
 | `account`      | `String`                     | The account that will sign the transaction.                                                               |
-| `options`      | `Object`                     | Options object.                                                                                           |
-| `options.as`   | `String`                     | Address of an Aragon organization, or its agent app, through which the paths should get created.          |
-| `options.path` | `String[]`                   | An array of address that conform a transaction path, it will be verified without calculating other paths. |
-| returns        | `Promise<TransactionPath>` | Shortest transaction path for the intent.                                                              |
+| returns        | `Promise<TransactionPath[]>` | Array of all the possible transaction paths.                                                              |
