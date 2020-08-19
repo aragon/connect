@@ -69,7 +69,7 @@ export default class Vote {
   }
 
   get hasEnded(): boolean {
-    const now = new Date().getTime()
+    const now = Date.now()
     return now >= toMilliseconds(this.endDate)
   }
 
