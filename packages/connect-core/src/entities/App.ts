@@ -1,37 +1,20 @@
 import Organization from './Organization'
 import Repo from './Repo'
 import Role from './Role'
+import IOrganizationConnector from '../connections/IOrganizationConnector'
 import {
   Abi,
-  AppIntent,
   AragonArtifact,
   AragonManifest,
-  ConnectionContext,
   Metadata,
+  AppMethod,
+  AppData,
 } from '../types'
 import { resolveManifest, resolveArtifact } from '../utils/metadata'
-import IOrganizationConnector from '../connections/IOrganizationConnector'
-// import IAppConnected from '../connections/IAppConnected'
+import { ethers } from 'ethers'
 
 // TODO:
 // [ ] (ipfs) contentUrl 	String 	The HTTP URL of the app content. Uses the IPFS HTTP provider. E.g. http://gateway.ipfs.io/ipfs/QmdLEDDfi…/ (ContentUri passing through the resolver)
-
-export interface AppData {
-  address: string
-  appId: string
-  artifact?: string | null
-  codeAddress: string
-  contentUri?: string
-  isForwarder?: boolean
-  isUpgradeable?: boolean
-  kernelAddress: string
-  manifest?: string | null
-  name?: string
-  registry?: string
-  registryAddress: string
-  repoAddress?: string
-  version?: string
-}
 
 export default class App {
   #metadata: Metadata
@@ -77,6 +60,9 @@ export default class App {
     return this.organization.connection.orgConnector
   }
 
+  // TODO: support create an intent from App metadata we have
+  // similar to what ethers/web3 does for methods
+
   async repo(): Promise<Repo> {
     return this.orgConnector().repoForApp(this.organization, this.address)
   }
@@ -85,27 +71,49 @@ export default class App {
     return this.orgConnector().rolesForAddress(this.organization, this.address)
   }
 
-  get artifact(): AragonArtifact {
-    return this.#metadata[0] as AragonArtifact
+  interface(): ethers.utils.Interface {
+    if (!this.abi) {
+      throw new Error(
+        `No ABI specified in app for ${this.address}. Make sure the metada for the app is available`
+      )
+    }
+    return new ethers.utils.Interface(this.abi)
   }
 
-  get manifest(): AragonManifest {
-    return this.#metadata[1] as AragonManifest
+  contract(): ethers.Contract {
+    if (!this.abi) {
+      throw new Error(
+        `No ABI specified in app for ${this.address}. Make sure the metada for the app is available`
+      )
+    }
+    return new ethers.Contract(
+      this.address,
+      this.abi,
+      this.organization.connection.ethersProvider
+    )
   }
 
   get abi(): Abi {
     return this.artifact.abi
   }
 
-  get intents(): AppIntent[] {
-    return this.artifact.functions
+  get appName(): string {
+    return this.artifact.appName
   }
 
-  get deprecatedIntents(): { [version: string]: AppIntent[] } {
+  get artifact(): AragonArtifact {
+    return this.#metadata[0] as AragonArtifact
+  }
+
+  get deprecatedMethods(): { [version: string]: AppMethod[] } {
     return this.artifact.deprecatedFunctions
   }
 
-  get appName(): string {
-    return this.artifact.appName
+  get manifest(): AragonManifest {
+    return this.#metadata[1] as AragonManifest
+  }
+
+  get methods(): AppMethod[] {
+    return this.artifact.functions
   }
 }

@@ -4,11 +4,13 @@ import {
   AppFiltersParam,
   SubscriptionHandler,
 } from '@aragon/connect-types'
-import { ConnectionContext } from '../types'
-import TransactionIntent from '../transactions/TransactionIntent'
-import { toArrayEntry } from '../utils/misc'
+
 import App from './App'
+import Intent from './Intent'
 import Permission from './Permission'
+import { ConnectionContext } from '../types'
+import { decodeForwardingPath } from '../utils/description'
+import { toArrayEntry } from '../utils/misc'
 
 // TODO
 // Organization#addApp(repoName, options)
@@ -122,15 +124,21 @@ export default class Organization {
   }
 
   ///////// INTENTS ///////////
-  appIntent(
+  intent(
     appAddress: Address,
     functionName: string,
     functionArgs: any[]
-  ): TransactionIntent {
-    return new TransactionIntent(
-      { contractAddress: appAddress, functionName, functionArgs },
+  ): Intent {
+    return new Intent(
+      { appAddress, functionName, functionArgs },
       this,
       this.connection.ethersProvider
     )
+  }
+
+  //////// DESCRIPTIONS /////////
+
+  async describeScript(script: string): Promise<ForwardingPathDescription> {
+    return decodeForwardingPath(script, this.apps(), this.connection)
   }
 }
