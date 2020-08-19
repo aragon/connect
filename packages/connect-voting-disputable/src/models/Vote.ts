@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers'
 import { SubscriptionHandler } from '@aragon/connect-types'
 
 import Setting from './Setting'
@@ -35,6 +34,7 @@ export default class Vote {
   readonly quietEndingSnapshotSupport: string
   readonly script: string
   readonly executedAt: string
+  readonly isAccepted: boolean
   readonly tokenDecimals: string
 
   constructor(data: VoteData, connector: IDisputableVotingConnector) {
@@ -64,6 +64,7 @@ export default class Vote {
     this.quietEndingSnapshotSupport = data.quietEndingSnapshotSupport
     this.script = data.script
     this.executedAt = data.executedAt
+    this.isAccepted = data.isAccepted
     this.tokenDecimals = data.tokenDecimals
   }
 
@@ -79,53 +80,38 @@ export default class Vote {
   }
 
   get yeasPct(): string {
-    return this.votingPowerPct(this.yeas)
+    return this._votingPowerPct(this.yeas)
   }
 
   get naysPct(): string {
-    return this.votingPowerPct(this.nays)
+    return this._votingPowerPct(this.nays)
   }
 
-  votingPowerPct(num: string): string {
-    const votingPower = bn(this.votingPower)
-    return bn(num).mul(PCT_BASE).div(votingPower).toString()
-  }
-
-  formattedYeas(): string {
+  get formattedYeas(): string {
     return formatBn(this.yeas, this.tokenDecimals)
   }
 
-  formattedYeasPct(): string {
+  get formattedYeasPct(): string {
     return formatBn(this.yeasPct, PCT_DECIMALS)
   }
 
-  formattedNays(): string {
+  get formattedNays(): string {
     return formatBn(this.nays, this.tokenDecimals)
   }
 
-  formattedNaysPct(): string {
+  get formattedNaysPct(): string {
     return formatBn(this.naysPct, PCT_DECIMALS)
   }
 
-  formattedVotingPower(): string {
+  get formattedVotingPower(): string {
     return formatBn(this.votingPower, this.tokenDecimals)
   }
 
-  async status(): Promise<string> {
+  get status(): string {
     if (this.hasEnded && this.voteStatus === 'Scheduled') {
-      const wasAccepted = await this.isAccepted()
-      return wasAccepted ? 'Accepted' : 'Rejected'
+      return this.isAccepted ? 'Accepted' : 'Rejected'
     }
     return this.voteStatus
-  }
-
-  async isAccepted(): Promise<boolean> {
-    const yeas = bn(this.yeas)
-    const nays = bn(this.nays)
-    const setting = await this.setting()
-
-    return this._hasReachedValuePct(yeas, yeas.add(nays), bn(setting.supportRequiredPct)) &&
-           this._hasReachedValuePct(yeas, bn(this.votingPower), bn(setting.minimumAcceptanceQuorumPct))
   }
 
   castVoteId(voterAddress: string): string {
@@ -168,7 +154,8 @@ export default class Vote {
     return new DisputableVoting(this.#connector, this.votingId)
   }
 
-  _hasReachedValuePct(value: BigNumber, total: BigNumber, pct: BigNumber): boolean {
-    return !total.eq(bn('0')) && (value.mul(PCT_BASE).div(total)).gt(pct)
+  _votingPowerPct(num: string): string {
+    const votingPower = bn(this.votingPower)
+    return bn(num).mul(PCT_BASE).div(votingPower).toString()
   }
 }

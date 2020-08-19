@@ -29,6 +29,7 @@ function buildVote(vote: any, connector: any): Vote {
     quietEndingSnapshotSupport,
     script,
     executedAt,
+    isAccepted,
   } = vote
 
   const voteData: VoteData = {
@@ -56,6 +57,7 @@ function buildVote(vote: any, connector: any): Vote {
     quietEndingSnapshotSupport,
     script,
     executedAt,
+    isAccepted,
     tokenDecimals: voting.token.decimals
   }
 

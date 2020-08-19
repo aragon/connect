@@ -40,6 +40,7 @@ export interface VoteData {
   script: string
   executedAt: string
   tokenDecimals: string
+  isAccepted: boolean
 }
 
 export interface CastVoteData {

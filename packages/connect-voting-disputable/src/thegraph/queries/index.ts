@@ -110,6 +110,7 @@ export const GET_VOTE = (type: string) => gql`
       quietEndingSnapshotSupport
       script
       executedAt
+      isAccepted
     }
   }
 `
@@ -150,6 +151,7 @@ export const ALL_VOTES = (type: string) => gql`
       quietEndingSnapshotSupport
       script
       executedAt
+      isAccepted
     }
   }
 `
