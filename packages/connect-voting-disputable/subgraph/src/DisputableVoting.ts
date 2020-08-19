@@ -75,6 +75,7 @@ export function handleStartVote(event: StartVoteEvent): void {
   vote.quietEndingSnapshotSupport = castVoterState(voteData.value11)
   vote.script = voteData.value12
   vote.executedAt = BigInt.fromI32(0)
+  vote.isAccepted = isAccepted(vote.yeas, vote.nays, vote.votingPower, vote.setting, votingApp.PCT_BASE())
   vote.save()
 
   const agreementApp = AgreementContract.bind(votingApp.getAgreement())
@@ -145,6 +146,16 @@ export function handleChangeRepresentative(event: ChangeRepresentativeEvent): vo
   voter.save()
 }
 
+function isAccepted(yeas: BigInt, nays: BigInt, votingPower: BigInt, settingId: string, pctBase: BigInt): boolean {
+  const setting = SettingEntity.load(settingId)!
+  return hasReachedValuePct(yeas, yeas.plus(nays), setting.supportRequiredPct, pctBase) &&
+         hasReachedValuePct(yeas, votingPower, setting.minimumAcceptanceQuorumPct, pctBase)
+}
+
+function hasReachedValuePct(value: BigInt, total: BigInt, pct: BigInt, pctBase: BigInt): boolean {
+  return total.notEqual(BigInt.fromI32(0)) && (value.times(pctBase).div(total)).gt(pct)
+}
+
 function loadOrCreateVoting(votingAddress: Address): DisputableVotingEntity {
   let voting = DisputableVotingEntity.load(votingAddress.toHexString())
   if (voting === null) {
@@ -189,6 +200,7 @@ function updateVoteState(votingAddress: Address, voteId: BigInt): void {
   vote.pauseDuration = voteData.value9
   vote.quietEndingExtendedSeconds = voteData.value10
   vote.quietEndingSnapshotSupport = castVoterState(voteData.value11)
+  vote.isAccepted = isAccepted(vote.yeas, vote.nays, vote.votingPower, vote.setting, votingApp.PCT_BASE())
   vote.save()
 }
 
