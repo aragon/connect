@@ -10,7 +10,7 @@ import {
 
 const VOTING_APP_ADDRESS = '0x26e14ed789b51b5b226d69a5d40f72dc2d0180fe'
 const VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-dvoting-rinkeby-staging'
+  'https://api.thegraph.com/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging'
 
 describe('DisputableVoting', () => {
   let voting: DisputableVoting
@@ -49,8 +49,8 @@ describe('DisputableVoting', () => {
       const vote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-4`)
 
       expect(vote.hasEnded).toBe(true)
-      expect(await vote.isAccepted()).toBe(false)
-      expect(await vote.status()).toBe('Rejected')
+      expect(vote.isAccepted).toBe(false)
+      expect(vote.status).toBe('Rejected')
 
       expect(vote.votingPower).toBe('4000000000000000000')
       expect(vote.formattedVotingPower).toBe('4.00')
