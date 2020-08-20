@@ -50,9 +50,9 @@ describe('when connecting to the mainnet subgraph', () => {
       expect(app.contentUri!.length).toBeGreaterThan(0)
     })
 
-    test('should have valid intents', () => {
-      expect(app.intents).toBeDefined()
-      expect(app.intents!.length).toBeGreaterThan(0)
+    test('should have valid methods', () => {
+      expect(app.methods).toBeDefined()
+      expect(app.methods!.length).toBeGreaterThan(0)
     })
     test('should have valid isForwarder', () => {
       expect(app.isForwarder).toBeDefined()
