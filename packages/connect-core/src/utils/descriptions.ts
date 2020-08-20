@@ -1,76 +1,76 @@
-import { ethers } from 'ethers'
+// import { ethers } from 'ethers'
 
-import App from '../entities/App'
-import Transaction from '../entities/Transaction'
-import {
-  decodeTransactionPath,
-  TransactionWithChildren,
-} from './path/decodePath'
-import {
-  tryEvaluatingRadspec,
-  postprocessRadspecDescription,
-} from './radspec/index'
+// import App from '../entities/App'
+// import Transaction from '../entities/Transaction'
+// import {
+//   decodeTransactionPath,
+//   TransactionWithChildren,
+// } from './path/decodePath'
+// import {
+//   tryEvaluatingRadspec,
+//   postprocessRadspecDescription,
+// } from './radspec/index'
 
-export async function describeTransaction(
-  transaction: TransactionWithChildren,
-  apps: App[],
-  provider?: ethers.providers.Provider
-): Promise<Transaction> {
-  if (!transaction.to) {
-    throw new Error(`Could not describe transaction: missing 'to'`)
-  }
-  if (!transaction.data) {
-    throw new Error(`Could not describe transaction: missing 'data'`)
-  }
-  let description, descriptionAnnotated
-  try {
-    description = await tryEvaluatingRadspec(transaction, apps, provider)
+// export async function describeTransaction(
+//   transaction: Transaction,
+//   apps: App[],
+//   provider?: ethers.providers.Provider
+// ): Promise<Transaction> {
+//   if (!transaction.to) {
+//     throw new Error(`Could not describe transaction: missing 'to'`)
+//   }
+//   if (!transaction.data) {
+//     throw new Error(`Could not describe transaction: missing 'data'`)
+//   }
+//   let description, descriptionAnnotated
+//   try {
+//     description = await tryEvaluatingRadspec(transaction, apps, provider)
 
-    if (description) {
-      const processed = await postprocessRadspecDescription(description, apps)
-      descriptionAnnotated = processed.annotatedDescription
-      description = processed.description
-    }
+//     if (description) {
+//       const processed = await postprocessRadspecDescription(description, apps)
+//       descriptionAnnotated = processed.annotatedDescription
+//       description = processed.description
+//     }
 
-    if (transaction.children) {
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      transaction.children = await describeTransactionPath(
-        transaction.children,
-        apps,
-        provider
-      )
-    }
-  } catch (err) {
-    throw new Error(`Could not describe transaction: ${err}`)
-  }
+//     // if (transaction.children) {
+//     //   // eslint-disable-next-line @typescript-eslint/no-use-before-define
+//     //   transaction.children = await describeTransactionPath(
+//     //     transaction.children,
+//     //     apps,
+//     //     provider
+//     //   )
+//     // }
+//   } catch (err) {
+//     throw new Error(`Could not describe transaction: ${err}`)
+//   }
 
-  return new Transaction({
-    ...transaction,
-    description,
-    descriptionAnnotated,
-  })
-}
+//   return new Transaction({
+//     ...transaction,
+//     description,
+//     descriptionAnnotated,
+//   })
+// }
 
-/**
- * Use radspec to create a human-readable description for each transaction in the given `path`
- *
- */
-export async function describeTransactionPath(
-  path: TransactionWithChildren[],
-  apps: App[],
-  provider?: ethers.providers.Provider
-): Promise<Transaction[]> {
-  return Promise.all(
-    path.map((step) => describeTransaction(step, apps, provider))
-  )
-}
+// /**
+//  * Use radspec to create a human-readable description for each transaction in the given `path`
+//  *
+//  */
+// export async function describeTransactionPath(
+//   path: Transaction[],
+//   apps: App[],
+//   provider?: ethers.providers.Provider
+// ): Promise<Transaction[]> {
+//   return Promise.all(
+//     path.map((step) => describeTransaction(step, apps, provider))
+//   )
+// }
 
-export async function describeScript(
-  script: string,
-  apps: App[],
-  provider?: ethers.providers.Provider
-): Promise<Transaction[]> {
-  const path = decodeTransactionPath(script)
+// export async function describeScript(
+//   script: string,
+//   apps: App[],
+//   provider?: ethers.providers.Provider
+// ): Promise<Transaction[]> {
+//   const path = decodeTransactionPath(script)
 
-  return describeTransactionPath(path, apps, provider)
-}
+//   return describeTransactionPath(path, apps, provider)
+// }
