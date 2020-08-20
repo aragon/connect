@@ -2,7 +2,6 @@ import { ethers } from 'ethers'
 
 import { erc20ABI, forwarderAbi, forwarderFeeAbi } from './abis'
 import { isFullMethodSignature } from './app'
-import { Abi, FunctionFragment } from '../types'
 import App from '../entities/App'
 
 export interface Transaction {
@@ -22,7 +21,7 @@ export interface TransactionWithTokenData extends Transaction {
 export async function createDirectTransaction(
   sender: string,
   destination: string,
-  methodAbiFragment: FunctionFragment,
+  methodAbiFragment: ethers.utils.FunctionFragment,
   params: any[]
 ): Promise<Transaction> {
   let transactionOptions = {}
@@ -89,7 +88,7 @@ export async function createDirectTransactionForApp(
   return createDirectTransaction(
     sender,
     destination,
-    methodAbiFragment as FunctionFragment,
+    methodAbiFragment as ethers.utils.FunctionFragment,
     params
   )
 }

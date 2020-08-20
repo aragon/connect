@@ -1,8 +1,7 @@
 import { ethers } from 'ethers'
 
-import { AppIntent } from '../types'
+import { AppIntent, TransactionRequestData } from '../types'
 import App from '../entities/App'
-import { TransactionRequestData } from '../transactions/TransactionRequest'
 
 export const apmAppId = (appName: string): string =>
   ethers.utils.namehash(`${appName}.aragonpm.eth`)

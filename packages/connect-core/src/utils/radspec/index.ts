@@ -4,8 +4,7 @@ import * as radspec from 'radspec'
 import { addressesEqual } from '../address'
 import { findAppMethodFromIntent } from '../app'
 import App from '../../entities/App'
-import { TransactionRequestData } from '../../transactions/TransactionRequest'
-import { Abi, AppIntent } from '../../types'
+import { Abi, AppIntent, TransactionRequestData } from '../../types'
 
 interface FoundMethod {
   method?: AppIntent

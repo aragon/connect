@@ -2,7 +2,7 @@ import { addressesEqual, ANY_ENTITY } from '../address'
 import { getKernelNamespace } from '../kernel'
 import App from '../../entities/App'
 import Role from '../../entities/Role'
-import { Annotation } from '../../transactions/TransactionRequest'
+import { Annotation } from '../../types'
 
 export interface PostProcessDescription {
   description: string

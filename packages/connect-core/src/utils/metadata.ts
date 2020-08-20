@@ -1,15 +1,18 @@
 import { ethers } from 'ethers'
 
-import { AppData } from '../entities/App'
-import { RepoData } from '../entities/Repo'
-import { RoleData } from '../entities/Role'
 import {
   getApmInternalAppInfo,
   getAragonOsInternalAppInfo,
   hasAppInfo,
 } from './overrides/index'
 import { DEFAULT_IPFS_GATEWAY } from '../params'
-import { AragonArtifact, AragonManifest } from '../types'
+import {
+  AragonArtifact,
+  AragonManifest,
+  AppData,
+  RepoData,
+  RoleData,
+} from '../types'
 
 export function parseMetadata(name: string, metadata: string): any {
   try {
