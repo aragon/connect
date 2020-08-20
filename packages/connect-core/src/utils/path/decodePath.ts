@@ -1,8 +1,7 @@
-import { isCallScript, decodeCallScript } from '../callScript'
+import { isCallScript, decodeCallScript, CallScriptAction } from '../callScript'
 import { isValidForwardCall, parseForwardCall } from '../forwarding'
-import { Transaction } from '../transactions'
 
-export interface TransactionWithChildren extends Transaction {
+export interface TransactionWithChildren extends CallScriptAction {
   children?: TransactionWithChildren[]
 }
 
@@ -25,7 +24,7 @@ export function decodeTransactionPath(
   return path.reduce((decodeSegments, segment) => {
     const { data } = segment
 
-    let children
+    let children: TransactionWithChildren[] = []
     if (isValidForwardCall(data)) {
       const forwardedEvmScript = parseForwardCall(data)
 

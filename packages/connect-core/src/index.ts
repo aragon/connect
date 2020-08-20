@@ -6,6 +6,7 @@ export type {
   Networkish,
   SubscriptionHandler,
 } from '@aragon/connect-types'
+
 export { default as IOrganizationConnector } from './connections/IOrganizationConnector'
 export {
   default as ConnectorJson,

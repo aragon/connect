@@ -2,12 +2,12 @@ import { ethers } from 'ethers'
 
 import { AppIntent } from '../../types'
 import App from '../../entities/App'
+import Transaction from '../../entities/Transaction'
 import { addressesEqual, includesAddress, ANY_ENTITY } from '../address'
 import { isFullMethodSignature } from '../app'
 import { encodeCallScript } from '../callScript'
 import { canForward } from '../forwarding'
 import {
-  Transaction,
   createDirectTransactionForApp,
   createForwarderTransactionBuilder,
   buildForwardingFeePretransaction,

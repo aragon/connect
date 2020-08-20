@@ -4,6 +4,7 @@ import {
   AppFiltersParam,
   SubscriptionHandler,
 } from '@aragon/connect-types'
+
 import { ConnectionContext } from '../types'
 import TransactionIntent from '../transactions/TransactionIntent'
 import { toArrayEntry } from '../utils/misc'

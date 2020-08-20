@@ -2,7 +2,7 @@ import { ethers } from 'ethers'
 
 export const CALLSCRIPT_ID = '0x00000001'
 
-interface CallScriptAction {
+export interface CallScriptAction {
   to: string
   data: string
 }

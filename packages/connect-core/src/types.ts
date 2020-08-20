@@ -3,7 +3,7 @@ import { Address, Network } from '@aragon/connect-types'
 
 import IOrganizationConnector from './connections/IOrganizationConnector'
 import App from './entities/App'
-import TransactionRequest from './transactions/TransactionRequest'
+import Transaction from './entities/Transaction'
 
 export type Abi = (ethers.utils.EventFragment | ethers.utils.FunctionFragment)[]
 
@@ -100,8 +100,8 @@ export interface RoleData {
 export interface TransactionPathData {
   apps: App[]
   destination: App
-  forwardingFeePretransaction?: TransactionRequest
-  transactions: TransactionRequest[]
+  forwardingFeePretransaction?: Transaction
+  transactions: Transaction[]
 }
 
 export interface TransactionIntentData {
@@ -110,13 +110,10 @@ export interface TransactionIntentData {
   functionArgs: any[]
 }
 
-export interface TransactionRequestData {
-  children?: TransactionRequest[]
-  description?: string
-  descriptionAnnotated?: Annotation[]
+export interface TransactionData {
   data: string
-  from?: string
-  to: string
+  from: Address
+  to: Address
 }
 
 ////// METADATA //////

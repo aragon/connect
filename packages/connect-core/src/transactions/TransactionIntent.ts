@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 
 import TransactionPath from './TransactionPath'
-import TransactionRequest from './TransactionRequest'
+import Transaction from '../entities/Transaction'
 import Organization from '../entities/Organization'
 import { TransactionIntentData } from '../types'
 import { calculateTransactionPath } from '../utils/path/calculatePath'
@@ -68,7 +68,7 @@ export default class TransactionIntent {
   async transactions(
     account: string,
     options?: { as: string; path?: string[] }
-  ): Promise<TransactionRequest[]> {
+  ): Promise<Transaction[]> {
     return (await this.paths(account, options)).transactions
   }
 }

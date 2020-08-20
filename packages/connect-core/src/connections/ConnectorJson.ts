@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import { AppFilters, Network, SubscriptionHandler } from '@aragon/connect-types'
+
 import { ConnectionContext } from '../types'
 import IOrganizationConnector from './IOrganizationConnector'
 import App from '../entities/App'
