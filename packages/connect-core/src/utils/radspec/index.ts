@@ -5,10 +5,10 @@ import { addressesEqual } from '../address'
 import { findAppMethodFromIntent } from '../app'
 import App from '../../entities/App'
 import Transaction from '../../entities/Transaction'
-import { Abi, AppIntent } from '../../types'
+import { Abi, AppMethod } from '../../types'
 
 interface FoundMethod {
-  method?: AppIntent
+  method?: AppMethod
   abi?: Abi
 }
 

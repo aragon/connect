@@ -171,12 +171,12 @@ export interface AragonArtifact extends AragonAppJson {
    * Includes metadata needed for radspec and transaction pathing
    * initialize() function should also be included for completeness
    */
-  functions: AppIntent[]
+  functions: AppMethod[]
   /**
    * Functions that are no longer available at `version`
    */
   deprecatedFunctions: {
-    [version: string]: AppIntent[]
+    [version: string]: AppMethod[]
   }
   /**
    * The flaten source code of the contracts must be included in

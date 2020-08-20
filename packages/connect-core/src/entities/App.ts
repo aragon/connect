@@ -61,6 +61,19 @@ export default class App {
     return this.organization.connection.orgConnector
   }
 
+  contract(): ethers.Contract {
+    if (!this.abi) {
+      throw new Error(
+        `No ABI specified in app for ${this.address}. Make sure the metada for the app is available`
+      )
+    }
+    return new ethers.Contract(
+      this.address,
+      this.abi,
+      this.organization.connection.ethersProvider
+    )
+  }
+
   interface(): ethers.utils.Interface {
     if (!this.abi) {
       throw new Error(
