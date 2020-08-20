@@ -63,6 +63,12 @@ export interface AppData {
   version?: string
 }
 
+export interface IntentData {
+  appAddress: string
+  functionName: string
+  functionArgs: any[]
+}
+
 export interface ParamData {
   argumentId: number
   operationType: number
@@ -104,12 +110,6 @@ export interface TransactionPathData {
   transactions: Transaction[]
 }
 
-export interface TransactionIntentData {
-  contractAddress: string
-  functionName: string
-  functionArgs: any[]
-}
-
 export interface TransactionData {
   data: string
   from: Address
@@ -120,7 +120,7 @@ export interface TransactionData {
 
 export type Metadata = (AragonArtifact | AragonManifest)[]
 
-export interface AppIntent {
+export interface AppMethod {
   roles: string[]
   sig: string
   /**

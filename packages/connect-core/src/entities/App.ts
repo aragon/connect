@@ -5,7 +5,7 @@ import Repo from './Repo'
 import Role from './Role'
 import {
   Abi,
-  AppIntent,
+  AppMethod,
   AragonArtifact,
   AragonManifest,
   Metadata,
@@ -90,11 +90,11 @@ export default class App {
     return this.artifact.abi
   }
 
-  get intents(): AppIntent[] {
+  get methods(): AppMethod[] {
     return this.artifact.functions
   }
 
-  get deprecatedIntents(): { [version: string]: AppIntent[] } {
+  get deprecatedMethods(): { [version: string]: AppMethod[] } {
     return this.artifact.deprecatedFunctions
   }
 

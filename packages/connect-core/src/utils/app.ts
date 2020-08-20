@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 
-import { AppIntent } from '../types'
+import { AppMethod } from '../types'
 import App from '../entities/App'
 import Transaction from '../entities/Transaction'
 
@@ -16,14 +16,15 @@ export const isFullMethodSignature = (methodSignature: string): boolean => {
   )
 }
 
-export function validateMethod(
-  destination: string,
-  methodSignature: string,
-  destinationApp: App
-): AppIntent {
-  const methods = destinationApp.intents
+export function getAppMethod(
+  destinationApp: App,
+  methodSignature: string
+): AppMethod {
+  const methods = destinationApp.methods
   if (!methods) {
-    throw new Error(`No functions specified in artifact for ${destination}`)
+    throw new Error(
+      `No methods specified in the app for ${destinationApp.address}. Make sure the metada for the app is available`
+    )
   }
 
   // Find the relevant method information
@@ -33,8 +34,11 @@ export function validateMethod(
       : // If the full signature isn't given, just select the first overload declared
         method.sig.split('(')[0] === methodSignature
   )
+
   if (!method) {
-    throw new Error(`No method named ${methodSignature} on ${destination}`)
+    throw new Error(
+      `No method named ${methodSignature} on ${destinationApp.address}`
+    )
   }
 
   return method
@@ -51,7 +55,7 @@ export function validateMethod(
 export function findAppMethodFromIntent(
   app: App,
   transaction: Transaction
-): AppIntent | undefined {
+): AppMethod | undefined {
   const methodId = transaction.data.substring(0, 10)
 
   const checkMethodSignature = (siganture: string): boolean => {
@@ -60,22 +64,22 @@ export function findAppMethodFromIntent(
     return sigHash === methodId
   }
 
-  const { deprecatedIntents, intents } = app || {}
+  const { deprecatedMethods, methods } = app || {}
 
   let method
   // First try to find the method in the current functions
-  if (Array.isArray(intents)) {
-    method = intents.find((method) => checkMethodSignature(method.sig))
+  if (Array.isArray(methods)) {
+    method = methods.find((method) => checkMethodSignature(method.sig))
   }
 
   if (!method) {
     // The current functions didn't have it; try with each deprecated version's functions
     const deprecatedFunctionsFromVersions = Object.values(
-      deprecatedIntents || {}
+      deprecatedMethods || {}
     )
     if (deprecatedFunctionsFromVersions.every(Array.isArray)) {
       // Flatten all the deprecated functions
-      const allDeprecatedFunctions = ([] as AppIntent[]).concat(
+      const allDeprecatedFunctions = ([] as AppMethod[]).concat(
         ...deprecatedFunctionsFromVersions
       )
       method = allDeprecatedFunctions.find((method) =>
