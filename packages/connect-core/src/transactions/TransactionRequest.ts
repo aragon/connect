@@ -1,16 +1,4 @@
-export interface TransactionRequestData {
-  children?: TransactionRequest[]
-  description?: string
-  descriptionAnnotated?: Annotation[]
-  data: string
-  from?: string
-  to: string
-}
-
-export interface Annotation {
-  type: string
-  value: any
-}
+import { Annotation, TransactionRequestData } from '../types'
 
 export default class TransactionRequest {
   readonly children?: TransactionRequest[]

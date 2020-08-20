@@ -1,22 +1,12 @@
+import Organization from './Organization'
 import {
   AragonArtifact,
   AragonArtifactRole,
   AragonManifest,
-  ConnectionContext,
   Metadata,
+  RepoData,
 } from '../types'
 import { resolveMetadata, resolveManifest } from '../utils/metadata'
-import Organization from './Organization'
-
-export interface RepoData {
-  address: string
-  artifact?: string | null
-  contentUri?: string
-  manifest?: string | null
-  name: string
-  registry?: string
-  registryAddress?: string
-}
 
 export default class Repo {
   #metadata!: Metadata

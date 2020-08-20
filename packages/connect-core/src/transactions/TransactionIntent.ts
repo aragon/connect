@@ -3,14 +3,9 @@ import { ethers } from 'ethers'
 import TransactionPath from './TransactionPath'
 import TransactionRequest from './TransactionRequest'
 import Organization from '../entities/Organization'
+import { TransactionIntentData } from '../types'
 import { calculateTransactionPath } from '../utils/path/calculatePath'
 import { describeTransactionPath } from '../utils/descriptions'
-
-export interface TransactionIntentData {
-  contractAddress: string
-  functionName: string
-  functionArgs: any[]
-}
 
 export default class TransactionIntent {
   readonly contractAddress!: string

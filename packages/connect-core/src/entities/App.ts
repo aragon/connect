@@ -6,32 +6,14 @@ import {
   AppIntent,
   AragonArtifact,
   AragonManifest,
-  ConnectionContext,
   Metadata,
+  AppData,
 } from '../types'
 import { resolveManifest, resolveArtifact } from '../utils/metadata'
 import IOrganizationConnector from '../connections/IOrganizationConnector'
-// import IAppConnected from '../connections/IAppConnected'
 
 // TODO:
 // [ ] (ipfs) contentUrl 	String 	The HTTP URL of the app content. Uses the IPFS HTTP provider. E.g. http://gateway.ipfs.io/ipfs/QmdLEDDfi…/ (ContentUri passing through the resolver)
-
-export interface AppData {
-  address: string
-  appId: string
-  artifact?: string | null
-  codeAddress: string
-  contentUri?: string
-  isForwarder?: boolean
-  isUpgradeable?: boolean
-  kernelAddress: string
-  manifest?: string | null
-  name?: string
-  registry?: string
-  registryAddress: string
-  repoAddress?: string
-  version?: string
-}
 
 export default class App {
   #metadata: Metadata

@@ -1,21 +1,8 @@
-import IOrganizationConnector from '../connections/IOrganizationConnector'
 import App from './App'
 import Organization from './Organization'
 import Role from './Role'
-
-export interface ParamData {
-  argumentId: number
-  operationType: number
-  argumentValue: BigInt
-}
-
-export interface PermissionData {
-  allowed: boolean
-  appAddress: string
-  granteeAddress: string
-  params: ParamData[]
-  roleHash: string
-}
+import { PermissionData, ParamData } from '../types'
+import IOrganizationConnector from '../connections/IOrganizationConnector'
 
 export default class Permission implements PermissionData {
   #organization: Organization
