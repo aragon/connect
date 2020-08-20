@@ -69,7 +69,4 @@ export async function tryEvaluatingRadspec(
   return evaluatedNotice
 }
 
-export {
-  postprocessRadspecDescription,
-  PostProcessDescription,
-} from './postprocess'
+export { postprocessRadspecDescription } from './postprocess'
