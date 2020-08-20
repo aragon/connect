@@ -6,9 +6,9 @@ import {
 } from '@aragon/connect-types'
 
 import { ConnectionContext } from '../types'
-import TransactionIntent from '../transactions/TransactionIntent'
 import { toArrayEntry } from '../utils/misc'
 import App from './App'
+import Intent from './Intent'
 import Permission from './Permission'
 
 // TODO
@@ -127,9 +127,9 @@ export default class Organization {
     appAddress: Address,
     functionName: string,
     functionArgs: any[]
-  ): TransactionIntent {
-    return new TransactionIntent(
-      { contractAddress: appAddress, functionName, functionArgs },
+  ): Intent {
+    return new Intent(
+      { appAddress, functionName, functionArgs },
       this,
       this.connection.ethersProvider
     )
