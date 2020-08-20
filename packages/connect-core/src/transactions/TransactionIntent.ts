@@ -5,7 +5,6 @@ import Transaction from '../entities/Transaction'
 import Organization from '../entities/Organization'
 import { TransactionIntentData } from '../types'
 import { calculateTransactionPath } from '../utils/path/calculatePath'
-import { describeTransactionPath } from '../utils/descriptions'
 
 export default class TransactionIntent {
   readonly contractAddress!: string
@@ -47,12 +46,6 @@ export default class TransactionIntent {
       this.#provider
     )
 
-    const describedPath = await describeTransactionPath(
-      path,
-      apps,
-      this.#provider
-    )
-
     return new TransactionPath({
       apps: apps.filter((app) =>
         path
@@ -61,7 +54,7 @@ export default class TransactionIntent {
       ),
       destination: apps.find((app) => app.address == this.contractAddress)!,
       forwardingFeePretransaction,
-      transactions: describedPath,
+      transactions: path,
     })
   }
 
