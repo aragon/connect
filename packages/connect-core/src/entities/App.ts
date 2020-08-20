@@ -1,3 +1,5 @@
+import { ethers } from 'ethers'
+
 import Organization from './Organization'
 import Repo from './Repo'
 import Role from './Role'
@@ -57,6 +59,15 @@ export default class App {
 
   private orgConnector(): IOrganizationConnector {
     return this.organization.connection.orgConnector
+  }
+
+  interface(): ethers.utils.Interface {
+    if (!this.abi) {
+      throw new Error(
+        `No ABI specified in app for ${this.address}. Make sure the metada for the app is available`
+      )
+    }
+    return new ethers.utils.Interface(this.abi)
   }
 
   async repo(): Promise<Repo> {

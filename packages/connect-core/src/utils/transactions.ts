@@ -1,52 +1,13 @@
 import { ethers } from 'ethers'
 
 import { erc20ABI, forwarderAbi, forwarderFeeAbi } from './abis'
-import { isFullMethodSignature } from './app'
 import App from '../entities/App'
+import Transaction from '../entities/Transaction'
 
-export interface Transaction {
-  data: string
-  from?: string
-  to: string
-}
-
-export interface TransactionWithTokenData extends Transaction {
-  token: {
-    address: string
-    value: string
-    spender: string
-  }
-}
-
-export async function createDirectTransaction(
-  sender: string,
-  destination: string,
-  methodAbiFragment: ethers.utils.FunctionFragment,
-  params: any[]
-): Promise<Transaction> {
-  let transactionOptions = {}
-
-  // If an extra parameter has been provided, it is the transaction options if it is an object
-  if (
-    methodAbiFragment.inputs.length + 1 === params.length &&
-    typeof params[params.length - 1] === 'object'
-  ) {
-    const options = params.pop()
-    transactionOptions = { ...transactionOptions, ...options }
-  }
-
-  const ethersInterface = new ethers.utils.Interface([methodAbiFragment])
-
-  // The direct transaction we eventually want to perform
-  return {
-    ...transactionOptions, // Options are overwriten by the values below
-    from: sender,
-    to: destination,
-    data: ethersInterface.encodeFunctionData(
-      ethers.utils.FunctionFragment.from(methodAbiFragment),
-      params
-    ),
-  }
+interface TokenData {
+  address: string
+  value: string
+  spender: string
 }
 
 export async function createDirectTransactionForApp(
@@ -55,42 +16,17 @@ export async function createDirectTransactionForApp(
   methodSignature: string,
   params: any[]
 ): Promise<Transaction> {
-  if (!app) {
-    throw new Error(`Could not create transaction due to missing app artifact`)
-  }
+  const appInterface = app.interface()
+  const functionFragment = appInterface.getFunction(methodSignature)
 
-  const destination = app.address
-
-  if (!app.abi) {
-    throw new Error(`No ABI specified in artifact for ${destination}`)
-  }
-
-  const methodAbiFragment = app.abi.find((method) => {
-    // If the full signature isn't given, just find the first overload declared
-    if (!isFullMethodSignature(methodSignature)) {
-      return method.name === methodSignature
-    }
-
-    // Fallback functions don't have inputs in the ABI
-    const currentParameterTypes = Array.isArray(method.inputs)
-      ? method.inputs.map(({ type }) => type)
-      : []
-    const currentMethodSignature = `${method.name}(${currentParameterTypes.join(
-      ','
-    )})`
-    return currentMethodSignature === methodSignature
+  return new Transaction({
+    from: sender,
+    to: app.address,
+    data: appInterface.encodeFunctionData(
+      ethers.utils.FunctionFragment.from(functionFragment),
+      params
+    ),
   })
-
-  if (!methodAbiFragment) {
-    throw new Error(`${methodSignature} not found on ABI for ${destination}`)
-  }
-
-  return createDirectTransaction(
-    sender,
-    destination,
-    methodAbiFragment as ethers.utils.FunctionFragment,
-    params
-  )
 }
 
 export function createForwarderTransactionBuilder(
@@ -99,24 +35,23 @@ export function createForwarderTransactionBuilder(
 ): Function {
   const forwarder = new ethers.utils.Interface(forwarderAbi)
 
-  return (forwarderAddress: string, script: string): Transaction => ({
-    ...directTransaction, // Options are overwriten by the values below
-    from: sender,
-    to: forwarderAddress,
-    data: forwarder.encodeFunctionData('forward', [script]),
-  })
+  return (forwarderAddress: string, script: string): Transaction =>
+    new Transaction({
+      ...directTransaction, // Options are overwriten by the values below
+      from: sender,
+      to: forwarderAddress,
+      data: forwarder.encodeFunctionData('forward', [script]),
+    })
 }
 
 export async function buildPretransaction(
-  transaction: TransactionWithTokenData,
+  transaction: Transaction,
+  tokenData: TokenData,
   provider: ethers.providers.Provider
 ): Promise<Transaction | undefined> {
   // Token allowance pretransactionn
-  const {
-    from,
-    to,
-    token: { address: tokenAddress, value: tokenValue, spender },
-  } = transaction
+  const { from, to } = transaction
+  const { address: tokenAddress, value: tokenValue, spender } = tokenData
 
   // Approve the transaction destination unless an spender is passed to approve a different contract
   const approveSpender = spender || to
@@ -144,11 +79,11 @@ export async function buildPretransaction(
 
     const erc20 = new ethers.utils.Interface(erc20ABI)
 
-    return {
+    return new Transaction({
       from,
       to: tokenAddress,
       data: erc20.encodeFunctionData('approve', [approveSpender, tokenValue]),
-    }
+    })
   }
 
   return undefined
@@ -181,16 +116,13 @@ export async function buildForwardingFeePretransaction(
 
   if (feeDetails.tokenAddress && feeDetails.amount > BigInt(0)) {
     // Needs a token approval pretransaction
-    const forwardingTxWithTokenData: TransactionWithTokenData = {
-      ...forwardingTransaction,
-      token: {
-        address: feeDetails.tokenAddress,
-        spender: forwarderAddress, // since it's a forwarding transaction, always show the real spender
-        value: feeDetails.amount.toString(),
-      },
+    const tokenData: TokenData = {
+      address: feeDetails.tokenAddress,
+      spender: forwarderAddress, // since it's a forwarding transaction, always show the real spender
+      value: feeDetails.amount.toString(),
     }
 
-    return buildPretransaction(forwardingTxWithTokenData, provider)
+    return buildPretransaction(forwardingTransaction, tokenData, provider)
   }
   return undefined
 }
