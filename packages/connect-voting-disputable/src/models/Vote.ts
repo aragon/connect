@@ -69,8 +69,8 @@ export default class Vote {
   }
 
   get hasEnded(): boolean {
-    const now = Date.now()
-    return now >= toMilliseconds(this.endDate)
+    return this.voteStatus !== 'Challenged' &&
+           Date.now() >= toMilliseconds(this.endDate)
   }
 
   get endDate(): string {
