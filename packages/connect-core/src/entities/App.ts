@@ -108,4 +108,13 @@ export default class App {
   get appName(): string {
     return this.artifact.appName
   }
+
+  toJSON() {
+    return {
+      ...this,
+      // Organization creates a cycling reference that makes
+      // the object impossible to pass through JSON.stringify().
+      organization: null,
+    }
+  }
 }
