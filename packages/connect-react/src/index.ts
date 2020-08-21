@@ -165,13 +165,25 @@ function useConnectSubscription<Data>(
 export function useApp(
   appsFilter?: AppFiltersParam
 ): [App | null, LoadingStatus] {
-  const callback = useCallback((org, onData) => org.onApp(appsFilter, onData), [
-    JSON.stringify(appsFilter),
-  ])
+  const appJsonRef = useRef<string>('')
+
+  const callback = useCallback(
+    (org, onData) =>
+      org.onApp(appsFilter, (app: App) => {
+        const appJson = JSON.stringify(app)
+        if (appJson !== appJsonRef.current) {
+          onData(app)
+          appJsonRef.current = appJson
+        }
+      }),
+    [JSON.stringify(appsFilter)]
+  )
+
   return useConnectSubscription<App | null>(callback, null)
 }
 
 export function useApps(appsFilter?: AppFiltersParam): [App[], LoadingStatus] {
+  const appsJsonRef = useRef<string>('')
   const callback = useCallback(
     (org, onData) => org.onApps(appsFilter, onData),
     [JSON.stringify(appsFilter)]
@@ -202,6 +214,26 @@ export function createAppHook(
       callbackRef.current = callback || ((app: App) => app)
     }, [callback])
 
+    // This is necessary because some connectors might keep providing new app
+    // instances, even if these instances are not actually updated.
+    // For example, the Graph connector uses HTTP polling which has this effect.
+    // From this point, we are only going to use `updatedApp` rather than `app`.
+    //
+    // Note that with the Graph connector, the useEffect() below triggers twice every
+    // time the connector refetch the data. This is because we are using the
+    // “cache-and-network” request policy, where results are received from the
+    // cache, while a network request is being initiated. Once the request
+    // finishes, results are updated once again.
+    const appJsonRef = useRef<string>('')
+    const [updatedApp, setUpdatedApp] = useState<App | null>(null)
+    useEffect(() => {
+      const appJson = JSON.stringify(app)
+      if (appJson !== appJsonRef.current) {
+        setUpdatedApp(app)
+        appJsonRef.current = appJson
+      }
+    }, [app])
+
     useEffect(() => {
       let cancelled = false
 
@@ -226,14 +258,14 @@ export function createAppHook(
         }
       }
 
-      if (app) {
+      if (updatedApp) {
         update()
       }
 
       return () => {
         cancelled = true
       }
-    }, [connector, app, ...(dependencies || [])])
+    }, [connector, updatedApp, ...(dependencies || [])])
 
     return [result, { error, loading, retry: () => null }]
   }
