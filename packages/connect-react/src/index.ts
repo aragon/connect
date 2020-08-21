@@ -184,7 +184,10 @@ export function usePermissions(): [Permission[], LoadingStatus] {
   return useConnectSubscription<Permission[]>(callback, [])
 }
 
-export function createAppHook(appConnect: Function) {
+export function createAppHook(
+  appConnect: Function,
+  connector?: string | [string, { [key: string]: any } | undefined]
+) {
   return function useAppData<T = any>(
     app: App | null,
     callback?: (app: App | any) => T | Promise<T>
@@ -208,7 +211,7 @@ export function createAppHook(appConnect: Function) {
         setLoading(true)
 
         try {
-          const connectedApp = await appConnect(app)
+          const connectedApp = await appConnect(updatedApp, connector)
           const result = await callbackRef.current(connectedApp)
           if (!cancelled) {
             setLoading(false)
@@ -229,7 +232,7 @@ export function createAppHook(appConnect: Function) {
       return () => {
         cancelled = true
       }
-    }, [app])
+    }, [connector, app])
 
     return [result, { error, loading, retry: () => null }]
   }
