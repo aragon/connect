@@ -190,7 +190,8 @@ export function createAppHook(
 ) {
   return function useAppData<T = any>(
     app: App | null,
-    callback?: (app: App | any) => T | Promise<T>
+    callback?: (app: App | any) => T | Promise<T>,
+    dependencies?: any[]
   ): [T | null, LoadingStatus] {
     const [result, setResult] = useState<T | null>(null)
     const [error, setError] = useState<Error | null>(null)
@@ -232,7 +233,7 @@ export function createAppHook(
       return () => {
         cancelled = true
       }
-    }, [connector, app])
+    }, [connector, app, ...(dependencies || [])])
 
     return [result, { error, loading, retry: () => null }]
   }
