@@ -1,4 +1,7 @@
-import { SubscriptionHandler } from '@aragon/connect-types'
+import {
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 import { GraphQLWrapper, QueryResult } from '@aragon/connect-thegraph'
 import { IVotingConnector } from '../types'
 import Vote from '../models/Vote'
@@ -49,7 +52,7 @@ export default class VotingConnectorTheGraph implements IVotingConnector {
     first: number,
     skip: number
   ): Promise<Vote[]> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<Vote[]>(
       queries.ALL_VOTES('query'),
       { appAddress, first, skip },
       (result: QueryResult) => parseVotes(result, this)
@@ -58,11 +61,11 @@ export default class VotingConnectorTheGraph implements IVotingConnector {
 
   onVotesForApp(
     appAddress: string,
-    callback: Function,
+    callback: SubscriptionCallback<Vote[]>,
     first: number,
     skip: number
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser<Vote[]>(
       queries.ALL_VOTES('subscription'),
       { appAddress, first, skip },
       callback,
@@ -82,8 +85,11 @@ export default class VotingConnectorTheGraph implements IVotingConnector {
     )
   }
 
-  onCastsForVote(voteId: string, callback: Function): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+  onCastsForVote(
+    voteId: string,
+    callback: SubscriptionCallback<Cast[]>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<Cast[]>(
       queries.CASTS_FOR_VOTE('subscription'),
       { voteId, first: 1000, skip: 0 },
       callback,

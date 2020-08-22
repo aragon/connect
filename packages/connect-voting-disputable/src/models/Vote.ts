@@ -1,5 +1,8 @@
 import { BigNumber } from 'ethers'
-import { SubscriptionHandler } from '@aragon/connect-types'
+import {
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 
 import CastVote from './CastVote'
 import CollateralRequirement from './CollateralRequirement'
@@ -53,9 +56,15 @@ export default class Vote {
   }
 
   get endDate(): string {
-    const originalEndDate = BigNumber.from(this.startDate).add(BigNumber.from(this.duration))
-    const endDateAfterPause = originalEndDate.add(BigNumber.from(this.pauseDuration))
-    return endDateAfterPause.add(BigNumber.from(this.quietEndingExtendedSeconds)).toString()
+    const originalEndDate = BigNumber.from(this.startDate).add(
+      BigNumber.from(this.duration)
+    )
+    const endDateAfterPause = originalEndDate.add(
+      BigNumber.from(this.pauseDuration)
+    )
+    return endDateAfterPause
+      .add(BigNumber.from(this.quietEndingExtendedSeconds))
+      .toString()
   }
 
   get yeasPct(): string {
@@ -68,7 +77,10 @@ export default class Vote {
 
   votingPowerPct(num: string): string {
     const votingPower = BigNumber.from(this.votingPower)
-    return BigNumber.from(num).mul(BigNumber.from(100)).div(votingPower).toString()
+    return BigNumber.from(num)
+      .mul(BigNumber.from(100))
+      .div(votingPower)
+      .toString()
   }
 
   castVoteId(voterAddress: string): string {
@@ -79,7 +91,10 @@ export default class Vote {
     return this.#connector.castVote(this.castVoteId(voterAddress))
   }
 
-  onCastVote(voterAddress: string, callback: Function): SubscriptionHandler {
+  onCastVote(
+    voterAddress: string,
+    callback: SubscriptionCallback<CastVote | null>
+  ): SubscriptionHandler {
     return this.#connector.onCastVote(this.castVoteId(voterAddress), callback)
   }
 
@@ -87,7 +102,10 @@ export default class Vote {
     return this.#connector.castVotes(this.id, first, skip)
   }
 
-  onCastVotes({ first = 1000, skip = 0 } = {}, callback: Function): SubscriptionHandler {
+  onCastVotes(
+    { first = 1000, skip = 0 } = {},
+    callback: SubscriptionCallback<CastVote[]>
+  ): SubscriptionHandler {
     return this.#connector.onCastVotes(this.id, first, skip, callback)
   }
 
@@ -95,7 +113,9 @@ export default class Vote {
     return this.#connector.collateralRequirement(this.id)
   }
 
-  onCollateralRequirement(callback: Function): SubscriptionHandler {
+  onCollateralRequirement(
+    callback: SubscriptionCallback<CollateralRequirement>
+  ): SubscriptionHandler {
     return this.#connector.onCollateralRequirement(this.id, callback)
   }
 }

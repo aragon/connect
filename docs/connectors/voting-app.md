@@ -33,10 +33,10 @@ Get the list of votes in the Voting app.
 
 Subscribe to the list of votes in the Voting app.
 
-| Name            | Type            | Description                                                         |
-| --------------- | --------------- | ------------------------------------------------------------------- |
-| `filters`       | `Object`        | Optional object allowing to filter the votes.                       |
-| `filters.first` | `Number`        | Maximum number of votes. Defaults to `1000`.                        |
-| `filters.skip`  | `Number`        | Skip a number of votes. Defaults to `0`.                            |
-| `callback`      | `votes => void` | A callback that will get called every time the result gets updated. |
-| returns         | `Function`      | Unsubscribe function.                                               |
+| Name            | Type                                    | Description                                                         |
+| --------------- | --------------------------------------- | ------------------------------------------------------------------- |
+| `filters`       | `Object`                                | Optional object allowing to filter the votes.                       |
+| `filters.first` | `Number`                                | Maximum number of votes. Defaults to `1000`.                        |
+| `filters.skip`  | `Number`                                | Skip a number of votes. Defaults to `0`.                            |
+| `callback`      | `(error: Error, votes: Vote[]) => void` | A callback that will get called every time the result gets updated. |
+| returns         | `{ unsubscribe: () => void }`           | Unsubscribe function.                                               |

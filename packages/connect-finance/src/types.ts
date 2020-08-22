@@ -1,4 +1,8 @@
-import { SubscriptionHandler, Address } from '@aragon/connect-types'
+import {
+  Address,
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 import Transaction from './models/Transaction'
 import TokenBalance from './models/TokenBalance'
 
@@ -27,7 +31,7 @@ export interface IFinanceConnector {
   ): Promise<Transaction[]>
   onTransactionsForApp(
     appAddress: string,
-    callback: Function,
+    callback: SubscriptionCallback<Transaction[]>,
     first: number,
     skip: number
   ): SubscriptionHandler
@@ -40,7 +44,7 @@ export interface IFinanceConnector {
   onBalanceForToken(
     appAddress: string,
     tokenAddress: string,
-    callback: Function,
+    callback: SubscriptionCallback<TokenBalance>,
     first: number,
     skip: number
   ): SubscriptionHandler

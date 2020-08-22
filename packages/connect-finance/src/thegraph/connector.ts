@@ -1,4 +1,8 @@
-import { SubscriptionHandler } from '@aragon/connect-types'
+import {
+  Address,
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 import { GraphQLWrapper, QueryResult } from '@aragon/connect-thegraph'
 import { IFinanceConnector } from '../types'
 import Transaction from '../models/Transaction'
@@ -45,11 +49,11 @@ export default class FinanceConnectorTheGraph implements IFinanceConnector {
   }
 
   async transactionsForApp(
-    appAddress: string,
+    appAddress: Address,
     first: number,
     skip: number
   ): Promise<Transaction[]> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<Transaction[]>(
       queries.ALL_TRANSACTIONS('query'),
       { appAddress, first, skip },
       (result: QueryResult) => parseTransactions(result)
@@ -57,12 +61,12 @@ export default class FinanceConnectorTheGraph implements IFinanceConnector {
   }
 
   onTransactionsForApp(
-    appAddress: string,
-    callback: Function,
+    appAddress: Address,
+    callback: SubscriptionCallback<Transaction[]>,
     first: number,
     skip: number
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser<Transaction[]>(
       queries.ALL_TRANSACTIONS('subscription'),
       { appAddress, first, skip },
       callback,
@@ -71,12 +75,12 @@ export default class FinanceConnectorTheGraph implements IFinanceConnector {
   }
 
   async balanceForToken(
-    appAddress: string,
-    tokenAddress: string,
+    appAddress: Address,
+    tokenAddress: Address,
     first: number,
     skip: number
   ): Promise<TokenBalance> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<TokenBalance>(
       queries.BALANCE_FOR_TOKEN('query'),
       { appAddress, tokenAddress, first, skip },
       (result: QueryResult) => parseTokenBalance(result)
@@ -84,13 +88,13 @@ export default class FinanceConnectorTheGraph implements IFinanceConnector {
   }
 
   onBalanceForToken(
-    appAddress: string,
-    tokenAddress: string,
-    callback: Function,
+    appAddress: Address,
+    tokenAddress: Address,
+    callback: SubscriptionCallback<TokenBalance>,
     first: number,
     skip: number
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser<TokenBalance>(
       queries.BALANCE_FOR_TOKEN('subscription'),
       { appAddress, tokenAddress, first, skip },
       callback,

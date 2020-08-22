@@ -1,4 +1,8 @@
-import { Address, SubscriptionHandler } from '@aragon/connect-types'
+import {
+  Address,
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 
 import Vote from './Vote'
 import Voter from './Voter'
@@ -41,7 +45,9 @@ export default class DisputableVoting {
     return this.#connector.currentSetting(this.#address)
   }
 
-  onCurrentSetting(callback: Function): SubscriptionHandler {
+  onCurrentSetting(
+    callback: SubscriptionCallback<Setting>
+  ): SubscriptionHandler {
     return this.#connector.onCurrentSetting(this.#address, callback)
   }
 
@@ -49,7 +55,10 @@ export default class DisputableVoting {
     return this.#connector.setting(this.settingId(settingNumber))
   }
 
-  onSetting(settingNumber: string, callback: Function): SubscriptionHandler {
+  onSetting(
+    settingNumber: string,
+    callback: SubscriptionCallback<Setting>
+  ): SubscriptionHandler {
     return this.#connector.onSetting(this.settingId(settingNumber), callback)
   }
 
@@ -57,7 +66,10 @@ export default class DisputableVoting {
     return this.#connector.settings(this.#address, first, skip)
   }
 
-  onSettings({ first = 1000, skip = 0 } = {}, callback: Function): SubscriptionHandler {
+  onSettings(
+    { first = 1000, skip = 0 } = {},
+    callback: SubscriptionCallback<Setting[]>
+  ): SubscriptionHandler {
     return this.#connector.onSettings(this.#address, first, skip, callback)
   }
 
@@ -65,7 +77,10 @@ export default class DisputableVoting {
     return this.#connector.vote(voteId)
   }
 
-  onVote(voteId: string, callback: Function): SubscriptionHandler {
+  onVote(
+    voteId: string,
+    callback: SubscriptionCallback<Vote>
+  ): SubscriptionHandler {
     return this.#connector.onVote(voteId, callback)
   }
 
@@ -73,7 +88,10 @@ export default class DisputableVoting {
     return this.#connector.votes(this.#address, first, skip)
   }
 
-  onVotes({ first = 1000, skip = 0 } = {}, callback: Function): SubscriptionHandler {
+  onVotes(
+    { first = 1000, skip = 0 } = {},
+    callback: SubscriptionCallback<Vote[]>
+  ): SubscriptionHandler {
     return this.#connector.onVotes(this.#address, first, skip, callback)
   }
 
@@ -85,7 +103,10 @@ export default class DisputableVoting {
     return this.#connector.voter(this.voterId(voterAddress))
   }
 
-  onVoter(voterAddress: string, callback: Function): SubscriptionHandler {
+  onVoter(
+    voterAddress: string,
+    callback: SubscriptionCallback<Voter>
+  ): SubscriptionHandler {
     return this.#connector.onVoter(this.voterId(voterAddress), callback)
   }
 }

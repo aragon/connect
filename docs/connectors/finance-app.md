@@ -33,13 +33,13 @@ Get the list of transactions in the Finance app.
 
 Subscribe to the list of transactions in the Finance app.
 
-| Name            | Type                   | Description                                                         |
-| --------------- | ---------------------- | ------------------------------------------------------------------- |
-| `filters`       | `Object`               | Optional object allowing to filter the votes.                       |
-| `filters.first` | `Number`               | Maximum number of votes. Defaults to `1000`.                        |
-| `filters.skip`  | `Number`               | Skip a number of votes. Defaults to `0`.                            |
-| `callback`      | `transactions => void` | A callback that will get called every time the result gets updated. |
-| returns         | `Function`             | Unsubscribe function.                                               |
+| Name            | Type                                                  | Description                                                         |
+| --------------- | ----------------------------------------------------- | ------------------------------------------------------------------- |
+| `filters`       | `Object`                                              | Optional object allowing to filter the votes.                       |
+| `filters.first` | `Number`                                              | Maximum number of votes. Defaults to `1000`.                        |
+| `filters.skip`  | `Number`                                              | Skip a number of votes. Defaults to `0`.                            |
+| `callback`      | `(error: Error, transactions: Transaction[]) => void` | A callback that will get called every time the result gets updated. |
+| returns         | `{ unsubscribe: () => void }`                         | Unsubscribe function.                                               |
 
 ### Finance\#balance\(tokenAddress, filters\)
 
@@ -57,11 +57,11 @@ Get the balance of a token in the Finance app.
 
 Subscribe to the balance of a token in the Finance app.
 
-| Name            | Type              | Description                                                         |
-| --------------- | ----------------- | ------------------------------------------------------------------- |
-| `tokenAddress`  | `String`          | The address of the token.                                           |
-| `filters`       | `Object`          | Optional object allowing to filter the votes.                       |
-| `filters.first` | `Number`          | Maximum number of votes. Defaults to `1000`.                        |
-| `filters.skip`  | `Number`          | Skip a number of votes. Defaults to `0`.                            |
-| `callback`      | `balance => void` | A callback that will get called every time the result gets updated. |
-| returns         | `Function`        | Unsubscribe function.                                               |
+| Name            | Type                                            | Description                                                         |
+| --------------- | ----------------------------------------------- | ------------------------------------------------------------------- |
+| `tokenAddress`  | `String`                                        | The address of the token.                                           |
+| `filters`       | `Object`                                        | Optional object allowing to filter the votes.                       |
+| `filters.first` | `Number`                                        | Maximum number of votes. Defaults to `1000`.                        |
+| `filters.skip`  | `Number`                                        | Skip a number of votes. Defaults to `0`.                            |
+| `callback`      | `(error: Error, balance: TokenBalance) => void` | A callback that will get called every time the result gets updated. |
+| returns         | `{ unsubscribe: () => void }`                   | Unsubscribe function.                                               |
