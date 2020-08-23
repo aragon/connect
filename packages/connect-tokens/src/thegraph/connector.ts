@@ -1,4 +1,8 @@
-import { Address, SubscriptionHandler } from '@aragon/connect-types'
+import {
+  Address,
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 import { GraphQLWrapper } from '@aragon/connect-thegraph'
 import { ITokensConnector } from '../types'
 import * as queries from './queries'
@@ -86,9 +90,9 @@ export default class TokensConnectorTheGraph implements ITokensConnector {
 
   onTokenHolders(
     tokenAddress: string,
-    callback: Function
+    callback: SubscriptionCallback<TokenHolder[]>
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser<TokenHolder[]>(
       queries.TOKEN_HOLDERS('subscription'),
       { tokenAddress, first: 1000, skip: 0 },
       callback,

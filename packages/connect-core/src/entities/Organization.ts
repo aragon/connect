@@ -3,6 +3,7 @@ import {
   AppFilters,
   AppFiltersParam,
   SubscriptionHandler,
+  SubscriptionCallback,
 } from '@aragon/connect-types'
 import { ConnectionContext } from '../types'
 import TransactionIntent from '../transactions/TransactionIntent'
@@ -18,8 +19,8 @@ import Permission from './Permission'
 // Organization#roleManager(appAddress, roleId)
 // Organization#setRoleManager(address, appAddress, roleId)
 
-type OnAppCallback = (app: App) => void
-type OnAppsCallback = (apps: App[]) => void
+type OnAppCallback = SubscriptionCallback<App>
+type OnAppsCallback = SubscriptionCallback<App[]>
 
 function normalizeAppFilters(filters?: AppFiltersParam): AppFilters {
   if (!filters) {
@@ -117,7 +118,9 @@ export default class Organization {
     return this.connection.orgConnector.permissionsForOrg(this)
   }
 
-  onPermissions(callback: Function): SubscriptionHandler {
+  onPermissions(
+    callback: SubscriptionCallback<Permission[]>
+  ): SubscriptionHandler {
     return this.connection.orgConnector.onPermissionsForOrg(this, callback)
   }
 

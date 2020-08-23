@@ -3,7 +3,13 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { AppFilters, Network, SubscriptionHandler } from '@aragon/connect-types'
+import {
+  Address,
+  AppFilters,
+  Network,
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 import {
   App,
   ConnectionContext,
@@ -45,7 +51,7 @@ class ConnectorEthereum implements IOrganizationConnector {
 
   onPermissionsForOrg(
     organization: Organization,
-    callback: Function
+    callback: SubscriptionCallback<Permission[]>
   ): SubscriptionHandler {
     return {
       unsubscribe: () => {},
@@ -67,7 +73,7 @@ class ConnectorEthereum implements IOrganizationConnector {
   onAppForOrg(
     organization: Organization,
     filters: AppFilters,
-    callback: Function
+    callback: SubscriptionCallback<App>
   ): SubscriptionHandler {
     return {
       unsubscribe: () => {},
@@ -77,20 +83,20 @@ class ConnectorEthereum implements IOrganizationConnector {
   onAppsForOrg(
     organization: Organization,
     filters: AppFilters,
-    callback: Function
+    callback: SubscriptionCallback<App[]>
   ): SubscriptionHandler {
     return {
       unsubscribe: () => {},
     }
   }
 
-  repoForApp(organization: Organization, appAddress: string): Promise<Repo> {
+  repoForApp(organization: Organization, appAddress: Address): Promise<Repo> {
     return new Promise((resolve) => {
       resolve()
     })
   }
 
-  appByAddress(organization: Organization, appAddress: string): Promise<App> {
+  appByAddress(organization: Organization, appAddress: Address): Promise<App> {
     return new Promise((resolve) => {
       resolve()
     })
@@ -98,7 +104,7 @@ class ConnectorEthereum implements IOrganizationConnector {
 
   rolesForAddress(
     organization: Organization,
-    appAddress: string
+    appAddress: Address
   ): Promise<Role[]> {
     return new Promise((resolve) => {
       resolve([])

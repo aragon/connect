@@ -6,15 +6,18 @@ import {
 } from '@urql/core'
 import { DocumentNode } from 'graphql'
 import { pipe, subscribe } from 'wonka'
-import { SubscriptionHandler } from '@aragon/connect-types'
+import {
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 import { ParseFunction, QueryResult } from '../types'
 
 // Average block time is about 13 seconds on the 2020-08-14
 // See https://etherscan.io/chart/blocktime
 const POLL_INTERVAL_DEFAULT = 13 * 1000
 
+// Make every operation type a query, until GraphQL subscriptions get added again.
 function createRequest(query: DocumentNode, args: object): GraphQLRequest {
-  // Make every operation type a query, until GraphQL subscriptions get added again.
   if (query.definitions) {
     query = {
       ...query,
@@ -63,7 +66,7 @@ export default class GraphQLWrapper {
   subscribeToQuery(
     query: DocumentNode,
     args: any = {},
-    callback: Function
+    callback: SubscriptionCallback<QueryResult>
   ): SubscriptionHandler {
     const request = createRequest(query, args)
 
@@ -76,18 +79,17 @@ export default class GraphQLWrapper {
         if (this.#verbose) {
           console.log(this.describeQueryResult(result))
         }
-
         if (result.error) {
-          throw new Error(
-            [
-              'Error performing subscription.',
-              `${result.error.name}: ${result.error.message}`,
-              this.describeQueryResult(result),
-            ].join('\n')
+          callback(
+            new Error(
+              'Error performing subscription.\n' +
+                `${result.error.name}: ${result.error.message} \n` +
+                this.describeQueryResult(result)
+            )
           )
+          return
         }
-
-        callback(result)
+        callback(null, result)
       })
     )
   }
@@ -95,12 +97,34 @@ export default class GraphQLWrapper {
   subscribeToQueryWithParser<T>(
     query: DocumentNode,
     args: any = {},
-    callback: Function,
+    callback: SubscriptionCallback<T>,
     parser: ParseFunction
   ): SubscriptionHandler {
-    return this.subscribeToQuery(query, args, async (result: QueryResult) => {
-      callback(await this.parseQueryResult<T>(parser, result))
-    })
+    return this.subscribeToQuery(
+      query,
+      args,
+      async (error: Error | null, result?: QueryResult) => {
+        try {
+          if (error || result?.error) {
+            if (result) {
+              throw new Error(
+                'Error performing subscription.\n' +
+                  `${result?.error?.name}: ${result?.error?.message}\n` +
+                  this.describeQueryResult(result)
+              )
+            } else {
+              throw error
+            }
+          }
+          callback(
+            null,
+            await this.parseQueryResult<T>(parser, result as QueryResult)
+          )
+        } catch (error) {
+          callback(error)
+        }
+      }
+    )
   }
 
   async performQuery(
@@ -136,6 +160,9 @@ export default class GraphQLWrapper {
     result: QueryResult
   ): Promise<T> {
     try {
+      if (result.error) {
+        throw result.error
+      }
       return parser(result)
     } catch (error) {
       throw new Error(error.message + '\n\n' + this.describeQueryResult(result))
@@ -155,11 +182,11 @@ export default class GraphQLWrapper {
     const argsStr = JSON.stringify(result.operation.variables, null, 2)
     const subgraphUrl = result.operation.context.url
 
-    return [
-      `Subgraph: ${subgraphUrl}`,
-      `Arguments: ${argsStr}`,
-      `Query: ${queryStr}`,
-      `Returned data: ${dataStr}`,
-    ].join('\n\n')
+    return (
+      `Subgraph: ${subgraphUrl}\n\n` +
+      `Arguments: ${argsStr}\n\n` +
+      `Query: ${queryStr}\n\n` +
+      `Returned data: ${dataStr}\n\n`
+    )
   }
 }
