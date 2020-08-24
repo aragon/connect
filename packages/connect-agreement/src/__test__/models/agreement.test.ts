@@ -92,6 +92,32 @@ describe('Agreement', () => {
     })
   })
 
+  describe('disputableApps', () => {
+    test('allows fetching a list of disputable apps', async () => {
+      const disputables = await agreement.disputableApps()
+      expect(disputables.length).toBeGreaterThan(0)
+
+      const disputable = disputables[0]
+      expect(disputable.id).toBe(`${AGREEMENT_APP_ADDRESS}-disputable-${disputable.address}`)
+      expect(disputable.address).toBe('0x26e14ed789b51b5b226d69a5d40f72dc2d0180fe')
+      expect(disputable.activated).toEqual(true)
+      expect(disputable.agreementId).toBe(AGREEMENT_APP_ADDRESS)
+      expect(disputable.collateralRequirementId).toBe(`${AGREEMENT_APP_ADDRESS}-disputable-${disputable.address}-collateral-requirement-1`)
+
+      const collateralRequirement = await disputable.collateralRequirement()
+      expect(collateralRequirement.actionAmount).toEqual('0')
+      expect(collateralRequirement.formattedActionAmount).toEqual('0.00')
+      expect(collateralRequirement.challengeAmount).toBe('0')
+      expect(collateralRequirement.formattedChallengeAmount).toBe('0.00')
+      expect(collateralRequirement.challengeDuration).toBe('259200')
+
+      const erc20 = await collateralRequirement.token()
+      expect(erc20.decimals).toEqual(18)
+      expect(erc20.name).toEqual('DAI Token')
+      expect(erc20.symbol).toBe('DAI')
+    })
+  })
+
   describe('signers', () => {
     let signer: Signer
     const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'

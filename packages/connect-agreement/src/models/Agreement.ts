@@ -2,6 +2,7 @@ import { Address, SubscriptionHandler } from '@aragon/connect-types'
 
 import Signer from './Signer'
 import Version from './Version'
+import DisputableApp from './DisputableApp'
 import { IAgreementConnector } from '../types'
 
 export default class Agreement {
@@ -61,6 +62,17 @@ export default class Agreement {
     callback: Function
   ): SubscriptionHandler {
     return this.#connector.onVersions(this.#address, first, skip, callback)
+  }
+
+  async disputableApps({ first = 1000, skip = 0 } = {}): Promise<DisputableApp[]> {
+    return this.#connector.disputableApps(this.#address, first, skip)
+  }
+
+  onDisputableApps(
+    { first = 1000, skip = 0 } = {},
+    callback: Function
+  ): SubscriptionHandler {
+    return this.#connector.onDisputableApps(this.#address, first, skip, callback)
   }
 
   signerId(signerAddress: string): string {
