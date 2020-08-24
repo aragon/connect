@@ -57,7 +57,10 @@ export default class DisputableVoting {
     return this.#connector.settings(this.#address, first, skip)
   }
 
-  onSettings({ first = 1000, skip = 0 } = {}, callback: Function): SubscriptionHandler {
+  onSettings(
+    { first = 1000, skip = 0 } = {},
+    callback: Function
+  ): SubscriptionHandler {
     return this.#connector.onSettings(this.#address, first, skip, callback)
   }
 
@@ -73,7 +76,10 @@ export default class DisputableVoting {
     return this.#connector.votes(this.#address, first, skip)
   }
 
-  onVotes({ first = 1000, skip = 0 } = {}, callback: Function): SubscriptionHandler {
+  onVotes(
+    { first = 1000, skip = 0 } = {},
+    callback: Function
+  ): SubscriptionHandler {
     return this.#connector.onVotes(this.#address, first, skip, callback)
   }
 

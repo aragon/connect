@@ -77,23 +77,51 @@ export interface CollateralRequirementData {
 export interface IDisputableVotingConnector {
   disconnect(): Promise<void>
   disputableVoting(disputableVoting: string): Promise<DisputableVotingData>
-  onDisputableVoting(disputableVoting: string, callback: Function): SubscriptionHandler
+  onDisputableVoting(
+    disputableVoting: string,
+    callback: Function
+  ): SubscriptionHandler
   currentSetting(disputableVoting: string): Promise<Setting>
-  onCurrentSetting(disputableVoting: string, callback: Function): SubscriptionHandler
+  onCurrentSetting(
+    disputableVoting: string,
+    callback: Function
+  ): SubscriptionHandler
   setting(settingId: string): Promise<Setting>
   onSetting(settingId: string, callback: Function): SubscriptionHandler
-  settings(disputableVoting: string, first: number, skip: number): Promise<Setting[]>
-  onSettings(disputableVoting: string, first: number, skip: number, callback: Function): SubscriptionHandler
+  settings(
+    disputableVoting: string,
+    first: number,
+    skip: number
+  ): Promise<Setting[]>
+  onSettings(
+    disputableVoting: string,
+    first: number,
+    skip: number,
+    callback: Function
+  ): SubscriptionHandler
   vote(voteId: string): Promise<Vote>
   onVote(voteId: string, callback: Function): SubscriptionHandler
   votes(disputableVoting: string, first: number, skip: number): Promise<Vote[]>
-  onVotes(disputableVoting: string, first: number, skip: number, callback: Function): SubscriptionHandler
+  onVotes(
+    disputableVoting: string,
+    first: number,
+    skip: number,
+    callback: Function
+  ): SubscriptionHandler
   castVote(castVoteId: string): Promise<CastVote | null>
   onCastVote(castVoteId: string, callback: Function): SubscriptionHandler
   castVotes(voteId: string, first: number, skip: number): Promise<CastVote[]>
-  onCastVotes(voteId: string, first: number, skip: number, callback: Function): SubscriptionHandler
+  onCastVotes(
+    voteId: string,
+    first: number,
+    skip: number,
+    callback: Function
+  ): SubscriptionHandler
   voter(voterId: string): Promise<Voter>
   onVoter(voterId: string, callback: Function): SubscriptionHandler
   collateralRequirement(voteId: string): Promise<CollateralRequirement>
-  onCollateralRequirement(voteId: string, callback: Function): SubscriptionHandler
+  onCollateralRequirement(
+    voteId: string,
+    callback: Function
+  ): SubscriptionHandler
 }
