@@ -23,7 +23,7 @@ function buildVote(vote: any, connector: any): Vote {
     pauseDuration,
     quietEndingExtendedSeconds,
     quietEndingSnapshotSupport,
-    script
+    script,
   } = vote
 
   const voteData: VoteData = {
@@ -45,7 +45,7 @@ function buildVote(vote: any, connector: any): Vote {
     pauseDuration,
     quietEndingExtendedSeconds,
     quietEndingSnapshotSupport,
-    script
+    script,
   }
 
   return new Vote(voteData, connector)

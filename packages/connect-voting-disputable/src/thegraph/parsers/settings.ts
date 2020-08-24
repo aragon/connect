@@ -14,7 +14,7 @@ function buildSetting(setting: any, connector: any): Setting {
     quietEndingPeriod,
     quietEndingExtension,
     createdAt,
-    voting
+    voting,
   } = setting
 
   const settingData: SettingData = {
@@ -27,13 +27,16 @@ function buildSetting(setting: any, connector: any): Setting {
     quietEndingPeriod,
     quietEndingExtension,
     createdAt,
-    votingId: voting.id
+    votingId: voting.id,
   }
 
   return new Setting(settingData, connector)
 }
 
-export function parseCurrentSetting(result: QueryResult, connector: any): Setting {
+export function parseCurrentSetting(
+  result: QueryResult,
+  connector: any
+): Setting {
   const disputableVoting = result.data.disputableVoting
 
   if (!disputableVoting || !disputableVoting.setting) {
