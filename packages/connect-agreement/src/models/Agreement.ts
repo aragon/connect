@@ -1,12 +1,12 @@
 import {
   Address,
   SubscriptionCallback,
-  SubscriptionHandler,
+  SubscriptionResult,
 } from '@aragon/connect-types'
-
+import { subscription } from '@aragon/connect-core'
+import { IAgreementConnector } from '../types'
 import Signer from './Signer'
 import Version from './Version'
-import { IAgreementConnector } from '../types'
 
 export default class Agreement {
   #address: Address
@@ -41,9 +41,11 @@ export default class Agreement {
   }
 
   onCurrentVersion(
-    callback: SubscriptionCallback<Version>
-  ): SubscriptionHandler {
-    return this.#connector.onCurrentVersion(this.#address, callback)
+    callback?: SubscriptionCallback<Version>
+  ): SubscriptionResult<Version> {
+    return subscription<Version>(callback, (callback) =>
+      this.#connector.onCurrentVersion(this.#address, callback)
+    )
   }
 
   versionId(versionNumber: string): string {
@@ -56,9 +58,11 @@ export default class Agreement {
 
   onVersion(
     versionNumber: string,
-    callback: SubscriptionCallback<Version>
-  ): SubscriptionHandler {
-    return this.#connector.onVersion(this.versionId(versionNumber), callback)
+    callback?: SubscriptionCallback<Version>
+  ): SubscriptionResult<Version> {
+    return subscription<Version>(callback, (callback) =>
+      this.#connector.onVersion(this.versionId(versionNumber), callback)
+    )
   }
 
   async versions({ first = 1000, skip = 0 } = {}): Promise<Version[]> {
@@ -67,9 +71,11 @@ export default class Agreement {
 
   onVersions(
     { first = 1000, skip = 0 } = {},
-    callback: SubscriptionCallback<Version[]>
-  ): SubscriptionHandler {
-    return this.#connector.onVersions(this.#address, first, skip, callback)
+    callback?: SubscriptionCallback<Version[]>
+  ): SubscriptionResult<Version[]> {
+    return subscription<Version[]>(callback, (callback) =>
+      this.#connector.onVersions(this.#address, first, skip, callback)
+    )
   }
 
   signerId(signerAddress: string): string {
@@ -82,8 +88,10 @@ export default class Agreement {
 
   onSigner(
     signerAddress: string,
-    callback: SubscriptionCallback<Signer>
-  ): SubscriptionHandler {
-    return this.#connector.onSigner(this.signerId(signerAddress), callback)
+    callback?: SubscriptionCallback<Signer>
+  ): SubscriptionResult<Signer> {
+    return subscription<Signer>(callback, (callback) =>
+      this.#connector.onSigner(this.signerId(signerAddress), callback)
+    )
   }
 }
