@@ -1,7 +1,5 @@
-import {
-  SubscriptionCallback,
-  SubscriptionHandler,
-} from '@aragon/connect-types'
+import { SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
+import { subscription } from '@aragon/connect-core'
 import { IVotingConnector, VoteData } from '../types'
 import Cast from './Cast'
 
@@ -42,7 +40,9 @@ export default class Vote {
     return this.#connector.castsForVote(this.id, first, skip)
   }
 
-  onCasts(callback: SubscriptionCallback<Cast[]>): SubscriptionHandler {
-    return this.#connector.onCastsForVote(this.id, callback)
+  onCasts(callback?: SubscriptionCallback<Cast[]>): SubscriptionResult<Cast[]> {
+    return subscription<Cast[]>(callback, (callback) =>
+      this.#connector.onCastsForVote(this.id, callback)
+    )
   }
 }
