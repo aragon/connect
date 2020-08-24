@@ -7,12 +7,12 @@ import {
 } from '@aragon/connect-react'
 import connectVoting, { Voting, Vote } from '@aragon/connect-voting'
 
-const NETWORK = 1
-const ORG_ADDRESS = 'governance.aragonproject.eth'
-const VOTING_APP_FILTER = 'voting'
-// const NETWORK = 4
-// const ORG_ADDRESS = '0x7cee20f778a53403d4fc8596e88deb694bc91c98'
-// const VOTING_APP_FILTER = '0xf7f9a33ed13b01324884bd87137609251b5f7c88'
+// const NETWORK = 1
+// const ORG_ADDRESS = 'governance.aragonproject.eth'
+// const VOTING_APP_FILTER = 'voting'
+const NETWORK = 4
+const ORG_ADDRESS = '0x7cee20f778a53403d4fc8596e88deb694bc91c98'
+const VOTING_APP_FILTER = '0xf7f9a33ed13b01324884bd87137609251b5f7c88'
 
 const VOTES_PER_PAGE = 5
 
@@ -67,7 +67,7 @@ function Votes() {
   const [votes, votesStatus] = useVoting(
     voting,
     (app: Voting) => {
-      return app.votes({ first: VOTES_PER_PAGE, skip: VOTES_PER_PAGE * page })
+      return app.onVotes({ first: VOTES_PER_PAGE, skip: VOTES_PER_PAGE * page })
     },
     [page]
   )
@@ -92,10 +92,10 @@ function Votes() {
           if (votingStatus.loading || votesStatus.loading) {
             return <p>Loading…</p>
           }
-          if (votes && votes.length > 0) {
+          if (Array.isArray(votes) && votes?.length > 0) {
             return (
               <ul>
-                {votes.map((vote: Vote) => (
+                {votes?.map((vote: Vote) => (
                   <li key={vote.id}>{formatVote(vote)}</li>
                 ))}
               </ul>
