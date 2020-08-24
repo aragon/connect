@@ -1,8 +1,9 @@
 import {
   Address,
   SubscriptionCallback,
-  SubscriptionHandler,
+  SubscriptionResult,
 } from '@aragon/connect-types'
+import { subscription } from '@aragon/connect-core'
 import { ITokensConnector } from '../types'
 import Token from './Token'
 import TokenHolder from './TokenHolder'
@@ -30,8 +31,10 @@ export default class Tokens {
   }
 
   onHolders(
-    callback: SubscriptionCallback<TokenHolder[]>
-  ): SubscriptionHandler {
-    return this.#connector.onTokenHolders(this.#appAddress, callback)
+    callback?: SubscriptionCallback<TokenHolder[]>
+  ): SubscriptionResult<TokenHolder[]> {
+    return subscription<TokenHolder[]>(callback, (callback) =>
+      this.#connector.onTokenHolders(this.#appAddress, callback)
+    )
   }
 }
