@@ -248,6 +248,7 @@ export function createAppHook(
 
     useEffect(() => {
       let cancelled = false
+      let subscriptionHandler: SubscriptionHandler | null = null
 
       setStatus((status) => ({
         ...status,
@@ -264,7 +265,28 @@ export function createAppHook(
         try {
           const connectedApp = await appConnect(updatedApp, connector)
           const result = await callbackRef.current(connectedApp)
-          if (!cancelled) {
+          if (cancelled) {
+            return
+          }
+
+          // Subscription
+          if (typeof result === 'function') {
+            console.log('Subscription mode')
+            subscriptionHandler = result(
+              (error: Error | null, result?: any) => {
+                if (!cancelled) {
+                  setStatus({
+                    error: error || null,
+                    loading: false,
+                    result: error ? null : result,
+                  })
+                }
+              }
+            )
+
+            // Just async data
+          } else {
+            console.log('Subscription mode')
             setStatus({
               error: null,
               loading: false,
@@ -288,6 +310,7 @@ export function createAppHook(
 
       return () => {
         cancelled = true
+        subscriptionHandler?.unsubscribe()
       }
     }, [connector, updatedApp, ...(dependencies || [])])
 
