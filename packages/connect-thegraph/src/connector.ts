@@ -14,6 +14,7 @@ import {
   Network,
   Networkish,
   SubscriptionHandler,
+  SubscriptionCallback,
 } from '@aragon/connect-types'
 import * as queries from './queries'
 import GraphQLWrapper from './core/GraphQLWrapper'
@@ -117,9 +118,9 @@ class ConnectorTheGraph implements IOrganizationConnector {
 
   onPermissionsForOrg(
     organization: Organization,
-    callback: Function
+    callback: SubscriptionCallback<Permission[]>
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser<Permission[]>(
       queries.ORGANIZATION_PERMISSIONS('subscription'),
       { orgAddress: organization.address.toLowerCase() },
       callback,
@@ -154,6 +155,23 @@ class ConnectorTheGraph implements IOrganizationConnector {
     return apps[0]
   }
 
+  onAppForOrg(
+    organization: Organization,
+    filters: AppFilters,
+    callback: SubscriptionCallback<App>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<App>(
+      queries.ORGANIZATION_APPS('subscription'),
+      {
+        appFilter: appFiltersToQueryFilter(filters),
+        first: 1,
+        orgAddress: organization.address.toLowerCase(),
+      },
+      callback,
+      (result) => parseApp(result, organization)
+    )
+  }
+
   async appsForOrg(
     organization: Organization,
     filters: AppFilters
@@ -168,27 +186,10 @@ class ConnectorTheGraph implements IOrganizationConnector {
     )
   }
 
-  onAppForOrg(
-    organization: Organization,
-    filters: AppFilters,
-    callback: Function
-  ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser<App[]>(
-      queries.ORGANIZATION_APPS('subscription'),
-      {
-        appFilter: appFiltersToQueryFilter(filters),
-        first: 1,
-        orgAddress: organization.address.toLowerCase(),
-      },
-      (apps: App[]) => callback(apps[0]),
-      (result) => parseApps(result, organization)
-    )
-  }
-
   onAppsForOrg(
     organization: Organization,
     filters: AppFilters,
-    callback: Function
+    callback: SubscriptionCallback<App[]>
   ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser<App[]>(
       queries.ORGANIZATION_APPS('subscription'),
@@ -205,7 +206,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
     organization: Organization,
     appAddress: Address
   ): Promise<Repo> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<Repo>(
       queries.REPO_BY_APP_ADDRESS('query'),
       { appAddress: appAddress.toLowerCase() },
       (result) => parseRepo(result, organization)

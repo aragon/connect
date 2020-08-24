@@ -1,4 +1,7 @@
-import { SubscriptionHandler } from '@aragon/connect-types'
+import {
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 import Vote from './models/Vote'
 import Cast from './models/Cast'
 
@@ -29,10 +32,13 @@ export interface IVotingConnector {
   votesForApp(appAddress: string, first: number, skip: number): Promise<Vote[]>
   onVotesForApp(
     appAddress: string,
-    callback: Function,
+    callback: SubscriptionCallback<Vote[]>,
     first: number,
     skip: number
   ): SubscriptionHandler
   castsForVote(voteId: string, first: number, skip: number): Promise<Cast[]>
-  onCastsForVote(voteId: string, callback: Function): SubscriptionHandler
+  onCastsForVote(
+    voteId: string,
+    callback: SubscriptionCallback<Cast[]>
+  ): SubscriptionHandler
 }
