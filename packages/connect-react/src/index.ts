@@ -220,9 +220,16 @@ export function createAppHook(
     callback?: (app: App | any) => T | Promise<T>,
     dependencies?: any[]
   ): [T | null, LoadingStatus] {
-    const [result, setResult] = useState<T | null>(null)
-    const [error, setError] = useState<Error | null>(null)
-    const [loading, setLoading] = useState<boolean>(false)
+    const [{ result, error, loading }, setStatus] = useState<{
+      error: Error | null
+      loading: boolean
+      result: T | null
+    }>({
+      error: null,
+      loading: false,
+      result: null,
+    })
+
     const callbackRef = useRef<Function>((app: App) => app)
 
     useEffect(() => {
@@ -242,23 +249,35 @@ export function createAppHook(
     useEffect(() => {
       let cancelled = false
 
-      setResult(null)
-      setError(null)
+      setStatus((status) => ({
+        ...status,
+        error: null,
+        result: null,
+      }))
 
       const update = async () => {
-        setLoading(true)
+        setStatus((status) => ({
+          ...status,
+          loading: true,
+        }))
 
         try {
           const connectedApp = await appConnect(updatedApp, connector)
           const result = await callbackRef.current(connectedApp)
           if (!cancelled) {
-            setLoading(false)
-            setResult(result)
+            setStatus({
+              error: null,
+              loading: false,
+              result,
+            })
           }
         } catch (err) {
           if (!cancelled) {
-            setLoading(false)
-            setError(err)
+            setStatus({
+              error: err,
+              loading: false,
+              result: null,
+            })
           }
         }
       }
