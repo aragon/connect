@@ -116,12 +116,20 @@ export function useOrganization(): OrganizationHookResult {
 function useConnectSubscription<Data>(
   callback: (
     org: Organization,
-    onData: (data: Data) => void
+    onData: (error: Error | null, data: Data) => void
   ) => SubscriptionHandler,
   initValue: Data
 ): [Data, LoadingStatus] {
-  const [data, setData] = useState<Data>(initValue)
-  const [loading, setLoading] = useState<boolean>(false)
+  const [{ data, error, loading }, setStatus] = useState<{
+    data: Data
+    error: Error | null
+    loading: boolean
+  }>({
+    data: initValue,
+    error: null,
+    loading: false,
+  })
+
   const {
     org,
     orgStatus: { loading: orgLoading },
@@ -132,8 +140,11 @@ function useConnectSubscription<Data>(
   const subscribe = useCallback(() => {
     if (!org) {
       // If the org is loading, the subscription is loading as well.
-      setLoading(orgLoading)
-      setData(initValue)
+      setStatus({
+        data: initValue,
+        error: null,
+        loading: orgLoading,
+      })
       return
     }
 
@@ -146,8 +157,9 @@ function useConnectSubscription<Data>(
       handler?.unsubscribe?.()
     }
 
-    setLoading(true)
-    handler = callback(org, (data: Data) => {
+    setStatus((status) => ({ ...status, loading: true }))
+
+    handler = callback(org, (error: Error | null, data: Data) => {
       if (cancelled) {
         return
       }
@@ -155,22 +167,26 @@ function useConnectSubscription<Data>(
       // This is necessary because some connectors might keep providing new app
       // instances, even if these instances are not actually updated.
       // For example, the Graph connector uses HTTP polling which has this effect.
-      const dataJson = JSON.stringify(data)
+      const dataJson = JSON.stringify({ error, data })
       if (dataJson === dataJsonRef.current) {
         return
       }
 
-      setData(data)
-      setLoading(false)
       dataJsonRef.current = dataJson
+
+      setStatus({
+        error: error || null,
+        data: error ? initValue : data,
+        loading: false,
+      })
     })
-  }, [org, orgLoading, callback])
+  }, [callback, initValue, org, orgLoading])
 
   useEffect(() => {
     subscribe()
   }, [subscribe])
 
-  return [data, { error: null, loading, retry: subscribe }]
+  return [data, { error, loading, retry: subscribe }]
 }
 
 export function useApp(
@@ -179,7 +195,6 @@ export function useApp(
   const callback = useCallback((org, onData) => org.onApp(appsFilter, onData), [
     JSON.stringify(appsFilter),
   ])
-
   return useConnectSubscription<App | null>(callback, null)
 }
 
@@ -188,7 +203,6 @@ export function useApps(appsFilter?: AppFiltersParam): [App[], LoadingStatus] {
     (org, onData) => org.onApps(appsFilter, onData),
     [JSON.stringify(appsFilter)]
   )
-
   return useConnectSubscription<App[]>(callback, [])
 }
 
