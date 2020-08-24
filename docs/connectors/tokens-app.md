@@ -52,10 +52,10 @@ Get a list of token holders.
 
 Subscribe to a list of token holders.
 
-| Name            | Type                                                 | Description                                                         |
-| --------------- | ---------------------------------------------------- | ------------------------------------------------------------------- |
-| `filters`       | `Object`                                             | Optional object allowing to filter the token holders.               |
-| `filters.first` | `Number`                                             | Maximum number of token holders. Defaults to `1000`.                |
-| `filters.skip`  | `Number`                                             | Skip a number of token holders. Defaults to `0`.                    |
+| Name            | Type                                                  | Description                                                         |
+| --------------- | ----------------------------------------------------- | ------------------------------------------------------------------- |
+| `filters`       | `Object`                                              | Optional object allowing to filter the token holders.               |
+| `filters.first` | `Number`                                              | Maximum number of token holders. Defaults to `1000`.                |
+| `filters.skip`  | `Number`                                              | Skip a number of token holders. Defaults to `0`.                    |
 | `callback`      | `(error: Error, tokenHolders: TokenHolder[]) => void` | A callback that will get called every time the result gets updated. |
-| returns         | `{ unsubscribe: () => void }`                        | Unsubscribe function.                                               |
+| returns         | `{ unsubscribe: () => void }`                         | Unsubscribe function.                                               |
