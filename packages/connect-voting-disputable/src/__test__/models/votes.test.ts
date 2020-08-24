@@ -13,7 +13,9 @@ describe('DisputableVoting', () => {
   let voting: DisputableVoting
 
   beforeAll(() => {
-    const connector = new DisputableVotingConnectorTheGraph(VOTING_SUBGRAPH_URL)
+    const connector = new DisputableVotingConnectorTheGraph({
+      subgraphUrl: VOTING_SUBGRAPH_URL,
+    })
     voting = new DisputableVoting(connector, VOTING_APP_ADDRESS)
   })
 

@@ -28,16 +28,25 @@ export function subgraphUrlFromChainId(chainId: number) {
   return null
 }
 
+type AgreementConnectorTheGraphConfig = {
+  pollInterval?: number
+  subgraphUrl?: string
+  verbose?: boolean
+}
+
 export default class AgreementConnectorTheGraph implements IAgreementConnector {
   #gql: GraphQLWrapper
 
-  constructor(subgraphUrl: string, verbose: boolean = false) {
-    if (!subgraphUrl) {
+  constructor(config: AgreementConnectorTheGraphConfig) {
+    if (!config.subgraphUrl) {
       throw new Error(
         'AgreementConnectorTheGraph requires subgraphUrl to be passed.'
       )
     }
-    this.#gql = new GraphQLWrapper(subgraphUrl, verbose)
+    this.#gql = new GraphQLWrapper(config.subgraphUrl, {
+      pollInterval: config.pollInterval,
+      verbose: config.verbose,
+    })
   }
 
   async disconnect() {

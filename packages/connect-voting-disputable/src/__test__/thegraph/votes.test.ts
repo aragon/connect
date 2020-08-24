@@ -8,7 +8,9 @@ describe('DisputableVoting votes', () => {
   let connector: DisputableVotingConnectorTheGraph
 
   beforeAll(() => {
-    connector = new DisputableVotingConnectorTheGraph(VOTING_SUBGRAPH_URL)
+    connector = new DisputableVotingConnectorTheGraph({
+      subgraphUrl: VOTING_SUBGRAPH_URL,
+    })
   })
 
   afterAll(async () => {

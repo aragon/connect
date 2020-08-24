@@ -8,7 +8,9 @@ describe('Agreement', () => {
   let agreement: Agreement
 
   beforeAll(() => {
-    const connector = new AgreementConnectorTheGraph(AGREEMENT_SUBGRAPH_URL)
+    const connector = new AgreementConnectorTheGraph({
+      subgraphUrl: AGREEMENT_SUBGRAPH_URL,
+    })
     agreement = new Agreement(connector, AGREEMENT_APP_ADDRESS)
   })
 
