@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn --frozen-lockfile
-      - run: yarn precise-commits --whitelist="packages/**/*.ts" --check-only --head=$GITHUB_SHA --base=${{ github.base_ref }}
+      - run: yarn precise-commits --whitelist="packages/**/*.ts" --check-only --head=$GITHUB_SHA --base=${git rev-parse ${{ github.base_ref }}}
       - run: yarn test
         env:
           CI: true
