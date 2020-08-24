@@ -1,12 +1,13 @@
 import { BigNumber } from 'ethers'
 import {
+  Address,
   SubscriptionCallback,
-  SubscriptionHandler,
+  SubscriptionResult,
 } from '@aragon/connect-types'
-
+import { subscription } from '@aragon/connect-core'
+import { IDisputableVotingConnector, VoteData } from '../types'
 import CastVote from './CastVote'
 import CollateralRequirement from './CollateralRequirement'
-import { IDisputableVotingConnector, VoteData } from '../types'
 
 export default class Vote {
   #connector: IDisputableVotingConnector
@@ -83,19 +84,21 @@ export default class Vote {
       .toString()
   }
 
-  castVoteId(voterAddress: string): string {
+  castVoteId(voterAddress: Address): string {
     return `${this.id}-cast-${voterAddress.toLowerCase()}`
   }
 
-  async castVote(voterAddress: string): Promise<CastVote | null> {
+  async castVote(voterAddress: Address): Promise<CastVote | null> {
     return this.#connector.castVote(this.castVoteId(voterAddress))
   }
 
   onCastVote(
-    voterAddress: string,
-    callback: SubscriptionCallback<CastVote | null>
-  ): SubscriptionHandler {
-    return this.#connector.onCastVote(this.castVoteId(voterAddress), callback)
+    voterAddress: Address,
+    callback?: SubscriptionCallback<CastVote | null>
+  ): SubscriptionResult<CastVote | null> {
+    return subscription<CastVote | null>(callback, (callback) =>
+      this.#connector.onCastVote(this.castVoteId(voterAddress), callback)
+    )
   }
 
   async castVotes({ first = 1000, skip = 0 } = {}): Promise<CastVote[]> {
@@ -104,9 +107,11 @@ export default class Vote {
 
   onCastVotes(
     { first = 1000, skip = 0 } = {},
-    callback: SubscriptionCallback<CastVote[]>
-  ): SubscriptionHandler {
-    return this.#connector.onCastVotes(this.id, first, skip, callback)
+    callback?: SubscriptionCallback<CastVote[]>
+  ): SubscriptionResult<CastVote[]> {
+    return subscription<CastVote[]>(callback, (callback) =>
+      this.#connector.onCastVotes(this.id, first, skip, callback)
+    )
   }
 
   async collateralRequirement(): Promise<CollateralRequirement> {
@@ -114,8 +119,10 @@ export default class Vote {
   }
 
   onCollateralRequirement(
-    callback: SubscriptionCallback<CollateralRequirement>
-  ): SubscriptionHandler {
-    return this.#connector.onCollateralRequirement(this.id, callback)
+    callback?: SubscriptionCallback<CollateralRequirement>
+  ): SubscriptionResult<CollateralRequirement> {
+    return subscription<CollateralRequirement>(callback, (callback) =>
+      this.#connector.onCollateralRequirement(this.id, callback)
+    )
   }
 }
