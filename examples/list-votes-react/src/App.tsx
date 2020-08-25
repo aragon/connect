@@ -90,12 +90,17 @@ const VotingApp = React.memo(function VotingApp() {
 })
 
 function Votes() {
-  const [voting, votingStatus] = useApp(VOTING_APP_FILTER)
   const [page, setPage] = useState<number>(0)
-  const [votes, votesStatus] = useVoting(
+
+  const [voting, votingStatus] = useApp(VOTING_APP_FILTER)
+
+  const [votes = [], votesStatus] = useVoting<Vote[]>(
     voting,
     (app: Voting) => {
-      return app.onVotes({ first: VOTES_PER_PAGE, skip: VOTES_PER_PAGE * page })
+      return app.onVotes({
+        first: VOTES_PER_PAGE,
+        skip: VOTES_PER_PAGE * page,
+      })
     },
     [page]
   )
@@ -120,7 +125,7 @@ function Votes() {
           if (votingStatus.loading || votesStatus.loading) {
             return <p>Loading…</p>
           }
-          if (Array.isArray(votes) && votes?.length > 0) {
+          if (votes && votes.length > 0) {
             return (
               <ul>
                 {votes?.map((vote: Vote) => (
