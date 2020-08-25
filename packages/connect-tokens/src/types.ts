@@ -31,6 +31,8 @@ export interface ITokensConnector {
   ): Promise<TokenHolder[]>
   onTokenHolders(
     tokenAddress: string,
+    first: number,
+    skip: number,
     callback: SubscriptionCallback<TokenHolder[]>
   ): SubscriptionHandler
 }

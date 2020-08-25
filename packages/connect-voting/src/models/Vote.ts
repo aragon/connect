@@ -42,7 +42,10 @@ export default class Vote {
     return this.#connector.castsForVote(this.id, first, skip)
   }
 
-  onCasts(callback: SubscriptionCallback<Cast[]>): SubscriptionHandler {
-    return this.#connector.onCastsForVote(this.id, callback)
+  onCasts(
+    { first = 1000, skip = 0 } = {},
+    callback: SubscriptionCallback<Cast[]>
+  ): SubscriptionHandler {
+    return this.#connector.onCastsForVote(this.id, first, skip, callback)
   }
 }
