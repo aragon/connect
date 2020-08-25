@@ -6,6 +6,9 @@ import {
 import Signer from './models/Signer'
 import Signature from './models/Signature'
 import Version from './models/Version'
+import DisputableApp from './models/DisputableApp'
+import CollateralRequirement from './models/CollateralRequirement'
+import ERC20 from './models/ERC20'
 
 export interface AgreementData {
   id: string
@@ -22,6 +25,31 @@ export interface VersionData {
   arbitrator: string
   appFeesCashier: string
   effectiveFrom: string
+}
+
+export interface DisputableAppData {
+  id: string
+  address: string
+  agreementId: string
+  activated: boolean
+  collateralRequirementId: string
+}
+
+export interface CollateralRequirementData {
+  id: string
+  disputableAppId: string
+  tokenId: string
+  tokenDecimals: string
+  actionAmount: string
+  challengeAmount: string
+  challengeDuration: string
+}
+
+export interface ERC20Data {
+  id: string
+  name: string
+  symbol: string
+  decimals: string
 }
 
 export interface SignerData {
@@ -61,6 +89,17 @@ export interface IAgreementConnector {
     skip: number,
     callback: SubscriptionCallback<Version[]>
   ): SubscriptionHandler
+  disputableApps(
+    agreement: string,
+    first: number,
+    skip: number
+  ): Promise<DisputableApp[]>
+  onDisputableApps(
+    agreement: string,
+    first: number,
+    skip: number,
+    callback: SubscriptionCallback<DisputableApp[]>
+  ): SubscriptionHandler
   signer(signerId: string): Promise<Signer>
   onSigner(
     signerId: string,
@@ -76,5 +115,15 @@ export interface IAgreementConnector {
     first: number,
     skip: number,
     callback: SubscriptionCallback<Signature[]>
+  ): SubscriptionHandler
+  collateralRequirement(disputableAppId: string): Promise<CollateralRequirement>
+  onCollateralRequirement(
+    disputableAppId: string,
+    callback: SubscriptionCallback<CollateralRequirement>
+  ): SubscriptionHandler
+  ERC20(tokenAddress: string): Promise<ERC20>
+  onERC20(
+    tokenAddress: string,
+    callback: SubscriptionCallback<ERC20>
   ): SubscriptionHandler
 }

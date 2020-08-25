@@ -8,6 +8,9 @@ import * as queries from './queries'
 import Signer from '../models/Signer'
 import Signature from '../models/Signature'
 import Version from '../models/Version'
+import DisputableApp from '../models/DisputableApp'
+import CollateralRequirement from '../models/CollateralRequirement'
+import ERC20 from '../models/ERC20'
 import { AgreementData, IAgreementConnector } from '../types'
 import {
   parseAgreement,
@@ -16,6 +19,9 @@ import {
   parseCurrentVersion,
   parseVersions,
   parseVersion,
+  parseDisputableApps,
+  parseCollateralRequirement,
+  parseERC20,
 } from './parsers'
 
 export function subgraphUrlFromChainId(chainId: number) {
@@ -142,6 +148,32 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     )
   }
 
+  async disputableApps(
+    agreement: string,
+    first: number,
+    skip: number
+  ): Promise<DisputableApp[]> {
+    return this.#gql.performQueryWithParser<DisputableApp[]>(
+      queries.ALL_DISPUTABLE_APPS('query'),
+      { agreement, first, skip },
+      (result: QueryResult) => parseDisputableApps(result, this)
+    )
+  }
+
+  onDisputableApps(
+    agreement: string,
+    first: number,
+    skip: number,
+    callback: SubscriptionCallback<DisputableApp[]>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<DisputableApp[]>(
+      queries.ALL_DISPUTABLE_APPS('subscription'),
+      { agreement, first, skip },
+      callback,
+      (result: QueryResult) => parseDisputableApps(result, this)
+    )
+  }
+
   async signer(signerId: string): Promise<Signer> {
     return this.#gql.performQueryWithParser<Signer>(
       queries.GET_SIGNER('query'),
@@ -185,6 +217,48 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
       { signerId, first, skip },
       callback,
       (result: QueryResult) => parseSignatures(result, this)
+    )
+  }
+
+  async collateralRequirement(
+    disputableAppId: string
+  ): Promise<CollateralRequirement> {
+    return this.#gql.performQueryWithParser<CollateralRequirement>(
+      queries.GET_COLLATERAL_REQUIREMENT('query'),
+      { disputableAppId },
+      (result: QueryResult) => parseCollateralRequirement(result, this)
+    )
+  }
+
+  onCollateralRequirement(
+    disputableAppId: string,
+    callback: SubscriptionCallback<CollateralRequirement>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<CollateralRequirement>(
+      queries.GET_COLLATERAL_REQUIREMENT('subscription'),
+      { disputableAppId },
+      callback,
+      (result: QueryResult) => parseCollateralRequirement(result, this)
+    )
+  }
+
+  async ERC20(tokenAddress: string): Promise<ERC20> {
+    return this.#gql.performQueryWithParser<ERC20>(
+      queries.GET_ERC20('query'),
+      { tokenAddress },
+      (result: QueryResult) => parseERC20(result)
+    )
+  }
+
+  onERC20(
+    tokenAddress: string,
+    callback: SubscriptionCallback<ERC20>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<ERC20>(
+      queries.GET_ERC20('subscription'),
+      { tokenAddress },
+      callback,
+      (result: QueryResult) => parseERC20(result)
     )
   }
 }
