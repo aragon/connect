@@ -1,4 +1,8 @@
-import { Address, SubscriptionHandler } from '@aragon/connect-types'
+import {
+  Address,
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 
 import Signer from './Signer'
 import Version from './Version'
@@ -36,7 +40,9 @@ export default class Agreement {
     return this.#connector.currentVersion(this.#address)
   }
 
-  onCurrentVersion(callback: Function): SubscriptionHandler {
+  onCurrentVersion(
+    callback: SubscriptionCallback<Version>
+  ): SubscriptionHandler {
     return this.#connector.onCurrentVersion(this.#address, callback)
   }
 
@@ -48,7 +54,10 @@ export default class Agreement {
     return this.#connector.version(this.versionId(versionNumber))
   }
 
-  onVersion(versionNumber: string, callback: Function): SubscriptionHandler {
+  onVersion(
+    versionNumber: string,
+    callback: SubscriptionCallback<Version>
+  ): SubscriptionHandler {
     return this.#connector.onVersion(this.versionId(versionNumber), callback)
   }
 
@@ -58,7 +67,7 @@ export default class Agreement {
 
   onVersions(
     { first = 1000, skip = 0 } = {},
-    callback: Function
+    callback: SubscriptionCallback<Version[]>
   ): SubscriptionHandler {
     return this.#connector.onVersions(this.#address, first, skip, callback)
   }
@@ -71,7 +80,10 @@ export default class Agreement {
     return this.#connector.signer(this.signerId(signerAddress))
   }
 
-  onSigner(signerAddress: string, callback: Function): SubscriptionHandler {
+  onSigner(
+    signerAddress: string,
+    callback: SubscriptionCallback<Signer>
+  ): SubscriptionHandler {
     return this.#connector.onSigner(this.signerId(signerAddress), callback)
   }
 }

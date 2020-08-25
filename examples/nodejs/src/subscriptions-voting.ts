@@ -9,35 +9,52 @@ async function main() {
   const org = await connect(ORG_ADDRESS, 'thegraph', { network: 4 })
   const voting = await connectVoting(org.app(VOTING_APP_ADDRESS))
 
-  const votesSubscription = voting.onVotes({}, (votes: Vote[]) => {
-    console.log('\nVotes: ')
-    votes
-      .map((vote, index) => ({
-        index,
-        title: vote.metadata,
-        id: vote.id,
-      }))
-      .forEach((vote) => {
-        console.log(vote)
-      })
-    console.log(
-      `\nTry creating a new vote at https://rinkeby.aragon.org/#/${ORG_ADDRESS}/${VOTING_APP_ADDRESS}/\n`
-    )
-  })
+  const votesSubscription = voting.onVotes(
+    {},
+    (error: Error | null, votes?: Vote[]) => {
+      if (error) {
+        console.error(error)
+        return
+      }
+      console.log('\nVotes: ')
+
+      votes = votes as Vote[]
+
+      votes
+        .map((vote, index) => ({
+          index,
+          title: vote.metadata,
+          id: vote.id,
+        }))
+        .forEach((vote) => {
+          console.log(vote)
+        })
+
+      console.log(
+        `\nTry creating a new vote at https://rinkeby.aragon.org/#/${ORG_ADDRESS}/${VOTING_APP_ADDRESS}/\n`
+      )
+    }
+  )
 
   const votes = await voting.votes()
   const vote1 = votes[1]
   console.log(`Vote #1: `, vote1)
 
-  const castsSubscription = vote1.onCasts((casts: Cast[]) => {
-    console.log(`\nCasts:`)
-    casts.forEach((cast) => {
-      console.log(cast)
-    })
-    console.log(
-      `\nTry casting a vote on https://rinkeby.aragon.org/#/${ORG_ADDRESS}/${VOTING_APP_ADDRESS}/vote/1 (You must first mint yourself a token in the Token Manager)\n`
-    )
-  })
+  const castsSubscription = vote1.onCasts(
+    (error: Error | null, casts?: Cast[]) => {
+      if (error) {
+        console.error(error)
+        return
+      }
+      console.log(`\nCasts:`)
+      for (const cast of casts as Cast[]) {
+        console.log(cast)
+      }
+      console.log(
+        `\nTry casting a vote on https://rinkeby.aragon.org/#/${ORG_ADDRESS}/${VOTING_APP_ADDRESS}/vote/1 (You must first mint yourself a token in the Token Manager)\n`
+      )
+    }
+  )
 
   await keepRunning()
 

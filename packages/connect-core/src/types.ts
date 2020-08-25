@@ -1,13 +1,13 @@
-import { ethers } from 'ethers'
+import { providers as ethersProviders, utils as ethersUtils } from 'ethers'
 import { Address, Network } from '@aragon/connect-types'
 import IOrganizationConnector from './connections/IOrganizationConnector'
 
 export type Metadata = (AragonArtifact | AragonManifest)[]
 
 // Type definition: https://github.com/ethers-io/ethers.js/blob/ethers-v5-beta/packages/abi/lib/fragments.d.ts#L68
-export type FunctionFragment = ethers.utils.FunctionFragment
+export type FunctionFragment = ethersUtils.FunctionFragment
 
-export type Abi = (ethers.utils.EventFragment | ethers.utils.FunctionFragment)[]
+export type Abi = (ethersUtils.EventFragment | ethersUtils.FunctionFragment)[]
 
 export interface AppIntent {
   roles: string[]
@@ -125,7 +125,7 @@ export interface AragonEnvironment {
 export type ConnectionContext = {
   actAs: Address | null
   ethereumProvider: object | null
-  ethersProvider: ethers.providers.Provider
+  ethersProvider: ethersProviders.Provider
   ipfs: (cid: string) => string
   network: Network
   orgAddress: Address

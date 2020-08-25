@@ -13,10 +13,18 @@ async function main() {
   console.log(`\nToken:`)
   console.log(token)
 
-  const subscription = tokens.onHolders((holders: TokenHolder[]) => {
-    console.log(`\nHolders:`)
-    holders.map(console.log)
-  })
+  const subscription = tokens.onHolders(
+    (error: Error | null, holders?: TokenHolder[]) => {
+      if (error) {
+        console.error(error)
+        return
+      }
+      console.log(`\nHolders:`)
+      for (const holder of holders as TokenHolder[]) {
+        console.log(holder)
+      }
+    }
+  )
 
   // await keepRunning()
 

@@ -14,7 +14,7 @@ function buildSetting(setting: any): Setting {
     quietEndingPeriod,
     quietEndingExtension,
     createdAt,
-    voting
+    voting,
   } = setting
 
   const settingData: SettingData = {
@@ -27,7 +27,7 @@ function buildSetting(setting: any): Setting {
     quietEndingPeriod,
     quietEndingExtension,
     createdAt,
-    votingId: voting.id
+    votingId: voting.id,
   }
 
   return new Setting(settingData)

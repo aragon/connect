@@ -1,4 +1,7 @@
-import { SubscriptionHandler } from '@aragon/connect-types'
+import {
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 
 import ERC20 from './models/ERC20'
 import Vote from './models/Vote'
@@ -92,25 +95,65 @@ export interface ERC20Data {
 export interface IDisputableVotingConnector {
   disconnect(): Promise<void>
   disputableVoting(disputableVoting: string): Promise<DisputableVotingData>
-  onDisputableVoting(disputableVoting: string, callback: Function): SubscriptionHandler
+  onDisputableVoting(
+    disputableVoting: string,
+    callback: SubscriptionCallback<DisputableVotingData>
+  ): SubscriptionHandler
   currentSetting(disputableVoting: string): Promise<Setting>
-  onCurrentSetting(disputableVoting: string, callback: Function): SubscriptionHandler
+  onCurrentSetting(
+    disputableVoting: string,
+    callback: SubscriptionCallback<Setting>
+  ): SubscriptionHandler
   setting(settingId: string): Promise<Setting>
-  onSetting(settingId: string, callback: Function): SubscriptionHandler
-  settings(disputableVoting: string, first: number, skip: number): Promise<Setting[]>
-  onSettings(disputableVoting: string, first: number, skip: number, callback: Function): SubscriptionHandler
+  onSetting(
+    settingId: string,
+    callback: SubscriptionCallback<Setting>
+  ): SubscriptionHandler
+  settings(
+    disputableVoting: string,
+    first: number,
+    skip: number
+  ): Promise<Setting[]>
+  onSettings(
+    disputableVoting: string,
+    first: number,
+    skip: number,
+    callback: SubscriptionCallback<Setting[]>
+  ): SubscriptionHandler
   vote(voteId: string): Promise<Vote>
-  onVote(voteId: string, callback: Function): SubscriptionHandler
+  onVote(
+    voteId: string,
+    callback: SubscriptionCallback<Vote>
+  ): SubscriptionHandler
   votes(disputableVoting: string, first: number, skip: number): Promise<Vote[]>
-  onVotes(disputableVoting: string, first: number, skip: number, callback: Function): SubscriptionHandler
+  onVotes(
+    disputableVoting: string,
+    first: number,
+    skip: number,
+    callback: SubscriptionCallback<Vote[]>
+  ): SubscriptionHandler
   castVote(castVoteId: string): Promise<CastVote | null>
-  onCastVote(castVoteId: string, callback: Function): SubscriptionHandler
+  onCastVote(
+    castVoteId: string,
+    callback: SubscriptionCallback<CastVote | null>
+  ): SubscriptionHandler
   castVotes(voteId: string, first: number, skip: number): Promise<CastVote[]>
-  onCastVotes(voteId: string, first: number, skip: number, callback: Function): SubscriptionHandler
+  onCastVotes(
+    voteId: string,
+    first: number,
+    skip: number,
+    callback: SubscriptionCallback<CastVote[]>
+  ): SubscriptionHandler
   voter(voterId: string): Promise<Voter>
-  onVoter(voterId: string, callback: Function): SubscriptionHandler
+  onVoter(
+    voterId: string,
+    callback: SubscriptionCallback<Voter>
+  ): SubscriptionHandler
   collateralRequirement(voteId: string): Promise<CollateralRequirement>
-  onCollateralRequirement(voteId: string, callback: Function): SubscriptionHandler
+  onCollateralRequirement(
+    voteId: string,
+    callback: SubscriptionCallback<CollateralRequirement>
+  ): SubscriptionHandler
   ERC20(tokenAddress: string): Promise<ERC20>
   onERC20(tokenAddress: string, callback: Function): SubscriptionHandler
 }

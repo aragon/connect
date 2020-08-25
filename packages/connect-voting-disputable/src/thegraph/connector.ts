@@ -1,4 +1,7 @@
-import { SubscriptionHandler } from '@aragon/connect-types'
+import {
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 import { GraphQLWrapper, QueryResult } from '@aragon/connect-thegraph'
 
 import { DisputableVotingData, IDisputableVotingConnector } from '../types'
@@ -65,7 +68,7 @@ export default class DisputableVotingConnectorTheGraph
   async disputableVoting(
     disputableVoting: string
   ): Promise<DisputableVotingData> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<DisputableVotingData>(
       queries.GET_DISPUTABLE_VOTING('query'),
       { disputableVoting },
       (result: QueryResult) => parseDisputableVoting(result)
@@ -74,9 +77,9 @@ export default class DisputableVotingConnectorTheGraph
 
   onDisputableVoting(
     disputableVoting: string,
-    callback: Function
+    callback: SubscriptionCallback<DisputableVotingData>
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser<DisputableVotingData>(
       queries.GET_DISPUTABLE_VOTING('subscription'),
       { disputableVoting },
       callback,
@@ -85,7 +88,7 @@ export default class DisputableVotingConnectorTheGraph
   }
 
   async currentSetting(disputableVoting: string): Promise<Setting> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<Setting>(
       queries.GET_CURRENT_SETTING('query'),
       { disputableVoting },
       (result: QueryResult) => parseCurrentSetting(result)
@@ -94,9 +97,9 @@ export default class DisputableVotingConnectorTheGraph
 
   onCurrentSetting(
     disputableVoting: string,
-    callback: Function
+    callback: SubscriptionCallback<Setting>
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser<Setting>(
       queries.GET_CURRENT_SETTING('subscription'),
       { disputableVoting },
       callback,
@@ -105,15 +108,18 @@ export default class DisputableVotingConnectorTheGraph
   }
 
   async setting(settingId: string): Promise<Setting> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<Setting>(
       queries.GET_SETTING('query'),
       { settingId },
       (result: QueryResult) => parseSetting(result)
     )
   }
 
-  onSetting(settingId: string, callback: Function): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+  onSetting(
+    settingId: string,
+    callback: SubscriptionCallback<Setting>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<Setting>(
       queries.GET_SETTING('subscription'),
       { settingId },
       callback,
@@ -126,7 +132,7 @@ export default class DisputableVotingConnectorTheGraph
     first: number,
     skip: number
   ): Promise<Setting[]> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<Setting[]>(
       queries.ALL_SETTINGS('query'),
       { disputableVoting, first, skip },
       (result: QueryResult) => parseSettings(result)
@@ -137,9 +143,9 @@ export default class DisputableVotingConnectorTheGraph
     disputableVoting: string,
     first: number,
     skip: number,
-    callback: Function
+    callback: SubscriptionCallback<Setting[]>
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser<Setting[]>(
       queries.ALL_SETTINGS('subscription'),
       { disputableVoting, first, skip },
       callback,
@@ -148,15 +154,18 @@ export default class DisputableVotingConnectorTheGraph
   }
 
   async vote(voteId: string): Promise<Vote> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<Vote>(
       queries.GET_VOTE('query'),
       { voteId },
       (result: QueryResult) => parseVote(result, this)
     )
   }
 
-  onVote(voteId: string, callback: Function): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+  onVote(
+    voteId: string,
+    callback: SubscriptionCallback<Vote>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<Vote>(
       queries.GET_VOTE('subscription'),
       { voteId },
       callback,
@@ -169,7 +178,7 @@ export default class DisputableVotingConnectorTheGraph
     first: number,
     skip: number
   ): Promise<Vote[]> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<Vote[]>(
       queries.ALL_VOTES('query'),
       { disputableVoting, first, skip },
       (result: QueryResult) => parseVotes(result, this)
@@ -180,9 +189,9 @@ export default class DisputableVotingConnectorTheGraph
     disputableVoting: string,
     first: number,
     skip: number,
-    callback: Function
+    callback: SubscriptionCallback<Vote[]>
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser<Vote[]>(
       queries.ALL_VOTES('subscription'),
       { disputableVoting, first, skip },
       callback,
@@ -191,15 +200,18 @@ export default class DisputableVotingConnectorTheGraph
   }
 
   async castVote(castVoteId: string): Promise<CastVote | null> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<CastVote | null>(
       queries.GET_CAST_VOTE('query'),
       { castVoteId },
       (result: QueryResult) => parseCastVote(result, this)
     )
   }
 
-  onCastVote(castVoteId: string, callback: Function): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+  onCastVote(
+    castVoteId: string,
+    callback: SubscriptionCallback<CastVote | null>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<CastVote | null>(
       queries.GET_CAST_VOTE('subscription'),
       { castVoteId },
       callback,
@@ -212,7 +224,7 @@ export default class DisputableVotingConnectorTheGraph
     first: number,
     skip: number
   ): Promise<CastVote[]> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<CastVote[]>(
       queries.ALL_CAST_VOTES('query'),
       { voteId, first, skip },
       (result: QueryResult) => parseCastVotes(result, this)
@@ -223,9 +235,9 @@ export default class DisputableVotingConnectorTheGraph
     voteId: string,
     first: number,
     skip: number,
-    callback: Function
+    callback: SubscriptionCallback<CastVote[]>
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser<CastVote[]>(
       queries.ALL_CAST_VOTES('subscription'),
       { voteId, first, skip },
       callback,
@@ -234,15 +246,18 @@ export default class DisputableVotingConnectorTheGraph
   }
 
   async voter(voterId: string): Promise<Voter> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<Voter>(
       queries.GET_VOTER('query'),
       { voterId },
       (result: QueryResult) => parseVoter(result, this)
     )
   }
 
-  onVoter(voterId: string, callback: Function): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+  onVoter(
+    voterId: string,
+    callback: SubscriptionCallback<Voter>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<Voter>(
       queries.GET_VOTER('subscription'),
       { voterId },
       callback,
@@ -251,7 +266,7 @@ export default class DisputableVotingConnectorTheGraph
   }
 
   async collateralRequirement(voteId: string): Promise<CollateralRequirement> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<CollateralRequirement>(
       queries.GET_COLLATERAL_REQUIREMENT('query'),
       { voteId },
       (result: QueryResult) => parseCollateralRequirement(result, this)
@@ -260,9 +275,9 @@ export default class DisputableVotingConnectorTheGraph
 
   onCollateralRequirement(
     voteId: string,
-    callback: Function
+    callback: SubscriptionCallback<CollateralRequirement>
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser<CollateralRequirement>(
       queries.GET_COLLATERAL_REQUIREMENT('subscription'),
       { voteId },
       callback,
