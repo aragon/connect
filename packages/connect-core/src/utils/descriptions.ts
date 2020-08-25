@@ -1,5 +1,4 @@
-import { ethers } from 'ethers'
-
+import { providers as ethersProviders } from 'ethers'
 import App from '../entities/App'
 import TransactionRequest from '../transactions/TransactionRequest'
 import {
@@ -14,7 +13,7 @@ import {
 export async function describeTransaction(
   transaction: TransactionWithChildren,
   apps: App[],
-  provider?: ethers.providers.Provider
+  provider?: ethersProviders.Provider
 ): Promise<TransactionRequest> {
   if (!transaction.to) {
     throw new Error(`Could not describe transaction: missing 'to'`)
@@ -58,7 +57,7 @@ export async function describeTransaction(
 export async function describeTransactionPath(
   path: TransactionWithChildren[],
   apps: App[],
-  provider?: ethers.providers.Provider
+  provider?: ethersProviders.Provider
 ): Promise<TransactionRequest[]> {
   return Promise.all(
     path.map((step) => describeTransaction(step, apps, provider))
@@ -68,7 +67,7 @@ export async function describeTransactionPath(
 export async function describeScript(
   script: string,
   apps: App[],
-  provider?: ethers.providers.Provider
+  provider?: ethersProviders.Provider
 ): Promise<TransactionRequest[]> {
   const path = decodeTransactionPath(script)
 

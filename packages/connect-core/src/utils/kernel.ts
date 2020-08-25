@@ -1,8 +1,8 @@
-import { ethers } from 'ethers'
+import { utils as ethersUtils } from 'ethers'
 
-const CORE_NAMESPACE = ethers.utils.solidityKeccak256(['string'], ['core'])
-const APP_ADDR_NAMESPACE = ethers.utils.solidityKeccak256(['string'], ['app'])
-const APP_BASES_NAMESPACE = ethers.utils.solidityKeccak256(['string'], ['base'])
+const CORE_NAMESPACE = ethersUtils.solidityKeccak256(['string'], ['core'])
+const APP_ADDR_NAMESPACE = ethersUtils.solidityKeccak256(['string'], ['app'])
+const APP_BASES_NAMESPACE = ethersUtils.solidityKeccak256(['string'], ['base'])
 
 const KERNEL_NAMESPACES_NAMES = new Map([
   [CORE_NAMESPACE, 'Core'],

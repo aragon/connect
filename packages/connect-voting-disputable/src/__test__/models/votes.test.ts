@@ -1,13 +1,16 @@
 import {
-  DisputableVoting,
+  ERC20,
   Vote,
   CastVote,
+  DisputableVoting,
+  CollateralRequirement,
   DisputableVotingConnectorTheGraph,
 } from '../../../src'
 
+
 const VOTING_APP_ADDRESS = '0x26e14ed789b51b5b226d69a5d40f72dc2d0180fe'
 const VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-dvoting-rinkeby-staging'
+  'https://api.thegraph.com/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging'
 
 describe('DisputableVoting', () => {
   let voting: DisputableVoting
@@ -43,9 +46,41 @@ describe('DisputableVoting', () => {
 
   describe('results', () => {
     test('computes the current outcome properly', async () => {
+      const vote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-4`)
+
+      expect(vote.hasEnded).toBe(true)
+      expect(vote.isAccepted).toBe(false)
+      expect(vote.status).toBe('Rejected')
+
+      expect(vote.votingPower).toBe('4000000000000000000')
+      expect(vote.formattedVotingPower).toBe('4.00')
+
+      expect(vote.yeas).toBe('1000000000000000000')
+      expect(vote.yeasPct).toBe('250000000000000000')
+      expect(vote.formattedYeas).toBe('1.00')
+      expect(vote.formattedYeasPct).toBe('25.00')
+
+      expect(vote.nays).toBe('1000000000000000000')
+      expect(vote.naysPct).toBe('250000000000000000')
+      expect(vote.formattedNays).toBe('1.00')
+      expect(vote.formattedNaysPct).toBe('25.00')
+    })
+  })
+
+  describe('setting', () => {
+    test('allows querying the vote settings', async () => {
       const vote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-5`)
-      expect(vote.yeasPct).toBe('0')
-      expect(vote.naysPct).toBe('25')
+      const setting = await vote.setting()
+
+      expect(setting.id).toBe(`${VOTING_APP_ADDRESS}-setting-0`)
+      expect(setting.supportRequiredPct).toBe('500000000000000000')
+      expect(setting.formattedSupportRequiredPct).toBe('50.00')
+      expect(setting.minimumAcceptanceQuorumPct).toBe('200000000000000000')
+      expect(setting.formattedMinimumAcceptanceQuorumPct).toBe('20.00')
+      expect(setting.quietEndingPeriod).toBe('86400')
+      expect(setting.quietEndingExtension).toBe('43200')
+      expect(setting.overruleWindow).toBe('172800')
+      expect(setting.executionDelay).toBe('0')
     })
   })
 
@@ -95,18 +130,32 @@ describe('DisputableVoting', () => {
   })
 
   describe('collateralRequirement', () => {
-    test('has a collateral requirement associated', async () => {
-      const voteId = `${VOTING_APP_ADDRESS}-vote-2`
-      const vote = await voting.vote(voteId)
-      const collateralRequirement = await vote.collateralRequirement()
+    const voteId = `${VOTING_APP_ADDRESS}-vote-2`
 
+    let collateralRequirement: CollateralRequirement
+
+    beforeAll(async () => {
+      const vote = await voting.vote(voteId)
+      collateralRequirement = await vote.collateralRequirement()
+    })
+
+    test('has a collateral requirement associated', async () => {
       expect(collateralRequirement.id).toBe(voteId)
-      expect(collateralRequirement.token).toBe(
+      expect(collateralRequirement.tokenId).toBe(
         '0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42'
       )
       expect(collateralRequirement.actionAmount).toBe('0')
       expect(collateralRequirement.challengeAmount).toBe('0')
       expect(collateralRequirement.challengeDuration).toBe('259200')
+    })
+
+    test('can requests the related token info', async () => {
+      const token: ERC20 = await collateralRequirement.token()
+
+      expect(token.id).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
+      expect(token.name).toBe('DAI Token')
+      expect(token.symbol).toBe('DAI')
+      expect(token.decimals).toBe(18)
     })
   })
 })

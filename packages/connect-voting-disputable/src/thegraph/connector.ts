@@ -7,6 +7,7 @@ import { GraphQLWrapper, QueryResult } from '@aragon/connect-thegraph'
 import { DisputableVotingData, IDisputableVotingConnector } from '../types'
 import Vote from '../models/Vote'
 import Voter from '../models/Voter'
+import ERC20 from '../models/ERC20'
 import Setting from '../models/Setting'
 import CastVote from '../models/CastVote'
 import CollateralRequirement from '../models/CollateralRequirement'
@@ -16,6 +17,7 @@ import {
   parseSettings,
   parseCurrentSetting,
   parseDisputableVoting,
+  parseERC20,
   parseVoter,
   parseVote,
   parseVotes,
@@ -89,7 +91,7 @@ export default class DisputableVotingConnectorTheGraph
     return this.#gql.performQueryWithParser<Setting>(
       queries.GET_CURRENT_SETTING('query'),
       { disputableVoting },
-      (result: QueryResult) => parseCurrentSetting(result, this)
+      (result: QueryResult) => parseCurrentSetting(result)
     )
   }
 
@@ -101,7 +103,7 @@ export default class DisputableVotingConnectorTheGraph
       queries.GET_CURRENT_SETTING('subscription'),
       { disputableVoting },
       callback,
-      (result: QueryResult) => parseCurrentSetting(result, this)
+      (result: QueryResult) => parseCurrentSetting(result)
     )
   }
 
@@ -109,7 +111,7 @@ export default class DisputableVotingConnectorTheGraph
     return this.#gql.performQueryWithParser<Setting>(
       queries.GET_SETTING('query'),
       { settingId },
-      (result: QueryResult) => parseSetting(result, this)
+      (result: QueryResult) => parseSetting(result)
     )
   }
 
@@ -121,7 +123,7 @@ export default class DisputableVotingConnectorTheGraph
       queries.GET_SETTING('subscription'),
       { settingId },
       callback,
-      (result: QueryResult) => parseSetting(result, this)
+      (result: QueryResult) => parseSetting(result)
     )
   }
 
@@ -133,7 +135,7 @@ export default class DisputableVotingConnectorTheGraph
     return this.#gql.performQueryWithParser<Setting[]>(
       queries.ALL_SETTINGS('query'),
       { disputableVoting, first, skip },
-      (result: QueryResult) => parseSettings(result, this)
+      (result: QueryResult) => parseSettings(result)
     )
   }
 
@@ -147,7 +149,7 @@ export default class DisputableVotingConnectorTheGraph
       queries.ALL_SETTINGS('subscription'),
       { disputableVoting, first, skip },
       callback,
-      (result: QueryResult) => parseSettings(result, this)
+      (result: QueryResult) => parseSettings(result)
     )
   }
 
@@ -280,6 +282,23 @@ export default class DisputableVotingConnectorTheGraph
       { voteId },
       callback,
       (result: QueryResult) => parseCollateralRequirement(result, this)
+    )
+  }
+
+  async ERC20(tokenAddress: string): Promise<ERC20> {
+    return this.#gql.performQueryWithParser(
+      queries.GET_ERC20('query'),
+      { tokenAddress },
+      (result: QueryResult) => parseERC20(result)
+    )
+  }
+
+  onERC20(tokenAddress: string, callback: Function): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser(
+      queries.GET_ERC20('subscription'),
+      { tokenAddress },
+      callback,
+      (result: QueryResult) => parseERC20(result)
     )
   }
 }

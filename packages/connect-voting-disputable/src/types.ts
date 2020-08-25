@@ -3,6 +3,7 @@ import {
   SubscriptionHandler,
 } from '@aragon/connect-types'
 
+import ERC20 from './models/ERC20'
 import Vote from './models/Vote'
 import Voter from './models/Voter'
 import Setting from './models/Setting'
@@ -25,6 +26,10 @@ export interface VoteData {
   context: string
   status: string
   actionId: string
+  challengeId: string
+  challenger: string
+  challengeEndDate: string
+  disputeId: string
   settingId: string
   startDate: string
   votingPower: string
@@ -36,6 +41,9 @@ export interface VoteData {
   quietEndingExtendedSeconds: string
   quietEndingSnapshotSupport: string
   script: string
+  executedAt: string
+  tokenDecimals: string
+  isAccepted: boolean
 }
 
 export interface CastVoteData {
@@ -71,10 +79,17 @@ export interface SettingData {
 export interface CollateralRequirementData {
   id: string
   voteId: string
-  token: string
+  tokenId: string
   actionAmount: string
   challengeAmount: string
   challengeDuration: string
+}
+
+export interface ERC20Data {
+  id: string
+  name: string
+  symbol: string
+  decimals: string
 }
 
 export interface IDisputableVotingConnector {
@@ -139,4 +154,6 @@ export interface IDisputableVotingConnector {
     voteId: string,
     callback: SubscriptionCallback<CollateralRequirement>
   ): SubscriptionHandler
+  ERC20(tokenAddress: string): Promise<ERC20>
+  onERC20(tokenAddress: string, callback: Function): SubscriptionHandler
 }
