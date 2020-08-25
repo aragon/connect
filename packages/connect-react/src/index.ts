@@ -161,11 +161,14 @@ function useConnectSubscription<Data>(
   const cancelCb = useRef<Function | null>(null)
   const dataJsonRef = useRef<string>(JSON.stringify(initValue))
 
+  // The init value never changes
+  const initValueRef = useRef<Data>(initValue)
+
   const subscribe = useCallback(() => {
     if (!org) {
       // If the org is loading, the subscription is loading as well.
       setStatus({
-        data: initValue,
+        data: initValueRef.current,
         error: null,
         loading: orgLoading,
       })
@@ -200,11 +203,11 @@ function useConnectSubscription<Data>(
 
       setStatus({
         error: error || null,
-        data: error ? initValue : data,
+        data: error ? initValueRef.current : data,
         loading: false,
       })
     })
-  }, [callback, initValue, org, orgLoading])
+  }, [callback, initValueRef, org, orgLoading])
 
   useEffect(() => {
     subscribe()
