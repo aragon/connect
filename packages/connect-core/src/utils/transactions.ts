@@ -1,8 +1,11 @@
-import { ethers } from 'ethers'
-
+import {
+  Contract,
+  providers as ethersProviders,
+  utils as ethersUtils,
+} from 'ethers'
 import { erc20ABI, forwarderAbi, forwarderFeeAbi } from './abis'
 import { isFullMethodSignature } from './app'
-import { Abi, FunctionFragment } from '../types'
+import { FunctionFragment } from '../types'
 import App from '../entities/App'
 
 export interface Transaction {
@@ -36,7 +39,7 @@ export async function createDirectTransaction(
     transactionOptions = { ...transactionOptions, ...options }
   }
 
-  const ethersInterface = new ethers.utils.Interface([methodAbiFragment])
+  const ethersInterface = new ethersUtils.Interface([methodAbiFragment])
 
   // The direct transaction we eventually want to perform
   return {
@@ -44,7 +47,7 @@ export async function createDirectTransaction(
     from: sender,
     to: destination,
     data: ethersInterface.encodeFunctionData(
-      ethers.utils.FunctionFragment.from(methodAbiFragment),
+      ethersUtils.FunctionFragment.from(methodAbiFragment),
       params
     ),
   }
@@ -98,7 +101,7 @@ export function createForwarderTransactionBuilder(
   sender: string,
   directTransaction: Transaction
 ): Function {
-  const forwarder = new ethers.utils.Interface(forwarderAbi)
+  const forwarder = new ethersUtils.Interface(forwarderAbi)
 
   return (forwarderAddress: string, script: string): Transaction => ({
     ...directTransaction, // Options are overwriten by the values below
@@ -110,7 +113,7 @@ export function createForwarderTransactionBuilder(
 
 export async function buildPretransaction(
   transaction: TransactionWithTokenData,
-  provider: ethers.providers.Provider
+  provider: ethersProviders.Provider
 ): Promise<Transaction | undefined> {
   // Token allowance pretransactionn
   const {
@@ -122,7 +125,7 @@ export async function buildPretransaction(
   // Approve the transaction destination unless an spender is passed to approve a different contract
   const approveSpender = spender || to
 
-  const tokenContract = new ethers.Contract(tokenAddress, erc20ABI, provider)
+  const tokenContract = new Contract(tokenAddress, erc20ABI, provider)
   const balance = await tokenContract.balanceOf(from)
   const tokenValueBN = BigInt(tokenValue)
 
@@ -143,7 +146,7 @@ export async function buildPretransaction(
       )
     }
 
-    const erc20 = new ethers.utils.Interface(erc20ABI)
+    const erc20 = new ethersUtils.Interface(erc20ABI)
 
     return {
       from,
@@ -157,15 +160,11 @@ export async function buildPretransaction(
 
 export async function buildForwardingFeePretransaction(
   forwardingTransaction: Transaction,
-  provider: ethers.providers.Provider
+  provider: ethersProviders.Provider
 ): Promise<Transaction | undefined> {
   const { to: forwarderAddress, from } = forwardingTransaction
 
-  const forwarderFee = new ethers.Contract(
-    forwarderAddress,
-    forwarderFeeAbi,
-    provider
-  )
+  const forwarderFee = new Contract(forwarderAddress, forwarderFeeAbi, provider)
 
   const feeDetails = { amount: BigInt(0), tokenAddress: '' }
   try {

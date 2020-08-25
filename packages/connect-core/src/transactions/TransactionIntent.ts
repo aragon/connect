@@ -1,5 +1,4 @@
-import { ethers } from 'ethers'
-
+import { providers as ethersProviders } from 'ethers'
 import TransactionPath from './TransactionPath'
 import TransactionRequest from './TransactionRequest'
 import Organization from '../entities/Organization'
@@ -18,12 +17,12 @@ export default class TransactionIntent {
   readonly functionArgs!: any[]
 
   #org: Organization
-  #provider: ethers.providers.Provider
+  #provider: ethersProviders.Provider
 
   constructor(
     data: TransactionIntentData,
     org: Organization,
-    provider: ethers.providers.Provider
+    provider: ethersProviders.Provider
   ) {
     this.#org = org
     this.#provider = provider

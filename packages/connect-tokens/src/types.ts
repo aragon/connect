@@ -1,4 +1,8 @@
-import { SubscriptionHandler, Address } from '@aragon/connect-types'
+import {
+  Address,
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 import Token from './models/Token'
 import TokenHolder from './models/TokenHolder'
 
@@ -25,5 +29,8 @@ export interface ITokensConnector {
     first: number,
     skip: number
   ): Promise<TokenHolder[]>
-  onTokenHolders(tokenAddress: string, callback: Function): SubscriptionHandler
+  onTokenHolders(
+    tokenAddress: string,
+    callback: SubscriptionCallback<TokenHolder[]>
+  ): SubscriptionHandler
 }

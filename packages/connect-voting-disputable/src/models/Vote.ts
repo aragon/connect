@@ -1,9 +1,20 @@
-import { BigNumber } from 'ethers'
-import { SubscriptionHandler } from '@aragon/connect-types'
+import {
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 
+import Setting from './Setting'
 import CastVote from './CastVote'
+import DisputableVoting from './DisputableVoting'
 import CollateralRequirement from './CollateralRequirement'
 import { IDisputableVotingConnector, VoteData } from '../types'
+import {
+  toMilliseconds,
+  bn,
+  formatBn,
+  PCT_BASE,
+  PCT_DECIMALS,
+} from '../helpers'
 
 export default class Vote {
   #connector: IDisputableVotingConnector
@@ -14,8 +25,12 @@ export default class Vote {
   readonly creator: string
   readonly duration: string
   readonly context: string
-  readonly status: string
+  readonly voteStatus: string
   readonly actionId: string
+  readonly challengeId: string
+  readonly challenger: string
+  readonly challengeEndDate: string
+  readonly disputeId: string
   readonly settingId: string
   readonly startDate: string
   readonly votingPower: string
@@ -27,6 +42,9 @@ export default class Vote {
   readonly quietEndingExtendedSeconds: string
   readonly quietEndingSnapshotSupport: string
   readonly script: string
+  readonly executedAt: string
+  readonly isAccepted: boolean
+  readonly tokenDecimals: string
 
   constructor(data: VoteData, connector: IDisputableVotingConnector) {
     this.#connector = connector
@@ -37,8 +55,12 @@ export default class Vote {
     this.duration = data.duration
     this.creator = data.creator
     this.context = data.context
-    this.status = data.status
+    this.voteStatus = data.status
     this.actionId = data.actionId
+    this.challengeId = data.challengeId
+    this.challenger = data.challenger
+    this.challengeEndDate = data.challengeEndDate
+    this.disputeId = data.disputeId
     this.settingId = data.settingId
     this.startDate = data.startDate
     this.votingPower = data.votingPower
@@ -50,25 +72,58 @@ export default class Vote {
     this.quietEndingExtendedSeconds = data.quietEndingExtendedSeconds
     this.quietEndingSnapshotSupport = data.quietEndingSnapshotSupport
     this.script = data.script
+    this.executedAt = data.executedAt
+    this.isAccepted = data.isAccepted
+    this.tokenDecimals = data.tokenDecimals
+  }
+
+  get hasEnded(): boolean {
+    return (
+      this.voteStatus !== 'Challenged' &&
+      this.voteStatus !== 'Disputed' &&
+      Date.now() >= toMilliseconds(this.endDate)
+    )
   }
 
   get endDate(): string {
-    const originalEndDate = BigNumber.from(this.startDate).add(BigNumber.from(this.duration))
-    const endDateAfterPause = originalEndDate.add(BigNumber.from(this.pauseDuration))
-    return endDateAfterPause.add(BigNumber.from(this.quietEndingExtendedSeconds)).toString()
+    const originalEndDate = bn(this.startDate).add(bn(this.duration))
+    const endDateAfterPause = originalEndDate.add(bn(this.pauseDuration))
+    return endDateAfterPause.add(bn(this.quietEndingExtendedSeconds)).toString()
   }
 
   get yeasPct(): string {
-    return this.votingPowerPct(this.yeas)
+    return this._votingPowerPct(this.yeas)
   }
 
   get naysPct(): string {
-    return this.votingPowerPct(this.nays)
+    return this._votingPowerPct(this.nays)
   }
 
-  votingPowerPct(num: string): string {
-    const votingPower = BigNumber.from(this.votingPower)
-    return BigNumber.from(num).mul(BigNumber.from(100)).div(votingPower).toString()
+  get formattedYeas(): string {
+    return formatBn(this.yeas, this.tokenDecimals)
+  }
+
+  get formattedYeasPct(): string {
+    return formatBn(this.yeasPct, PCT_DECIMALS)
+  }
+
+  get formattedNays(): string {
+    return formatBn(this.nays, this.tokenDecimals)
+  }
+
+  get formattedNaysPct(): string {
+    return formatBn(this.naysPct, PCT_DECIMALS)
+  }
+
+  get formattedVotingPower(): string {
+    return formatBn(this.votingPower, this.tokenDecimals)
+  }
+
+  get status(): string {
+    if (this.hasEnded && this.voteStatus === 'Scheduled') {
+      return this.isAccepted ? 'Accepted' : 'Rejected'
+    }
+    return this.voteStatus
   }
 
   castVoteId(voterAddress: string): string {
@@ -79,7 +134,10 @@ export default class Vote {
     return this.#connector.castVote(this.castVoteId(voterAddress))
   }
 
-  onCastVote(voterAddress: string, callback: Function): SubscriptionHandler {
+  onCastVote(
+    voterAddress: string,
+    callback: SubscriptionCallback<CastVote | null>
+  ): SubscriptionHandler {
     return this.#connector.onCastVote(this.castVoteId(voterAddress), callback)
   }
 
@@ -87,7 +145,10 @@ export default class Vote {
     return this.#connector.castVotes(this.id, first, skip)
   }
 
-  onCastVotes({ first = 1000, skip = 0 } = {}, callback: Function): SubscriptionHandler {
+  onCastVotes(
+    { first = 1000, skip = 0 } = {},
+    callback: SubscriptionCallback<CastVote[]>
+  ): SubscriptionHandler {
     return this.#connector.onCastVotes(this.id, first, skip, callback)
   }
 
@@ -95,7 +156,26 @@ export default class Vote {
     return this.#connector.collateralRequirement(this.id)
   }
 
-  onCollateralRequirement(callback: Function): SubscriptionHandler {
+  onCollateralRequirement(
+    callback: SubscriptionCallback<CollateralRequirement>
+  ): SubscriptionHandler {
     return this.#connector.onCollateralRequirement(this.id, callback)
+  }
+
+  async setting(): Promise<Setting> {
+    return this.#connector.setting(this.settingId)
+  }
+
+  onSetting(callback: SubscriptionCallback<Setting>): SubscriptionHandler {
+    return this.#connector.onSetting(this.settingId, callback)
+  }
+
+  _disputableVoting(): DisputableVoting {
+    return new DisputableVoting(this.#connector, this.votingId)
+  }
+
+  _votingPowerPct(num: string): string {
+    const votingPower = bn(this.votingPower)
+    return bn(num).mul(PCT_BASE).div(votingPower).toString()
   }
 }

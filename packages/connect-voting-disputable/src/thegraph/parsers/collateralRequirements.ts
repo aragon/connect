@@ -2,7 +2,10 @@ import { QueryResult } from '@aragon/connect-thegraph'
 
 import CollateralRequirement from '../../models/CollateralRequirement'
 
-export function parseCollateralRequirement(result: QueryResult, connector: any): CollateralRequirement {
+export function parseCollateralRequirement(
+  result: QueryResult,
+  connector: any
+): CollateralRequirement {
   const vote = result.data.vote
 
   if (!vote || !vote.collateralRequirement) {
@@ -10,12 +13,15 @@ export function parseCollateralRequirement(result: QueryResult, connector: any):
   }
 
   const { collateralRequirement } = vote
-  return new CollateralRequirement({
-    id: collateralRequirement.id,
-    voteId: collateralRequirement.vote.id,
-    token: collateralRequirement.token.id,
-    actionAmount: collateralRequirement.actionAmount,
-    challengeAmount: collateralRequirement.challengeAmount,
-    challengeDuration: collateralRequirement.challengeDuration,
-  }, connector)
+  return new CollateralRequirement(
+    {
+      id: collateralRequirement.id,
+      voteId: collateralRequirement.vote.id,
+      tokenId: collateralRequirement.token.id,
+      actionAmount: collateralRequirement.actionAmount,
+      challengeAmount: collateralRequirement.challengeAmount,
+      challengeDuration: collateralRequirement.challengeDuration,
+    },
+    connector
+  )
 }

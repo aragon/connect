@@ -1,4 +1,7 @@
-import { SubscriptionHandler } from '@aragon/connect-types'
+import {
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 
 import Signer from './models/Signer'
 import Signature from './models/Signature'
@@ -65,17 +68,26 @@ export interface SignatureData {
 export interface IAgreementConnector {
   disconnect(): Promise<void>
   agreement(agreement: string): Promise<AgreementData>
-  onAgreement(agreement: string, callback: Function): SubscriptionHandler
+  onAgreement(
+    agreement: string,
+    callback: SubscriptionCallback<AgreementData>
+  ): SubscriptionHandler
   currentVersion(agreement: string): Promise<Version>
-  onCurrentVersion(agreement: string, callback: Function): SubscriptionHandler
+  onCurrentVersion(
+    agreement: string,
+    callback: SubscriptionCallback<Version>
+  ): SubscriptionHandler
   version(versionId: string): Promise<Version>
-  onVersion(versionId: string, callback: Function): SubscriptionHandler
+  onVersion(
+    versionId: string,
+    callback: SubscriptionCallback<Version>
+  ): SubscriptionHandler
   versions(agreement: string, first: number, skip: number): Promise<Version[]>
   onVersions(
     agreement: string,
     first: number,
     skip: number,
-    callback: Function
+    callback: SubscriptionCallback<Version[]>
   ): SubscriptionHandler
   disputableApps(agreement: string, first: number, skip: number): Promise<DisputableApp[]>
   onDisputableApps(
@@ -85,7 +97,10 @@ export interface IAgreementConnector {
     callback: Function
   ): SubscriptionHandler
   signer(signerId: string): Promise<Signer>
-  onSigner(signerId: string, callback: Function): SubscriptionHandler
+  onSigner(
+    signerId: string,
+    callback: SubscriptionCallback<Signer>
+  ): SubscriptionHandler
   signatures(
     signerId: string,
     first: number,
@@ -95,7 +110,7 @@ export interface IAgreementConnector {
     signerId: string,
     first: number,
     skip: number,
-    callback: Function
+    callback: SubscriptionCallback<Signature[]>
   ): SubscriptionHandler
   collateralRequirement(disputableAppId: string): Promise<CollateralRequirement>
   onCollateralRequirement(disputableAppId: string, callback: Function): SubscriptionHandler

@@ -1,4 +1,7 @@
-import { SubscriptionHandler } from '@aragon/connect-types'
+import {
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 import { GraphQLWrapper, QueryResult } from '@aragon/connect-thegraph'
 
 import * as queries from './queries'
@@ -60,15 +63,18 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
   }
 
   async agreement(agreement: string): Promise<AgreementData> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<AgreementData>(
       queries.GET_AGREEMENT('query'),
       { agreement },
       (result: QueryResult) => parseAgreement(result)
     )
   }
 
-  onAgreement(agreement: string, callback: Function): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+  onAgreement(
+    agreement: string,
+    callback: SubscriptionCallback<AgreementData>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<AgreementData>(
       queries.GET_AGREEMENT('subscription'),
       { agreement },
       callback,
@@ -77,15 +83,18 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
   }
 
   async currentVersion(agreement: string): Promise<Version> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<Version>(
       queries.GET_CURRENT_VERSION('query'),
       { agreement },
       (result: QueryResult) => parseCurrentVersion(result, this)
     )
   }
 
-  onCurrentVersion(agreement: string, callback: Function): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+  onCurrentVersion(
+    agreement: string,
+    callback: SubscriptionCallback<Version>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<Version>(
       queries.GET_CURRENT_VERSION('subscription'),
       { agreement },
       callback,
@@ -94,15 +103,18 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
   }
 
   async version(versionId: string): Promise<Version> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<Version>(
       queries.GET_VERSION('query'),
       { versionId },
       (result: QueryResult) => parseVersion(result, this)
     )
   }
 
-  onVersion(versionId: string, callback: Function): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+  onVersion(
+    versionId: string,
+    callback: SubscriptionCallback<Version>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<Version>(
       queries.GET_VERSION('subscription'),
       { versionId },
       callback,
@@ -115,7 +127,7 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     first: number,
     skip: number
   ): Promise<Version[]> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<Version[]>(
       queries.ALL_VERSIONS('query'),
       { agreement, first, skip },
       (result: QueryResult) => parseVersions(result, this)
@@ -126,9 +138,9 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     agreement: string,
     first: number,
     skip: number,
-    callback: Function
+    callback: SubscriptionCallback<Version[]>
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser<Version[]>(
       queries.ALL_VERSIONS('subscription'),
       { agreement, first, skip },
       callback,
@@ -163,15 +175,18 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
   }
 
   async signer(signerId: string): Promise<Signer> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<Signer>(
       queries.GET_SIGNER('query'),
       { signerId },
       (result: QueryResult) => parseSigner(result, this)
     )
   }
 
-  onSigner(signerId: string, callback: Function): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+  onSigner(
+    signerId: string,
+    callback: SubscriptionCallback<Signer>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<Signer>(
       queries.GET_SIGNER('query'),
       { signerId },
       callback,
@@ -184,7 +199,7 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     first: number,
     skip: number
   ): Promise<Signature[]> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<Signature[]>(
       queries.GET_SIGNATURES('query'),
       { signerId, first, skip },
       (result: QueryResult) => parseSignatures(result, this)
@@ -195,9 +210,9 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     signerId: string,
     first: number,
     skip: number,
-    callback: Function
+    callback: SubscriptionCallback<Signature[]>
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser<Signature[]>(
       queries.GET_SIGNATURES('query'),
       { signerId, first, skip },
       callback,

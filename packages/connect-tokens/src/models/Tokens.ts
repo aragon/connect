@@ -1,4 +1,8 @@
-import { Address, SubscriptionHandler } from '@aragon/connect-types'
+import {
+  Address,
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 import { ITokensConnector } from '../types'
 import Token from './Token'
 import TokenHolder from './TokenHolder'
@@ -25,7 +29,9 @@ export default class Tokens {
     return this.#connector.tokenHolders(token.address, first, skip)
   }
 
-  onHolders(callback: Function): SubscriptionHandler {
+  onHolders(
+    callback: SubscriptionCallback<TokenHolder[]>
+  ): SubscriptionHandler {
     return this.#connector.onTokenHolders(this.#appAddress, callback)
   }
 }
