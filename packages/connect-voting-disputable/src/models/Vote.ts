@@ -8,7 +8,13 @@ import CastVote from './CastVote'
 import DisputableVoting from './DisputableVoting'
 import CollateralRequirement from './CollateralRequirement'
 import { IDisputableVotingConnector, VoteData } from '../types'
-import { toMilliseconds, bn, formatBn, PCT_BASE, PCT_DECIMALS } from '../helpers'
+import {
+  toMilliseconds,
+  bn,
+  formatBn,
+  PCT_BASE,
+  PCT_DECIMALS,
+} from '../helpers'
 
 export default class Vote {
   #connector: IDisputableVotingConnector
@@ -72,8 +78,11 @@ export default class Vote {
   }
 
   get hasEnded(): boolean {
-    return this.voteStatus !== 'Challenged' && this.voteStatus !== 'Disputed' &&
-           Date.now() >= toMilliseconds(this.endDate)
+    return (
+      this.voteStatus !== 'Challenged' &&
+      this.voteStatus !== 'Disputed' &&
+      Date.now() >= toMilliseconds(this.endDate)
+    )
   }
 
   get endDate(): string {
@@ -157,7 +166,7 @@ export default class Vote {
     return this.#connector.setting(this.settingId)
   }
 
-  onSetting(callback: Function): SubscriptionHandler {
+  onSetting(callback: SubscriptionCallback<Setting>): SubscriptionHandler {
     return this.#connector.onSetting(this.settingId, callback)
   }
 
