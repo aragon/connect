@@ -7,7 +7,11 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { AppFiltersParam, SubscriptionHandler } from '@aragon/connect-types'
+import {
+  AppFiltersParam,
+  SubscriptionHandler,
+  SubscriptionResult,
+} from '@aragon/connect-types'
 import {
   App,
   ConnectOptions,
@@ -237,7 +241,7 @@ export function createAppHook(
 ) {
   return function useAppData<T = any>(
     app: App | null,
-    callback?: (app: App | any) => T | Promise<T>,
+    callback?: (app: App | any) => T | Promise<T> | SubscriptionResult<T>,
     dependencies?: any[]
   ): [T | undefined, LoadingStatus] {
     const [{ result, error, loading }, setStatus] = useState<{
