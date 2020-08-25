@@ -29,9 +29,9 @@ export default class Voting {
   ): SubscriptionHandler {
     return this.#connector.onVotesForApp(
       this.#appAddress,
-      callback,
       first,
-      skip
+      skip,
+      callback
     )
   }
 }

@@ -61,9 +61,9 @@ export default class VotingConnectorTheGraph implements IVotingConnector {
 
   onVotesForApp(
     appAddress: string,
-    callback: SubscriptionCallback<Vote[]>,
     first: number,
-    skip: number
+    skip: number,
+    callback: SubscriptionCallback<Vote[]>
   ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser<Vote[]>(
       queries.ALL_VOTES('subscription'),
