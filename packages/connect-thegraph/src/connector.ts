@@ -168,7 +168,10 @@ class ConnectorTheGraph implements IOrganizationConnector {
         orgAddress: organization.address.toLowerCase(),
       },
       callback,
-      (result) => parseApp(result, organization)
+      async (result) => {
+        const apps = await parseApps(result, organization)
+        return apps[0]
+      }
     )
   }
 
