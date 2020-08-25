@@ -89,7 +89,11 @@ export interface IAgreementConnector {
     skip: number,
     callback: SubscriptionCallback<Version[]>
   ): SubscriptionHandler
-  disputableApps(agreement: string, first: number, skip: number): Promise<DisputableApp[]>
+  disputableApps(
+    agreement: string,
+    first: number,
+    skip: number
+  ): Promise<DisputableApp[]>
   onDisputableApps(
     agreement: string,
     first: number,
@@ -114,9 +118,12 @@ export interface IAgreementConnector {
   ): SubscriptionHandler
   collateralRequirement(disputableAppId: string): Promise<CollateralRequirement>
   onCollateralRequirement(
-     disputableAppId: string, 
-	 callback: SubscriptionCallback<CollateralRequirement>
+    disputableAppId: string,
+    callback: SubscriptionCallback<CollateralRequirement>
   ): SubscriptionHandler
   ERC20(tokenAddress: string): Promise<ERC20>
-  onERC20(tokenAddress: string, callback: SubscriptionCallback<ERC20>): SubscriptionHandler
+  onERC20(
+    tokenAddress: string,
+    callback: SubscriptionCallback<ERC20>
+  ): SubscriptionHandler
 }
