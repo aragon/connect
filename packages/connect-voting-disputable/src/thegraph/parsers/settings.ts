@@ -3,7 +3,7 @@ import { QueryResult } from '@aragon/connect-thegraph'
 import Setting from '../../models/Setting'
 import { SettingData } from '../../types'
 
-function buildSetting(setting: any, connector: any): Setting {
+function buildSetting(setting: any): Setting {
   const {
     id,
     settingId,
@@ -30,38 +30,35 @@ function buildSetting(setting: any, connector: any): Setting {
     votingId: voting.id,
   }
 
-  return new Setting(settingData, connector)
+  return new Setting(settingData)
 }
 
-export function parseCurrentSetting(
-  result: QueryResult,
-  connector: any
-): Setting {
+export function parseCurrentSetting(result: QueryResult): Setting {
   const disputableVoting = result.data.disputableVoting
 
   if (!disputableVoting || !disputableVoting.setting) {
     throw new Error('Unable to parse current setting.')
   }
 
-  return buildSetting(disputableVoting.setting, connector)
+  return buildSetting(disputableVoting.setting)
 }
 
-export function parseSetting(result: QueryResult, connector: any): Setting {
+export function parseSetting(result: QueryResult): Setting {
   const setting = result.data.setting
 
   if (!setting) {
     throw new Error('Unable to parse setting.')
   }
 
-  return buildSetting(setting, connector)
+  return buildSetting(setting)
 }
 
-export function parseSettings(result: QueryResult, connector: any): Setting[] {
+export function parseSettings(result: QueryResult): Setting[] {
   const settings = result.data.settings
 
   if (!settings) {
     throw new Error('Unable to parse settings.')
   }
 
-  return settings.map((setting: any) => buildSetting(setting, connector))
+  return settings.map((setting: any) => buildSetting(setting))
 }

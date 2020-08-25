@@ -2,7 +2,7 @@ import { DisputableVotingConnectorTheGraph, Vote, CastVote } from '../../../src'
 
 const VOTING_APP_ADDRESS = '0x26e14ed789b51b5b226d69a5d40f72dc2d0180fe'
 const VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-dvoting-rinkeby-staging'
+  'https://api.thegraph.com/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging'
 
 describe('DisputableVoting votes', () => {
   let connector: DisputableVotingConnectorTheGraph
@@ -31,7 +31,7 @@ describe('DisputableVoting votes', () => {
       expect(vote.settingId).toBe(`${VOTING_APP_ADDRESS}-setting-0`)
       expect(vote.actionId).toBe('5')
       expect(vote.context).toBe('Delfi test')
-      expect(vote.status).toBe('Scheduled')
+      expect(vote.voteStatus).toBe('Scheduled')
       expect(vote.creator).toBe('0x0090aed150056316e37fe6dfa10dc63e79d173b6')
       expect(vote.startDate).toBe('1596383789')
       expect(vote.votingPower).toBe('4000000000000000000')
@@ -92,7 +92,7 @@ describe('DisputableVoting votes', () => {
       expect(vote.votingId).toBe(VOTING_APP_ADDRESS)
       expect(vote.settingId).toBe(`${VOTING_APP_ADDRESS}-setting-0`)
       expect(vote.actionId).toBe('3')
-      expect(vote.status).toBe('Cancelled')
+      expect(vote.voteStatus).toBe('Cancelled')
       expect(vote.context).toBe('Context for action 3')
       expect(vote.creator).toBe('0x0090aed150056316e37fe6dfa10dc63e79d173b6')
       expect(vote.startDate).toBe('1596302414')

@@ -3,7 +3,7 @@ import { DisputableVotingConnectorTheGraph, Voter } from '../../../src'
 const VOTER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
 const VOTING_APP_ADDRESS = '0x26e14ed789b51b5b226d69a5d40f72dc2d0180fe'
 const VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-dvoting-rinkeby-staging'
+  'https://api.thegraph.com/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging'
 
 describe('DisputableVoting voters', () => {
   let connector: DisputableVotingConnectorTheGraph

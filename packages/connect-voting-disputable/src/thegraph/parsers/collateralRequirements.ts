@@ -17,7 +17,7 @@ export function parseCollateralRequirement(
     {
       id: collateralRequirement.id,
       voteId: collateralRequirement.vote.id,
-      token: collateralRequirement.token.id,
+      tokenId: collateralRequirement.token.id,
       actionAmount: collateralRequirement.actionAmount,
       challengeAmount: collateralRequirement.challengeAmount,
       challengeDuration: collateralRequirement.challengeDuration,
