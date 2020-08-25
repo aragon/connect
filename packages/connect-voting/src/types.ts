@@ -39,6 +39,8 @@ export interface IVotingConnector {
   castsForVote(voteId: string, first: number, skip: number): Promise<Cast[]>
   onCastsForVote(
     voteId: string,
+    first: number,
+    skip: number,
     callback: SubscriptionCallback<Cast[]>
   ): SubscriptionHandler
 }

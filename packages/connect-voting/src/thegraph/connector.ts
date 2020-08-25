@@ -87,11 +87,13 @@ export default class VotingConnectorTheGraph implements IVotingConnector {
 
   onCastsForVote(
     voteId: string,
+    first: number,
+    skip: number,
     callback: SubscriptionCallback<Cast[]>
   ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser<Cast[]>(
       queries.CASTS_FOR_VOTE('subscription'),
-      { voteId, first: 1000, skip: 0 },
+      { voteId, first, skip },
       callback,
       (result: QueryResult) => parseCasts(result)
     )
