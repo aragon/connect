@@ -153,7 +153,7 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     first: number,
     skip: number
   ): Promise<DisputableApp[]> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<DisputableApp[]>
       queries.ALL_DISPUTABLE_APPS('query'),
       { agreement, first, skip },
       (result: QueryResult) => parseDisputableApps(result, this)
@@ -164,9 +164,9 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     agreement: string,
     first: number,
     skip: number,
-    callback: Function
+    callback: SubscriptionCallback<DisputableApp[]>
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser<DisputableApp[]>(
       queries.ALL_DISPUTABLE_APPS('subscription'),
       { agreement, first, skip },
       callback,
@@ -221,7 +221,7 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
   }
 
   async collateralRequirement(disputableAppId: string): Promise<CollateralRequirement> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<CollateralRequirement>(
       queries.GET_COLLATERAL_REQUIREMENT('query'),
       { disputableAppId },
       (result: QueryResult) => parseCollateralRequirement(result, this)
@@ -232,7 +232,7 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     disputableAppId: string,
     callback: Function
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser<CollateralRequirement>(
       queries.GET_COLLATERAL_REQUIREMENT('subscription'),
       { disputableAppId },
       callback,
@@ -241,7 +241,7 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
   }
 
   async ERC20(tokenAddress: string): Promise<ERC20> {
-    return this.#gql.performQueryWithParser(
+    return this.#gql.performQueryWithParser<ERC20>(
       queries.GET_ERC20('query'),
       { tokenAddress },
       (result: QueryResult) => parseERC20(result)
@@ -249,7 +249,7 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
   }
 
   onERC20(tokenAddress: string, callback: Function): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+    return this.#gql.subscribeToQueryWithParser<ERC20>(
       queries.GET_ERC20('subscription'),
       { tokenAddress },
       callback,

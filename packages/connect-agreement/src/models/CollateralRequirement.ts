@@ -1,4 +1,7 @@
-import { SubscriptionHandler } from '@aragon/connect-types'
+import {
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 
 import ERC20 from './ERC20'
 import { formatBn } from '../helpers'
@@ -39,7 +42,7 @@ export default class CollateralRequirement {
     return this.#connector.ERC20(this.tokenId)
   }
 
-  onToken(callback: Function): SubscriptionHandler {
+  onToken(callback: SubscriptionCallback<ERC20>): SubscriptionHandler {
     return this.#connector.onERC20(this.tokenId, callback)
   }
 }

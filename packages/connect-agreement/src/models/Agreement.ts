@@ -79,7 +79,7 @@ export default class Agreement {
 
   onDisputableApps(
     { first = 1000, skip = 0 } = {},
-    callback: Function
+    callback: SubscriptionCallback<DisputableApp[]>
   ): SubscriptionHandler {
     return this.#connector.onDisputableApps(this.#address, first, skip, callback)
   }

@@ -94,7 +94,7 @@ export interface IAgreementConnector {
     agreement: string,
     first: number,
     skip: number,
-    callback: Function
+    callback: SubscriptionCallback<DisputableApp[]>
   ): SubscriptionHandler
   signer(signerId: string): Promise<Signer>
   onSigner(
@@ -113,7 +113,10 @@ export interface IAgreementConnector {
     callback: SubscriptionCallback<Signature[]>
   ): SubscriptionHandler
   collateralRequirement(disputableAppId: string): Promise<CollateralRequirement>
-  onCollateralRequirement(disputableAppId: string, callback: Function): SubscriptionHandler
+  onCollateralRequirement(
+     disputableAppId: string, 
+	 callback: SubscriptionCallback<CollateralRequirement>
+  ): SubscriptionHandler
   ERC20(tokenAddress: string): Promise<ERC20>
-  onERC20(tokenAddress: string, callback: Function): SubscriptionHandler
+  onERC20(tokenAddress: string, callback: SubscriptionCallback<ERC20>): SubscriptionHandler
 }
