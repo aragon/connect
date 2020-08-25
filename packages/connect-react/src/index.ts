@@ -239,15 +239,15 @@ export function createAppHook(
     app: App | null,
     callback?: (app: App | any) => T | Promise<T>,
     dependencies?: any[]
-  ): [T | null, LoadingStatus] {
+  ): [T | undefined, LoadingStatus] {
     const [{ result, error, loading }, setStatus] = useState<{
       error: Error | null
       loading: boolean
-      result: T | null
+      result?: T
     }>({
       error: null,
-      loading: false,
-      result: null,
+      loading: true,
+      result: undefined,
     })
 
     const callbackRef = useRef<Function>((app: App) => app)
@@ -273,7 +273,7 @@ export function createAppHook(
       setStatus((status) => ({
         ...status,
         error: null,
-        result: null,
+        result: undefined,
       }))
 
       const update = async () => {
@@ -297,7 +297,7 @@ export function createAppHook(
                   setStatus({
                     error: error || null,
                     loading: false,
-                    result: error ? null : result,
+                    result: error ? undefined : result,
                   })
                 }
               }
@@ -316,7 +316,7 @@ export function createAppHook(
             setStatus({
               error: err,
               loading: false,
-              result: null,
+              result: undefined,
             })
           }
         }
