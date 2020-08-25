@@ -30,6 +30,10 @@ type Vote @entity {
   context: String!
   status: VoteStatus!
   actionId: BigInt!
+  disputeId: BigInt
+  challengeId: BigInt!
+  challenger: Bytes!
+  challengeEndDate: BigInt!
   setting: Setting!
   startDate: BigInt!
   votingPower: BigInt!
@@ -41,6 +45,8 @@ type Vote @entity {
   quietEndingExtendedSeconds: BigInt!
   quietEndingSnapshotSupport: VoterState!
   script: Bytes!
+  executedAt: BigInt!
+  isAccepted: Boolean!
   castVotes: [CastVote!] @derivedFrom(field: "vote")
   collateralRequirement: CollateralRequirement! @derivedFrom(field: "vote")
 }

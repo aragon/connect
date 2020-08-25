@@ -1,8 +1,8 @@
-import { SettingData, IDisputableVotingConnector } from '../types'
+import { SettingData } from '../types'
+import { formatBn, PCT_DECIMALS } from '../helpers'
+
 
 export default class Setting {
-  #connector: IDisputableVotingConnector
-
   readonly id: string
   readonly votingId: string
   readonly settingId: string
@@ -14,9 +14,7 @@ export default class Setting {
   readonly quietEndingExtension: string
   readonly createdAt: string
 
-  constructor(data: SettingData, connector: IDisputableVotingConnector) {
-    this.#connector = connector
-
+  constructor(data: SettingData) {
     this.id = data.id
     this.votingId = data.votingId
     this.settingId = data.settingId
@@ -27,5 +25,13 @@ export default class Setting {
     this.quietEndingPeriod = data.quietEndingPeriod
     this.quietEndingExtension = data.quietEndingExtension
     this.createdAt = data.createdAt
+  }
+
+  get formattedSupportRequiredPct(): string {
+    return formatBn(this.supportRequiredPct, PCT_DECIMALS)
+  }
+
+  get formattedMinimumAcceptanceQuorumPct(): string {
+    return formatBn(this.minimumAcceptanceQuorumPct, PCT_DECIMALS)
   }
 }
