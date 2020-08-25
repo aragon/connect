@@ -6,11 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>List Votes</title>
     <style>
+      * {
+        box-sizing: border-box;
+      }
       html {
         display: grid;
         min-height: 100%;
-        color: #eee;
-        background: #448888;
+        color: #fff;
+        background: #558888;
       }
       body,
       button {
@@ -18,7 +21,6 @@
       }
       body {
         margin: 0;
-        padding: 0 0 40px;
       }
       p,
       ul {
@@ -29,16 +31,59 @@
       }
       li {
         list-style: none;
+        text-align: center;
       }
       section {
         display: grid;
         place-items: start center;
         min-height: 100px;
+        min-width: 500px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+        padding: 40px;
       }
       h1 {
-        margin: 40px 0 20px;
+        margin: -10px 0 20px;
         font-weight: 400;
         font-size: 22px;
+      }
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+        min-height: 100vh;
+        padding: 40px 0;
+      }
+      button {
+        height: 30px;
+        padding: 0 10px;
+        line-height: 1;
+        font-size: 14px;
+        background: #fff;
+        border: 0;
+        border-radius: 2px;
+        cursor: pointer;
+      }
+      button:active {
+        background: #ddd;
+      }
+      .actions-button {
+        position: fixed;
+        top: 5px;
+        left: 5px;
+        width: 30px;
+        padding: 0;
+      }
+      .actions {
+        position: fixed;
+        top: 5px;
+        left: 35px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px;
+        height: 30px;
       }
     </style>
   </head>
