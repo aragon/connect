@@ -17,7 +17,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn --frozen-lockfile
-      - run: yarn precise-commits --whitelist="packages/**/*.ts" --check-only --head=$GITHUB_SHA --base=${git rev-parse ${{ github.base_ref }}}
+      - name: Extract base commit
+        shell: bash
+        run: echo "##[set-output name=commit;]$(git rev-parse ${{ github.base_ref }})"
+        id: extract_commit
+      - run: yarn precise-commits --whitelist="packages/**/*.ts" --check-only --head=$GITHUB_SHA --base=${{ steps.extract_commit.outputs.commit }}
       - run: yarn test
         env:
           CI: true
