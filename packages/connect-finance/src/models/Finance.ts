@@ -32,9 +32,9 @@ export default class Finance {
     return subscription<Transaction[]>(callback, (callback) =>
       this.#connector.onTransactionsForApp!(
         this.#appAddress,
-        callback,
         first,
-        skip
+        skip,
+        callback
       )
     )
   }
@@ -60,9 +60,9 @@ export default class Finance {
       this.#connector.onBalanceForToken!(
         this.#appAddress,
         tokenAddress,
-        callback,
         first,
-        skip
+        skip,
+        callback
       )
     )
   }

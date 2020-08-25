@@ -90,11 +90,13 @@ export default class TokensConnectorTheGraph implements ITokensConnector {
 
   onTokenHolders(
     tokenAddress: string,
+    first: number,
+    skip: number,
     callback: SubscriptionCallback<TokenHolder[]>
   ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser<TokenHolder[]>(
       queries.TOKEN_HOLDERS('subscription'),
-      { tokenAddress, first: 1000, skip: 0 },
+      { tokenAddress, first, skip },
       callback,
       (result) => parseTokenHolders(result)
     )

@@ -293,8 +293,11 @@ export default class DisputableVotingConnectorTheGraph
     )
   }
 
-  onERC20(tokenAddress: string, callback: Function): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser(
+  onERC20(
+    tokenAddress: string,
+    callback: SubscriptionCallback<ERC20>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<ERC20>(
       queries.GET_ERC20('subscription'),
       { tokenAddress },
       callback,
