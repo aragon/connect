@@ -48,7 +48,7 @@
     "status": "oao status",
     "publish-version": "./scripts/publish-version.sh",
     "postinstall": "yarn build",
-    "prepush": "oao run-script prettier --parallel"
+    "pre-push": "oao run-script prettier --parallel"
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",
