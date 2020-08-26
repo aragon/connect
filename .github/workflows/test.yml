@@ -1,6 +1,6 @@
 name: Test
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   build:
@@ -17,6 +17,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn --frozen-lockfile
+      - run: yarn prettier
       - run: yarn test
         env:
           CI: true

@@ -46,9 +46,9 @@
     "build": "MODE=libs-only ./scripts/rebuild-packages.sh",
     "build:examples": "MODE=all ./scripts/rebuild-packages.sh",
     "status": "oao status",
+    "prettier": "oao run-script prettier --parallel",
     "publish-version": "./scripts/publish-version.sh",
-    "postinstall": "yarn build",
-    "precommit": "yarn precise-commits"
+    "postinstall": "yarn build"
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",
@@ -56,8 +56,12 @@
     "is-ci-cli": "^2.1.1",
     "jest": "^26.0.1",
     "oao": "^2.0.0",
-    "precise-commits": "^1.0.2",
     "prettier": "^2.0.5",
     "ts-jest": "^26.1.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn prettier"
+    }
   }
 }

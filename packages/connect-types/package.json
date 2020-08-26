@@ -15,7 +15,8 @@
     "build:cjs": "tsc --build ./tsconfig.cjs.json",
     "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo",
     "dev:esm": "yarn build:esm --watch",
-    "dev:cjs": "yarn build:cjs --watch"
+    "dev:cjs": "yarn build:cjs --watch",
+    "prettier": "prettier src/**/*.ts"
   },
   "devDependencies": {
     "typescript": "^3.8.3"

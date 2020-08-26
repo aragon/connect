@@ -18,7 +18,8 @@
     "test:debug": "node --inspect-brk ../../node_modules/jest/bin/jest.js --runInBand --watch",
     "clean": "rm -rf ./dist",
     "compile": "tsc",
-    "lint": "eslint --ext .ts ./src"
+    "lint": "eslint --ext .ts ./src",
+    "prettier": "prettier src/**/*.ts"
   },
   "files": [
     "dist"
