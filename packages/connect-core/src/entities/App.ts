@@ -91,6 +91,10 @@ export default class App {
     return this.orgConnector().rolesForAddress(this.organization, this.address)
   }
 
+  get appName(): string {
+    return this.artifact.appName
+  }
+
   get artifact(): AragonArtifact {
     return this.#metadata[0] as AragonArtifact
   }
@@ -109,9 +113,5 @@ export default class App {
 
   get deprecatedMethods(): { [version: string]: AppMethod[] } {
     return this.artifact.deprecatedFunctions
-  }
-
-  get appName(): string {
-    return this.artifact.appName
   }
 }

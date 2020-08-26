@@ -1,4 +1,4 @@
-import { ethers } from 'ethers'
+import { utils as ethersUtils } from 'ethers'
 
 import {
   getApmInternalAppInfo,
@@ -31,7 +31,7 @@ export async function fetchMetadata(
     const url = `${DEFAULT_IPFS_GATEWAY}/ipfs/${contentHashRegEx[1]}/${fileName}`
     let metadata
     try {
-      metadata = await ethers.utils.fetchJson(url)
+      metadata = await ethersUtils.fetchJson(url)
     } catch (error) {
       throw new Error(`Can't fetch ${url}, failed with error: {error}.`)
     }

@@ -1,14 +1,14 @@
-import { ethers } from 'ethers'
+import { providers as ethersProviders } from 'ethers'
 
+import ForwardingPath from './ForwardingPath'
 import Organization from './Organization'
 import Transaction from './Transaction'
-import TransactionPath from '../transactions/TransactionPath'
 import { PathOptions, IntentData } from '../types'
 import { calculateTransactionPath } from '../utils/path/calculatePath'
 
 export default class Intent {
   #org: Organization
-  #provider: ethers.providers.Provider
+  #provider: ethersProviders.Provider
   readonly appAddress: string
   readonly functionName: string
   readonly functionArgs: any[]
@@ -16,7 +16,7 @@ export default class Intent {
   constructor(
     data: IntentData,
     org: Organization,
-    provider: ethers.providers.Provider
+    provider: ethersProviders.Provider
   ) {
     this.#org = org
     this.#provider = provider
@@ -26,7 +26,7 @@ export default class Intent {
   }
 
   // Retrieve a single forwarding path. Defaults to the shortest one.
-  async path({ actAs, path }: PathOptions): Promise<TransactionPath> {
+  async path({ actAs, path }: PathOptions): Promise<ForwardingPath> {
     const apps = await this.#org.apps()
 
     // Get the destination app
@@ -46,19 +46,22 @@ export default class Intent {
       this.#provider
     )
 
-    return new TransactionPath({
-      apps: apps.filter((app) =>
-        transactions
-          .map((tx) => tx.to)
-          .some((address) => address === app.address)
-      ),
-      destination,
-      transactions,
-    })
+    return new ForwardingPath(
+      {
+        apps: apps.filter((app) =>
+          transactions
+            .map((tx) => tx.to)
+            .some((address) => address === app.address)
+        ),
+        destination,
+        transactions,
+      },
+      this.#provider
+    )
   }
 
   // Retrieve the different possible forwarding paths.
-  async paths({ actAs, path }: PathOptions): Promise<TransactionPath[]> {
+  async paths({ actAs, path }: PathOptions): Promise<ForwardingPath[]> {
     // TODO: support logic to calculate multiple Forwarding paths
     return [await this.path({ actAs, path })]
   }

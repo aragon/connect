@@ -6,7 +6,7 @@ import {
 } from '@aragon/connect-types'
 
 import { ConnectionContext } from '../types'
-import { decodeForwardingPath } from '../utils/description'
+import { decodeForwardingPath } from '../utils/descriptor/describe'
 import { toArrayEntry } from '../utils/misc'
 import App from './App'
 import Intent from './Intent'
@@ -125,11 +125,13 @@ export default class Organization {
   }
 
   ///////// INTENTS ///////////
+
   appIntent(
     appAddress: Address,
     functionName: string,
     functionArgs: any[]
   ): Intent {
+    // TODO: Use curry functions to allow to provide an account as the last argument and otherwise provide a partialy applied function
     return new Intent(
       { appAddress, functionName, functionArgs },
       this,

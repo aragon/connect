@@ -1,4 +1,4 @@
-import { ethers } from 'ethers'
+import { providers as ethersProviders, utils as ethersUtils } from 'ethers'
 
 import App from '../../entities/App'
 import Transaction from '../../entities/Transaction'
@@ -22,7 +22,7 @@ async function calculateForwardingPath(
   directTransaction: Transaction,
   forwardersWithPermission: string[],
   forwarders: string[],
-  provider: ethers.providers.Provider
+  provider: ethersProviders.Provider
 ): Promise<Transaction[]> {
   // No forwarders can perform the requested action
   if (forwardersWithPermission.length === 0) {
@@ -38,7 +38,7 @@ async function calculateForwardingPath(
     forwarder: string,
     script: string,
     path: Transaction[],
-    provider: ethers.providers.Provider
+    provider: ethersProviders.Provider
   ): Promise<Transaction[]> => {
     const transaction = createForwarderTransaction(forwarder, script)
 
@@ -154,7 +154,7 @@ export async function calculateTransactionPath(
   methodSignature: string,
   params: any[],
   apps: App[],
-  provider: ethers.providers.Provider,
+  provider: ethersProviders.Provider,
   finalForwarder?: string //Address of the final forwarder that can perfom the action. Needed for actions that aren't in the ACL but whose execution depends on other factors
 ): Promise<Transaction[]> {
   // The direct transaction we eventually want to perform
@@ -166,8 +166,15 @@ export async function calculateTransactionPath(
   )
 
   const finalForwarderProvided = finalForwarder
-    ? ethers.utils.isAddress(finalForwarder)
+    ? ethersUtils.isAddress(finalForwarder)
     : false
+
+  const method = findAppMethodFromSignature(app, methodSignature, {
+    allowDeprecated: false,
+  })
+  if (!method) {
+    throw new Error(`No method named ${methodSignature} on ${destination}`)
+  }
 
   const method = getAppMethod(destinationApp, methodSignature)
   // We can already assume the user is able to directly invoke the action if:
@@ -209,6 +216,7 @@ export async function calculateTransactionPath(
     const role = (await destinationApp.roles()).find(
       (role) => role.name === method.roles[0]
     )
+
     const allowedEntities =
       role?.permissions
         ?.filter((permission) => permission.allowed)

@@ -1,4 +1,4 @@
-import { ethers } from 'ethers'
+import { providers as ethersProviders } from 'ethers'
 
 import App from './App'
 import Transaction from './Transaction'
@@ -8,15 +8,15 @@ import {
   ForwardingPathDescriptionData,
   PostProcessDescription,
 } from '../types'
-import { describeForwardingPath } from '../utils/description'
+import { describeForwardingPath } from '../utils/descriptor/describe'
 
 export default class ForwardingPath {
-  #provider: ethers.providers.Provider
+  #provider: ethersProviders.Provider
   readonly apps: App[]
   readonly destination: App
   readonly transactions: Transaction[]
 
-  constructor(data: ForwardingPathData, provider: ethers.providers.Provider) {
+  constructor(data: ForwardingPathData, provider: ethersProviders.Provider) {
     this.#provider = provider
     this.apps = data.apps
     this.destination = data.destination
@@ -43,35 +43,4 @@ export default class ForwardingPath {
   toString(): string {
     return this.describe().toString()
   }
-}
-
-type ForwardingPathDescriptionTreeEntry =
-  | AppOrAddress
-  | [AppOrAddress, ForwardingPathDescriptionTreeEntry[]]
-
-export type ForwardingPathDescriptionTree = ForwardingPathDescriptionTreeEntry[]
-
-export class ForwardingPathDescription {
-  readonly apps: App[]
-  readonly describeSteps: PostProcessDescription[]
-
-  constructor(data: ForwardingPathDescriptionData) {
-    this.apps = data.apps
-    this.describeSteps = data.describeSteps
-  }
-
-  // Return a tree that can get used to render the path.
-  tree(): ForwardingPathDescriptionTree {
-    // TODO:
-    return []
-  }
-
-  // Renders the forwarding path description as text
-  toString(): string {
-    return this.tree().toString()
-  }
-
-  // TBD: a utility that makes it easy to render the tree,
-  // e.g. as a nested list in HTML or React.
-  reduce(callback: Function): any {}
 }

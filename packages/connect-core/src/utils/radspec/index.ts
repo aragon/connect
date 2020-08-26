@@ -1,4 +1,4 @@
-import { ethers } from 'ethers'
+import { providers as ethersProviders } from 'ethers'
 import * as radspec from 'radspec'
 
 import { addressesEqual } from '../address'
@@ -18,7 +18,7 @@ interface FoundMethod {
 export async function tryEvaluatingRadspec(
   intent: Transaction,
   apps: App[],
-  provider?: ethers.providers.Provider // Decorated intent with description, if one could be made
+  provider?: ethersProviders.Provider // Decorated intent with description, if one could be made
 ): Promise<string> {
   const app = apps.find((app) => addressesEqual(app.address, intent.to))
 
@@ -67,6 +67,63 @@ export async function tryEvaluatingRadspec(
   }
 
   return evaluatedNotice
+}
+
+/**
+ * Attempt to describe a setApp() intent. Only describes the APP_BASE namespace.
+ *
+ * @param  {Object} intent transaction intent
+ * @param  {Object} wrapper
+ * @return {Promise<Object>} Decorated intent with description, if one could be made
+ */
+export async function tryDescribingUpdateAppIntent(intent, wrapper) {
+  const upgradeIntentParams = (
+    await filterAndDecodeAppUpgradeIntents([intent], wrapper)
+  )[0]
+  if (!upgradeIntentParams) return
+
+  const { appId, appAddress } = upgradeIntentParams
+  // Fetch aragonPM information
+  const repoAddress = await wrapper.ens.resolve(appId)
+  const repo = makeRepoProxy(repoAddress, wrapper.web3)
+  const { version: latestVersion } = await getRepoLatestVersionForContract(
+    repo,
+    appAddress
+  )
+
+  return {
+    ...intent,
+    description: `Upgrade ${appId} app instances to v${latestVersion}`,
+  }
+}
+
+/**
+ * Attempt to parse a complete organization upgrade intent
+ *
+ * @param  {Array<Object>} intents intent basket
+ * @param  {Object} wrapper
+ * @return {Promise<Object>} Decorated intent with description, if one could be made
+ */
+export async function tryDescribingUpgradeOrganizationBasket(intents, wrapper) {
+  const upgradedKnownAppIds = (
+    await filterAndDecodeAppUpgradeIntents(intents, wrapper)
+  )
+    .map(({ appId }) => appId)
+    // Take intersection with knownAppIds
+    .filter((appId) => knownAppIds.includes(appId))
+
+  if (
+    // All intents are for upgrading known apps
+    intents.length === upgradedKnownAppIds.length &&
+    // All known apps are being upgraded
+    knownAppIds.length === upgradedKnownAppIds.length
+  ) {
+    return {
+      description: 'Upgrade organization to Aragon 0.8 Camino',
+      from: intents[0].from,
+      to: intents[0].to,
+    }
+  }
 }
 
 export { postprocessRadspecDescription } from './postprocess'

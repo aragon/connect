@@ -1,4 +1,4 @@
-import { ethers } from 'ethers'
+import { utils as ethersUtils } from 'ethers'
 
 export const CALLSCRIPT_ID = '0x00000001'
 
@@ -90,8 +90,8 @@ export function decodeCallScript(script: string): CallScriptAction[] {
  */
 export function encodeCallScript(actions: CallScriptAction[]): string {
   return actions.reduce((script: string, { to, data }) => {
-    const address = ethers.utils.defaultAbiCoder.encode(['address'], [to])
-    const dataLength = ethers.utils.defaultAbiCoder.encode(
+    const address = ethersUtils.defaultAbiCoder.encode(['address'], [to])
+    const dataLength = ethersUtils.defaultAbiCoder.encode(
       ['uint256'],
       [(data.length - 2) / 2]
     )

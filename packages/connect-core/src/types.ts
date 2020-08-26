@@ -1,16 +1,16 @@
-import { ethers } from 'ethers'
+import { providers as ethersProviders, utils as ethersUtils } from 'ethers'
 import { Address, Network } from '@aragon/connect-types'
 
 import IOrganizationConnector from './connections/IOrganizationConnector'
 import App from './entities/App'
 import Transaction from './entities/Transaction'
 
-export type Abi = (ethers.utils.EventFragment | ethers.utils.FunctionFragment)[]
+export type Abi = (ethersUtils.EventFragment | ethersUtils.FunctionFragment)[]
 
 export type ConnectionContext = {
   actAs: Address | null
   ethereumProvider: object | null
-  ethersProvider: ethers.providers.Provider
+  ethersProvider: ethersProviders.Provider
   ipfs: (cid: string) => string
   network: Network
   orgAddress: Address
@@ -114,13 +114,6 @@ export interface RoleData {
   grantees?: PermissionData[] | null
 }
 
-export interface TransactionPathData {
-  apps: App[]
-  destination: App
-  forwardingFeePretransaction?: Transaction
-  transactions: Transaction[]
-}
-
 export interface TransactionData {
   data: string
   from: Address
@@ -144,7 +137,7 @@ export interface AppMethod {
    * The function's ABI element is included for convenience of the client
    * null if ABI is not found for this signature
    */
-  abi: ethers.utils.FunctionFragment | null
+  abi: ethersUtils.FunctionFragment | null
 }
 
 // The aragon manifest requires the use of camelcase for some names
