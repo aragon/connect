@@ -10,7 +10,10 @@ import { Address } from '@graphprotocol/graph-ts'
  * which must have the same name.
  */
 export function getTemplateForApp(appId: string): string | null {
-  if (appId == '0x34c62f3aec3073826f39c2c35e9a1297d9dbf3cc77472283106f09eee9cf47bf') {
+  const AGREEMENT_OPEN = '0x34c62f3aec3073826f39c2c35e9a1297d9dbf3cc77472283106f09eee9cf47bf'
+  const AGREEMENT_PRECEDENCE_CAMPAIGN = '0x15a969a0e134d745b604fb43f699bb5c146424792084c198d53050c4d08126d1'
+
+  if (appId == AGREEMENT_OPEN || appId == AGREEMENT_PRECEDENCE_CAMPAIGN) {
     return 'Agreement'
   } else {
     return null

@@ -4,6 +4,8 @@ import { Kernel as KernelTemplate } from '../../generated/templates'
 import { MiniMeToken as MiniMeTokenTemplate } from '../../generated/templates'
 import * as hooks from '../aragon-hooks'
 
+/* eslint-disable @typescript-eslint/no-use-before-define */
+
 export function processOrg(orgAddress: Address): void {
   if (!_isRegistered(orgAddress, 'org')) {
     KernelTemplate.create(orgAddress)
@@ -15,7 +17,7 @@ export function processOrg(orgAddress: Address): void {
 
 export function processApp(appAddress: Address, appId: string): void {
   if (!_isRegistered(appAddress, 'app')) {
-    let templateType = hooks.getTemplateForApp(appId)
+    const templateType = hooks.getTemplateForApp(appId)
     if (templateType) {
       DataSourceTemplate.create(templateType, [appAddress.toHexString()])
       hooks.onAppTemplateCreated(appAddress, appId)
@@ -35,7 +37,7 @@ export function processToken(tokenAddress: Address): void {
 }
 
 function _isRegistered(address: Address, type: string): boolean {
-  let aragon = _getAragonInfo()
+  const aragon = _getAragonInfo()
 
   let entities: Address[]
   if (type == 'org') {
@@ -52,18 +54,18 @@ function _isRegistered(address: Address, type: string): boolean {
 }
 
 function _registerEntity(address: Address, type: string): void {
-  let aragon = _getAragonInfo()
+  const aragon = _getAragonInfo()
 
   if (type == 'org') {
-    let entities = aragon.orgs
+    const entities = aragon.orgs
     entities.push(address)
     aragon.orgs = entities
   } else if (type == 'app') {
-    let entities = aragon.apps
+    const entities = aragon.apps
     entities.push(address)
     aragon.apps = entities
   } else if (type == 'token') {
-    let entities = aragon.tokens
+    const entities = aragon.tokens
     entities.push(address)
     aragon.tokens = entities
   } else {
@@ -74,7 +76,7 @@ function _registerEntity(address: Address, type: string): void {
 }
 
 function _getAragonInfo(): AragonInfoEntity {
-  let aragonId = 'THERE_CAN_ONLY_BE_ONE'
+  const aragonId = 'THERE_CAN_ONLY_BE_ONE'
 
   let aragon = AragonInfoEntity.load(aragonId)
   if (!aragon) {
