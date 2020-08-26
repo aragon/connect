@@ -61,8 +61,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "yarn prettier",
-      "pre-commit": "yarn prettier"
+      "pre-push": "yarn prettier"
     }
   }
 }
