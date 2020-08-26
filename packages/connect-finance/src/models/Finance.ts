@@ -30,7 +30,7 @@ export default class Finance {
     callback?: SubscriptionCallback<Transaction[]>
   ): SubscriptionResult<Transaction[]> {
     return subscription<Transaction[]>(callback, (callback) =>
-      this.#connector.onTransactionsForApp!(
+      this.#connector.onTransactionsForApp(
         this.#appAddress,
         first,
         skip,
@@ -57,7 +57,7 @@ export default class Finance {
     callback?: SubscriptionCallback<TokenBalance>
   ): SubscriptionResult<TokenBalance> {
     return subscription<TokenBalance>(callback, (callback) =>
-      this.#connector.onBalanceForToken!(
+      this.#connector.onBalanceForToken(
         this.#appAddress,
         tokenAddress,
         first,
