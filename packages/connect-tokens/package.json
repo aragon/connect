@@ -18,7 +18,7 @@
     "test:debug": "node --inspect-brk ../../node_modules/jest/bin/jest.js --runInBand --watch",
     "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo",
     "lint": "eslint --ext .ts ./src",
-    "prettier": "prettier --ext .ts ./src"
+    "prettier": "prettier src/**/*.ts"
   },
   "files": [
     "dist"
