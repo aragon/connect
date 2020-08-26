@@ -58,7 +58,7 @@ function buildVote(vote: any, connector: any): Vote {
     script,
     executedAt,
     isAccepted,
-    tokenDecimals: voting.token.decimals
+    tokenDecimals: voting.token.decimals,
   }
 
   return new Vote(voteData, connector)
