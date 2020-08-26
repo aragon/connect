@@ -1,11 +1,10 @@
-import { ethers } from 'ethers'
-
+import { utils as ethersUtils } from 'ethers'
 import { AppIntent } from '../types'
 import App from '../entities/App'
 import { TransactionRequestData } from '../transactions/TransactionRequest'
 
 export const apmAppId = (appName: string): string =>
-  ethers.utils.namehash(`${appName}.aragonpm.eth`)
+  ethersUtils.namehash(`${appName}.aragonpm.eth`)
 
 // Is the given method a full signature, e.g. 'foo(arg1,arg2,...)'
 export const isFullMethodSignature = (methodSignature: string): boolean => {
@@ -56,7 +55,7 @@ export function findAppMethodFromIntent(
 
   const checkMethodSignature = (siganture: string): boolean => {
     // Hash signature with Ethereum Identity and silce bytes
-    const sigHash = ethers.utils.hexDataSlice(ethers.utils.id(siganture), 0, 4)
+    const sigHash = ethersUtils.hexDataSlice(ethersUtils.id(siganture), 0, 4)
     return sigHash === methodId
   }
 

@@ -59,6 +59,24 @@ export const ALL_VERSIONS = (type: string) => gql`
   }
 `
 
+export const ALL_DISPUTABLE_APPS = (type: string) => gql`
+  ${type} DisputableApps($agreement: String!, $first: Int!, $skip: Int!) {
+    disputables(where: {
+      agreement: $agreement
+    }, first: $first, skip: $skip) {
+      id
+      agreement {
+        id
+      }
+      address
+      activated
+      currentCollateralRequirement {
+        id
+      }
+    }
+  }
+`
+
 export const GET_SIGNER = (type: string) => gql`
   ${type} Signer($signerId: String!) {
     signer(id: $signerId) {
@@ -78,6 +96,37 @@ export const GET_SIGNATURES = (type: string) => gql`
       version { id }
       signer { id }
       createdAt
+    }
+  }
+`
+
+export const GET_COLLATERAL_REQUIREMENT = (type: string) => gql`
+  ${type} CollateralRequirement($disputableAppId: String!) {
+    disputable(id: $disputableAppId) {
+      currentCollateralRequirement {
+        id
+        actionAmount
+        challengeAmount
+        challengeDuration
+        disputable {
+          id
+        }
+        token {
+          id
+          decimals
+        }
+      }
+    }
+  }
+`
+
+export const GET_ERC20 = (type: string) => gql`
+  ${type} ERC20($tokenAddress: String!) {
+    erc20(id: $tokenAddress) {
+      id
+      name
+      symbol
+      decimals
     }
   }
 `

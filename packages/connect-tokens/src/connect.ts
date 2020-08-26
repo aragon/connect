@@ -33,6 +33,6 @@ export default createAppConnector<Tokens, Config>(
       verbose,
     })
 
-    return new Tokens(connectorTheGraph, app.address)
+    return Tokens.create(connectorTheGraph)
   }
 )

@@ -29,7 +29,7 @@ export default class Voting {
     callback?: SubscriptionCallback<Vote[]>
   ): SubscriptionResult<Vote[]> {
     return subscription<Vote[]>(callback, (callback) =>
-      this.#connector.onVotesForApp(this.#appAddress, callback, first, skip)
+      this.#connector.onVotesForApp(this.#appAddress, first, skip, callback)
     )
   }
 }

@@ -40,9 +40,12 @@ export default class Vote {
     return this.#connector.castsForVote(this.id, first, skip)
   }
 
-  onCasts(callback?: SubscriptionCallback<Cast[]>): SubscriptionResult<Cast[]> {
+  onCasts(
+    { first = 1000, skip = 0 } = {},
+    callback?: SubscriptionCallback<Cast[]>
+  ): SubscriptionResult<Cast[]> {
     return subscription<Cast[]>(callback, (callback) =>
-      this.#connector.onCastsForVote(this.id, callback)
+      this.#connector.onCastsForVote(this.id, first, skip, callback)
     )
   }
 }

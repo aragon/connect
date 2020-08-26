@@ -19,15 +19,40 @@ const VOTES_PER_PAGE = 5
 const useVoting = createAppHook(connectVoting)
 
 export default function App() {
+  const [showActions, setShowActions] = useState(false)
+  const [mountOrg, setMountOrg] = useState(true)
+  const [mountApp, setMountApp] = useState(true)
+  const [mountVotes, setMountVotes] = useState(true)
   return (
     <Connect
       location={ORG_ADDRESS}
       connector="thegraph"
       options={{ network: NETWORK }}
     >
-      <Organization />
-      <VotingApp />
-      <Votes />
+      <main>
+        <button
+          className="actions-button"
+          onClick={() => setShowActions(!showActions)}
+        >
+          {showActions ? '✖️' : '🔨'}
+        </button>
+        {showActions && (
+          <div className="actions">
+            <button onClick={() => setMountOrg(!mountOrg)}>
+              {mountOrg ? 'unmount' : 'mount'} org
+            </button>
+            <button onClick={() => setMountApp(!mountApp)}>
+              {mountApp ? 'unmount' : 'mount'} app
+            </button>
+            <button onClick={() => setMountVotes(!mountVotes)}>
+              {mountVotes ? 'unmount' : 'mount'} votes
+            </button>
+          </div>
+        )}
+        {mountOrg && <Organization />}
+        {mountApp && <VotingApp />}
+        {mountVotes && <Votes />}
+      </main>
     </Connect>
   )
 }
@@ -36,38 +61,46 @@ function Organization() {
   const [org] = useOrganization()
   return (
     <section>
-      <h1>Organization</h1> <p>{org?.address || 'loading…'}</p>
+      <h1>Organization</h1> <p>{org?.address || 'Loading…'}</p>
     </section>
   )
 }
 
-function VotingApp() {
-  const [voting, votingStatus] = useApp(VOTING_APP_FILTER)
+const VotingApp = React.memo(function VotingApp() {
+  const [voting, { error, loading }] = useApp(VOTING_APP_FILTER)
   return (
     <section>
       <h1>Voting App</h1>
       <p>
         {(() => {
-          if (votingStatus.loading) {
-            return 'loading…'
+          if (loading) {
+            return 'Loading…'
           }
-          if (votingStatus.error) {
-            return votingStatus.error.message
+          if (error) {
+            return error.message
+          }
+          if (!voting) {
+            return 'App not found.'
           }
           return voting?.address
         })()}
       </p>
     </section>
   )
-}
+})
 
 function Votes() {
-  const [voting, votingStatus] = useApp(VOTING_APP_FILTER)
   const [page, setPage] = useState<number>(0)
-  const [votes, votesStatus] = useVoting(
+
+  const [voting, votingStatus] = useApp(VOTING_APP_FILTER)
+
+  const [votes = [], votesStatus] = useVoting<Vote[]>(
     voting,
     (app: Voting) => {
-      return app.onVotes({ first: VOTES_PER_PAGE, skip: VOTES_PER_PAGE * page })
+      return app.onVotes({
+        first: VOTES_PER_PAGE,
+        skip: VOTES_PER_PAGE * page,
+      })
     },
     [page]
   )
@@ -92,7 +125,7 @@ function Votes() {
           if (votingStatus.loading || votesStatus.loading) {
             return <p>Loading…</p>
           }
-          if (Array.isArray(votes) && votes?.length > 0) {
+          if (votes && votes.length > 0) {
             return (
               <ul>
                 {votes?.map((vote: Vote) => (
@@ -109,7 +142,7 @@ function Votes() {
           display: 'flex',
           alignItems: 'center',
           gap: '20px',
-          marginTop: '20px',
+          marginTop: '30px',
         }}
       >
         <button
@@ -129,5 +162,5 @@ function formatVote(vote: any): string {
   let str = vote.metadata
   str = str.replace(/\n/g, ' ')
   str = str.length > 40 ? str.slice(0, 40) + '…' : str
-  return str || '[Action]'
+  return str || '(action)'
 }

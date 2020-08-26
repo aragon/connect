@@ -62,9 +62,9 @@ export default class FinanceConnectorTheGraph implements IFinanceConnector {
 
   onTransactionsForApp(
     appAddress: Address,
-    callback: SubscriptionCallback<Transaction[]>,
     first: number,
-    skip: number
+    skip: number,
+    callback: SubscriptionCallback<Transaction[]>
   ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser<Transaction[]>(
       queries.ALL_TRANSACTIONS('subscription'),
@@ -90,9 +90,9 @@ export default class FinanceConnectorTheGraph implements IFinanceConnector {
   onBalanceForToken(
     appAddress: Address,
     tokenAddress: Address,
-    callback: SubscriptionCallback<TokenBalance>,
     first: number,
-    skip: number
+    skip: number,
+    callback: SubscriptionCallback<TokenBalance>
   ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser<TokenBalance>(
       queries.BALANCE_FOR_TOKEN('subscription'),

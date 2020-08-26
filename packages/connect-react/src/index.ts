@@ -7,7 +7,11 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { AppFiltersParam, SubscriptionHandler } from '@aragon/connect-types'
+import {
+  AppFiltersParam,
+  SubscriptionHandler,
+  SubscriptionResult,
+} from '@aragon/connect-types'
 import {
   App,
   ConnectOptions,
@@ -45,11 +49,24 @@ export function Connect({
   location,
   options,
 }: ConnectProps): JSX.Element {
-  const [org, setOrg] = useState<Organization | null>(null)
-  const [orgError, setOrgError] = useState<Error | null>(null)
-  const [orgLoading, setOrgLoading] = useState<boolean>(false)
+  const [{ org, orgError, orgLoading }, setOrgStatus] = useState<{
+    org: Organization | null
+    orgError: Error | null
+    orgLoading: boolean
+  }>({
+    org: null,
+    orgError: null,
+    orgLoading: true,
+  })
 
   const cancelOrgLoading = useRef<Function | null>(null)
+
+  // If the connector is custom instance, it is the responsibility of the provider to memoize it.
+  const connectorUpdateValue =
+    Array.isArray(connector) || typeof connector === 'string'
+      ? JSON.stringify(connector)
+      : connector
+  const optionsUpdateValue = JSON.stringify(options)
 
   const loadOrg = useCallback(() => {
     let cancelled = false
@@ -59,15 +76,20 @@ export function Connect({
       cancelled = true
     }
 
-    setOrg(null)
-    setOrgLoading(true)
+    setOrgStatus((status) => ({
+      ...status,
+      org: null,
+      orgLoading: true,
+    }))
 
     const update = async () => {
       const done = (err: Error | null, org: Organization | null) => {
         if (!cancelled) {
-          setOrgLoading(false)
-          setOrgError(err || null)
-          setOrg(err ? null : org)
+          setOrgStatus({
+            org: err ? null : org,
+            orgError: err || null,
+            orgLoading: false,
+          })
         }
       }
 
@@ -79,9 +101,11 @@ export function Connect({
       }
     }
     update()
-  }, [location, connector, options])
+  }, [location, connectorUpdateValue, optionsUpdateValue])
 
-  useEffect(loadOrg, [location, connector, options])
+  useEffect(() => {
+    loadOrg()
+  }, [location, connectorUpdateValue, optionsUpdateValue])
 
   const value = useMemo<ContextValue>(
     () => ({
@@ -127,7 +151,7 @@ function useConnectSubscription<Data>(
   }>({
     data: initValue,
     error: null,
-    loading: false,
+    loading: true,
   })
 
   const {
@@ -137,11 +161,14 @@ function useConnectSubscription<Data>(
   const cancelCb = useRef<Function | null>(null)
   const dataJsonRef = useRef<string>(JSON.stringify(initValue))
 
+  // The init value never changes
+  const initValueRef = useRef<Data>(initValue)
+
   const subscribe = useCallback(() => {
     if (!org) {
       // If the org is loading, the subscription is loading as well.
       setStatus({
-        data: initValue,
+        data: initValueRef.current,
         error: null,
         loading: orgLoading,
       })
@@ -176,11 +203,11 @@ function useConnectSubscription<Data>(
 
       setStatus({
         error: error || null,
-        data: error ? initValue : data,
+        data: error ? initValueRef.current : data,
         loading: false,
       })
     })
-  }, [callback, initValue, org, orgLoading])
+  }, [callback, initValueRef, org, orgLoading])
 
   useEffect(() => {
     subscribe()
@@ -217,17 +244,17 @@ export function createAppHook(
 ) {
   return function useAppData<T = any>(
     app: App | null,
-    callback?: (app: App | any) => T | Promise<T>,
+    callback?: (app: App | any) => T | Promise<T> | SubscriptionResult<T>,
     dependencies?: any[]
-  ): [T | null, LoadingStatus] {
+  ): [T | undefined, LoadingStatus] {
     const [{ result, error, loading }, setStatus] = useState<{
       error: Error | null
       loading: boolean
-      result: T | null
+      result?: T
     }>({
       error: null,
-      loading: false,
-      result: null,
+      loading: true,
+      result: undefined,
     })
 
     const callbackRef = useRef<Function>((app: App) => app)
@@ -253,7 +280,7 @@ export function createAppHook(
       setStatus((status) => ({
         ...status,
         error: null,
-        result: null,
+        result: undefined,
       }))
 
       const update = async () => {
@@ -271,14 +298,13 @@ export function createAppHook(
 
           // Subscription
           if (typeof result === 'function') {
-            console.log('Subscription mode')
             subscriptionHandler = result(
               (error: Error | null, result?: any) => {
                 if (!cancelled) {
                   setStatus({
                     error: error || null,
                     loading: false,
-                    result: error ? null : result,
+                    result: error ? undefined : result,
                   })
                 }
               }
@@ -286,7 +312,6 @@ export function createAppHook(
 
             // Just async data
           } else {
-            console.log('Subscription mode')
             setStatus({
               error: null,
               loading: false,
@@ -298,7 +323,7 @@ export function createAppHook(
             setStatus({
               error: err,
               loading: false,
-              result: null,
+              result: undefined,
             })
           }
         }

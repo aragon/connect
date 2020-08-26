@@ -7,6 +7,7 @@ import { subscription } from '@aragon/connect-core'
 import { IAgreementConnector } from '../types'
 import Signer from './Signer'
 import Version from './Version'
+import DisputableApp from './DisputableApp'
 
 export default class Agreement {
   #address: Address
@@ -75,6 +76,21 @@ export default class Agreement {
   ): SubscriptionResult<Version[]> {
     return subscription<Version[]>(callback, (callback) =>
       this.#connector.onVersions(this.#address, first, skip, callback)
+    )
+  }
+
+  async disputableApps({ first = 1000, skip = 0 } = {}): Promise<
+    DisputableApp[]
+  > {
+    return this.#connector.disputableApps(this.#address, first, skip)
+  }
+
+  onDisputableApps(
+    { first = 1000, skip = 0 } = {},
+    callback?: SubscriptionCallback<DisputableApp[]>
+  ): SubscriptionResult<DisputableApp[]> {
+    return subscription<DisputableApp[]>(callback, (callback) =>
+      this.#connector.onDisputableApps(this.#address, first, skip, callback)
     )
   }
 
