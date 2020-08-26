@@ -1,10 +1,7 @@
-import {
-  SubscriptionCallback,
-  SubscriptionHandler,
-} from '@aragon/connect-types'
-
-import Signature from '../models/Signature'
+import { SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
+import { subscription } from '@aragon/connect-core'
 import { SignerData, IAgreementConnector } from '../types'
+import Signature from '../models/Signature'
 
 export default class Signer {
   #connector: IAgreementConnector
@@ -39,8 +36,10 @@ export default class Signer {
 
   onSignatures(
     { first = 1000, skip = 0 } = {},
-    callback: SubscriptionCallback<Signature[]>
-  ): SubscriptionHandler {
-    return this.#connector.onSignatures(this.id, first, skip, callback)
+    callback?: SubscriptionCallback<Signature[]>
+  ): SubscriptionResult<Signature[]> {
+    return subscription<Signature[]>(callback, (callback) =>
+      this.#connector.onSignatures(this.id, first, skip, callback)
+    )
   }
 }

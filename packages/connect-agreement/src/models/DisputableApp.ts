@@ -1,8 +1,5 @@
-import {
-  SubscriptionCallback,
-  SubscriptionHandler,
-} from '@aragon/connect-types'
-
+import { SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
+import { subscription } from '@aragon/connect-core'
 import { DisputableAppData, IAgreementConnector } from '../types'
 import CollateralRequirement from './CollateralRequirement'
 
@@ -30,8 +27,10 @@ export default class DisputableApp {
   }
 
   onCollateralRequirement(
-    callback: SubscriptionCallback<CollateralRequirement>
-  ): SubscriptionHandler {
-    return this.#connector.onCollateralRequirement(this.id, callback)
+    callback?: SubscriptionCallback<CollateralRequirement>
+  ): SubscriptionResult<CollateralRequirement> {
+    return subscription<CollateralRequirement>(callback, (callback) =>
+      this.#connector.onCollateralRequirement(this.id, callback)
+    )
   }
 }

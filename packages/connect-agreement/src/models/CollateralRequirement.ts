@@ -1,11 +1,8 @@
-import {
-  SubscriptionCallback,
-  SubscriptionHandler,
-} from '@aragon/connect-types'
-
+import { SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
+import { subscription } from '@aragon/connect-core'
+import { CollateralRequirementData, IAgreementConnector } from '../types'
 import ERC20 from './ERC20'
 import { formatBn } from '../helpers'
-import { CollateralRequirementData, IAgreementConnector } from '../types'
 
 export default class CollateralRequirement {
   #connector: IAgreementConnector
@@ -42,7 +39,9 @@ export default class CollateralRequirement {
     return this.#connector.ERC20(this.tokenId)
   }
 
-  onToken(callback: SubscriptionCallback<ERC20>): SubscriptionHandler {
-    return this.#connector.onERC20(this.tokenId, callback)
+  onToken(callback?: SubscriptionCallback<ERC20>): SubscriptionResult<ERC20> {
+    return subscription<ERC20>(callback, (callback) =>
+      this.#connector.onERC20(this.tokenId, callback)
+    )
   }
 }

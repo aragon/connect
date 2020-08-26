@@ -39,7 +39,12 @@ export async function parseApps(
   result: QueryResult,
   organization: Organization
 ): Promise<App[]> {
-  const apps = result?.data?.organization?.apps
+  const data = result?.data
+  const apps = data?.organization?.apps
+
+  if (data?.organization === null || apps?.length === 0) {
+    throw new Error('No apps found with the current filters.')
+  }
 
   if (!apps) {
     throw new Error('Unable to parse apps.')
