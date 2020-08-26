@@ -1,5 +1,5 @@
 {
-  "name": "@aragon/subgraph-voting-disputable",
+  "name": "@aragon/subgraph-disputable-voting",
   "version": "0.1.0",
   "scripts": {
     "codegen": "rm -rf generated; graph codegen",
