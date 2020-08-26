@@ -36,9 +36,9 @@ templates:
         - name: ERC20
           file: ./abis/MiniMeToken.json
       eventHandlers:
-        - event: StartVote(indexed uint256,indexed address,bytes)
+        - event: StartVote(indexed uint256,indexed address,bytes,bytes)
           handler: handleStartVote
-        - event: CastVote(indexed uint256,indexed address,bool,uint256)
+        - event: CastVote(indexed uint256,indexed address,bool,address)
           handler: handleCastVote
         - event: PauseVote(indexed uint256,indexed uint256)
           handler: handlePauseVote
@@ -48,8 +48,8 @@ templates:
           handler: handleCancelVote
         - event: ExecuteVote(indexed uint256)
           handler: handleExecuteVote
-        - event: VoteQuietEndingExtension(indexed uint256,bool)
-          handler: handleVoteQuietEndingExtension
+        - event: QuietEndingExtendVote(indexed uint256,bool)
+          handler: handleQuietEndingExtendVote
         - event: NewSetting(uint256)
           handler: handleNewSetting
         - event: ChangeRepresentative(indexed address,indexed address)

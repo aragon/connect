@@ -26,7 +26,6 @@ type Vote @entity {
   voting: DisputableVoting!
   voteId: BigInt!
   creator: Bytes!
-  duration: BigInt!
   context: String!
   status: VoteStatus!
   actionId: BigInt!
@@ -36,13 +35,13 @@ type Vote @entity {
   challengeEndDate: BigInt!
   setting: Setting!
   startDate: BigInt!
-  votingPower: BigInt!
+  totalPower: BigInt!
   snapshotBlock: BigInt!
   yeas: BigInt!
   nays: BigInt!
   pausedAt: BigInt!
   pauseDuration: BigInt!
-  quietEndingExtendedSeconds: BigInt!
+  quietEndingExtensionDuration: BigInt!
   quietEndingSnapshotSupport: VoterState!
   script: Bytes!
   executedAt: BigInt!
@@ -73,12 +72,13 @@ type Setting @entity {
   id: ID!
   voting: DisputableVoting!
   settingId: BigInt!
+  voteTime: BigInt!
   supportRequiredPct: BigInt!
   minimumAcceptanceQuorumPct: BigInt!
-  executionDelay: BigInt!
-  overruleWindow: BigInt!
+  delegatedVotingPeriod: BigInt!
   quietEndingPeriod: BigInt!
   quietEndingExtension: BigInt!
+  executionDelay: BigInt!
   createdAt: BigInt!
 }
 

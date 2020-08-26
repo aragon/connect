@@ -1,7 +1,7 @@
 import { DisputableVotingConnectorTheGraph, Voter } from '../../../src'
 
 const VOTER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
-const VOTING_APP_ADDRESS = '0x26e14ed789b51b5b226d69a5d40f72dc2d0180fe'
+const VOTING_APP_ADDRESS = '0x0e835020497b2cd716369f8fc713fb7bd0a22dbf'
 const VOTING_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging'
 
@@ -27,7 +27,7 @@ describe('DisputableVoting voters', () => {
       )
     })
 
-    test('allows fetching voter information', async () => {
+    test.skip('allows fetching voter information', async () => {
       expect(voter.id).toBe(`${VOTING_APP_ADDRESS}-voter-${VOTER_ADDRESS}`)
       expect(voter.address).toBe(VOTER_ADDRESS)
       expect(voter.representative).toBe(null)

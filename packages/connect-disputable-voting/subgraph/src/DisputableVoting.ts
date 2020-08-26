@@ -19,7 +19,7 @@ import {
   ResumeVote as ResumeVoteEvent,
   CancelVote as CancelVoteEvent,
   ExecuteVote as ExecuteVoteEvent,
-  VoteQuietEndingExtension as VoteQuietEndingExtensionEvent,
+  QuietEndingExtendVote as QuietEndingExtendVoteEvent,
   ChangeRepresentative as ChangeRepresentativeEvent
 } from '../generated/templates/DisputableVoting/DisputableVoting'
 
@@ -34,12 +34,13 @@ export function handleNewSetting(event: NewSettingEvent): void {
   const setting = new SettingEntity(currentSettingId)
   setting.voting = event.address.toHexString()
   setting.settingId = event.params.settingId
-  setting.supportRequiredPct = settingData.value0
-  setting.minimumAcceptanceQuorumPct = settingData.value1
-  setting.executionDelay = settingData.value2
-  setting.overruleWindow = settingData.value3
+  setting.voteTime = settingData.value0
+  setting.supportRequiredPct = settingData.value1
+  setting.minimumAcceptanceQuorumPct = settingData.value2
+  setting.delegatedVotingPeriod = settingData.value3
   setting.quietEndingPeriod = settingData.value4
   setting.quietEndingExtension = settingData.value5
+  setting.executionDelay = settingData.value6
   setting.createdAt = event.block.timestamp
   setting.save()
 
@@ -57,25 +58,24 @@ export function handleStartVote(event: StartVoteEvent): void {
   vote.voteId = event.params.voteId
   vote.creator = event.params.creator
   vote.context = event.params.context.toString()
-  vote.duration = votingApp.voteTime()
   vote.yeas = voteData.value0
   vote.nays = voteData.value1
-  vote.votingPower = voteData.value2
-  vote.setting = buildSettingId(event.address, voteData.value3)
-  vote.actionId = voteData.value4
+  vote.totalPower = voteData.value2
+  vote.startDate = voteData.value3
+  vote.snapshotBlock = voteData.value4
+  vote.status = castVoteStatus(voteData.value5)
+  vote.setting = buildSettingId(event.address, voteData.value6)
+  vote.actionId = voteData.value7
   vote.challengeId = BigInt.fromI32(0)
   vote.challenger = Address.fromString('0x0000000000000000000000000000000000000000')
   vote.challengeEndDate = BigInt.fromI32(0)
-  vote.status = castVoteStatus(voteData.value5)
-  vote.startDate = voteData.value6
-  vote.snapshotBlock = voteData.value7
   vote.pausedAt = voteData.value8
   vote.pauseDuration = voteData.value9
-  vote.quietEndingExtendedSeconds = voteData.value10
+  vote.quietEndingExtensionDuration = voteData.value10
   vote.quietEndingSnapshotSupport = castVoterState(voteData.value11)
-  vote.script = voteData.value12
+  vote.script = event.params.executionScript
   vote.executedAt = BigInt.fromI32(0)
-  vote.isAccepted = isAccepted(vote.yeas, vote.nays, vote.votingPower, vote.setting, votingApp.PCT_BASE())
+  vote.isAccepted = isAccepted(vote.yeas, vote.nays, vote.totalPower, vote.setting, votingApp.PCT_BASE())
   vote.save()
 
   const agreementApp = AgreementContract.bind(votingApp.getAgreement())
@@ -84,9 +84,9 @@ export function handleStartVote(event: StartVoteEvent): void {
   const collateralRequirement = new CollateralRequirementEntity(voteId)
   collateralRequirement.vote = voteId
   collateralRequirement.token = buildERC20(collateralRequirementData.value0)
-  collateralRequirement.actionAmount = collateralRequirementData.value1
-  collateralRequirement.challengeAmount = collateralRequirementData.value2
-  collateralRequirement.challengeDuration = collateralRequirementData.value3
+  collateralRequirement.challengeDuration = collateralRequirementData.value1
+  collateralRequirement.actionAmount = collateralRequirementData.value2
+  collateralRequirement.challengeAmount = collateralRequirementData.value3
   collateralRequirement.save()
 }
 
@@ -97,13 +97,16 @@ export function handleCastVote(event: CastVoteEvent): void {
   voter.save()
 
   const votingApp = VotingContract.bind(event.address)
-  const castVoteData = votingApp.getCastVote(event.params.voteId, event.params.voter)
+  const vote = VoteEntity.load(buildVoteId(event.address, event.params.voteId))!
+  const miniMeToken = ERC20Contract.bind(votingApp.token())
+  const stake = miniMeToken.balanceOfAt(event.params.voter, vote.snapshotBlock)
+
   const castVote = loadOrCreateCastVote(event.address, event.params.voteId, event.params.voter)
   castVote.voter = voter.id
-  castVote.stake = event.params.stake
+  castVote.stake = stake
   castVote.supports = event.params.supports
   castVote.createdAt = event.block.timestamp
-  castVote.caster = castVoteData.value1
+  castVote.caster = event.params.caster
   castVote.save()
 }
 
@@ -136,20 +139,20 @@ export function handleExecuteVote(event: ExecuteVoteEvent): void {
   vote.save()
 }
 
-export function handleVoteQuietEndingExtension(event: VoteQuietEndingExtensionEvent): void {
+export function handleQuietEndingExtendVote(event: QuietEndingExtendVoteEvent): void {
   updateVoteState(event.address, event.params.voteId)
 }
 
 export function handleChangeRepresentative(event: ChangeRepresentativeEvent): void {
   const voter = loadOrCreateVoter(event.address, event.params.voter)
-  voter.representative = event.params.newRepresentative
+  voter.representative = event.params.representative
   voter.save()
 }
 
-function isAccepted(yeas: BigInt, nays: BigInt, votingPower: BigInt, settingId: string, pctBase: BigInt): boolean {
+function isAccepted(yeas: BigInt, nays: BigInt, totalPower: BigInt, settingId: string, pctBase: BigInt): boolean {
   const setting = SettingEntity.load(settingId)!
   return hasReachedValuePct(yeas, yeas.plus(nays), setting.supportRequiredPct, pctBase) &&
-         hasReachedValuePct(yeas, votingPower, setting.minimumAcceptanceQuorumPct, pctBase)
+         hasReachedValuePct(yeas, totalPower, setting.minimumAcceptanceQuorumPct, pctBase)
 }
 
 function hasReachedValuePct(value: BigInt, total: BigInt, pct: BigInt, pctBase: BigInt): boolean {
@@ -198,9 +201,9 @@ function updateVoteState(votingAddress: Address, voteId: BigInt): void {
   vote.status = castVoteStatus(voteData.value5)
   vote.pausedAt = voteData.value8
   vote.pauseDuration = voteData.value9
-  vote.quietEndingExtendedSeconds = voteData.value10
+  vote.quietEndingExtensionDuration = voteData.value10
   vote.quietEndingSnapshotSupport = castVoterState(voteData.value11)
-  vote.isAccepted = isAccepted(vote.yeas, vote.nays, vote.votingPower, vote.setting, votingApp.PCT_BASE())
+  vote.isAccepted = isAccepted(vote.yeas, vote.nays, vote.totalPower, vote.setting, votingApp.PCT_BASE())
   vote.save()
 }
 

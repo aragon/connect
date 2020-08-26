@@ -21,12 +21,13 @@ export const GET_CURRENT_SETTING = (type: string) => gql`
       setting {
         id
         settingId
+        voteTime
         supportRequiredPct
         minimumAcceptanceQuorumPct
-        executionDelay
-        overruleWindow
+        delegatedVotingPeriod
         quietEndingPeriod
         quietEndingExtension
+        executionDelay
         createdAt
         voting {
           id
@@ -41,12 +42,13 @@ export const GET_SETTING = (type: string) => gql`
     setting(id: $settingId) {
       id
       settingId
+      voteTime
       supportRequiredPct
       minimumAcceptanceQuorumPct
-      executionDelay
-      overruleWindow
+      delegatedVotingPeriod
       quietEndingPeriod
       quietEndingExtension
+      executionDelay
       createdAt
       voting {
         id
@@ -62,12 +64,13 @@ export const ALL_SETTINGS = (type: string) => gql`
     }, first: $first, skip: $skip) {
       id
       settingId
+      voteTime
       supportRequiredPct
       minimumAcceptanceQuorumPct
-      executionDelay
-      overruleWindow
+      delegatedVotingPeriod
       quietEndingPeriod
       quietEndingExtension
+      executionDelay
       createdAt
       voting {
         id
@@ -87,7 +90,6 @@ export const GET_VOTE = (type: string) => gql`
         }
       }
       voteId
-      duration
       creator
       context
       status
@@ -98,15 +100,16 @@ export const GET_VOTE = (type: string) => gql`
       disputeId
       setting { 
         id 
+        voteTime
       }
       startDate
-      votingPower
+      totalPower
       snapshotBlock
       yeas
       nays
       pausedAt
       pauseDuration
-      quietEndingExtendedSeconds
+      quietEndingExtensionDuration
       quietEndingSnapshotSupport
       script
       executedAt
@@ -128,7 +131,6 @@ export const ALL_VOTES = (type: string) => gql`
         }
       }
       voteId
-      duration
       creator
       context
       status
@@ -139,15 +141,16 @@ export const ALL_VOTES = (type: string) => gql`
       disputeId
       setting { 
         id 
+        voteTime
       }
       startDate
-      votingPower
+      totalPower
       snapshotBlock
       yeas
       nays
       pausedAt
       pauseDuration
-      quietEndingExtendedSeconds
+      quietEndingExtensionDuration
       quietEndingSnapshotSupport
       script
       executedAt

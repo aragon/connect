@@ -34,13 +34,13 @@ export default class Vote {
   readonly disputeId: string
   readonly settingId: string
   readonly startDate: string
-  readonly votingPower: string
+  readonly totalPower: string
   readonly snapshotBlock: string
   readonly yeas: string
   readonly nays: string
   readonly pausedAt: string
   readonly pauseDuration: string
-  readonly quietEndingExtendedSeconds: string
+  readonly quietEndingExtensionDuration: string
   readonly quietEndingSnapshotSupport: string
   readonly script: string
   readonly executedAt: string
@@ -64,13 +64,13 @@ export default class Vote {
     this.disputeId = data.disputeId
     this.settingId = data.settingId
     this.startDate = data.startDate
-    this.votingPower = data.votingPower
+    this.totalPower = data.totalPower
     this.snapshotBlock = data.snapshotBlock
     this.yeas = data.yeas
     this.nays = data.nays
     this.pausedAt = data.pausedAt
     this.pauseDuration = data.pauseDuration
-    this.quietEndingExtendedSeconds = data.quietEndingExtendedSeconds
+    this.quietEndingExtensionDuration = data.quietEndingExtensionDuration
     this.quietEndingSnapshotSupport = data.quietEndingSnapshotSupport
     this.script = data.script
     this.executedAt = data.executedAt
@@ -89,7 +89,7 @@ export default class Vote {
   get endDate(): string {
     const originalEndDate = bn(this.startDate).add(bn(this.duration))
     const endDateAfterPause = originalEndDate.add(bn(this.pauseDuration))
-    return endDateAfterPause.add(bn(this.quietEndingExtendedSeconds)).toString()
+    return endDateAfterPause.add(bn(this.quietEndingExtensionDuration)).toString()
   }
 
   get yeasPct(): string {
@@ -116,8 +116,8 @@ export default class Vote {
     return formatBn(this.naysPct, PCT_DECIMALS)
   }
 
-  get formattedVotingPower(): string {
-    return formatBn(this.votingPower, this.tokenDecimals)
+  get formattedTotalPower(): string {
+    return formatBn(this.totalPower, this.tokenDecimals)
   }
 
   get status(): string {
@@ -186,7 +186,7 @@ export default class Vote {
   }
 
   _votingPowerPct(num: string): string {
-    const votingPower = bn(this.votingPower)
-    return bn(num).mul(PCT_BASE).div(votingPower).toString()
+    const totalPower = bn(this.totalPower)
+    return bn(num).mul(PCT_BASE).div(totalPower).toString()
   }
 }

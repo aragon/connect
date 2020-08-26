@@ -32,13 +32,13 @@ export interface VoteData {
   disputeId: string
   settingId: string
   startDate: string
-  votingPower: string
+  totalPower: string
   snapshotBlock: string
   yeas: string
   nays: string
   pausedAt: string
   pauseDuration: string
-  quietEndingExtendedSeconds: string
+  quietEndingExtensionDuration: string
   quietEndingSnapshotSupport: string
   script: string
   executedAt: string
@@ -67,12 +67,13 @@ export interface SettingData {
   id: string
   votingId: string
   settingId: string
+  voteTime: string
   supportRequiredPct: string
   minimumAcceptanceQuorumPct: string
-  executionDelay: string
-  overruleWindow: string
+  delegatedVotingPeriod: string
   quietEndingPeriod: string
   quietEndingExtension: string
+  executionDelay: string
   createdAt: string
 }
 
