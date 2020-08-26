@@ -23,12 +23,17 @@ function buildDisputableApp(disputableApp: any, connector: any): DisputableApp {
   return new DisputableApp(disputableAppData, connector)
 }
 
-export function parseDisputableApps(result: QueryResult, connector: any): DisputableApp[] {
+export function parseDisputableApps(
+  result: QueryResult,
+  connector: any
+): DisputableApp[] {
   const disputables = result.data.disputables
 
   if (!disputables) {
     throw new Error('Unable to parse disputable apps.')
   }
 
-  return disputables.map((disputableApp: any) => buildDisputableApp(disputableApp, connector))
+  return disputables.map((disputableApp: any) =>
+    buildDisputableApp(disputableApp, connector)
+  )
 }

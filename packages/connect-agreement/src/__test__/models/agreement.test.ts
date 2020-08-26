@@ -98,11 +98,17 @@ describe('Agreement', () => {
       expect(disputables.length).toBeGreaterThan(0)
 
       const disputable = disputables[0]
-      expect(disputable.id).toBe(`${AGREEMENT_APP_ADDRESS}-disputable-${disputable.address}`)
-      expect(disputable.address).toBe('0x26e14ed789b51b5b226d69a5d40f72dc2d0180fe')
+      expect(disputable.id).toBe(
+        `${AGREEMENT_APP_ADDRESS}-disputable-${disputable.address}`
+      )
+      expect(disputable.address).toBe(
+        '0x26e14ed789b51b5b226d69a5d40f72dc2d0180fe'
+      )
       expect(disputable.activated).toEqual(true)
       expect(disputable.agreementId).toBe(AGREEMENT_APP_ADDRESS)
-      expect(disputable.collateralRequirementId).toBe(`${AGREEMENT_APP_ADDRESS}-disputable-${disputable.address}-collateral-requirement-1`)
+      expect(disputable.collateralRequirementId).toBe(
+        `${AGREEMENT_APP_ADDRESS}-disputable-${disputable.address}-collateral-requirement-1`
+      )
 
       const collateralRequirement = await disputable.collateralRequirement()
       expect(collateralRequirement.actionAmount).toEqual('0')

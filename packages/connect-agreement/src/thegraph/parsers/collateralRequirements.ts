@@ -3,7 +3,10 @@ import { QueryResult } from '@aragon/connect-thegraph'
 import { CollateralRequirementData } from '../../types'
 import CollateralRequirement from '../../models/CollateralRequirement'
 
-function buildCollateralRequirement(collateralRequirement: any, connector: any): CollateralRequirement {
+function buildCollateralRequirement(
+  collateralRequirement: any,
+  connector: any
+): CollateralRequirement {
   const {
     id,
     token,
@@ -26,7 +29,10 @@ function buildCollateralRequirement(collateralRequirement: any, connector: any):
   return new CollateralRequirement(collateralRequirementData, connector)
 }
 
-export function parseCollateralRequirement(result: QueryResult, connector: any): CollateralRequirement {
+export function parseCollateralRequirement(
+  result: QueryResult,
+  connector: any
+): CollateralRequirement {
   const disputable = result.data.disputable
 
   if (!disputable || !disputable.currentCollateralRequirement) {
