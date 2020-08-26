@@ -48,7 +48,7 @@
     "status": "oao status",
     "publish-version": "./scripts/publish-version.sh",
     "postinstall": "yarn build",
-    "precommit": "yarn precise-commits"
+    "prepush": "oao run-script prettier --parallel"
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",
@@ -56,7 +56,6 @@
     "is-ci-cli": "^2.1.1",
     "jest": "^26.0.1",
     "oao": "^2.0.0",
-    "precise-commits": "^1.0.2",
     "prettier": "^2.0.5",
     "ts-jest": "^26.1.0"
   }
