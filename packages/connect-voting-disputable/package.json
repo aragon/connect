@@ -1,6 +1,6 @@
 {
   "name": "@aragon/connect-voting-disputable",
-  "version": "0.6.0",
+  "version": "0.7.0-beta.1",
   "private": true,
   "license": "LGPL-3.0-or-later",
   "description": "Access and interact with Aragon Organizations and their apps.",
@@ -36,8 +36,8 @@
     "lint": "eslint --ext .ts ./src"
   },
   "dependencies": {
-    "@aragon/connect-core": "^0.6.0",
-    "@aragon/connect-thegraph": "^0.6.0",
+    "@aragon/connect-core": "^0.7.0-beta.1",
+    "@aragon/connect-thegraph": "^0.7.0-beta.1",
     "graphql-tag": "^2.10.3"
   },
   "devDependencies": {

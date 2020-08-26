@@ -1,6 +1,6 @@
 {
   "name": "@aragon/connect-thegraph",
-  "version": "0.6.0",
+  "version": "0.7.0-beta.1",
   "license": "LGPL-3.0-or-later",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -35,7 +35,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@aragon/connect-core": "^0.6.0",
+    "@aragon/connect-core": "^0.7.0-beta.1",
     "@urql/core": "^1.11.7",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",

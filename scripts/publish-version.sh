@@ -42,7 +42,7 @@ done
 
 # Publish
 confirm "Publish a version of Connect?"
-./node_modules/.bin/oao publish
+./node_modules/.bin/oao publish --no-check-uncommitted --new-version "0.7.0-beta.1" --publish-tag next
 
 # Push the version to GitHub
 tag="$(git describe --tags "$(git rev-list --tags --max-count=1)")"
