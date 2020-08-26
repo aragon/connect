@@ -6,11 +6,15 @@ export const PCT_BASE = BigNumber.from(`100${'0'.repeat(PCT_DECIMALS)}`)
 
 export const bn = (x: string): BigNumber => BigNumber.from(x)
 
-export const formatBn = (number: string | BigNumber, numberDecimals: string | number, formattedDecimals = 2): string => {
+export const formatBn = (
+  number: string | BigNumber,
+  numberDecimals: string | number,
+  formattedDecimals = 2
+): string => {
   const formattedNumber = utils.formatUnits(number, numberDecimals)
   const decimalPosition = formattedNumber.indexOf('.')
 
-  if (decimalPosition === - 1) {
+  if (decimalPosition === -1) {
     return `${formattedNumber}.${'0'.repeat(formattedDecimals)}`
   }
 
@@ -22,6 +26,8 @@ export const formatBn = (number: string | BigNumber, numberDecimals: string | nu
   }
 
   const integer = formattedNumber.substring(0, decimalPosition)
-  const roundedDecimals = Math.round(parseInt(decimals) / (10 ** (decimalsLength - formattedDecimals)))
+  const roundedDecimals = Math.round(
+    parseInt(decimals) / 10 ** (decimalsLength - formattedDecimals)
+  )
   return `${integer}.${roundedDecimals}`
 }

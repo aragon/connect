@@ -1,7 +1,6 @@
 import { SettingData } from '../types'
 import { formatBn, PCT_DECIMALS } from '../helpers'
 
-
 export default class Setting {
   readonly id: string
   readonly votingId: string
