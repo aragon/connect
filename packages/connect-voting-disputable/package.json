@@ -32,7 +32,8 @@
     "test:watch": "jest --watch",
     "test:debug": "node --inspect-brk ../../node_modules/jest/bin/jest.js --runInBand --watch",
     "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo",
-    "lint": "eslint --ext .ts ./src"
+    "lint": "eslint --ext .ts ./src",
+    "prettier": "prettier --ext .ts ./src"
   },
   "dependencies": {
     "@aragon/connect-core": "^0.6.0",
