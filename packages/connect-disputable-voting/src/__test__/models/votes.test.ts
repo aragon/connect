@@ -93,7 +93,7 @@ describe('DisputableVoting', () => {
 
     describe('when querying an non-existing voter', () => {
       let castVote: CastVote | null
-      const VOTER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
+      const VOTER_ADDRESS = '0x03acbcb547d03c8e7746ef5988012b59604aa083'
 
       beforeAll(async () => {
         castVote = await vote.castVote(VOTER_ADDRESS)
