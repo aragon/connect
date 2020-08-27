@@ -1,6 +1,6 @@
 import { DisputableVotingConnectorTheGraph, Vote, CastVote } from '../../../src'
 
-const VOTING_APP_ADDRESS = '0x26e14ed789b51b5b226d69a5d40f72dc2d0180fe'
+const VOTING_APP_ADDRESS = '0x0e835020497b2cd716369f8fc713fb7bd0a22dbf'
 const VOTING_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging'
 
@@ -18,58 +18,45 @@ describe('DisputableVoting votes', () => {
   })
 
   describe('vote', () => {
-    let vote: Vote
+    test('returns the requested vote information', async () => {
+      const vote: Vote = await connector.vote(`${VOTING_APP_ADDRESS}-vote-3`)
 
-    beforeAll(async () => {
-      vote = await connector.vote(`${VOTING_APP_ADDRESS}-vote-4`)
-    })
-
-    test('returns the requested vote information', () => {
-      expect(vote.id).toBe(`${VOTING_APP_ADDRESS}-vote-4`)
-      expect(vote.voteId).toEqual('4')
+      expect(vote.id).toBe(`${VOTING_APP_ADDRESS}-vote-3`)
+      expect(vote.voteId).toEqual('3')
       expect(vote.votingId).toBe(VOTING_APP_ADDRESS)
       expect(vote.settingId).toBe(`${VOTING_APP_ADDRESS}-setting-0`)
-      expect(vote.actionId).toBe('5')
-      expect(vote.context).toBe('Delfi test')
-      expect(vote.voteStatus).toBe('Scheduled')
+      expect(vote.actionId).toBe('4')
+      expect(vote.context).toBe('Context for action 4')
+      expect(vote.voteStatus).toBe('Disputed')
       expect(vote.creator).toBe('0x0090aed150056316e37fe6dfa10dc63e79d173b6')
-      expect(vote.startDate).toBe('1596383789')
-      expect(vote.votingPower).toBe('4000000000000000000')
-      expect(vote.snapshotBlock).toBe('6948545')
-      expect(vote.yeas).toBe('1000000000000000000')
-      expect(vote.nays).toBe('1000000000000000000')
-      expect(vote.pausedAt).toBe('0')
+      expect(vote.startDate).toBe('1598480213')
+      expect(vote.totalPower).toBe('3000000000000000000')
+      expect(vote.snapshotBlock).toBe('7088291')
+      expect(vote.yeas).toBe('0')
+      expect(vote.nays).toBe('0')
+      expect(vote.pausedAt).toBe('1598480258')
       expect(vote.pauseDuration).toBe('0')
-      expect(vote.quietEndingExtendedSeconds).toBe('0')
+      expect(vote.quietEndingExtensionDuration).toBe('0')
       expect(vote.quietEndingSnapshotSupport).toBe('Absent')
       expect(vote.script).toBe('0x00000001')
     })
 
     it('allows fetching the cast votes', async () => {
+      const vote: Vote = await connector.vote(`${VOTING_APP_ADDRESS}-vote-0`)
+
       const castVotes: CastVote[] = await vote.castVotes()
-      expect(castVotes.length).toBeGreaterThan(1)
+      expect(castVotes.length).toBeGreaterThan(0)
 
       const firstCastVote = castVotes[0]
       expect(firstCastVote.id).toBe(
-        `${VOTING_APP_ADDRESS}-vote-4-cast-0x0090aed150056316e37fe6dfa10dc63e79d173b6`
+        `${VOTING_APP_ADDRESS}-vote-0-cast-0x0090aed150056316e37fe6dfa10dc63e79d173b6`
       )
       expect(firstCastVote.caster).toBe(
         '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
       )
-      expect(firstCastVote.createdAt).toEqual('1596383834')
+      expect(firstCastVote.createdAt).toEqual('1598530298')
       expect(firstCastVote.stake).toBe('1000000000000000000')
       expect(firstCastVote.supports).toBe(true)
-
-      const secondCastVote = castVotes[1]
-      expect(secondCastVote.id).toBe(
-        `${VOTING_APP_ADDRESS}-vote-4-cast-0xa9ac50dce74c46025dc9dceafb4fa21f0dc142ea`
-      )
-      expect(secondCastVote.caster).toBe(
-        '0xa9ac50dce74c46025dc9dceafb4fa21f0dc142ea'
-      )
-      expect(secondCastVote.createdAt).toEqual('1596394454')
-      expect(secondCastVote.stake).toBe('1000000000000000000')
-      expect(secondCastVote.supports).toBe(false)
     })
   })
 
@@ -81,7 +68,7 @@ describe('DisputableVoting votes', () => {
     })
 
     test('returns a list of votes', () => {
-      expect(votes.length).toBeGreaterThan(4)
+      expect(votes.length).toBeGreaterThan(3)
     })
 
     test('allows fetching a single vote', () => {
@@ -95,14 +82,14 @@ describe('DisputableVoting votes', () => {
       expect(vote.voteStatus).toBe('Cancelled')
       expect(vote.context).toBe('Context for action 3')
       expect(vote.creator).toBe('0x0090aed150056316e37fe6dfa10dc63e79d173b6')
-      expect(vote.startDate).toBe('1596302414')
-      expect(vote.votingPower).toBe('3000000000000000000')
-      expect(vote.snapshotBlock).toBe('6943120')
+      expect(vote.startDate).toBe('1598480123')
+      expect(vote.totalPower).toBe('3000000000000000000')
+      expect(vote.snapshotBlock).toBe('7088285')
       expect(vote.yeas).toBe('0')
       expect(vote.nays).toBe('0')
-      expect(vote.pausedAt).toBe('1596302459')
+      expect(vote.pausedAt).toBe('1598480183')
       expect(vote.pauseDuration).toBe('15')
-      expect(vote.quietEndingExtendedSeconds).toBe('0')
+      expect(vote.quietEndingExtensionDuration).toBe('0')
       expect(vote.quietEndingSnapshotSupport).toBe('Absent')
       expect(vote.script).toBe('0x00000001')
     })

@@ -7,12 +7,13 @@ function buildSetting(setting: any): Setting {
   const {
     id,
     settingId,
+    voteTime,
     supportRequiredPct,
     minimumAcceptanceQuorumPct,
-    executionDelay,
-    overruleWindow,
+    delegatedVotingPeriod,
     quietEndingPeriod,
     quietEndingExtension,
+    executionDelay,
     createdAt,
     voting,
   } = setting
@@ -20,12 +21,13 @@ function buildSetting(setting: any): Setting {
   const settingData: SettingData = {
     id,
     settingId,
+    voteTime,
     supportRequiredPct,
     minimumAcceptanceQuorumPct,
-    executionDelay,
-    overruleWindow,
+    delegatedVotingPeriod,
     quietEndingPeriod,
     quietEndingExtension,
+    executionDelay,
     createdAt,
     votingId: voting.id,
   }

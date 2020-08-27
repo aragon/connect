@@ -1,6 +1,6 @@
 import { DisputableVotingConnectorTheGraph, Setting } from '../../../src'
 
-const VOTING_APP_ADDRESS = '0x26e14ed789b51b5b226d69a5d40f72dc2d0180fe'
+const VOTING_APP_ADDRESS = '0x0e835020497b2cd716369f8fc713fb7bd0a22dbf'
 const VOTING_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging'
 
@@ -29,12 +29,12 @@ describe('DisputableVoting settings', () => {
       expect(setting.votingId).toBe(VOTING_APP_ADDRESS)
       expect(setting.settingId).toEqual('0')
       expect(setting.supportRequiredPct).toBe('500000000000000000')
-      expect(setting.minimumAcceptanceQuorumPct).toBe('200000000000000000')
+      expect(setting.minimumAcceptanceQuorumPct).toBe('500000000000000000')
       expect(setting.executionDelay).toBe('0')
-      expect(setting.overruleWindow).toBe('172800')
+      expect(setting.delegatedVotingPeriod).toBe('172800')
       expect(setting.quietEndingPeriod).toBe('86400')
       expect(setting.quietEndingExtension).toBe('43200')
-      expect(setting.createdAt).toBe('1596141103')
+      expect(setting.createdAt).toBe('1598479523')
     })
   })
 
@@ -50,12 +50,12 @@ describe('DisputableVoting settings', () => {
       expect(setting.votingId).toBe(VOTING_APP_ADDRESS)
       expect(setting.settingId).toEqual('0')
       expect(setting.supportRequiredPct).toBe('500000000000000000')
-      expect(setting.minimumAcceptanceQuorumPct).toBe('200000000000000000')
+      expect(setting.minimumAcceptanceQuorumPct).toBe('500000000000000000')
       expect(setting.executionDelay).toBe('0')
-      expect(setting.overruleWindow).toBe('172800')
+      expect(setting.delegatedVotingPeriod).toBe('172800')
       expect(setting.quietEndingPeriod).toBe('86400')
       expect(setting.quietEndingExtension).toBe('43200')
-      expect(setting.createdAt).toBe('1596141103')
+      expect(setting.createdAt).toBe('1598479523')
     })
   })
 
@@ -77,12 +77,12 @@ describe('DisputableVoting settings', () => {
       expect(setting.votingId).toBe(VOTING_APP_ADDRESS)
       expect(setting.settingId).toEqual('0')
       expect(setting.supportRequiredPct).toBe('500000000000000000')
-      expect(setting.minimumAcceptanceQuorumPct).toBe('200000000000000000')
+      expect(setting.minimumAcceptanceQuorumPct).toBe('500000000000000000')
       expect(setting.executionDelay).toBe('0')
-      expect(setting.overruleWindow).toBe('172800')
+      expect(setting.delegatedVotingPeriod).toBe('172800')
       expect(setting.quietEndingPeriod).toBe('86400')
       expect(setting.quietEndingExtension).toBe('43200')
-      expect(setting.createdAt).toBe('1596141103')
+      expect(setting.createdAt).toBe('1598479523')
     })
   })
 })

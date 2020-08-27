@@ -7,7 +7,7 @@ import {
   DisputableVotingConnectorTheGraph,
 } from '../../../src'
 
-const VOTING_APP_ADDRESS = '0x26e14ed789b51b5b226d69a5d40f72dc2d0180fe'
+const VOTING_APP_ADDRESS = '0x0e835020497b2cd716369f8fc713fb7bd0a22dbf'
 const VOTING_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging'
 
@@ -45,47 +45,47 @@ describe('DisputableVoting', () => {
 
   describe('results', () => {
     test('computes the current outcome properly', async () => {
-      const vote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-4`)
+      const vote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-3`)
 
-      expect(vote.hasEnded).toBe(true)
+      expect(vote.hasEnded).toBe(false)
       expect(vote.isAccepted).toBe(false)
-      expect(vote.status).toBe('Rejected')
+      expect(vote.status).toBe('Disputed')
 
-      expect(vote.votingPower).toBe('4000000000000000000')
-      expect(vote.formattedVotingPower).toBe('4.00')
+      expect(vote.totalPower).toBe('3000000000000000000')
+      expect(vote.formattedTotalPower).toBe('3.00')
 
-      expect(vote.yeas).toBe('1000000000000000000')
-      expect(vote.yeasPct).toBe('250000000000000000')
-      expect(vote.formattedYeas).toBe('1.00')
-      expect(vote.formattedYeasPct).toBe('25.00')
+      expect(vote.yeas).toBe('0')
+      expect(vote.yeasPct).toBe('0')
+      expect(vote.formattedYeas).toBe('0.00')
+      expect(vote.formattedYeasPct).toBe('0.00')
 
-      expect(vote.nays).toBe('1000000000000000000')
-      expect(vote.naysPct).toBe('250000000000000000')
-      expect(vote.formattedNays).toBe('1.00')
-      expect(vote.formattedNaysPct).toBe('25.00')
+      expect(vote.nays).toBe('0')
+      expect(vote.naysPct).toBe('0')
+      expect(vote.formattedNays).toBe('0.00')
+      expect(vote.formattedNaysPct).toBe('0.00')
     })
   })
 
   describe('setting', () => {
     test('allows querying the vote settings', async () => {
-      const vote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-5`)
+      const vote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-3`)
       const setting = await vote.setting()
 
       expect(setting.id).toBe(`${VOTING_APP_ADDRESS}-setting-0`)
       expect(setting.supportRequiredPct).toBe('500000000000000000')
       expect(setting.formattedSupportRequiredPct).toBe('50.00')
-      expect(setting.minimumAcceptanceQuorumPct).toBe('200000000000000000')
-      expect(setting.formattedMinimumAcceptanceQuorumPct).toBe('20.00')
+      expect(setting.minimumAcceptanceQuorumPct).toBe('500000000000000000')
+      expect(setting.formattedMinimumAcceptanceQuorumPct).toBe('50.00')
       expect(setting.quietEndingPeriod).toBe('86400')
       expect(setting.quietEndingExtension).toBe('43200')
-      expect(setting.overruleWindow).toBe('172800')
+      expect(setting.delegatedVotingPeriod).toBe('172800')
       expect(setting.executionDelay).toBe('0')
     })
   })
 
   describe('castVote', () => {
     let vote: Vote
-    const VOTE_ID = `${VOTING_APP_ADDRESS}-vote-5`
+    const VOTE_ID = `${VOTING_APP_ADDRESS}-vote-0`
 
     beforeAll(async () => {
       vote = await voting.vote(VOTE_ID)
@@ -106,7 +106,7 @@ describe('DisputableVoting', () => {
 
     describe('when querying an existing voter', () => {
       let castVote: CastVote
-      const VOTER_ADDRESS = '0xa9ac50dce74c46025dc9dceafb4fa21f0dc142ea'
+      const VOTER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
 
       beforeAll(async () => {
         castVote = (await vote.castVote(VOTER_ADDRESS))!
@@ -114,9 +114,9 @@ describe('DisputableVoting', () => {
 
       test('fetches the cast vote info', async () => {
         expect(castVote.id).toBe(`${VOTE_ID}-cast-${VOTER_ADDRESS}`)
-        expect(castVote.supports).toBe(false)
+        expect(castVote.supports).toBe(true)
         expect(castVote.stake).toBe('1000000000000000000')
-        expect(castVote.createdAt).toBe('1596394229')
+        expect(castVote.createdAt).toBe('1598530298')
         expect(castVote.caster).toBe(VOTER_ADDRESS)
       })
 
