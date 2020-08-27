@@ -41,8 +41,21 @@ for pkg_json in ./packages/*/package.json; do
 done
 
 # Publish
+
+publish_message="Publish a version of Connect?"
+version_param=""
+tag_param=""
+if [ -n "${NEW_VERSION-}" ]; then
+  publish_message="${publish_message} [version: ${NEW_VERSION}]"
+  version_param=" --new-version \"${NEW_VERSION}\""
+fi
+if [ -n "${NPM_TAG-}" ]; then
+  publish_message="${publish_message} [npm tag:${NPM_TAG}]"
+  tag_param=" --publish-tag \"${NPM_TAG}\""
+fi
+
 confirm "Publish a version of Connect?"
-./node_modules/.bin/oao publish --no-check-uncommitted --new-version "0.7.0-beta.1" --publish-tag next
+./node_modules/.bin/oao publish $version_param $tag_param
 
 # Push the version to GitHub
 tag="$(git describe --tags "$(git rev-list --tags --max-count=1)")"
