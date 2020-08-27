@@ -54,7 +54,7 @@ if [ -n "${NPM_TAG-}" ]; then
   tag_param=" --publish-tag \"${NPM_TAG}\""
 fi
 
-confirm "Publish a version of Connect?"
+confirm "$publish_message"
 ./node_modules/.bin/oao publish $version_param $tag_param
 
 # Push the version to GitHub
