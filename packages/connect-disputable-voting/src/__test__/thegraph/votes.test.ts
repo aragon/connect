@@ -18,13 +18,9 @@ describe('DisputableVoting votes', () => {
   })
 
   describe('vote', () => {
-    let vote: Vote
+    test('returns the requested vote information', async () => {
+      const vote: Vote = await connector.vote(`${VOTING_APP_ADDRESS}-vote-3`)
 
-    beforeAll(async () => {
-      vote = await connector.vote(`${VOTING_APP_ADDRESS}-vote-3`)
-    })
-
-    test('returns the requested vote information', () => {
       expect(vote.id).toBe(`${VOTING_APP_ADDRESS}-vote-3`)
       expect(vote.voteId).toEqual('3')
       expect(vote.votingId).toBe(VOTING_APP_ADDRESS)
@@ -45,31 +41,22 @@ describe('DisputableVoting votes', () => {
       expect(vote.script).toBe('0x00000001')
     })
 
-    it.skip('allows fetching the cast votes', async () => {
+    it('allows fetching the cast votes', async () => {
+      const vote: Vote = await connector.vote(`${VOTING_APP_ADDRESS}-vote-0`)
+
       const castVotes: CastVote[] = await vote.castVotes()
-      expect(castVotes.length).toBeGreaterThan(1)
+      expect(castVotes.length).toBeGreaterThan(0)
 
       const firstCastVote = castVotes[0]
       expect(firstCastVote.id).toBe(
-        `${VOTING_APP_ADDRESS}-vote-3-cast-0x0090aed150056316e37fe6dfa10dc63e79d173b6`
+        `${VOTING_APP_ADDRESS}-vote-0-cast-0x0090aed150056316e37fe6dfa10dc63e79d173b6`
       )
       expect(firstCastVote.caster).toBe(
         '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
       )
-      expect(firstCastVote.createdAt).toEqual('1596383834')
+      expect(firstCastVote.createdAt).toEqual('1598530298')
       expect(firstCastVote.stake).toBe('1000000000000000000')
       expect(firstCastVote.supports).toBe(true)
-
-      const secondCastVote = castVotes[1]
-      expect(secondCastVote.id).toBe(
-        `${VOTING_APP_ADDRESS}-vote-3-cast-0xa9ac50dce74c46025dc9dceafb4fa21f0dc142ea`
-      )
-      expect(secondCastVote.caster).toBe(
-        '0xa9ac50dce74c46025dc9dceafb4fa21f0dc142ea'
-      )
-      expect(secondCastVote.createdAt).toEqual('1596394454')
-      expect(secondCastVote.stake).toBe('1000000000000000000')
-      expect(secondCastVote.supports).toBe(false)
     })
   })
 

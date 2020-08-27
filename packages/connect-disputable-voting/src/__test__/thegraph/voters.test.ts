@@ -27,7 +27,7 @@ describe('DisputableVoting voters', () => {
       )
     })
 
-    test.skip('allows fetching voter information', async () => {
+    test('allows fetching voter information', async () => {
       expect(voter.id).toBe(`${VOTING_APP_ADDRESS}-voter-${VOTER_ADDRESS}`)
       expect(voter.address).toBe(VOTER_ADDRESS)
       expect(voter.representative).toBe(null)

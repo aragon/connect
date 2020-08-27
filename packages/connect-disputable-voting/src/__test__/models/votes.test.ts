@@ -85,7 +85,7 @@ describe('DisputableVoting', () => {
 
   describe('castVote', () => {
     let vote: Vote
-    const VOTE_ID = `${VOTING_APP_ADDRESS}-vote-3`
+    const VOTE_ID = `${VOTING_APP_ADDRESS}-vote-0`
 
     beforeAll(async () => {
       vote = await voting.vote(VOTE_ID)
@@ -104,9 +104,9 @@ describe('DisputableVoting', () => {
       })
     })
 
-    describe.skip('when querying an existing voter', () => {
+    describe('when querying an existing voter', () => {
       let castVote: CastVote
-      const VOTER_ADDRESS = '0xa9ac50dce74c46025dc9dceafb4fa21f0dc142ea'
+      const VOTER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
 
       beforeAll(async () => {
         castVote = (await vote.castVote(VOTER_ADDRESS))!
@@ -114,9 +114,9 @@ describe('DisputableVoting', () => {
 
       test('fetches the cast vote info', async () => {
         expect(castVote.id).toBe(`${VOTE_ID}-cast-${VOTER_ADDRESS}`)
-        expect(castVote.supports).toBe(false)
+        expect(castVote.supports).toBe(true)
         expect(castVote.stake).toBe('1000000000000000000')
-        expect(castVote.createdAt).toBe('1596394229')
+        expect(castVote.createdAt).toBe('1598530298')
         expect(castVote.caster).toBe(VOTER_ADDRESS)
       })
 
