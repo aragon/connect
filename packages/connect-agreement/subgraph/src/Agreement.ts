@@ -123,7 +123,7 @@ export function handleActionChallenged(event: ActionChallenged): void {
 
   const challengerArbitratorFeeId = challengeId + 'challenger-arbitrator-fee'
   const challengeArbitratorFeesData = agreementApp.getChallengeArbitratorFees(event.params.challengeId)
-  createArbitratorFee(challengerArbitratorFeeId, challengeArbitratorFeesData.value1, challengeArbitratorFeesData.value0)
+  createArbitratorFee(challengerArbitratorFeeId, challengeArbitratorFeesData.value2, challengeArbitratorFeesData.value3)
   challenge.challengerArbitratorFee = challengerArbitratorFeeId
 
   challenge.save()
@@ -150,9 +150,9 @@ export function handleActionDisputed(event: ActionDisputed): void {
   dispute.createdAt = event.block.timestamp
   dispute.save()
 
-  const challenge = Challenge.load(challengeId)
+  const challenge = Challenge.load(challengeId)!
   const submitterArbitratorFeeId = challengeId + 'submitter-arbitrator-fee'
-  createArbitratorFee(submitterArbitratorFeeId, challengeArbitratorFeesData.value3, challengeArbitratorFeesData.value2)
+  createArbitratorFee(submitterArbitratorFeeId, challengeArbitratorFeesData.value0, challengeArbitratorFeesData.value1)
   challenge.submitterArbitratorFee = submitterArbitratorFeeId
   challenge.save()
 }
@@ -243,9 +243,9 @@ function updateCollateralRequirement(agreement: Address, disputable: Address, co
   const requirementData = agreementApp.getCollateralRequirement(disputable, collateralRequirementId)
   requirement.disputable = buildDisputableId(agreement, disputable)
   requirement.token = buildERC20(requirementData.value0)
-  requirement.actionAmount = requirementData.value1
-  requirement.challengeAmount = requirementData.value2
-  requirement.challengeDuration = requirementData.value3
+  requirement.challengeDuration = requirementData.value1
+  requirement.actionAmount = requirementData.value2
+  requirement.challengeAmount = requirementData.value3
   requirement.save()
 }
 
