@@ -47,15 +47,15 @@ version_param=""
 tag_param=""
 if [ -n "${NEW_VERSION-}" ]; then
   publish_message="${publish_message} [version: ${NEW_VERSION}]"
-  version_param=" --new-version \"${NEW_VERSION}\""
+  version_param=" --new-version ${NEW_VERSION}"
 fi
 if [ -n "${NPM_TAG-}" ]; then
   publish_message="${publish_message} [npm tag:${NPM_TAG}]"
-  tag_param=" --publish-tag \"${NPM_TAG}\""
+  tag_param=" --publish-tag ${NPM_TAG}"
 fi
 
 confirm "$publish_message"
-./node_modules/.bin/oao publish $version_param $tag_param
+./node_modules/.bin/oao publish --no-check-uncommitted $version_param $tag_param
 
 # Push the version to GitHub
 tag="$(git describe --tags "$(git rev-list --tags --max-count=1)")"
