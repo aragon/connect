@@ -1,7 +1,7 @@
 import { Transaction, FinanceConnectorTheGraph } from '..'
 
 const FINANCE_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/0xgabi/aragon-finance-rinkeby'
+  'https://api.thegraph.com/subgraphs/name/aragon/aragon-finance-rinkeby'
 
 const FINANCE_APP_ADDRESS = '0x00696c6ab99c1fd7aa69539c7abe50f9bf972934'
 
