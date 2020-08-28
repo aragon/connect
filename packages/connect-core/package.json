@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "ethers": "^5.0.7",
-    "radspec": "^2.0.0-rc.1"
+    "radspec": "^2.0.0-rc.2"
   },
   "description": "Access and interact with Aragon Organizations and their apps.",
   "keywords": [

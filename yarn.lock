@@ -4221,11 +4221,6 @@ date-fns@2.0.0-alpha.22:
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.0.0-alpha.22.tgz#c65f5dd7e959c59f8ea5591e458afc76a2a0d8d0"
   integrity sha512-ovlz0I0OFhyn9bgTfqFAUvJvo8VS9mUuOxZ6cwKwBjSx42lMpXPGolcINYZoTNAG2M4YJ3QoApiQQljQEuy/Uw==
 
-dayjs@^1.8.28:
-  version "1.8.33"
-  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.33.tgz#18bc4a2b6c1c6f4d67b4c4f2536c0b97e5b766f7"
-  integrity sha512-881TDLZCdpJFKbraWRHcUG8zfMLLX400ENf9rFZDuWc5zYMss6xifo2PhlDX0ftOmR2NRmaIY47bAa4gKQfXqw==
-
 deasync@^0.1.14:
   version "0.1.20"
   resolved "https://registry.yarnpkg.com/deasync/-/deasync-0.1.20.tgz#546fd2660688a1eeed55edce2308c5cf7104f9da"
@@ -4967,7 +4962,7 @@ etag@^1.8.1, etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
 
-ethers@^5.0.0, ethers@^5.0.0-beta.190, ethers@^5.0.7:
+ethers@^5.0.0, ethers@^5.0.7:
   version "5.0.8"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.0.8.tgz#c13d0fdf5e66db8085e2036d3309ed2f8a17ed89"
   integrity sha512-of/rPgJ7E3yyBADUv5A7Gtkd7EB8ta/T9NS5CCG9tj9cifnXcI3KIdYQ7d8AS+9vm38pR1g6S5I+Q/mRnlQZlg==
@@ -9249,15 +9244,14 @@ quote-stream@^1.0.1, quote-stream@~1.0.2:
     minimist "^1.1.3"
     through2 "^2.0.0"
 
-radspec@^2.0.0-rc.1:
-  version "2.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/radspec/-/radspec-2.0.0-rc.1.tgz#3688e2312bd2497f5748d58a87daeb2c33a4f98e"
-  integrity sha512-asIPa/FOJwqYLVuo14PlVcBy4WyFta3vhkUafVxQkInSF98UmZLbgBAII9jzTPqE61o0lT2wgWJBVfWqAoKJyQ==
+radspec@^2.0.0-rc.2:
+  version "2.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/radspec/-/radspec-2.0.0-rc.2.tgz#0ab09853586ab34be3099dde774880a200d14047"
+  integrity sha512-etB24HzGpuqngCqTLOKCmJw6YWcyaaHMZth5mzpTHB5jqkL2VWkr8O0rjzxqV0DKZmKBF07mEQuHbod9sKo8mw==
   dependencies:
     "@babel/runtime" "^7.1.2"
     date-fns "2.0.0-alpha.22"
-    dayjs "^1.8.28"
-    ethers "^5.0.0-beta.190"
+    ethers "^5.0.0"
 
 raf@^3.4.1:
   version "3.4.1"
