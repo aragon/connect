@@ -13,7 +13,7 @@
     "deploy-mainnet-staging": "env STAGING=true scripts/deploy.sh aragon agreement mainnet",
     "deploy-rinkeby": "scripts/deploy.sh aragon agreement rinkeby",
     "deploy-rinkeby-staging": "env STAGING=true scripts/deploy.sh aragon agreement rinkeby",
-    "deploy-xdai": "scripts/deploy.sh aragon dvoting xdai"
+    "deploy-xdai": "scripts/deploy.sh aragon agreement xdai"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.18.0",
