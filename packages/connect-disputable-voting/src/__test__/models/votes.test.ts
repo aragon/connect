@@ -45,11 +45,11 @@ describe('DisputableVoting', () => {
 
   describe('results', () => {
     test('computes the current outcome properly', async () => {
-      const vote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-3`)
+      const vote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-2`)
 
-      expect(vote.hasEnded).toBe(false)
+      expect(vote.hasEnded).toBe(true)
       expect(vote.isAccepted).toBe(false)
-      expect(vote.status).toBe('Disputed')
+      expect(vote.status).toBe('Cancelled')
 
       expect(vote.totalPower).toBe('3000000000000000000')
       expect(vote.formattedTotalPower).toBe('3.00')
