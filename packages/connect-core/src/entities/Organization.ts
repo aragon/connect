@@ -6,9 +6,11 @@ import {
 } from '@aragon/connect-types'
 
 import { ConnectionContext } from '../types'
+import { decodeForwardingPath } from '../utils/description'
 import { toArrayEntry } from '../utils/misc'
 import App from './App'
 import Intent from './Intent'
+import { ForwardingPathDescription } from './ForwardingPath'
 import Permission from './Permission'
 
 // TODO
@@ -133,5 +135,11 @@ export default class Organization {
       this,
       this.connection.ethersProvider
     )
+  }
+
+  //////// DESCRIPTIONS /////////
+
+  async describeScript(script: string): Promise<ForwardingPathDescription> {
+    return decodeForwardingPath(script, this.apps(), this.connection)
   }
 }

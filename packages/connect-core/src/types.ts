@@ -63,6 +63,17 @@ export interface AppData {
   version?: string
 }
 
+export interface ForwardingPathData {
+  apps: App[]
+  destination: App
+  transactions: Transaction[]
+}
+
+export interface ForwardingPathDescriptionData {
+  apps: App[]
+  describeSteps: PostProcessDescription[]
+}
+
 export interface IntentData {
   appAddress: string
   functionName: string
