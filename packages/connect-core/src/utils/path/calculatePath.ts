@@ -1,5 +1,4 @@
 import { providers as ethersProviders, utils as ethersUtils } from 'ethers'
-
 import App from '../../entities/App'
 import Transaction from '../../entities/Transaction'
 import { addressesEqual, includesAddress, ANY_ENTITY } from '../address'

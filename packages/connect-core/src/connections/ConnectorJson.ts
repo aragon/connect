@@ -3,8 +3,13 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { AppFilters, Network, SubscriptionHandler } from '@aragon/connect-types'
-
+import {
+  Address,
+  AppFilters,
+  Network,
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@aragon/connect-types'
 import { ConnectionContext } from '../types'
 import IOrganizationConnector from './IOrganizationConnector'
 import App from '../entities/App'
@@ -45,7 +50,7 @@ class ConnectorJson implements IOrganizationConnector {
 
   onPermissionsForOrg(
     organization: Organization,
-    callback: Function
+    callback: SubscriptionCallback<Permission[]>
   ): SubscriptionHandler {
     return {
       unsubscribe: () => {},
@@ -66,39 +71,39 @@ class ConnectorJson implements IOrganizationConnector {
     })
   }
 
+  onAppForOrg(
+    organization: Organization,
+    filters: AppFilters,
+    callback: SubscriptionCallback<App>
+  ): SubscriptionHandler {
+    return {
+      unsubscribe: () => {},
+    }
+  }
+
   appsForOrg(organization: Organization): Promise<App[]> {
     return new Promise((resolve) => {
       resolve([])
     })
   }
 
-  onAppForOrg(
-    organization: Organization,
-    filters: AppFilters,
-    callback: Function
-  ): SubscriptionHandler {
-    return {
-      unsubscribe: () => {},
-    }
-  }
-
   onAppsForOrg(
     organization: Organization,
     filters: AppFilters,
-    callback: Function
+    callback: SubscriptionCallback<App[]>
   ): SubscriptionHandler {
     return {
       unsubscribe: () => {},
     }
   }
 
-  repoForApp(organization: Organization, appAddress: string): Promise<Repo> {
+  repoForApp(organization: Organization, appAddress: Address): Promise<Repo> {
     return new Promise((resolve) => {
       resolve()
     })
   }
 
-  appByAddress(organization: Organization, appAddress: string): Promise<App> {
+  appByAddress(organization: Organization, appAddress: Address): Promise<App> {
     return new Promise((resolve) => {
       resolve()
     })
@@ -106,7 +111,7 @@ class ConnectorJson implements IOrganizationConnector {
 
   rolesForAddress(
     organization: Organization,
-    appAddress: string
+    appAddress: Address
   ): Promise<Role[]> {
     return new Promise((resolve) => {
       resolve([])

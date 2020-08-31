@@ -1,7 +1,7 @@
 {
   "name": "bundler-webpack-ts-loader",
   "main": "dist/index.js",
-  "version": "0.6.0",
+  "version": "0.7.0-beta.3",
   "private": true,
   "sideEffects": false,
   "scripts": {
@@ -10,7 +10,7 @@
     "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@aragon/connect": "^0.6.0",
+    "@aragon/connect": "^0.7.0-beta.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },

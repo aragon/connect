@@ -155,4 +155,13 @@ export default class App {
   async roles(): Promise<Role[]> {
     return this.orgConnector().rolesForAddress(this.organization, this.address)
   }
+
+  toJSON() {
+    return {
+      ...this,
+      // Organization creates a cycling reference that makes
+      // the object impossible to pass through JSON.stringify().
+      organization: null,
+    }
+  }
 }

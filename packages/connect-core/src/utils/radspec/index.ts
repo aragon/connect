@@ -1,6 +1,5 @@
 import { providers as ethersProviders } from 'ethers'
 import * as radspec from 'radspec'
-
 import { addressesEqual } from '../address'
 import { findAppMethodFromData } from '../app'
 import { filterAndDecodeAppUpgradeIntents } from '../intent'

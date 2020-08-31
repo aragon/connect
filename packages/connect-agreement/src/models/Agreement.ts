@@ -1,8 +1,13 @@
-import { Address, SubscriptionHandler } from '@aragon/connect-types'
-
+import {
+  Address,
+  SubscriptionCallback,
+  SubscriptionResult,
+} from '@aragon/connect-types'
+import { subscription } from '@aragon/connect-core'
+import { IAgreementConnector } from '../types'
 import Signer from './Signer'
 import Version from './Version'
-import { IAgreementConnector } from '../types'
+import DisputableApp from './DisputableApp'
 
 export default class Agreement {
   #address: Address
@@ -36,8 +41,12 @@ export default class Agreement {
     return this.#connector.currentVersion(this.#address)
   }
 
-  onCurrentVersion(callback: Function): SubscriptionHandler {
-    return this.#connector.onCurrentVersion(this.#address, callback)
+  onCurrentVersion(
+    callback?: SubscriptionCallback<Version>
+  ): SubscriptionResult<Version> {
+    return subscription<Version>(callback, (callback) =>
+      this.#connector.onCurrentVersion(this.#address, callback)
+    )
   }
 
   versionId(versionNumber: string): string {
@@ -48,8 +57,13 @@ export default class Agreement {
     return this.#connector.version(this.versionId(versionNumber))
   }
 
-  onVersion(versionNumber: string, callback: Function): SubscriptionHandler {
-    return this.#connector.onVersion(this.versionId(versionNumber), callback)
+  onVersion(
+    versionNumber: string,
+    callback?: SubscriptionCallback<Version>
+  ): SubscriptionResult<Version> {
+    return subscription<Version>(callback, (callback) =>
+      this.#connector.onVersion(this.versionId(versionNumber), callback)
+    )
   }
 
   async versions({ first = 1000, skip = 0 } = {}): Promise<Version[]> {
@@ -58,9 +72,26 @@ export default class Agreement {
 
   onVersions(
     { first = 1000, skip = 0 } = {},
-    callback: Function
-  ): SubscriptionHandler {
-    return this.#connector.onVersions(this.#address, first, skip, callback)
+    callback?: SubscriptionCallback<Version[]>
+  ): SubscriptionResult<Version[]> {
+    return subscription<Version[]>(callback, (callback) =>
+      this.#connector.onVersions(this.#address, first, skip, callback)
+    )
+  }
+
+  async disputableApps({ first = 1000, skip = 0 } = {}): Promise<
+    DisputableApp[]
+  > {
+    return this.#connector.disputableApps(this.#address, first, skip)
+  }
+
+  onDisputableApps(
+    { first = 1000, skip = 0 } = {},
+    callback?: SubscriptionCallback<DisputableApp[]>
+  ): SubscriptionResult<DisputableApp[]> {
+    return subscription<DisputableApp[]>(callback, (callback) =>
+      this.#connector.onDisputableApps(this.#address, first, skip, callback)
+    )
   }
 
   signerId(signerAddress: string): string {
@@ -71,7 +102,12 @@ export default class Agreement {
     return this.#connector.signer(this.signerId(signerAddress))
   }
 
-  onSigner(signerAddress: string, callback: Function): SubscriptionHandler {
-    return this.#connector.onSigner(this.signerId(signerAddress), callback)
+  onSigner(
+    signerAddress: string,
+    callback?: SubscriptionCallback<Signer>
+  ): SubscriptionResult<Signer> {
+    return subscription<Signer>(callback, (callback) =>
+      this.#connector.onSigner(this.signerId(signerAddress), callback)
+    )
   }
 }

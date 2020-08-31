@@ -73,7 +73,6 @@ export async function buildApprovePretransaction(
   const approveSpender = spender || to
 
   const tokenContract = new Contract(tokenAddress, erc20ABI, provider)
-
   const balance = await tokenContract.balanceOf(from)
   const tokenValueBN = BigInt(tokenValue)
 

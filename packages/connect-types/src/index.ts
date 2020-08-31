@@ -30,3 +30,7 @@ export type AppFiltersParam =
     }
 
 export type SubscriptionHandler = { unsubscribe: () => void }
+export type SubscriptionCallback<T> = (error: Error | null, data?: T) => void
+export type SubscriptionResult<T extends unknown> =
+  | SubscriptionHandler
+  | ((callback: SubscriptionCallback<T>) => SubscriptionHandler)

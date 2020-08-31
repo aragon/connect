@@ -1,0 +1,75 @@
+# Do not edit subgraph.yaml, this is a generated file.
+# Instead, edit subgraph.template.yaml and run `yarn manifest-<network>-[staging]`
+specVersion: 0.0.2
+description: A template for Aragon subgraphs
+repository: https://github.com/aragon/connect
+schema:
+  file: ./schema.graphql
+dataSources:
+{{> Organizations.yaml}}
+{{> OrganizationFactories.yaml}}
+{{> OrganizationTemplates.yaml}}
+{{> LegacyOrganizationTemplates.yaml}}
+{{> TokenFactories.yaml}}
+{{> Tokens.yaml}}
+templates:
+  {{> Kernel.template.yaml}}
+  {{> MiniMeToken.template.yaml}}
+  - kind: ethereum/contract
+    name: DisputableVoting
+    network: {{network}}
+    source:
+      abi: DisputableVoting
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      entities:
+        - DisputableVoting
+        - Agreement
+        - ERC20
+      abis:
+        - name: DisputableVoting
+          file: ./abis/DisputableVoting.json
+        - name: Agreement
+          file: ./abis/Agreement.json
+        - name: ERC20
+          file: ./abis/MiniMeToken.json
+      eventHandlers:
+        - event: StartVote(indexed uint256,indexed address,bytes,bytes)
+          handler: handleStartVote
+        - event: CastVote(indexed uint256,indexed address,bool,address)
+          handler: handleCastVote
+        - event: PauseVote(indexed uint256,indexed uint256)
+          handler: handlePauseVote
+        - event: ResumeVote(indexed uint256)
+          handler: handleResumeVote
+        - event: CancelVote(indexed uint256)
+          handler: handleCancelVote
+        - event: ExecuteVote(indexed uint256)
+          handler: handleExecuteVote
+        - event: QuietEndingExtendVote(indexed uint256,bool)
+          handler: handleQuietEndingExtendVote
+        - event: NewSetting(uint256)
+          handler: handleNewSetting
+        - event: ChangeRepresentative(indexed address,indexed address)
+          handler: handleChangeRepresentative
+      file: ./src/DisputableVoting.ts
+  - kind: ethereum/contract
+    name: Agreement
+    network: {{network}}
+    source:
+      abi: Agreement
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      entities:
+        - Agreement
+      abis:
+        - name: Agreement
+          file: ./abis/Agreement.json
+      eventHandlers:
+        - event: ActionDisputed(indexed uint256,indexed uint256)
+          handler: handleActionDisputed
+      file: ./src/Agreement.ts

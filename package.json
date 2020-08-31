@@ -1,5 +1,6 @@
 {
   "name": "@aragon/connect",
+  "version": "0.7.0-beta.3",
   "description": "Access and interact with Aragon Organizations and their apps.",
   "keywords": [
     "ethereum",
@@ -46,14 +47,17 @@
     "build:examples": "MODE=all ./scripts/rebuild-packages.sh",
     "status": "oao status",
     "publish-version": "./scripts/publish-version.sh",
-    "postinstall": "yarn build"
+    "postinstall": "yarn build",
+    "precommit": "yarn precise-commits"
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",
+    "husky": "^4.2.5",
     "is-ci-cli": "^2.1.1",
     "jest": "^26.0.1",
     "oao": "^2.0.0",
+    "precise-commits": "^1.0.2",
+    "prettier": "^2.0.5",
     "ts-jest": "^26.1.0"
-  },
-  "version": "0.6.0"
+  }
 }

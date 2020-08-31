@@ -1,15 +1,25 @@
-import { Address, SubscriptionHandler } from '@aragon/connect-types'
+import {
+  Address,
+  SubscriptionCallback,
+  SubscriptionResult,
+} from '@aragon/connect-types'
+import { subscription } from '@aragon/connect-core'
 import { ITokensConnector } from '../types'
 import Token from './Token'
 import TokenHolder from './TokenHolder'
 
 export default class Tokens {
-  #appAddress: Address
   #connector: ITokensConnector
+  #tokenAddress: Address
 
-  constructor(connector: ITokensConnector, appAddress: Address) {
-    this.#appAddress = appAddress
+  constructor(connector: ITokensConnector, tokenAddress: Address) {
     this.#connector = connector
+    this.#tokenAddress = tokenAddress
+  }
+
+  static async create(connector: ITokensConnector) {
+    const token = await connector.token()
+    return new Tokens(connector, token.address)
   }
 
   async disconnect() {
@@ -21,11 +31,15 @@ export default class Tokens {
   }
 
   async holders({ first = 1000, skip = 0 } = {}): Promise<TokenHolder[]> {
-    const token = await this.token()
-    return this.#connector.tokenHolders(token.address, first, skip)
+    return this.#connector.tokenHolders(this.#tokenAddress, first, skip)
   }
 
-  onHolders(callback: Function): SubscriptionHandler {
-    return this.#connector.onTokenHolders(this.#appAddress, callback)
+  onHolders(
+    { first = 1000, skip = 0 } = {},
+    callback?: SubscriptionCallback<TokenHolder[]>
+  ): SubscriptionResult<TokenHolder[]> {
+    return subscription<TokenHolder[]>(callback, (callback) =>
+      this.#connector.onTokenHolders(this.#tokenAddress, first, skip, callback)
+    )
   }
 }

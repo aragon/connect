@@ -7,7 +7,11 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { AppFiltersParam, SubscriptionHandler } from '@aragon/connect-types'
+import {
+  AppFiltersParam,
+  SubscriptionHandler,
+  SubscriptionResult,
+} from '@aragon/connect-types'
 import {
   App,
   ConnectOptions,
@@ -45,11 +49,24 @@ export function Connect({
   location,
   options,
 }: ConnectProps): JSX.Element {
-  const [org, setOrg] = useState<Organization | null>(null)
-  const [orgError, setOrgError] = useState<Error | null>(null)
-  const [orgLoading, setOrgLoading] = useState<boolean>(false)
+  const [{ org, orgError, orgLoading }, setOrgStatus] = useState<{
+    org: Organization | null
+    orgError: Error | null
+    orgLoading: boolean
+  }>({
+    org: null,
+    orgError: null,
+    orgLoading: true,
+  })
 
   const cancelOrgLoading = useRef<Function | null>(null)
+
+  // If the connector is custom instance, it is the responsibility of the provider to memoize it.
+  const connectorUpdateValue =
+    Array.isArray(connector) || typeof connector === 'string'
+      ? JSON.stringify(connector)
+      : connector
+  const optionsUpdateValue = JSON.stringify(options)
 
   const loadOrg = useCallback(() => {
     let cancelled = false
@@ -59,15 +76,20 @@ export function Connect({
       cancelled = true
     }
 
-    setOrg(null)
-    setOrgLoading(true)
+    setOrgStatus((status) => ({
+      ...status,
+      org: null,
+      orgLoading: true,
+    }))
 
     const update = async () => {
       const done = (err: Error | null, org: Organization | null) => {
         if (!cancelled) {
-          setOrgLoading(false)
-          setOrgError(err || null)
-          setOrg(err ? null : org)
+          setOrgStatus({
+            org: err ? null : org,
+            orgError: err || null,
+            orgLoading: false,
+          })
         }
       }
 
@@ -79,9 +101,11 @@ export function Connect({
       }
     }
     update()
-  }, [location, connector, options])
+  }, [location, connectorUpdateValue, optionsUpdateValue])
 
-  useEffect(loadOrg, [location, connector, options])
+  useEffect(() => {
+    loadOrg()
+  }, [location, connectorUpdateValue, optionsUpdateValue])
 
   const value = useMemo<ContextValue>(
     () => ({
@@ -116,24 +140,38 @@ export function useOrganization(): OrganizationHookResult {
 function useConnectSubscription<Data>(
   callback: (
     org: Organization,
-    onData: (data: Data) => void
+    onData: (error: Error | null, data: Data) => void
   ) => SubscriptionHandler,
   initValue: Data
 ): [Data, LoadingStatus] {
-  const [data, setData] = useState<Data>(initValue)
-  const [loading, setLoading] = useState<boolean>(false)
+  const [{ data, error, loading }, setStatus] = useState<{
+    data: Data
+    error: Error | null
+    loading: boolean
+  }>({
+    data: initValue,
+    error: null,
+    loading: true,
+  })
+
   const {
     org,
     orgStatus: { loading: orgLoading },
   } = useConnectContext()
-
   const cancelCb = useRef<Function | null>(null)
+  const dataJsonRef = useRef<string>(JSON.stringify(initValue))
+
+  // The init value never changes
+  const initValueRef = useRef<Data>(initValue)
 
   const subscribe = useCallback(() => {
     if (!org) {
       // If the org is loading, the subscription is loading as well.
-      setLoading(orgLoading)
-      setData(initValue)
+      setStatus({
+        data: initValueRef.current,
+        error: null,
+        loading: orgLoading,
+      })
       return
     }
 
@@ -146,20 +184,36 @@ function useConnectSubscription<Data>(
       handler?.unsubscribe?.()
     }
 
-    setLoading(true)
-    handler = callback(org, (data: Data) => {
-      if (!cancelled) {
-        setData(data)
-        setLoading(false)
+    setStatus((status) => ({ ...status, loading: true }))
+
+    handler = callback(org, (error: Error | null, data: Data) => {
+      if (cancelled) {
+        return
       }
+
+      // This is necessary because some connectors might keep providing new app
+      // instances, even if these instances are not actually updated.
+      // For example, the Graph connector uses HTTP polling which has this effect.
+      const dataJson = JSON.stringify({ error, data })
+      if (dataJson === dataJsonRef.current) {
+        return
+      }
+
+      dataJsonRef.current = dataJson
+
+      setStatus({
+        error: error || null,
+        data: error ? initValueRef.current : data,
+        loading: false,
+      })
     })
-  }, [org, orgLoading, callback])
+  }, [callback, initValueRef, org, orgLoading])
 
   useEffect(() => {
     subscribe()
   }, [subscribe])
 
-  return [data, { error: null, loading, retry: subscribe }]
+  return [data, { error, loading, retry: subscribe }]
 }
 
 export function useApp(
@@ -184,52 +238,106 @@ export function usePermissions(): [Permission[], LoadingStatus] {
   return useConnectSubscription<Permission[]>(callback, [])
 }
 
-export function createAppHook(appConnect: Function) {
+export function createAppHook(
+  appConnect: Function,
+  connector?: string | [string, { [key: string]: any } | undefined]
+) {
   return function useAppData<T = any>(
     app: App | null,
-    callback?: (app: App | any) => T | Promise<T>
-  ): [T | null, LoadingStatus] {
-    const [result, setResult] = useState<T | null>(null)
-    const [error, setError] = useState<Error | null>(null)
-    const [loading, setLoading] = useState<boolean>(false)
+    callback?: (app: App | any) => T | Promise<T> | SubscriptionResult<T>,
+    dependencies?: any[]
+  ): [T | undefined, LoadingStatus] {
+    const [{ result, error, loading }, setStatus] = useState<{
+      error: Error | null
+      loading: boolean
+      result?: T
+    }>({
+      error: null,
+      loading: true,
+      result: undefined,
+    })
+
     const callbackRef = useRef<Function>((app: App) => app)
 
     useEffect(() => {
       callbackRef.current = callback || ((app: App) => app)
     }, [callback])
 
+    const appJsonRef = useRef<string>('')
+    const [updatedApp, setUpdatedApp] = useState<App | null>(null)
+    useEffect(() => {
+      const appJson = JSON.stringify(app)
+      if (appJson !== appJsonRef.current) {
+        setUpdatedApp(app)
+        appJsonRef.current = appJson
+      }
+    }, [app])
+
     useEffect(() => {
       let cancelled = false
+      let subscriptionHandler: SubscriptionHandler | null = null
 
-      setResult(null)
-      setError(null)
+      setStatus((status) => ({
+        ...status,
+        error: null,
+        result: undefined,
+      }))
 
       const update = async () => {
-        setLoading(true)
+        setStatus((status) => ({
+          ...status,
+          loading: true,
+        }))
 
         try {
-          const connectedApp = await appConnect(app)
+          const connectedApp = await appConnect(updatedApp, connector)
           const result = await callbackRef.current(connectedApp)
-          if (!cancelled) {
-            setLoading(false)
-            setResult(result)
+          if (cancelled) {
+            return
+          }
+
+          // Subscription
+          if (typeof result === 'function') {
+            subscriptionHandler = result(
+              (error: Error | null, result?: any) => {
+                if (!cancelled) {
+                  setStatus({
+                    error: error || null,
+                    loading: false,
+                    result: error ? undefined : result,
+                  })
+                }
+              }
+            )
+
+            // Just async data
+          } else {
+            setStatus({
+              error: null,
+              loading: false,
+              result,
+            })
           }
         } catch (err) {
           if (!cancelled) {
-            setLoading(false)
-            setError(err)
+            setStatus({
+              error: err,
+              loading: false,
+              result: undefined,
+            })
           }
         }
       }
 
-      if (app) {
+      if (updatedApp) {
         update()
       }
 
       return () => {
         cancelled = true
+        subscriptionHandler?.unsubscribe()
       }
-    }, [app])
+    }, [connector, updatedApp, ...(dependencies || [])])
 
     return [result, { error, loading, retry: () => null }]
   }

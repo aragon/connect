@@ -72,7 +72,9 @@ const subscription = wrapper.subscribeToQuery(
     id: TOKEN_ID,
     address: ACCOUNT_ADDRES,
   },
-  results => {
+  (error, results) => {
+    if (error) throw error
+
     // Handle each new result
     const { miniMeToken } = results.data
   }

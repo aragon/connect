@@ -24,7 +24,11 @@ async function main() {
       }
     `,
     {},
-    (results: any) => {
+    (error: Error | null, results?: any) => {
+      if (error) {
+        console.error(error)
+        return
+      }
       console.log(JSON.stringify(results.data, null, 2))
       console.log(
         `\nTry creating a new vote at https://rinkeby.aragon.org/#/${DAO_ADDRESS}/${VOTING_APP_ADDRESS}/`

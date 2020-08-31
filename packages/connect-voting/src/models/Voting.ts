@@ -1,4 +1,9 @@
-import { Address, SubscriptionHandler } from '@aragon/connect-types'
+import {
+  Address,
+  SubscriptionCallback,
+  SubscriptionResult,
+} from '@aragon/connect-types'
+import { subscription } from '@aragon/connect-core'
 import { IVotingConnector } from '../types'
 import Vote from './Vote'
 
@@ -21,13 +26,10 @@ export default class Voting {
 
   onVotes(
     { first = 1000, skip = 0 } = {},
-    callback: Function
-  ): SubscriptionHandler {
-    return this.#connector.onVotesForApp(
-      this.#appAddress,
-      callback,
-      first,
-      skip
+    callback?: SubscriptionCallback<Vote[]>
+  ): SubscriptionResult<Vote[]> {
+    return subscription<Vote[]>(callback, (callback) =>
+      this.#connector.onVotesForApp(this.#appAddress, first, skip, callback)
     )
   }
 }

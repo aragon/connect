@@ -8,12 +8,20 @@ async function main() {
     network: 4,
   })) as Organization
 
-  const subscription = org.onPermissions((permissions: Permission[]) => {
-    permissions.map(console.log)
-    console.log(
-      `\nTry creating or granting new permissions at https://rinkeby.aragon.org/#/${ORG_ADDRESS}/permissions/`
-    )
-  })
+  const subscription = org.onPermissions(
+    (error: Error | null, permissions?: Permission[]) => {
+      if (error) {
+        console.error(error)
+        return
+      }
+      for (const permission of permissions as Permission[]) {
+        console.log(permission)
+      }
+      console.log(
+        `\nTry creating or granting new permissions at https://rinkeby.aragon.org/#/${ORG_ADDRESS}/permissions/`
+      )
+    }
+  )
 
   await keepRunning()
 

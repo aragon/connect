@@ -2,7 +2,7 @@
 
 This is the main connector of the Aragon Connect library. It is responsible for parsing the organization’s data.
 
-Currently a single flavor of this connector is available and comes built into the core library, connecting to a Subgraph data source,. We have plans to expand to other flavors, like an Ethereum connector that reduces the state directly from an Ethereum node’s JSON-RPC API, or a SQL connector that fetches data from a database, etc.
+Currently a single flavor of this connector is available and comes built into the core library, connecting to a Subgraph (The Graph) data source,. We have plans to expand to other flavors, like an Ethereum connector that reduces the state directly from an Ethereum node’s JSON-RPC API, or a SQL connector that fetches data from a database, etc.
 
 ## Connector Interface
 
@@ -40,35 +40,35 @@ Perform a GraphQL query.
 
 Perform a GraphQL query and parse the result.
 
-| Name     | Type           | Description                                       |
-| -------- | -------------- | ------------------------------------------------- |
-| `query`  | `DocumentNode` | GraphQL query parsed in the standard GraphQL AST. |
-| `args`   | `any = {}`     | Arguments to pass to fields in the query.         |
-| `parser` | `Function`     | Parser function.                                  |
-| returns  | `Promise<any>` | Query result data parsed.                         |
+| Name     | Type                 | Description                                       |
+| -------- | -------------------- | ------------------------------------------------- |
+| `query`  | `DocumentNode`       | GraphQL query parsed in the standard GraphQL AST. |
+| `args`   | `any = {}`           | Arguments to pass to fields in the query.         |
+| `parser` | `(data: any) => any` | Parser function.                                  |
+| returns  | `Promise<any>`       | Query result data parsed.                         |
 
 **GraphQLWrapper\#subscribeToQuery\(query, args, callback\)**
 
 Create a GraphQL subscription.
 
-| Name       | Type                          | Description                                       |
-| ---------- | ----------------------------- | ------------------------------------------------- |
-| `query`    | `DocumentNode`                | GraphQL query parsed in the standard GraphQL AST. |
-| `args`     | `any = {}`                    | Arguments to pass to fields in the query.         |
-| `callback` | `Function`                    | Callback function call on every data update.      |
-| returns    | `{ unsubscribe: () => void }` | Subscription handler.                             |
+| Name       | Type                                          | Description                                       |
+| ---------- | --------------------------------------------- | ------------------------------------------------- |
+| `query`    | `DocumentNode`                                | GraphQL query parsed in the standard GraphQL AST. |
+| `args`     | `any = {}`                                    | Arguments to pass to fields in the query.         |
+| `callback` | `(error: Error, result: QueryResult) => void` | Callback function call on every data update.      |
+| returns    | `{ unsubscribe: () => void }`                 | Subscription handler.                             |
 
 **GraphQLWrapper\#subscribeToQueryWithParser\(query, args, callback, parser\)**
 
 Create a GraphQL subscription and parse the emitted results.
 
-| Name       | Type                          | Description                                       |
-| ---------- | ----------------------------- | ------------------------------------------------- |
-| `query`    | `DocumentNode`                | GraphQL query parsed in the standard GraphQL AST. |
-| `args`     | `any = {}`                    | Arguments to pass to fields in the query.         |
-| `callback` | `Function`                    | Callback function call on every data update.      |
-| `parser`   | `Function`                    | Parser function.                                  |
-| returns    | `{ unsubscribe: () => void }` | Subscription handler.                             |
+| Name       | Type                                  | Description                                       |
+| ---------- | ------------------------------------- | ------------------------------------------------- |
+| `query`    | `DocumentNode`                        | GraphQL query parsed in the standard GraphQL AST. |
+| `args`     | `any = {}`                            | Arguments to pass to fields in the query.         |
+| `callback` | `(error: Error, result: any) => void` | Callback function call on every data update.      |
+| `parser`   | `(data: any) => any`                  | Parser function.                                  |
+| returns    | `{ unsubscribe: () => void }`         | Subscription handler.                             |
 
 ### Subgraph Schema
 

@@ -1,10 +1,11 @@
 {
   "name": "@aragon/connect-ethereum",
-  "version": "0.6.0",
+  "version": "0.7.0-beta.3",
   "license": "LGPL-3.0-or-later",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/cjs/index.d.ts",
+  "sideEffects": false,
   "scripts": {
     "build": "yarn build:esm && yarn build:cjs",
     "build:esm": "tsc --build",
@@ -33,7 +34,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@aragon/connect-core": "^0.6.0"
+    "@aragon/connect-core": "^0.7.0-beta.3"
   },
   "description": "Access and interact with Aragon Organizations and their apps.",
   "keywords": [

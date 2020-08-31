@@ -1,5 +1,4 @@
 import { Contract, providers as ethersProviders } from 'ethers'
-
 import { forwarderAbi } from './abis'
 
 export const FORWARD_SIG = '0xd948d468' // function forward(bytes)

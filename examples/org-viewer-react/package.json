@@ -1,6 +1,6 @@
 {
   "name": "org-viewer-react",
-  "version": "0.6.0",
+  "version": "0.7.0-beta.3",
   "private": true,
   "scripts": {
     "start": "yarn clean && webpack-dev-server",
@@ -9,7 +9,7 @@
     "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@aragon/connect-react": "^0.6.0",
+    "@aragon/connect-react": "^0.7.0-beta.3",
     "@emotion/core": "^10.0.28",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"

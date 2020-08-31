@@ -1,7 +1,12 @@
-import { Address, SubscriptionHandler } from '@aragon/connect-types'
-import { IFinanceConnector } from '../types'
+import {
+  Address,
+  SubscriptionCallback,
+  SubscriptionResult,
+} from '@aragon/connect-types'
+import { subscription } from '@aragon/connect-core'
 import Transaction from './Transaction'
 import TokenBalance from './TokenBalance'
+import { IFinanceConnector } from '../types'
 
 export default class Finance {
   #appAddress: Address
@@ -22,13 +27,15 @@ export default class Finance {
 
   onTransactions(
     { first = 1000, skip = 0 } = {},
-    callback: Function
-  ): SubscriptionHandler {
-    return this.#connector.onTransactionsForApp!(
-      this.#appAddress,
-      callback,
-      first,
-      skip
+    callback?: SubscriptionCallback<Transaction[]>
+  ): SubscriptionResult<Transaction[]> {
+    return subscription<Transaction[]>(callback, (callback) =>
+      this.#connector.onTransactionsForApp(
+        this.#appAddress,
+        first,
+        skip,
+        callback
+      )
     )
   }
 
@@ -47,14 +54,16 @@ export default class Finance {
   onBalance(
     tokenAddress: string,
     { first = 1000, skip = 0 } = {},
-    callback: Function
-  ): SubscriptionHandler {
-    return this.#connector.onBalanceForToken!(
-      this.#appAddress,
-      tokenAddress,
-      callback,
-      first,
-      skip
+    callback?: SubscriptionCallback<TokenBalance>
+  ): SubscriptionResult<TokenBalance> {
+    return subscription<TokenBalance>(callback, (callback) =>
+      this.#connector.onBalanceForToken(
+        this.#appAddress,
+        tokenAddress,
+        first,
+        skip,
+        callback
+      )
     )
   }
 }
