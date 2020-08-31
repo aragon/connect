@@ -1,14 +1,13 @@
+import { StepDecoded } from '../../types'
 import { isCallScript, decodeCallScript } from '../callScript'
 import { isValidForwardCall, parseForwardCall } from '../forwarding'
 
 /**
- * Decodes an EVM callscript and returns the forwarding path it description.
+ * Decodes an EVM callscript and returns the transaction path it describes.
  *
  * @return An array of Ethereum transactions that describe each step in the path
  */
-export function decodeForwardingPath(
-  script: string
-): ForwardingPathDescriptionTree {
+export function decodeForwardingPath(script: string): StepDecoded[] {
   // In the future we may support more EVMScripts, but for now let's just assume we're only
   // dealing with call scripts
   if (!isCallScript(script)) {
@@ -17,8 +16,8 @@ export function decodeForwardingPath(
 
   const path = decodeCallScript(script)
 
-  return path.reduce((decodeSegments, segment) => {
-    const { data } = segment
+  const decodedPath = path.map((step) => {
+    const { data } = step
 
     let children
     if (isValidForwardCall(data)) {
@@ -26,10 +25,14 @@ export function decodeForwardingPath(
 
       try {
         children = decodeForwardingPath(forwardedEvmScript)
-        // eslint-disable-next-line no-empty
       } catch (err) {}
     }
 
-    return decodeSegments.concat({ ...segment, children })
-  }, [] as ForwardingPathDescriptionTree)
+    return {
+      ...step,
+      children,
+    }
+  })
+
+  return decodedPath
 }

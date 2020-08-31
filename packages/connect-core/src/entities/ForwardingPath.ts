@@ -1,25 +1,25 @@
 import { providers as ethersProviders } from 'ethers'
 
-import App from './App'
 import Transaction from './Transaction'
+import { buildApprovePretransaction } from '../utils/transactions'
 import {
-  AppOrAddress,
   ForwardingPathData,
-  ForwardingPathDescriptionData,
-  PostProcessDescription,
+  AppOrAddress,
+  StepDescribed,
+  TokenData,
 } from '../types'
-import { describeForwardingPath } from '../utils/descriptor/describe'
+import ForwardingPathDescription from '../utils/descriptor'
 
 export default class ForwardingPath {
   #provider: ethersProviders.Provider
-  readonly apps: App[]
-  readonly destination: App
+  readonly destination: AppOrAddress
+  readonly description: StepDescribed[]
   readonly transactions: Transaction[]
 
   constructor(data: ForwardingPathData, provider: ethersProviders.Provider) {
     this.#provider = provider
-    this.apps = data.apps
     this.destination = data.destination
+    this.description = data.description
     this.transactions = data.transactions
   }
 
@@ -33,14 +33,18 @@ export default class ForwardingPath {
   }
 
   // Return a description of the forwarding path, to be rendered.
-  async describe(): Promise<ForwardingPathDescription> {
-    // TODO: Make sure we are safe to only provide the apps on the path here
-    return describeForwardingPath(this.transactions, this.apps, this.#provider)
+  describe(): ForwardingPathDescription {
+    return new ForwardingPathDescription(this.description)
   }
 
-  // Return a description of the forwarding path, as text.
-  // Shorthand for .describe().toString()
-  toString(): string {
-    return this.describe().toString()
+  async applyApprovePretransaction(tokenData: TokenData) {
+    const pretransaction = await buildApprovePretransaction(
+      this.transactions[0],
+      tokenData,
+      this.#provider
+    )
+    if (pretransaction) {
+      this.transactions.push(pretransaction)
+    }
   }
 }
