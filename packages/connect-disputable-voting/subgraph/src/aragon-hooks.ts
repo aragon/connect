@@ -16,9 +16,9 @@ export function getTemplateForApp(appId: string): string | null {
   const VOTING_OPEN = '0x705b5084c67966bb8e4640b28bab7a1e51e03d209d84e3a04d2a4f7415f93b34'
   const VOTING_PRECEDENCE_CAMPAIGN = '0x39aa9e500efe56efda203714d12c78959ecbf71223162614ab5b56eaba014145'
 
-  if (appId === AGREEMENT_OPEN || appId === AGREEMENT_PRECEDENCE_CAMPAIGN) {
+  if (appId == AGREEMENT_OPEN || appId == AGREEMENT_PRECEDENCE_CAMPAIGN) {
     return 'Agreement'
-  } else if (appId === VOTING_OPEN || appId === VOTING_PRECEDENCE_CAMPAIGN) {
+  } else if (appId == VOTING_OPEN || appId == VOTING_PRECEDENCE_CAMPAIGN) {
     return 'DisputableVoting'
   } else {
     return null
