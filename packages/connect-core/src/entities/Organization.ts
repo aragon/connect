@@ -4,14 +4,25 @@ import {
   AppFiltersParam,
   SubscriptionHandler,
 } from '@aragon/connect-types'
+import { utils as ethersUtils } from 'ethers'
 
-import { ConnectionContext } from '../types'
-import { decodeForwardingPath } from '../utils/descriptor/describe'
+import {
+  ConnectionContext,
+  AppOrAddress,
+  PathOptions,
+  PostProcessDescription,
+} from '../types'
+import ForwardingPathDescription, {
+  decodeForwardingPath,
+  describePath,
+  describeTransaction,
+} from '../utils/descriptor/index'
+import { organizationIntent } from '../utils/intent'
 import { toArrayEntry } from '../utils/misc'
 import App from './App'
-import Intent from './Intent'
-import { ForwardingPathDescription } from './ForwardingPath'
+import ForwardingPath from './ForwardingPath'
 import Permission from './Permission'
+import Transaction from './Transaction'
 
 // TODO
 // Organization#addApp(repoName, options)
@@ -71,6 +82,12 @@ export default class Organization {
     return this.connection
   }
 
+  //////// ACCOUNT /////////
+
+  actAss(sender: Address): void {
+    this.connection.actAs = sender
+  }
+
   ///////// APPS ///////////
 
   async app(filters?: AppFiltersParam): Promise<App> {
@@ -115,7 +132,16 @@ export default class Organization {
     )
   }
 
+  async acl(): Promise<App> {
+    return this.app('acl')
+  }
+
+  async kernel(): Promise<App> {
+    return this.app('kernel')
+  }
+
   ///////// PERMISSIONS ///////////
+
   async permissions(): Promise<Permission[]> {
     return this.connection.orgConnector.permissionsForOrg(this)
   }
@@ -126,22 +152,84 @@ export default class Organization {
 
   ///////// INTENTS ///////////
 
-  appIntent(
-    appAddress: Address,
-    functionName: string,
-    functionArgs: any[]
-  ): Intent {
-    // TODO: Use curry functions to allow to provide an account as the last argument and otherwise provide a partialy applied function
-    return new Intent(
-      { appAddress, functionName, functionArgs },
-      this,
+  /**
+   * Calculate the transaction path for a transaction to an external `destination`
+   * (not the currently running app) that invokes a method matching the
+   * `methodAbiFragment` with `params`.
+   *
+   * @param  {string} destination Address of the external contract
+   * @param  {object} methodAbiFragment ABI fragment of method to invoke
+   * @param  {Array<*>} params
+   * @return {Promise<ForwardingPath>} An array of Ethereum transactions that describe each step in the path.
+   *   If the destination is a non-installed contract, always results in an array containing a
+   *   single transaction.
+   */
+  async intent(
+    destination: AppOrAddress,
+    methodAbiFragment: ethersUtils.FunctionFragment,
+    params: any[],
+    options: PathOptions
+  ): Promise<ForwardingPath | undefined> {
+    const sender = options.actAs || this.connection.actAs
+    if (!sender) {
+      throw new Error(
+        `No sender address specified. Use 'actAs' option or set one as default on your organization connection.`
+      )
+    }
+
+    const installedApps = await this.apps()
+
+    return organizationIntent(
+      sender,
+      destination,
+      methodAbiFragment,
+      params,
+      installedApps,
       this.connection.ethersProvider
     )
   }
 
-  //////// DESCRIPTIONS /////////
+  // async intentBasket() {}
+
+  //////// SCRIPTS /////////
 
   async describeScript(script: string): Promise<ForwardingPathDescription> {
-    return decodeForwardingPath(script, this.apps(), this.connection)
+    const installedApps = await this.apps()
+
+    const describedSteps = await describePath(
+      decodeForwardingPath(script),
+      installedApps,
+      this.connection.ethersProvider
+    )
+
+    // TODO: Add decorators
+    // // Add name and identifier decoration
+    // const docoratedStep = describedSteps.map(async (step) => {
+    //   const app = installedApps.find((app) => app.address === step.to)
+
+    //   if (app) {
+    //     return {
+    //       ...step,
+    //       identifier: app.appId,
+    //       name: app.appName,
+    //     }
+    //   }
+
+    //   return step
+    // })
+
+    return new ForwardingPathDescription(describedSteps)
+  }
+
+  ///// TRANSACTIONS //////
+
+  async describeTransaction(
+    transaction: Transaction
+  ): Promise<PostProcessDescription> {
+    return describeTransaction(
+      transaction,
+      await this.apps(),
+      this.connection.ethersProvider
+    )
   }
 }
