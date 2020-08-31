@@ -12,6 +12,7 @@ export default class Repo {
   #metadata!: Metadata
   readonly address: string
   readonly contentUri?: string
+  readonly lastVersion?: string
   readonly name: string
   readonly registry?: string
   readonly registryAddress?: string
@@ -23,6 +24,7 @@ export default class Repo {
 
     this.address = data.address
     this.contentUri = data.contentUri
+    this.lastVersion = data.lastVersion
     this.name = data.name
     this.registry = data.registry
     this.registryAddress = data.registryAddress
