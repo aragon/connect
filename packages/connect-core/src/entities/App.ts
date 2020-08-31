@@ -1,4 +1,8 @@
-import { ethers } from 'ethers'
+import {
+  Contract,
+  providers as ethersProvider,
+  utils as ethersUtils,
+} from 'ethers'
 
 import Organization from './Organization'
 import Repo from './Repo'
@@ -10,9 +14,12 @@ import {
   AragonManifest,
   Metadata,
   AppData,
+  PathOptions,
 } from '../types'
+import { appIntent } from '../utils/intent'
 import { resolveManifest, resolveArtifact } from '../utils/metadata'
 import IOrganizationConnector from '../connections/IOrganizationConnector'
+import ForwardingPath from './ForwardingPath'
 
 // TODO:
 // [ ] (ipfs) contentUrl 	String 	The HTTP URL of the app content. Uses the IPFS HTTP provider. E.g. http://gateway.ipfs.io/ipfs/QmdLEDDfi…/ (ContentUri passing through the resolver)
@@ -61,34 +68,8 @@ export default class App {
     return this.organization.connection.orgConnector
   }
 
-  contract(): ethers.Contract {
-    if (!this.abi) {
-      throw new Error(
-        `No ABI specified in app for ${this.address}. Make sure the metada for the app is available`
-      )
-    }
-    return new ethers.Contract(
-      this.address,
-      this.abi,
-      this.organization.connection.ethersProvider
-    )
-  }
-
-  interface(): ethers.utils.Interface {
-    if (!this.abi) {
-      throw new Error(
-        `No ABI specified in app for ${this.address}. Make sure the metada for the app is available`
-      )
-    }
-    return new ethers.utils.Interface(this.abi)
-  }
-
-  async repo(): Promise<Repo> {
-    return this.orgConnector().repoForApp(this.organization, this.address)
-  }
-
-  async roles(): Promise<Role[]> {
-    return this.orgConnector().rolesForAddress(this.organization, this.address)
+  private orgProvider(): ethersProvider.Provider {
+    return this.organization.connection.ethersProvider
   }
 
   get appName(): string {
@@ -113,5 +94,65 @@ export default class App {
 
   get deprecatedMethods(): { [version: string]: AppMethod[] } {
     return this.artifact.deprecatedFunctions
+  }
+
+  contract(): Contract {
+    if (!this.abi) {
+      throw new Error(
+        `No ABI specified in app for ${this.address}. Make sure the metada for the app is available`
+      )
+    }
+    return new Contract(this.address, this.abi, this.orgProvider())
+  }
+
+  interface(): ethersUtils.Interface {
+    if (!this.abi) {
+      throw new Error(
+        `No ABI specified in app for ${this.address}. Make sure the metada for the app is available`
+      )
+    }
+    return new ethersUtils.Interface(this.abi)
+  }
+
+  /**
+   * Calculate the transaction path for a transaction to `destination`
+   * that invokes `methodSignature` with `params`.
+   *
+   * @param  {string} methodSignature
+   * @param  {Array<*>} params
+   * @return {Promise<Array<Object>>} An array of Ethereum transactions that describe each step in the path
+   */
+  async intent(
+    methodSignature: string,
+    params: any[],
+    options: PathOptions
+  ): Promise<ForwardingPath | undefined> {
+    const sender = options.actAs || this.organization.connection.actAs
+    if (!sender) {
+      throw new Error(
+        `No sender address specified. Use 'actAs' option or set one as default on your organization connection.`
+      )
+    }
+
+    const installedApps = await this.orgConnector().appsForOrg(
+      this.organization
+    )
+
+    return appIntent(
+      sender,
+      this,
+      methodSignature,
+      params,
+      installedApps,
+      this.orgProvider()
+    )
+  }
+
+  async repo(): Promise<Repo> {
+    return this.orgConnector().repoForApp(this.organization, this.address)
+  }
+
+  async roles(): Promise<Role[]> {
+    return this.orgConnector().rolesForAddress(this.organization, this.address)
   }
 }
