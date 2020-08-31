@@ -3,7 +3,7 @@ import { Address, Network } from '@aragon/connect-types'
 
 import IOrganizationConnector from './connections/IOrganizationConnector'
 import App from './entities/App'
-import TransactionRequest from './transactions/TransactionRequest'
+import Transaction from './entities/Transaction'
 
 export type Abi = (ethers.utils.EventFragment | ethers.utils.FunctionFragment)[]
 
@@ -63,6 +63,23 @@ export interface AppData {
   version?: string
 }
 
+export interface ForwardingPathData {
+  apps: App[]
+  destination: App
+  transactions: Transaction[]
+}
+
+export interface ForwardingPathDescriptionData {
+  apps: App[]
+  describeSteps: PostProcessDescription[]
+}
+
+export interface IntentData {
+  appAddress: string
+  functionName: string
+  functionArgs: any[]
+}
+
 export interface ParamData {
   argumentId: number
   operationType: number
@@ -100,30 +117,21 @@ export interface RoleData {
 export interface TransactionPathData {
   apps: App[]
   destination: App
-  forwardingFeePretransaction?: TransactionRequest
-  transactions: TransactionRequest[]
+  forwardingFeePretransaction?: Transaction
+  transactions: Transaction[]
 }
 
-export interface TransactionIntentData {
-  contractAddress: string
-  functionName: string
-  functionArgs: any[]
-}
-
-export interface TransactionRequestData {
-  children?: TransactionRequest[]
-  description?: string
-  descriptionAnnotated?: Annotation[]
+export interface TransactionData {
   data: string
-  from?: string
-  to: string
+  from: Address
+  to: Address
 }
 
 ////// METADATA //////
 
 export type Metadata = (AragonArtifact | AragonManifest)[]
 
-export interface AppIntent {
+export interface AppMethod {
   roles: string[]
   sig: string
   /**
@@ -174,12 +182,12 @@ export interface AragonArtifact extends AragonAppJson {
    * Includes metadata needed for radspec and transaction pathing
    * initialize() function should also be included for completeness
    */
-  functions: AppIntent[]
+  functions: AppMethod[]
   /**
    * Functions that are no longer available at `version`
    */
   deprecatedFunctions: {
-    [version: string]: AppIntent[]
+    [version: string]: AppMethod[]
   }
   /**
    * The flaten source code of the contracts must be included in

@@ -1,12 +1,12 @@
-import TransactionRequest from './TransactionRequest'
 import App from '../entities/App'
+import Transaction from '../entities/Transaction'
 import { TransactionPathData } from '../types'
 
 export default class TransactionPath {
   readonly apps!: App[]
   readonly destination!: App
-  readonly forwardingFeePretransaction?: TransactionRequest
-  readonly transactions!: TransactionRequest[]
+  readonly forwardingFeePretransaction?: Transaction
+  readonly transactions!: Transaction[]
 
   constructor(data: TransactionPathData) {
     this.apps = data.apps

@@ -1,4 +1,5 @@
 import { AppFilters, Network, SubscriptionHandler } from '@aragon/connect-types'
+
 import { ConnectionContext } from '../types'
 import App from '../entities/App'
 import Organization from '../entities/Organization'

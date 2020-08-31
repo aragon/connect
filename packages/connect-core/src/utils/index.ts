@@ -1,4 +1,4 @@
-export * from './descriptions'
+export * from './description'
 export * from './misc'
 export * from './network'
 export * from './app-connectors'

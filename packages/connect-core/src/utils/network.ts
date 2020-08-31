@@ -1,4 +1,5 @@
 import { Address, Network, Networkish } from '@aragon/connect-types'
+
 import { NETWORKS } from '../params'
 
 export function networkFromChainId(chainId: number): Network | null {
