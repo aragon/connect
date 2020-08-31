@@ -3,7 +3,7 @@ import { providers as ethersProviders, utils as ethersUtils } from 'ethers'
 import App from '../../entities/App'
 import Transaction from '../../entities/Transaction'
 import { addressesEqual, includesAddress, ANY_ENTITY } from '../address'
-import { getAppMethod } from '../app'
+import { findAppMethodFromSignature } from '../app'
 import { encodeCallScript } from '../callScript'
 import { canForward } from '../forwarding'
 import {
@@ -169,19 +169,17 @@ export async function calculateTransactionPath(
     ? ethersUtils.isAddress(finalForwarder)
     : false
 
-  const method = findAppMethodFromSignature(app, methodSignature, {
-    allowDeprecated: false,
-  })
+  const method = findAppMethodFromSignature(destinationApp, methodSignature)
   if (!method) {
-    throw new Error(`No method named ${methodSignature} on ${destination}`)
+    throw new Error(
+      `No method named ${methodSignature} on ${destinationApp.address}`
+    )
   }
-
-  const method = getAppMethod(destinationApp, methodSignature)
   // We can already assume the user is able to directly invoke the action if:
   //   - The method has no ACL requirements and no final forwarder was given, or
   //   - The final forwarder matches the sender
   if (
-    (method.roles.length === 0 && !finalForwarderProvided) ||
+    (method?.roles.length === 0 && !finalForwarderProvided) ||
     (finalForwarder && addressesEqual(finalForwarder, sender))
   ) {
     try {

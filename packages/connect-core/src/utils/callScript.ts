@@ -1,11 +1,8 @@
 import { utils as ethersUtils } from 'ethers'
 
-export const CALLSCRIPT_ID = '0x00000001'
+import { CallScriptAction } from '../types'
 
-export interface CallScriptAction {
-  to: string
-  data: string
-}
+export const CALLSCRIPT_ID = '0x00000001'
 
 interface Segment {
   segment: CallScriptAction

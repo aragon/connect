@@ -1,3 +1,4 @@
+import { Address } from '@aragon/connect-types'
 import {
   Contract,
   providers as ethersProviders,
@@ -7,15 +8,33 @@ import {
 import { erc20ABI, forwarderAbi, forwarderFeeAbi } from './abis'
 import App from '../entities/App'
 import Transaction from '../entities/Transaction'
+import { TokenData } from '../types'
 
-interface TokenData {
-  address: string
-  value: string
-  spender: string
+export async function createDirectTransaction(
+  sender: Address,
+  destination: Address,
+  methodAbiFragment: ethersUtils.FunctionFragment,
+  params: any[]
+): Promise<Transaction> {
+  if (methodAbiFragment.type === 'fallback' && params.length > 1) {
+    throw new Error(
+      `Could not create transaction to fallback function due to too many parameters: ${params}`
+    )
+  }
+
+  // The direct transaction we eventually want to perform
+  return new Transaction({
+    from: sender,
+    to: destination,
+    data: new ethersUtils.Interface([methodAbiFragment]).encodeFunctionData(
+      ethersUtils.FunctionFragment.from(methodAbiFragment),
+      params
+    ),
+  })
 }
 
 export async function createDirectTransactionForApp(
-  sender: string,
+  sender: Address,
   app: App,
   methodSignature: string,
   params: any[]
@@ -23,18 +42,11 @@ export async function createDirectTransactionForApp(
   const appInterface = app.interface()
   const functionFragment = appInterface.getFunction(methodSignature)
 
-  return new Transaction({
-    from: sender,
-    to: app.address,
-    data: appInterface.encodeFunctionData(
-      ethersUtils.FunctionFragment.from(functionFragment),
-      params
-    ),
-  })
+  return createDirectTransaction(sender, app.address, functionFragment, params)
 }
 
 export function createForwarderTransactionBuilder(
-  sender: string,
+  sender: Address,
   directTransaction: Transaction
 ): Function {
   const forwarder = new ethersUtils.Interface(forwarderAbi)
@@ -48,7 +60,7 @@ export function createForwarderTransactionBuilder(
     })
 }
 
-export async function buildPretransaction(
+export async function buildApprovePretransaction(
   transaction: Transaction,
   tokenData: TokenData,
   provider: ethersProviders.Provider
@@ -123,7 +135,11 @@ export async function buildForwardingFeePretransaction(
       value: feeDetails.amount.toString(),
     }
 
-    return buildPretransaction(forwardingTransaction, tokenData, provider)
+    return buildApprovePretransaction(
+      forwardingTransaction,
+      tokenData,
+      provider
+    )
   }
   return undefined
 }
