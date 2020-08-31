@@ -5,7 +5,7 @@ import Repo from './Repo'
 import Role from './Role'
 import {
   Abi,
-  AppIntent,
+  AppMethod,
   AragonArtifact,
   AragonManifest,
   Metadata,
@@ -61,6 +61,19 @@ export default class App {
     return this.organization.connection.orgConnector
   }
 
+  contract(): ethers.Contract {
+    if (!this.abi) {
+      throw new Error(
+        `No ABI specified in app for ${this.address}. Make sure the metada for the app is available`
+      )
+    }
+    return new ethers.Contract(
+      this.address,
+      this.abi,
+      this.organization.connection.ethersProvider
+    )
+  }
+
   interface(): ethers.utils.Interface {
     if (!this.abi) {
       throw new Error(
@@ -90,11 +103,11 @@ export default class App {
     return this.artifact.abi
   }
 
-  get intents(): AppIntent[] {
+  get methods(): AppMethod[] {
     return this.artifact.functions
   }
 
-  get deprecatedIntents(): { [version: string]: AppIntent[] } {
+  get deprecatedMethods(): { [version: string]: AppMethod[] } {
     return this.artifact.deprecatedFunctions
   }
 

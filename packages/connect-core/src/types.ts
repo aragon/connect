@@ -63,6 +63,23 @@ export interface AppData {
   version?: string
 }
 
+export interface ForwardingPathData {
+  apps: App[]
+  destination: App
+  transactions: Transaction[]
+}
+
+export interface ForwardingPathDescriptionData {
+  apps: App[]
+  describeSteps: PostProcessDescription[]
+}
+
+export interface IntentData {
+  appAddress: string
+  functionName: string
+  functionArgs: any[]
+}
+
 export interface ParamData {
   argumentId: number
   operationType: number
@@ -104,12 +121,6 @@ export interface TransactionPathData {
   transactions: Transaction[]
 }
 
-export interface TransactionIntentData {
-  contractAddress: string
-  functionName: string
-  functionArgs: any[]
-}
-
 export interface TransactionData {
   data: string
   from: Address
@@ -120,7 +131,7 @@ export interface TransactionData {
 
 export type Metadata = (AragonArtifact | AragonManifest)[]
 
-export interface AppIntent {
+export interface AppMethod {
   roles: string[]
   sig: string
   /**
@@ -171,12 +182,12 @@ export interface AragonArtifact extends AragonAppJson {
    * Includes metadata needed for radspec and transaction pathing
    * initialize() function should also be included for completeness
    */
-  functions: AppIntent[]
+  functions: AppMethod[]
   /**
    * Functions that are no longer available at `version`
    */
   deprecatedFunctions: {
-    [version: string]: AppIntent[]
+    [version: string]: AppMethod[]
   }
   /**
    * The flaten source code of the contracts must be included in
