@@ -23,6 +23,39 @@ export type AppOrAddress = App | Address
 
 export type ForwardingPathDeclaration = AppOrAddress[]
 
+type ForwardingPathDescriptionTreeEntry =
+  | AppOrAddress
+  | [AppOrAddress, ForwardingPathDescriptionTreeEntry[]]
+
+export type ForwardingPathDescriptionTree = ForwardingPathDescriptionTreeEntry[]
+
+export interface CallScriptAction {
+  to: string
+  data: string
+}
+
+export interface StepDecoded {
+  to: string
+  data: string
+  from?: string
+  children?: StepDecoded[]
+}
+
+export interface Annotation {
+  type: string
+  value: any
+}
+
+export interface StepDescribed extends StepDecoded {
+  description: string
+  annotatedDescription?: Annotation[]
+}
+
+export interface PostProcessDescription {
+  description: string
+  annotatedDescription?: Annotation[]
+}
+
 export type PathOptions = {
   // The account to sign the transactions with. It is optional
   // when `actAs` has been set with the connection. If not,
@@ -32,16 +65,6 @@ export type PathOptions = {
   // Optionally declare a forwarding path. When not specified,
   // the shortest path is used instead.
   path: ForwardingPathDeclaration
-}
-
-export interface Annotation {
-  type: string
-  value: any
-}
-
-export interface PostProcessDescription {
-  description: string
-  annotatedDescription?: Annotation[]
 }
 
 ////// ENTITES /////
@@ -64,20 +87,9 @@ export interface AppData {
 }
 
 export interface ForwardingPathData {
-  apps: App[]
-  destination: App
+  destination: AppOrAddress
   transactions: Transaction[]
-}
-
-export interface ForwardingPathDescriptionData {
-  apps: App[]
-  describeSteps: PostProcessDescription[]
-}
-
-export interface IntentData {
-  appAddress: string
-  functionName: string
-  functionArgs: any[]
+  description: StepDescribed[]
 }
 
 export interface ParamData {
@@ -98,6 +110,7 @@ export interface RepoData {
   address: string
   artifact?: string | null
   contentUri?: string
+  lastVersion?: string
   manifest?: string | null
   name: string
   registry?: string
@@ -118,6 +131,12 @@ export interface TransactionData {
   data: string
   from: Address
   to: Address
+}
+
+export interface TokenData {
+  address: Address
+  value: string
+  spender: Address
 }
 
 ////// METADATA //////
