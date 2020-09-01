@@ -112,6 +112,7 @@ export const GET_VOTE = (type: string) => gql`
       quietEndingExtensionDuration
       quietEndingSnapshotSupport
       script
+  settledAt
       executedAt
       isAccepted
     }
@@ -153,6 +154,7 @@ export const ALL_VOTES = (type: string) => gql`
       quietEndingExtensionDuration
       quietEndingSnapshotSupport
       script
+      settledAt
       executedAt
       isAccepted
     }

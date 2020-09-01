@@ -9,7 +9,6 @@ function buildVote(vote: any, connector: any): Vote {
     voting,
     voteId,
     creator,
-    duration,
     context,
     status,
     actionId,
@@ -28,6 +27,7 @@ function buildVote(vote: any, connector: any): Vote {
     quietEndingExtensionDuration,
     quietEndingSnapshotSupport,
     script,
+    settledAt,
     executedAt,
     isAccepted,
   } = vote
@@ -56,6 +56,7 @@ function buildVote(vote: any, connector: any): Vote {
     quietEndingExtensionDuration,
     quietEndingSnapshotSupport,
     script,
+    settledAt,
     executedAt,
     isAccepted,
     tokenDecimals: voting.token.decimals,
