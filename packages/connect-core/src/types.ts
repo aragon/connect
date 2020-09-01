@@ -23,39 +23,6 @@ export type AppOrAddress = App | Address
 
 export type ForwardingPathDeclaration = AppOrAddress[]
 
-type ForwardingPathDescriptionTreeEntry =
-  | AppOrAddress
-  | [AppOrAddress, ForwardingPathDescriptionTreeEntry[]]
-
-export type ForwardingPathDescriptionTree = ForwardingPathDescriptionTreeEntry[]
-
-export interface CallScriptAction {
-  to: string
-  data: string
-}
-
-export interface StepDecoded {
-  to: string
-  data: string
-  from?: string
-  children?: StepDecoded[]
-}
-
-export interface Annotation {
-  type: string
-  value: any
-}
-
-export interface StepDescribed extends StepDecoded {
-  description: string
-  annotatedDescription?: Annotation[]
-}
-
-export interface PostProcessDescription {
-  description: string
-  annotatedDescription?: Annotation[]
-}
-
 export type PathOptions = {
   // The account to sign the transactions with. It is optional
   // when `actAs` has been set with the connection. If not,
@@ -65,6 +32,31 @@ export type PathOptions = {
   // Optionally declare a forwarding path. When not specified,
   // the shortest path is used instead.
   path: ForwardingPathDeclaration
+}
+
+export interface CallScriptAction {
+  to: string
+  data: string
+}
+export interface Annotation {
+  type: string
+  value: any
+}
+export interface PostProcessDescription {
+  description: string
+  annotatedDescription?: Annotation[]
+}
+
+export interface StepDecoded {
+  to: string
+  data: string
+  from?: string
+  children?: StepDecoded[]
+}
+
+export interface StepDescribed extends StepDecoded {
+  description: string
+  annotatedDescription?: Annotation[]
 }
 
 ////// ENTITES /////
@@ -89,7 +81,6 @@ export interface AppData {
 export interface ForwardingPathData {
   destination: AppOrAddress
   transactions: Transaction[]
-  description: StepDescribed[]
 }
 
 export interface ParamData {

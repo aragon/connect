@@ -1,10 +1,11 @@
-import { providers as ethersProviders } from 'ethers'
 import * as radspec from 'radspec'
+import { providers as ethersProviders } from 'ethers'
+
 import { addressesEqual } from '../address'
 import { findAppMethodFromData } from '../app'
 import { filterAndDecodeAppUpgradeIntents } from '../intent'
-import App from '../../entities/App'
 import { Abi, AppMethod, StepDecoded, StepDescribed } from '../../types'
+import App from '../../entities/App'
 
 interface FoundMethod {
   method?: AppMethod

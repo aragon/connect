@@ -1,11 +1,9 @@
 import { Address } from '@aragon/connect-types'
 import { providers as ethersProviders } from 'ethers'
 
+import { calculateTransactionPath } from './calculatePath'
 import App from '../../entities/App'
 import ForwardingPath from '../../entities/ForwardingPath'
-import { calculateTransactionPath } from './calculatePath'
-import { describePath } from '../descriptor/index'
-import { StepDescribed } from '../../types'
 
 /**
  * Calculate the transaction path for a transaction to `destination`
@@ -36,19 +34,12 @@ export async function getForwardingPath(
     finalForwarder
   )
 
-  let description: StepDescribed[] = []
-  if (transactions.length > 0) {
-    try {
-      description = await describePath(transactions, installedApps, provider)
-    } catch (_) {}
-  }
-
   return new ForwardingPath(
     {
       destination: destinationApp.address,
-      description,
       transactions,
     },
+    installedApps,
     provider
   )
 }

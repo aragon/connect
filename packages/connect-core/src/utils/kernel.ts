@@ -2,8 +2,8 @@ import { utils as ethersUtils } from 'ethers'
 
 import { addressesEqual } from './address'
 import { findAppMethodFromData } from './app'
-import App from '../entities/App'
 import { StepDecoded } from '../types'
+import App from '../entities/App'
 
 const CORE_NAMESPACE = ethersUtils.solidityKeccak256(['string'], ['core'])
 const APP_ADDR_NAMESPACE = ethersUtils.solidityKeccak256(['string'], ['app'])

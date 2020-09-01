@@ -1,4 +1,5 @@
 import { utils as ethersUtils } from 'ethers'
+
 import {
   getApmInternalAppInfo,
   getAragonOsInternalAppInfo,

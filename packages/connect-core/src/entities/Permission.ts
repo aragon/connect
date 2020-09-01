@@ -1,7 +1,7 @@
+import { PermissionData, ParamData } from '../types'
 import App from './App'
 import Organization from './Organization'
 import Role from './Role'
-import { PermissionData, ParamData } from '../types'
 import IOrganizationConnector from '../connections/IOrganizationConnector'
 
 export default class Permission implements PermissionData {

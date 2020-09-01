@@ -1,4 +1,4 @@
-import Organization from './Organization'
+import { resolveMetadata, resolveManifest } from '../utils/metadata'
 import {
   AragonArtifact,
   AragonArtifactRole,
@@ -6,7 +6,7 @@ import {
   Metadata,
   RepoData,
 } from '../types'
-import { resolveMetadata, resolveManifest } from '../utils/metadata'
+import Organization from './Organization'
 
 export default class Repo {
   #metadata!: Metadata

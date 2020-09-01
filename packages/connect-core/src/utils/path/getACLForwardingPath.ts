@@ -1,11 +1,11 @@
 import { Address } from '@aragon/connect-types'
 import { providers as ethersProviders } from 'ethers'
 
-import App from '../../entities/App'
-import ForwardingPath from '../../entities/ForwardingPath'
 import { getForwardingPath } from './getForwardingPath'
 import { findMethodAbiFragment } from '../abi'
 import { findAppMethodFromSignature } from '../app'
+import App from '../../entities/App'
+import ForwardingPath from '../../entities/ForwardingPath'
 
 /**
  * Get the permission manager for an `app`'s and `role`.

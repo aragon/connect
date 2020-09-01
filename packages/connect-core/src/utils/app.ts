@@ -21,18 +21,18 @@ function findAppMethod(
   methodTestFn: any,
   { allowDeprecated = true } = {}
 ): AppMethod | undefined {
-  const { deprecatedMethods, methods } = app || {}
+  const { deprecatedFunctions, functions } = app.artifact || {}
 
   let method
   // First try to find the method in the current functions
-  if (Array.isArray(methods)) {
-    method = methods.find(methodTestFn)
+  if (Array.isArray(functions)) {
+    method = functions.find(methodTestFn)
   }
 
   if (!method && allowDeprecated) {
     // The current functions didn't have it; try with each deprecated version's functions
     const deprecatedFunctionsFromVersions = Object.values(
-      deprecatedMethods || {}
+      deprecatedFunctions || {}
     )
     if (deprecatedFunctionsFromVersions.every(Array.isArray)) {
       // Flatten all the deprecated functions and find the method

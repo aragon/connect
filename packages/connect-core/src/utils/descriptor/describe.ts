@@ -1,13 +1,13 @@
 import { providers as ethersProviders } from 'ethers'
 
-import App from '../../entities/App'
-import Transaction from '../../entities/Transaction'
 import {
   tryEvaluatingRadspec,
   tryDescribingUpdateAppIntent,
   postprocessRadspecDescription,
 } from '../radspec/index'
 import { StepDecoded, StepDescribed, PostProcessDescription } from '../../types'
+import App from '../../entities/App'
+import Transaction from '../../entities/Transaction'
 
 export async function describeStep(
   step: StepDecoded,

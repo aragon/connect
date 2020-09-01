@@ -1,11 +1,6 @@
 import { Address } from '@aragon/connect-types'
 import { utils as ethersUtils, providers as ethersProvider } from 'ethers'
 
-import App from '../entities/App'
-import ForwardingPath from '../entities/ForwardingPath'
-import { AppOrAddress, StepDecoded } from '../types'
-import { describePath } from './descriptor/index'
-import { getForwardingPath, getACLForwardingPath } from './path/index'
 import { addressesEqual, normalizeAddress } from './address'
 import { normalizeApp } from './app'
 import { createDirectTransaction } from './transactions'
@@ -14,6 +9,10 @@ import {
   isKernelAppCodeNamespace,
   isKernelSetAppIntent,
 } from './kernel'
+import { getForwardingPath, getACLForwardingPath } from './path/index'
+import { AppOrAddress, StepDecoded } from '../types'
+import App from '../entities/App'
+import ForwardingPath from '../entities/ForwardingPath'
 
 export async function organizationIntent(
   sender: Address,
@@ -23,7 +22,7 @@ export async function organizationIntent(
   installedApps: App[],
   provider: ethersProvider.Provider
 ): Promise<ForwardingPath | undefined> {
-  const acl = installedApps.find((app) => app.appName === 'acl.aragonpm.eth')!
+  const acl = installedApps.find((app) => app.name === 'acl')!
   const destinationAddress = normalizeAddress(destination)
 
   // TODO: Add Disputable Forwarding Path
@@ -69,9 +68,9 @@ export async function organizationIntent(
     return new ForwardingPath(
       {
         destination,
-        description: await describePath([tx], installedApps, provider),
         transactions: [tx],
       },
+      installedApps,
       provider
     )
   } catch (_) {
@@ -87,7 +86,7 @@ export async function appIntent(
   installedApps: App[],
   provider: ethersProvider.Provider
 ): Promise<ForwardingPath | undefined> {
-  const acl = installedApps.find((app) => app.appName === 'acl.aragonpm.eth')!
+  const acl = installedApps.find((app) => app.name === 'acl')!
 
   // TODO: Add Disputable Forwarding Path
   if (addressesEqual(app.address, acl.address)) {
@@ -119,9 +118,7 @@ export function filterAndDecodeAppUpgradeIntents(
   intents: StepDecoded[],
   installedApps: App[]
 ): ethersUtils.Result[] {
-  const kernelApp = installedApps.find(
-    (app) => app.appName === 'kernel.aragonpm.eth'
-  )!
+  const kernelApp = installedApps.find((app) => app.name === 'kernel')!
 
   return (
     intents

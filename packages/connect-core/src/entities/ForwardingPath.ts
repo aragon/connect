@@ -1,6 +1,5 @@
 import { providers as ethersProviders } from 'ethers'
 
-import Transaction from './Transaction'
 import { buildApprovePretransaction } from '../utils/transactions'
 import {
   ForwardingPathData,
@@ -8,18 +7,26 @@ import {
   StepDescribed,
   TokenData,
 } from '../types'
-import ForwardingPathDescription from '../utils/descriptor'
+import ForwardingPathDescription, {
+  describePath,
+} from '../utils/descriptor/index'
+import App from './App'
+import Transaction from './Transaction'
 
 export default class ForwardingPath {
+  #apps: App[]
   #provider: ethersProviders.Provider
   readonly destination: AppOrAddress
-  readonly description: StepDescribed[]
   readonly transactions: Transaction[]
 
-  constructor(data: ForwardingPathData, provider: ethersProviders.Provider) {
+  constructor(
+    data: ForwardingPathData,
+    apps: App[],
+    provider: ethersProviders.Provider
+  ) {
+    this.#apps = apps
     this.#provider = provider
     this.destination = data.destination
-    this.description = data.description
     this.transactions = data.transactions
   }
 
@@ -33,8 +40,19 @@ export default class ForwardingPath {
   }
 
   // Return a description of the forwarding path, to be rendered.
-  describe(): ForwardingPathDescription {
-    return new ForwardingPathDescription(this.description)
+  async describe(): Promise<ForwardingPathDescription> {
+    let description: StepDescribed[] = []
+    if (this.transactions.length > 0) {
+      try {
+        description = await describePath(
+          this.transactions,
+          this.#apps,
+          this.#provider
+        )
+      } catch (_) {}
+    }
+
+    return new ForwardingPathDescription(description)
   }
 
   async applyApprovePretransaction(tokenData: TokenData) {

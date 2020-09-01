@@ -7,12 +7,6 @@ import {
 } from '@aragon/connect-types'
 import { utils as ethersUtils } from 'ethers'
 
-import {
-  ConnectionContext,
-  AppOrAddress,
-  PathOptions,
-  PostProcessDescription,
-} from '../types'
 import ForwardingPathDescription, {
   decodeForwardingPath,
   describePath,
@@ -20,6 +14,12 @@ import ForwardingPathDescription, {
 } from '../utils/descriptor/index'
 import { organizationIntent } from '../utils/intent'
 import { toArrayEntry } from '../utils/misc'
+import {
+  ConnectionContext,
+  AppOrAddress,
+  PathOptions,
+  PostProcessDescription,
+} from '../types'
 import App from './App'
 import ForwardingPath from './ForwardingPath'
 import Permission from './Permission'
@@ -163,9 +163,10 @@ export default class Organization {
    * @param  {string} destination Address of the external contract
    * @param  {object} methodAbiFragment ABI fragment of method to invoke
    * @param  {Array<*>} params
-   * @return {Promise<ForwardingPath>} An array of Ethereum transactions that describe each step in the path.
-   *   If the destination is a non-installed contract, always results in an array containing a
-   *   single transaction.
+   * @param  {Object} options
+   * @return {Promise<ForwardingPath>} An object that represents the forwarding path corresponding to an action.
+   *   If the destination is a non-installed contract, always results in a
+   *   single step transaction.
    */
   async intent(
     destination: AppOrAddress,
@@ -192,10 +193,9 @@ export default class Organization {
     )
   }
 
-  // async intentBasket() {}
+  //////// DESCRIPTIONS /////////
 
-  //////// SCRIPTS /////////
-
+  // Return a description of the forwarding path encoded on the evm script
   async describeScript(script: string): Promise<ForwardingPathDescription> {
     const installedApps = await this.apps()
 
@@ -224,8 +224,7 @@ export default class Organization {
     return new ForwardingPathDescription(describedSteps)
   }
 
-  ///// TRANSACTIONS //////
-
+  // Try to describe a single transaction using Radspec on the context of the organization
   async describeTransaction(
     transaction: Transaction
   ): Promise<PostProcessDescription> {

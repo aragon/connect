@@ -1,8 +1,8 @@
 import { addressesEqual, ANY_ENTITY } from '../address'
 import { getKernelNamespace } from '../kernel'
+import { Annotation, PostProcessDescription } from '../../types'
 import App from '../../entities/App'
 import Role from '../../entities/Role'
-import { Annotation, PostProcessDescription } from '../../types'
 
 interface CompiledTokens {
   description: string[]
@@ -73,7 +73,11 @@ export async function postprocessRadspecDescription(
 
     if (app) {
       // return the entire app as it contains APM package details
-      return [input, `“${app.appName}”`, { type: 'apmPackage', value: app }]
+      return [
+        input,
+        `“${app.artifact.appName}”`,
+        { type: 'apmPackage', value: app },
+      ]
     }
 
     const namespace = getKernelNamespace(input)

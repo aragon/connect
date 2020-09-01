@@ -4,22 +4,21 @@ import {
   utils as ethersUtils,
 } from 'ethers'
 
-import Organization from './Organization'
-import Repo from './Repo'
-import Role from './Role'
+import { appIntent } from '../utils/intent'
+import { resolveManifest, resolveArtifact } from '../utils/metadata'
 import {
   Abi,
-  AppMethod,
   AragonArtifact,
   AragonManifest,
   Metadata,
   AppData,
   PathOptions,
 } from '../types'
-import { appIntent } from '../utils/intent'
-import { resolveManifest, resolveArtifact } from '../utils/metadata'
-import IOrganizationConnector from '../connections/IOrganizationConnector'
 import ForwardingPath from './ForwardingPath'
+import Organization from './Organization'
+import Repo from './Repo'
+import Role from './Role'
+import IOrganizationConnector from '../connections/IOrganizationConnector'
 
 // TODO:
 // [ ] (ipfs) contentUrl 	String 	The HTTP URL of the app content. Uses the IPFS HTTP provider. E.g. http://gateway.ipfs.io/ipfs/QmdLEDDfi…/ (ContentUri passing through the resolver)
@@ -72,10 +71,6 @@ export default class App {
     return this.organization.connection.ethersProvider
   }
 
-  get appName(): string {
-    return this.artifact.appName
-  }
-
   get artifact(): AragonArtifact {
     return this.#metadata[0] as AragonArtifact
   }
@@ -88,12 +83,21 @@ export default class App {
     return this.artifact.abi
   }
 
-  get methods(): AppMethod[] {
-    return this.artifact.functions
+  async repo(): Promise<Repo> {
+    return this.orgConnector().repoForApp(this.organization, this.address)
   }
 
-  get deprecatedMethods(): { [version: string]: AppMethod[] } {
-    return this.artifact.deprecatedFunctions
+  async roles(): Promise<Role[]> {
+    return this.orgConnector().rolesForAddress(this.organization, this.address)
+  }
+
+  toJSON() {
+    return {
+      ...this,
+      // Organization creates a cycling reference that makes
+      // the object impossible to pass through JSON.stringify().
+      organization: null,
+    }
   }
 
   contract(): Contract {
@@ -115,12 +119,13 @@ export default class App {
   }
 
   /**
-   * Calculate the transaction path for a transaction to `destination`
+   * Calculate the forwarding path for an app action
    * that invokes `methodSignature` with `params`.
    *
    * @param  {string} methodSignature
    * @param  {Array<*>} params
-   * @return {Promise<Array<Object>>} An array of Ethereum transactions that describe each step in the path
+   * @param  {Object} options
+   * @return {Promise<ForwardingPath>} An object that represents the forwarding path corresponding to an action.
    */
   async intent(
     methodSignature: string,
@@ -146,22 +151,5 @@ export default class App {
       installedApps,
       this.orgProvider()
     )
-  }
-
-  async repo(): Promise<Repo> {
-    return this.orgConnector().repoForApp(this.organization, this.address)
-  }
-
-  async roles(): Promise<Role[]> {
-    return this.orgConnector().rolesForAddress(this.organization, this.address)
-  }
-
-  toJSON() {
-    return {
-      ...this,
-      // Organization creates a cycling reference that makes
-      // the object impossible to pass through JSON.stringify().
-      organization: null,
-    }
   }
 }

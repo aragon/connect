@@ -1,7 +1,7 @@
+import { resolveArtifact } from '../utils/metadata'
+import { AragonArtifact, Metadata, RoleData } from '../types'
 import Organization from './Organization'
 import Permission from './Permission'
-import { AragonArtifact, Metadata, RoleData } from '../types'
-import { resolveArtifact } from '../utils/metadata'
 
 export default class Role {
   readonly appAddress!: string

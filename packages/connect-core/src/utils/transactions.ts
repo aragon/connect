@@ -6,9 +6,9 @@ import {
 } from 'ethers'
 
 import { erc20ABI, forwarderAbi, forwarderFeeAbi } from './abis'
+import { TokenData } from '../types'
 import App from '../entities/App'
 import Transaction from '../entities/Transaction'
-import { TokenData } from '../types'
 
 export async function createDirectTransaction(
   sender: Address,

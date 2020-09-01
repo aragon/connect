@@ -1,4 +1,10 @@
-import { ForwardingPathDescriptionTree, StepDescribed } from '../../types'
+import { AppOrAddress, StepDescribed } from '../../types'
+
+type ForwardingPathDescriptionTreeEntry =
+  | AppOrAddress
+  | [AppOrAddress, ForwardingPathDescriptionTreeEntry[]]
+
+type ForwardingPathDescriptionTree = ForwardingPathDescriptionTreeEntry[]
 
 export default class ForwardingPathDescription {
   readonly describeSteps: StepDescribed[]
