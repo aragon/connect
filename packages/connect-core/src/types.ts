@@ -27,11 +27,11 @@ export type PathOptions = {
   // The account to sign the transactions with. It is optional
   // when `actAs` has been set with the connection. If not,
   // the address has to be passed.
-  actAs: Address
+  actAs?: Address
 
   // Optionally declare a forwarding path. When not specified,
   // the shortest path is used instead.
-  path: ForwardingPathDeclaration
+  path?: ForwardingPathDeclaration
 }
 
 export interface CallScriptAction {
@@ -127,7 +127,7 @@ export interface TransactionData {
 export interface TokenData {
   address: Address
   value: string
-  spender: Address
+  spender?: Address
 }
 
 ////// METADATA //////

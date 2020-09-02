@@ -70,7 +70,7 @@ export async function buildApprovePretransaction(
   const { address: tokenAddress, value: tokenValue, spender } = tokenData
 
   // Approve the transaction destination unless an spender is passed to approve a different contract
-  const approveSpender = spender || to
+  const approveSpender = spender ?? to
 
   const tokenContract = new Contract(tokenAddress, erc20ABI, provider)
   const balance = await tokenContract.balanceOf(from)

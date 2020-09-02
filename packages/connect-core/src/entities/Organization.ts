@@ -172,9 +172,9 @@ export default class Organization {
     destination: AppOrAddress,
     methodAbiFragment: ethersUtils.FunctionFragment,
     params: any[],
-    options: PathOptions
+    options?: PathOptions
   ): Promise<ForwardingPath | undefined> {
-    const sender = options.actAs || this.connection.actAs
+    const sender = options?.actAs || this.connection.actAs
     if (!sender) {
       throw new Error(
         `No sender address specified. Use 'actAs' option or set one as default on your organization connection.`
@@ -214,7 +214,7 @@ export default class Organization {
     //     return {
     //       ...step,
     //       identifier: app.appId,
-    //       name: app.appName,
+    //       name: app.artifact.appName,
     //     }
     //   }
 

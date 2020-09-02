@@ -25,7 +25,6 @@ export async function organizationIntent(
   const acl = installedApps.find((app) => app.name === 'acl')!
   const destinationAddress = normalizeAddress(destination)
 
-  // TODO: Add Disputable Forwarding Path
   if (addressesEqual(destinationAddress, acl.address)) {
     try {
       return getACLForwardingPath(
@@ -88,7 +87,6 @@ export async function appIntent(
 ): Promise<ForwardingPath | undefined> {
   const acl = installedApps.find((app) => app.name === 'acl')!
 
-  // TODO: Add Disputable Forwarding Path
   if (addressesEqual(app.address, acl.address)) {
     try {
       return getACLForwardingPath(

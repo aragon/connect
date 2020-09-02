@@ -14,6 +14,7 @@ import {
   APM_REGISTRY_NODE,
   OPEN_REGISTRY_NODE,
   HATCH_REGISTRY_NODE,
+  HIVE_REGISTRY_NODE,
 } from '../helpers/constants'
 
 export function handleDeployAPM(event: DeployAPMEvent): void {
@@ -41,6 +42,8 @@ export function handleDeployAPM(event: DeployAPMEvent): void {
     name = 'open.aragonpm.eth'
   } else if (node.toHex() == HATCH_REGISTRY_NODE) {
     name = 'hatch.aragonpm.eth'
+  } else if (node.toHex() == HIVE_REGISTRY_NODE) {
+    name = '1hive.aragonpm.eth'
   }
 
   // create new registry
