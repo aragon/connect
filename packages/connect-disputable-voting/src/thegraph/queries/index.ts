@@ -112,7 +112,7 @@ export const GET_VOTE = (type: string) => gql`
       quietEndingExtensionDuration
       quietEndingSnapshotSupport
       script
-  settledAt
+      settledAt
       executedAt
       isAccepted
     }
