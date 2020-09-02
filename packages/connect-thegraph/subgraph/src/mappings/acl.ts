@@ -19,7 +19,7 @@ import {
 export function handleSetPermission(event: SetPermissionEvent): void {
   const acl = AclContract.bind(event.address)
   const orgAddress = acl.kernel()
-  const orgId = orgAddress.toHex()
+  const orgId = orgAddress.toHexString()
   const org = OrganizationEntity.load(orgId)
 
   const appAddress = event.params.app
@@ -37,7 +37,7 @@ export function handleSetPermission(event: SetPermissionEvent): void {
   if (role == null) {
     role = new RoleEntity(roleId)
     role.roleHash = roleHash
-    role.app = appAddress.toHex()
+    role.app = appAddress.toHexString()
     role.appAddress = appAddress
   }
 
@@ -88,7 +88,7 @@ export function handleChangePermissionManager(
   if (role == null) {
     role = new RoleEntity(roleId)
     role.roleHash = roleHash
-    role.app = appAddress.toHex()
+    role.app = appAddress.toHexString()
     role.appAddress = appAddress
   }
 

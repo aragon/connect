@@ -1,5 +1,3 @@
-import { Bytes, Address } from '@graphprotocol/graph-ts'
-
 import { resolveRepo } from '../helpers/ens'
 
 // Import entity types from the schema
@@ -11,7 +9,6 @@ import {
 } from '../../generated/schema'
 
 // Import templates types
-import { Acl as AclTemplate } from '../../generated/templates'
 import { AppProxyForwarder as AppProxyForwarderContract } from '../../generated/templates/Kernel/AppProxyForwarder'
 import {
   NewAppProxy as NewAppProxyEvent,
@@ -20,15 +17,13 @@ import {
 } from '../../generated/templates/Kernel/Kernel'
 
 import {
-  KERNEL_CORE_APP_ID,
-  KERNEL_DEFAULT_ACL_APP_ID,
   KERNEL_APP_BASES_NAMESPACE,
   KERNEL_CORE_NAMESPACE,
 } from '../helpers/constants'
 
 export function handleNewProxyApp(event: NewAppProxyEvent): void {
   const orgAddress = event.address
-  const orgId = orgAddress.toHex()
+  const orgId = orgAddress.toHexString()
   let org = OrganizationEntity.load(orgId)
 
   const kernel = KernelContract.bind(orgAddress)
@@ -42,15 +37,9 @@ export function handleNewProxyApp(event: NewAppProxyEvent): void {
     org.permissions = []
   }
 
-  const proxy = event.params.proxy.toHex()
-  const appId = event.params.appId.toHex()
+  const proxy = event.params.proxy.toHexString()
+  const appId = event.params.appId.toHexString()
   const isUpgradeable = event.params.isUpgradeable
-
-  // Create ACL template and add Kernel app
-  if (appId == KERNEL_DEFAULT_ACL_APP_ID) {
-    _addKernelApp(orgAddress, kernel, org as OrganizationEntity)
-    AclTemplate.create(event.params.proxy)
-  }
 
   // Create app
   let app = AppEntity.load(proxy)
@@ -85,28 +74,28 @@ export function handleNewProxyApp(event: NewAppProxyEvent): void {
         app.repo = repo.id
         app.repoName = repo.name
         app.repoAddress = repo.address
-	repo.appCount += 1
-	repo.save()
+        repo.appCount += 1
+        repo.save()
       }
     }
+
+    const orgApps = org.apps
+    orgApps.push(app.id)
+    org.apps = orgApps
+
+    app.save()
+    org.save()
   }
-
-  const orgApps = org.apps
-  orgApps.push(app.id)
-  org.apps = orgApps
-
-  app.save()
-  org.save()
 }
 
 export function handleSetApp(event: SetAppEvent): void {
-  const namespace = event.params.namespace.toHex()
+  const namespace = event.params.namespace.toHexString()
   // Update if in the APP_BASE or CORE_BASE namespace
   if (
     namespace == KERNEL_APP_BASES_NAMESPACE ||
     namespace == KERNEL_CORE_NAMESPACE
   ) {
-    const appId = event.params.appId.toHex()
+    const appId = event.params.appId.toHexString()
 
     // Generate implementation id
     const implementationId = namespace.concat('-').concat(appId)
@@ -120,36 +109,4 @@ export function handleSetApp(event: SetAppEvent): void {
 
     implementation.save()
   }
-}
-
-function _addKernelApp(
-  kernelProxyAddress: Address,
-  kernel: KernelContract,
-  org: OrganizationEntity
-): void {
-  // handle kernel implementation
-  const implementationId = KERNEL_CORE_NAMESPACE.concat('-').concat(
-    KERNEL_CORE_APP_ID
-  )
-  let implementation = ImplementationEntity.load(implementationId)
-  if (implementation == null) {
-    implementation = new ImplementationEntity(implementationId)
-    implementation.address = kernel.getApp(
-      Bytes.fromHexString(KERNEL_CORE_NAMESPACE) as Bytes,
-      Bytes.fromHexString(KERNEL_CORE_APP_ID) as Bytes
-    )
-    implementation.save()
-  }
-
-  // handle kernel implementation
-  const app = new AppEntity(kernelProxyAddress.toHex())
-  app.address = kernelProxyAddress
-  app.appId = KERNEL_CORE_APP_ID
-  app.implementation = implementationId
-
-  const orgApps = org.apps
-  orgApps.push(app.id)
-  org.apps = orgApps
-
-  app.save()
 }

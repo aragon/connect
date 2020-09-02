@@ -65,6 +65,7 @@ type Organization @entity {
   "Kernel address"
   id: ID!
   address: Bytes!
+  createdAt: BigInt!
   "Acl address"
   acl: Bytes!
   "Address of the recovery Vault instance"

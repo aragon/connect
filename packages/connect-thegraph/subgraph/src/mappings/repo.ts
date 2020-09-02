@@ -15,7 +15,7 @@ import {
 } from '../../generated/templates/Repo/Repo'
 
 export function handleNewVersion(event: NewVersionEvent): void {
-  const repoId = event.address.toHex()
+  const repoId = event.address.toHexString()
   const repo = RepoEntity.load(repoId)
 
   if (repo !== null) {
@@ -33,7 +33,7 @@ export function handleNewVersion(event: NewVersionEvent): void {
       version.repoNamehash = repo.node
 
       const repoContract = RepoContract.bind(event.address)
-      let callVersionResult = repoContract.try_getByVersionId(
+      const callVersionResult = repoContract.try_getByVersionId(
         event.params.versionId
       )
       if (callVersionResult.reverted) {
