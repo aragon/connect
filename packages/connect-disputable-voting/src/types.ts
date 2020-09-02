@@ -41,6 +41,7 @@ export interface VoteData {
   quietEndingExtensionDuration: string
   quietEndingSnapshotSupport: string
   script: string
+  settledAt: string
   executedAt: string
   tokenDecimals: string
   isAccepted: boolean
