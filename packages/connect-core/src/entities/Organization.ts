@@ -157,9 +157,7 @@ export default class Organization {
       this.connection.ethersProvider
     )
 
-    // TODO: Add decorators
-
-    return new ForwardingPathDescription(describedSteps)
+    return new ForwardingPathDescription(describedSteps, installedApps)
   }
 
   // Try to describe a single transaction using Radspec on the context of the organization

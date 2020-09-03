@@ -6,6 +6,7 @@ import {
   AppOrAddress,
   StepDescribed,
   TokenData,
+  TransactionData,
 } from '../types'
 import ForwardingPathDescription, {
   describePath,
@@ -14,17 +15,17 @@ import App from './App'
 import Transaction from './Transaction'
 
 export default class ForwardingPath {
-  #apps: App[]
+  #installedApps: App[]
   #provider: ethersProviders.Provider
   readonly destination: AppOrAddress
   readonly transactions: Transaction[]
 
   constructor(
     data: ForwardingPathData,
-    apps: App[],
+    installedApps: App[],
     provider: ethersProviders.Provider
   ) {
-    this.#apps = apps
+    this.#installedApps = installedApps
     this.#provider = provider
     this.destination = data.destination
     this.transactions = data.transactions
@@ -46,23 +47,29 @@ export default class ForwardingPath {
       try {
         description = await describePath(
           this.transactions,
-          this.#apps,
+          this.#installedApps,
           this.#provider
         )
       } catch (_) {}
     }
 
-    return new ForwardingPathDescription(description)
+    return new ForwardingPathDescription(description, this.#installedApps)
   }
 
-  async applyApprovePretransaction(tokenData: TokenData) {
-    const pretransaction = await buildApprovePretransaction(
-      this.transactions[0],
-      tokenData,
-      this.#provider
-    )
-    if (pretransaction) {
-      this.transactions.push(pretransaction)
+  async applyPretransaction(
+    transaction: TransactionData,
+    tokenData: TokenData
+  ) {
+    let pretransaction
+    if (tokenData) {
+      pretransaction = await buildApprovePretransaction(
+        this.transactions[0],
+        tokenData,
+        this.#provider
+      )
     }
+    pretransaction = new Transaction(transaction)
+
+    this.transactions.push(pretransaction)
   }
 }

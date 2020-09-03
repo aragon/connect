@@ -1,4 +1,5 @@
 import { AppOrAddress, StepDescribed } from '../../types'
+import App from '../../entities/App'
 
 type ForwardingPathDescriptionTreeEntry =
   | AppOrAddress
@@ -7,14 +8,26 @@ type ForwardingPathDescriptionTreeEntry =
 type ForwardingPathDescriptionTree = ForwardingPathDescriptionTreeEntry[]
 
 export default class ForwardingPathDescription {
-  readonly describeSteps: StepDescribed[]
+  #installedApps: App[]
+  readonly describedSteps: StepDescribed[]
 
-  constructor(describeSteps: StepDescribed[]) {
-    this.describeSteps = describeSteps
+  constructor(describedSteps: StepDescribed[], installedApps: App[]) {
+    this.#installedApps = installedApps
+    this.describedSteps = describedSteps
   }
 
   // Return a tree that can get used to render the path.
   tree(): ForwardingPathDescriptionTree {
+    const docoratedStep = this.describedSteps.map(async (step) => {
+      const app = this.#installedApps.find((app) => app.address === step.to)
+
+      if (app) {
+        return {
+          ...step,
+          app,
+        }
+      }
+    })
     return []
   }
 
