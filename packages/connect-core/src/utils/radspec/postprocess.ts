@@ -19,7 +19,7 @@ type ProcessToken = [string, string, Annotation]
  */
 export async function postprocessRadspecDescription(
   description: string,
-  apps: App[]
+  installedApps: App[]
 ): Promise<PostProcessDescription> {
   const addressRegexStr = '0x[a-fA-F0-9]{40}'
   const addressRegex = new RegExp(`^${addressRegexStr}$`)
@@ -39,9 +39,10 @@ export async function postprocessRadspecDescription(
   }
 
   const roles: Role[] = []
-  for (const app of apps) {
+
+  for await (const app of installedApps) {
     const appRoles = await app.roles()
-    roles.concat(appRoles)
+    appRoles.forEach((role) => roles.push(role))
   }
 
   const annotateAddress = (input: string): ProcessToken => {
@@ -53,7 +54,9 @@ export async function postprocessRadspecDescription(
       ]
     }
 
-    const app = apps.find(({ address }) => addressesEqual(address, input))
+    const app = installedApps.find(({ address }) =>
+      addressesEqual(address, input)
+    )
     if (app) {
       const replacement = `${app.name}${app.appId ? ` (${app.appId})` : ''}`
       return [input, `“${replacement}”`, { type: 'app', value: app }]
@@ -69,7 +72,7 @@ export async function postprocessRadspecDescription(
       return [input, `“${role.name}”`, { type: 'role', value: role }]
     }
 
-    const app = apps.find(({ appId }) => appId === input)
+    const app = installedApps.find(({ appId }) => appId === input)
 
     if (app) {
       // return the entire app as it contains APM package details

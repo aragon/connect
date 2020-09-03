@@ -17,14 +17,16 @@ interface FoundMethod {
  */
 export async function tryEvaluatingRadspec(
   intent: StepDecoded,
-  apps: App[],
+  installedApps: App[],
   provider: ethersProviders.Provider // Decorated intent with description, if one could be made
 ): Promise<StepDescribed> {
-  const app = apps.find((app) => addressesEqual(app.address, intent.to))
+  const app = installedApps.find((app) =>
+    addressesEqual(app.address, intent.to)
+  )
 
   // If the intent matches an installed app, use only that app to search for a
   // method match, otherwise fallback to searching all installed apps
-  const appsToSearch = app ? [app] : apps
+  const appsToSearch = app ? [app] : installedApps
   const foundMethod = appsToSearch.reduce<FoundMethod | undefined>(
     (found, app) => {
       if (found) {
