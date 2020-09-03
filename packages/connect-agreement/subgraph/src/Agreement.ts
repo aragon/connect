@@ -1,6 +1,8 @@
+import { ethereum, BigInt, Address } from '@graphprotocol/graph-ts'
+
 import { ERC20 } from '../generated/schema'
 import { ERC20 as ERC20Contract } from '../generated/templates/Agreement/ERC20'
-import { ethereum, BigInt, Address } from '@graphprotocol/graph-ts'
+import { createAgreementStakingMovement } from './Staking'
 import { Agreement, Action, Signature, Version, Disputable, Challenge, Dispute, Evidence, Signer, CollateralRequirement, ArbitratorFee } from '../generated/schema'
 import {
   Agreement as AgreementContract,
@@ -91,11 +93,11 @@ export function handleActionSubmitted(event: ActionSubmitted): void {
   action.context = actionData.value6
   action.createdAt = event.block.timestamp
   action.save()
+
+  createAgreementStakingMovement(event.address, event.params.actionId, 'new', event)
 }
 
 export function handleActionClosed(event: ActionClosed): void {
-  const agreementApp = AgreementContract.bind(event.address)
-
   const action = Action.load(buildActionId(event.address, event.params.actionId))!
   action.closed = true
   action.save()
@@ -125,12 +127,14 @@ export function handleActionChallenged(event: ActionChallenged): void {
   const challengeArbitratorFeesData = agreementApp.getChallengeArbitratorFees(event.params.challengeId)
   createArbitratorFee(challengerArbitratorFeeId, challengeArbitratorFeesData.value2, challengeArbitratorFeesData.value3)
   challenge.challengerArbitratorFee = challengerArbitratorFeeId
-
   challenge.save()
+
+  createAgreementStakingMovement(event.address, event.params.actionId, 'challenged', event)
 }
 
 export function handleActionSettled(event: ActionSettled): void {
   updateChallengeState(event.address, event.params.challengeId)
+  createAgreementStakingMovement(event.address, event.params.actionId, 'settled', event)
 }
 
 export function handleActionDisputed(event: ActionDisputed): void {
@@ -160,16 +164,19 @@ export function handleActionDisputed(event: ActionDisputed): void {
 export function handleActionAccepted(event: ActionAccepted): void {
   updateChallengeState(event.address, event.params.challengeId)
   updateDisputeState(event.address, event.params.challengeId)
+  createAgreementStakingMovement(event.address, event.params.actionId, 'accepted', event)
 }
 
 export function handleActionVoided(event: ActionVoided): void {
   updateChallengeState(event.address, event.params.challengeId)
   updateDisputeState(event.address, event.params.challengeId)
+  createAgreementStakingMovement(event.address, event.params.actionId, 'voided', event)
 }
 
 export function handleActionRejected(event: ActionRejected): void {
   updateChallengeState(event.address, event.params.challengeId)
   updateDisputeState(event.address, event.params.challengeId)
+  createAgreementStakingMovement(event.address, event.params.actionId, 'rejected', event)
 }
 
 export function handleEvidenceSubmitted(event: EvidenceSubmitted): void {
@@ -256,7 +263,7 @@ function createArbitratorFee(id: string, feeToken: Address, feeAmount: BigInt): 
   arbitratorFee.save()
 }
 
-function buildERC20(address: Address): string {
+export function buildERC20(address: Address): string {
   const id = address.toHexString()
   let token = ERC20.load(id)
 
@@ -280,7 +287,7 @@ function buildDisputableId(agreement: Address, disputable: Address): string {
   return agreement.toHexString() + "-disputable-" + disputable.toHexString()
 }
 
-function buildActionId(agreement: Address, actionId: BigInt): string {
+export function buildActionId(agreement: Address, actionId: BigInt): string {
   return agreement.toHexString() + "-action-" + actionId.toString()
 }
 
@@ -300,7 +307,7 @@ function buildCollateralRequirementId(agreement: Address, disputable: Address, c
   return buildDisputableId(agreement, disputable) + "-collateral-requirement-" + collateralRequirementId.toString()
 }
 
-export function buildId(event: ethereum.Event): string {
+function buildId(event: ethereum.Event): string {
   return event.transaction.hash.toHexString() + event.logIndex.toString()
 }
 

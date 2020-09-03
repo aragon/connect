@@ -114,6 +114,44 @@ type CollateralRequirement @entity {
   challengeAmount: BigInt!
 }
 
+type Staking @entity {
+  id: ID!
+  user: Bytes!
+  token: ERC20!
+  available: BigInt!
+  locked: BigInt!
+  challenged: BigInt!
+  total: BigInt!
+  movements: [StakingMovement!] @derivedFrom(field: "staking")
+}
+
+type StakingMovement @entity {
+  id: ID!
+  staking: Staking!
+  amount: BigInt!
+  agreement: Agreement
+  action: Action
+  actionState: StakingActionState!
+  collateralState: StakingCollateralState!
+  createdAt: BigInt!
+}
+
+enum StakingCollateralState {
+  Available,
+  Locked,
+  Challenged,
+  Slashed,
+  Withdrawn
+}
+
+enum StakingActionState {
+  NA,
+  Scheduled,
+  Challenged,
+  Cancelled,
+  Completed
+}
+
 type ERC20 @entity {
   id: ID!
   name: String!
