@@ -19,7 +19,8 @@ type ProcessToken = [string, string, Annotation]
  */
 export async function postprocessRadspecDescription(
   description: string,
-  installedApps: App[]
+  installedApps: App[],
+  roles: Role[]
 ): Promise<PostProcessDescription> {
   const addressRegexStr = '0x[a-fA-F0-9]{40}'
   const addressRegex = new RegExp(`^${addressRegexStr}$`)
@@ -36,13 +37,6 @@ export async function postprocessRadspecDescription(
 
   if (tokens.length < 1) {
     return { description }
-  }
-
-  const roles: Role[] = []
-
-  for await (const app of installedApps) {
-    const appRoles = await app.roles()
-    appRoles.forEach((role) => roles.push(role))
   }
 
   const annotateAddress = (input: string): ProcessToken => {

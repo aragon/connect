@@ -7,11 +7,23 @@ import {
 } from '../radspec/index'
 import { StepDecoded, StepDescribed, PostProcessDescription } from '../../types'
 import App from '../../entities/App'
+import Role from '../../entities/Role'
 import Transaction from '../../entities/Transaction'
+
+async function getRolesForApps(apps: App[]): Promise<Role[]> {
+  const roles: Role[] = []
+  for await (const app of apps) {
+    const appRoles = await app.roles()
+    appRoles.forEach((role) => roles.push(role))
+  }
+
+  return roles
+}
 
 export async function describeStep(
   step: StepDecoded,
   installedApps: App[],
+  roles: Role[],
   provider: ethersProviders.Provider
 ): Promise<StepDescribed> {
   let decoratedStep
@@ -38,7 +50,8 @@ export async function describeStep(
         annotatedDescription,
       } = await postprocessRadspecDescription(
         decoratedStep.description,
-        installedApps
+        installedApps,
+        roles
       )
       decoratedStep.description = description
       decoratedStep.annotatedDescription = annotatedDescription ?? []
@@ -65,8 +78,9 @@ export async function describePath(
   installedApps: App[],
   provider: ethersProviders.Provider
 ): Promise<StepDescribed[]> {
+  const roles = await getRolesForApps(installedApps)
   return Promise.all(
-    path.map(async (step) => describeStep(step, installedApps, provider))
+    path.map(async (step) => describeStep(step, installedApps, roles, provider))
   )
 }
 
@@ -90,10 +104,13 @@ export async function describeTransaction(
       provider
     )
 
+    const roles = await getRolesForApps(installedApps)
+
     if (description) {
       return postprocessRadspecDescription(
         description.description,
-        installedApps
+        installedApps,
+        roles
       )
     }
   } catch (err) {
