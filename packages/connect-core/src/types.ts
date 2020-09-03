@@ -38,10 +38,12 @@ export interface CallScriptAction {
   to: string
   data: string
 }
+
 export interface Annotation {
   type: string
   value: any
 }
+
 export interface PostProcessDescription {
   description: string
   annotatedDescription?: Annotation[]

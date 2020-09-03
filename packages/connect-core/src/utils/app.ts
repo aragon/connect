@@ -1,20 +1,10 @@
 import { utils as ethersUtils } from 'ethers'
 
-import { AppMethod, AppOrAddress } from '../types'
+import { AppMethod } from '../types'
 import App from '../entities/App'
 
 export const apmAppId = (appName: string): string =>
   ethersUtils.namehash(`${appName}.aragonpm.eth`)
-
-export function normalizeApp(
-  appOrAddres: AppOrAddress,
-  installedApps: App[]
-): App | undefined {
-  if (typeof appOrAddres === 'string') {
-    return installedApps.find((app) => app.address === appOrAddres)
-  }
-  return appOrAddres
-}
 
 function findAppMethod(
   app: App,

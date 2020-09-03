@@ -15,17 +15,7 @@ export async function describeStep(
   provider: ethersProviders.Provider
 ): Promise<StepDescribed> {
   let decoratedStep
-  // TODO: Add once we support intent Basket
-  // if (Array.isArray(step)) {
-  //   // Intent basket with multiple transactions in a single callscript
-  //   // First see if the step can be handled with a specialized descriptor
-  //   try {
-  //     decoratedStep = await tryDescribingUpgradeOrganizationBasket(step)
-  //   } catch (err) {}
-
-  //   // If the step wasn't handled, just individually describe each of the transactions
-  //   return decoratedStep || describePath(step, installedApps, provider)
-  // }
+  // TODO: Add intent Basket support
 
   // Single transaction step
   // First see if the step can be handled with a specialized descriptor

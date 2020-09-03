@@ -5,23 +5,15 @@ import {
   SubscriptionHandler,
   SubscriptionCallback,
 } from '@aragon/connect-types'
-import { utils as ethersUtils } from 'ethers'
 
 import ForwardingPathDescription, {
   decodeForwardingPath,
   describePath,
   describeTransaction,
 } from '../utils/descriptor/index'
-import { organizationIntent } from '../utils/intent'
 import { toArrayEntry } from '../utils/misc'
-import {
-  ConnectionContext,
-  AppOrAddress,
-  PathOptions,
-  PostProcessDescription,
-} from '../types'
+import { ConnectionContext, PostProcessDescription } from '../types'
 import App from './App'
-import ForwardingPath from './ForwardingPath'
 import Permission from './Permission'
 import Transaction from './Transaction'
 
@@ -153,46 +145,6 @@ export default class Organization {
     return this.connection.orgConnector.onPermissionsForOrg(this, callback)
   }
 
-  ///////// INTENTS ///////////
-
-  /**
-   * Calculate the transaction path for a transaction to an external `destination`
-   * (not the currently running app) that invokes a method matching the
-   * `methodAbiFragment` with `params`.
-   *
-   * @param  {string} destination Address of the external contract
-   * @param  {object} methodAbiFragment ABI fragment of method to invoke
-   * @param  {Array<*>} params
-   * @param  {Object} options
-   * @return {Promise<ForwardingPath>} An object that represents the forwarding path corresponding to an action.
-   *   If the destination is a non-installed contract, always results in a
-   *   single step transaction.
-   */
-  async intent(
-    destination: AppOrAddress,
-    methodAbiFragment: ethersUtils.FunctionFragment,
-    params: any[],
-    options?: PathOptions
-  ): Promise<ForwardingPath | undefined> {
-    const sender = options?.actAs || this.connection.actAs
-    if (!sender) {
-      throw new Error(
-        `No sender address specified. Use 'actAs' option or set one as default on your organization connection.`
-      )
-    }
-
-    const installedApps = await this.apps()
-
-    return organizationIntent(
-      sender,
-      destination,
-      methodAbiFragment,
-      params,
-      installedApps,
-      this.connection.ethersProvider
-    )
-  }
-
   //////// DESCRIPTIONS /////////
 
   // Return a description of the forwarding path encoded on the evm script
@@ -206,20 +158,6 @@ export default class Organization {
     )
 
     // TODO: Add decorators
-    // // Add name and identifier decoration
-    // const docoratedStep = describedSteps.map(async (step) => {
-    //   const app = installedApps.find((app) => app.address === step.to)
-
-    //   if (app) {
-    //     return {
-    //       ...step,
-    //       identifier: app.appId,
-    //       name: app.artifact.appName,
-    //     }
-    //   }
-
-    //   return step
-    // })
 
     return new ForwardingPathDescription(describedSteps)
   }

@@ -99,34 +99,4 @@ export async function tryDescribingUpdateAppIntent(
   }
 }
 
-// TODO: Add once we support Intent Basket
-// /**
-//  * Attempt to parse a complete organization upgrade intent
-//  *
-//  * @param  {Array<Object>} intents intent basket
-//  * @param  {Object} wrapper
-//  * @return {Promise<Object>} Decorated intent with description, if one could be made
-//  */
-// export async function tryDescribingUpgradeOrganizationBasket(intents, wrapper) {
-//   const upgradedKnownAppIds = (
-//     await filterAndDecodeAppUpgradeIntents(intents, wrapper)
-//   )
-//     .map(({ appId }) => appId)
-//     // Take intersection with knownAppIds
-//     .filter((appId) => knownAppIds.includes(appId))
-
-//   if (
-//     // All intents are for upgrading known apps
-//     intents.length === upgradedKnownAppIds.length &&
-//     // All known apps are being upgraded
-//     knownAppIds.length === upgradedKnownAppIds.length
-//   ) {
-//     return {
-//       description: 'Upgrade organization to Aragon 0.8 Camino',
-//       from: intents[0].from,
-//       to: intents[0].to,
-//     }
-//   }
-// }
-
 export { postprocessRadspecDescription } from './postprocess'
