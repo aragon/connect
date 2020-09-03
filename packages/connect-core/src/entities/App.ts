@@ -130,18 +130,16 @@ export default class App {
   async intent(
     methodSignature: string,
     params: any[],
-    options?: PathOptions
-  ): Promise<ForwardingPath | undefined> {
-    const sender = options?.actAs || this.organization.connection.actAs
+    options: PathOptions
+  ): Promise<ForwardingPath> {
+    const sender = options.actAs || this.organization.connection.actAs
     if (!sender) {
       throw new Error(
         `No sender address specified. Use 'actAs' option or set one as default on your organization connection.`
       )
     }
 
-    const installedApps = await this.orgConnector().appsForOrg(
-      this.organization
-    )
+    const installedApps = await this.organization.apps()
 
     return appIntent(
       sender,

@@ -81,7 +81,7 @@ export interface AppData {
 }
 
 export interface ForwardingPathData {
-  destination: AppOrAddress
+  destination: App
   transactions: Transaction[]
 }
 

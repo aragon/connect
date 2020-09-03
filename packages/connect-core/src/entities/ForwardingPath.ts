@@ -3,7 +3,6 @@ import { providers as ethersProviders } from 'ethers'
 import { buildApprovePretransaction } from '../utils/transactions'
 import {
   ForwardingPathData,
-  AppOrAddress,
   StepDescribed,
   TokenData,
   TransactionData,
@@ -14,10 +13,19 @@ import ForwardingPathDescription, {
 import App from './App'
 import Transaction from './Transaction'
 
+const normalizePretransaction = (
+  pretransaction: Transaction | TransactionData
+): Transaction => {
+  if (pretransaction instanceof Transaction) {
+    return pretransaction
+  }
+  return new Transaction(pretransaction)
+}
+
 export default class ForwardingPath {
   #installedApps: App[]
   #provider: ethersProviders.Provider
-  readonly destination: AppOrAddress
+  readonly destination: App
   readonly transactions: Transaction[]
 
   constructor(
@@ -56,20 +64,20 @@ export default class ForwardingPath {
     return new ForwardingPathDescription(description, this.#installedApps)
   }
 
-  async applyPretransaction(
-    transaction: TransactionData,
+  // Build a token allowance pretransactionn
+  async buildApprovePretransaction(
     tokenData: TokenData
-  ) {
-    let pretransaction
-    if (tokenData) {
-      pretransaction = await buildApprovePretransaction(
-        this.transactions[0],
-        tokenData,
-        this.#provider
-      )
-    }
-    pretransaction = new Transaction(transaction)
+  ): Promise<Transaction | undefined> {
+    return buildApprovePretransaction(
+      this.transactions[0],
+      tokenData,
+      this.#provider
+    )
+  }
 
+  // Apply a pretransaction to the path
+  applyPretransaction(pretransaction: Transaction | TransactionData): void {
+    normalizePretransaction(pretransaction)
     this.transactions.push(pretransaction)
   }
 }

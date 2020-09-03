@@ -14,15 +14,15 @@ import ForwardingPath from '../entities/ForwardingPath'
 
 export async function appIntent(
   sender: Address,
-  app: App,
+  destinationApp: App,
   methodSignature: string,
   params: any[],
   installedApps: App[],
   provider: ethersProvider.Provider
-): Promise<ForwardingPath | undefined> {
+): Promise<ForwardingPath> {
   const acl = installedApps.find((app) => app.name === 'acl')!
 
-  if (addressesEqual(app.address, acl.address)) {
+  if (addressesEqual(destinationApp.address, acl.address)) {
     try {
       return getACLForwardingPath(
         sender,
@@ -33,13 +33,21 @@ export async function appIntent(
         provider
       )
     } catch (_) {
-      return undefined
+      // emtpy path
+      return new ForwardingPath(
+        {
+          destination: destinationApp,
+          transactions: [],
+        },
+        installedApps,
+        provider
+      )
     }
   }
 
   return getForwardingPath(
     sender,
-    app,
+    destinationApp,
     methodSignature,
     params,
     installedApps,

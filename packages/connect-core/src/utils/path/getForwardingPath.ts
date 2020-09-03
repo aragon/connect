@@ -36,7 +36,7 @@ export async function getForwardingPath(
 
   return new ForwardingPath(
     {
-      destination: destinationApp.address,
+      destination: destinationApp,
       transactions,
     },
     installedApps,
