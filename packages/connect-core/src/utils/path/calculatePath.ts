@@ -1,7 +1,13 @@
-import { providers as ethersProviders, utils as ethersUtils } from 'ethers'
+import { providers as ethersProviders } from 'ethers'
 import { AppIntent } from '../../types'
+import { ErrorInvalid } from '../../errors'
 import App from '../../entities/App'
-import { addressesEqual, includesAddress, ANY_ENTITY } from '../address'
+import {
+  ANY_ENTITY,
+  addressesEqual,
+  includesAddress,
+  isAddress,
+} from '../address'
 import { isFullMethodSignature } from '../app'
 import { encodeCallScript } from '../callScript'
 import { canForward } from '../forwarding'
@@ -24,7 +30,9 @@ function validateMethod(
 ): AppIntent {
   const methods = destinationApp.intents
   if (!methods) {
-    throw new Error(`No functions specified in artifact for ${destination}`)
+    throw new ErrorInvalid(
+      `No functions specified in artifact for ${destination}`
+    )
   }
 
   // Find the relevant method information
@@ -35,7 +43,9 @@ function validateMethod(
         method.sig.split('(')[0] === methodSignature
   )
   if (!method) {
-    throw new Error(`No method named ${methodSignature} on ${destination}`)
+    throw new ErrorInvalid(
+      `No method named ${methodSignature} on ${destination}`
+    )
   }
 
   return method
@@ -190,7 +200,7 @@ export async function calculateTransactionPath(
   // Get the destination app
   const destinationApp = apps.find((app) => app.address == destination)
   if (!destinationApp) {
-    throw new Error(
+    throw new ErrorInvalid(
       `Transaction path destination (${destination}) is not an installed app`
     )
   }
@@ -199,7 +209,7 @@ export async function calculateTransactionPath(
   const method = validateMethod(destination, methodSignature, destinationApp)
 
   const finalForwarderProvided = finalForwarder
-    ? ethersUtils.isAddress(finalForwarder)
+    ? isAddress(finalForwarder)
     : false
   const directTransaction = await createDirectTransactionForApp(
     sender,

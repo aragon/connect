@@ -1,3 +1,4 @@
+export * from './address'
 export * from './app-connectors'
 export * from './descriptions'
 export * from './misc'

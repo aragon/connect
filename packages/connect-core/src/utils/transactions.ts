@@ -3,6 +3,7 @@ import {
   providers as ethersProviders,
   utils as ethersUtils,
 } from 'ethers'
+import { ErrorInvalid, ErrorUnsufficientBalance } from '../errors'
 import { erc20ABI, forwarderAbi, forwarderFeeAbi } from './abis'
 import { isFullMethodSignature } from './app'
 import { FunctionFragment } from '../types'
@@ -60,13 +61,15 @@ export async function createDirectTransactionForApp(
   params: any[]
 ): Promise<Transaction> {
   if (!app) {
-    throw new Error(`Could not create transaction due to missing app artifact`)
+    throw new ErrorInvalid(
+      `Could not create transaction due to missing app artifact`
+    )
   }
 
   const destination = app.address
 
   if (!app.abi) {
-    throw new Error(`No ABI specified in artifact for ${destination}`)
+    throw new ErrorInvalid(`No ABI specified in artifact for ${destination}`)
   }
 
   const methodAbiFragment = app.abi.find((method) => {
@@ -86,7 +89,9 @@ export async function createDirectTransactionForApp(
   })
 
   if (!methodAbiFragment) {
-    throw new Error(`${methodSignature} not found on ABI for ${destination}`)
+    throw new ErrorInvalid(
+      `${methodSignature} not found on ABI for ${destination}`
+    )
   }
 
   return createDirectTransaction(
@@ -130,7 +135,7 @@ export async function buildPretransaction(
   const tokenValueBN = BigInt(tokenValue)
 
   if (BigInt(balance) < tokenValueBN) {
-    throw new Error(
+    throw new ErrorUnsufficientBalance(
       `Balance too low. ${from} balance of ${tokenAddress} token is ${balance} (attempting to send ${tokenValue})`
     )
   }
