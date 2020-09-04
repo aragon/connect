@@ -80,6 +80,11 @@ export function createAgreementStakingMovement(agreement: Address, actionId: Big
   const user = actionData.value4
   const token = collateralData.value0
   const collateralAmount = collateralData.value2
+
+  if (collateralAmount.equals(BigInt.fromI32(0))) {
+    return
+  }
+
   const staking = loadOrCreateStaking(token, user)
 
   const id = buildStakingMovementId(token, user, buildId(event))
