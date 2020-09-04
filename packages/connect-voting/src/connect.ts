@@ -1,4 +1,8 @@
-import { createAppConnector } from '@aragon/connect-core'
+import {
+  createAppConnector,
+  ErrorInvalid,
+  ErrorUnsupported,
+} from '@aragon/connect-core'
 import Voting from './models/Voting'
 import VotingConnectorTheGraph, {
   subgraphUrlFromChainId,
@@ -12,8 +16,15 @@ type Config = {
 export default createAppConnector<Voting, Config>(
   ({ app, config, connector, network, orgConnector, verbose }) => {
     if (connector !== 'thegraph') {
-      console.warn(
-        `Connector unsupported: ${connector}. Using "thegraph" instead.`
+      throw new ErrorUnsupported(
+        `Connector unsupported: ${connector}. Please use thegraph.`
+      )
+    }
+
+    if (app.name !== 'voting') {
+      throw new ErrorInvalid(
+        `This app (${app.name}) is not compatible with @aragon/connect-voting. ` +
+          `Please use an app instance of the voting.aragonpm.eth repo.`
       )
     }
 
