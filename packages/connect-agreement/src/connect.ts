@@ -32,6 +32,6 @@ export default createAppConnector<Agreement, Config>(
       verbose,
     })
 
-    return new Agreement(connectorTheGraph, app.address)
+    return new Agreement(connectorTheGraph, app)
   }
 )
