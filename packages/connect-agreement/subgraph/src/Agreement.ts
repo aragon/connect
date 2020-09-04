@@ -108,6 +108,8 @@ export function handleActionClosed(event: ActionClosed): void {
   const action = Action.load(buildActionId(event.address, event.params.actionId))!
   action.closed = true
   action.save()
+
+  createAgreementStakingMovement(event.address, event.params.actionId, 'closed', event)
 }
 
 export function handleActionChallenged(event: ActionChallenged): void {
@@ -171,13 +173,11 @@ export function handleActionDisputed(event: ActionDisputed): void {
 export function handleActionAccepted(event: ActionAccepted): void {
   updateChallengeState(event.address, event.params.challengeId)
   updateDisputeState(event.address, event.params.challengeId)
-  createAgreementStakingMovement(event.address, event.params.actionId, 'accepted', event)
 }
 
 export function handleActionVoided(event: ActionVoided): void {
   updateChallengeState(event.address, event.params.challengeId)
   updateDisputeState(event.address, event.params.challengeId)
-  createAgreementStakingMovement(event.address, event.params.actionId, 'voided', event)
 }
 
 export function handleActionRejected(event: ActionRejected): void {

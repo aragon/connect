@@ -116,16 +116,9 @@ export function createAgreementStakingMovement(agreement: Address, actionId: Big
     movement.collateralState = 'Slashed'
     staking.locked = staking.locked.minus(collateralAmount)
     staking.challenged = staking.challenged.minus(collateralAmount)
-  } else if (type == 'accepted') {
+  } else { // closed
     movement.amount = collateralAmount
-    movement.actionState = 'Accepted'
-    movement.collateralState = 'Available'
-    staking.available = staking.available.plus(collateralAmount)
-    staking.locked = staking.locked.minus(collateralAmount)
-    staking.challenged = staking.challenged.minus(collateralAmount)
-  } else { // voided
-    movement.amount = collateralAmount
-    movement.actionState = 'Voided'
+    movement.actionState = 'Completed'
     movement.collateralState = 'Available'
     staking.available = staking.available.plus(collateralAmount)
     staking.locked = staking.locked.minus(collateralAmount)
