@@ -1,11 +1,21 @@
 import { ethereum, BigInt, Address } from '@graphprotocol/graph-ts'
-
 import { Staking, StakingMovement } from '../generated/schema'
 import { buildActionId, buildERC20 } from './Agreement'
 import { Agreement as AgreementContract } from '../generated/templates/Agreement/Agreement'
-import { Staked as StakedEvent, Unstaked as UnstakedEvent, StakeTransferred as StakeTransferredEvent, Staking as StakingContract } from '../generated/templates/Staking/Staking'
+import { Staking as StakingTemplate } from '../generated/templates'
+import { NewStaking as NewStakingEvent } from '../generated/templates/StakingFactory/StakingFactory'
+import {
+  Staked as StakedEvent,
+  Unstaked as UnstakedEvent,
+  StakeTransferred as StakeTransferredEvent,
+  Staking as StakingContract
+} from '../generated/templates/Staking/Staking'
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
+
+export function handleNewStaking(event: NewStakingEvent): void {
+  StakingTemplate.create(event.params.instance)
+}
 
 export function handleStaked(event: StakedEvent): void {
   const stakingApp = StakingContract.bind(event.address)

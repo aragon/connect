@@ -39,6 +39,7 @@ type Action @entity {
   disputable: Disputable!
   actionId: BigInt!
   disputableActionId: BigInt!
+  script: Bytes
   context: Bytes!
   closed: Boolean!
   submitter: Signer!

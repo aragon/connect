@@ -1,8 +1,11 @@
-import { ethereum, BigInt, Address } from '@graphprotocol/graph-ts'
+import { ethereum, BigInt, Address, log } from '@graphprotocol/graph-ts'
 
 import { ERC20 } from '../generated/schema'
 import { ERC20 as ERC20Contract } from '../generated/templates/Agreement/ERC20'
 import { createAgreementStakingMovement } from './Staking'
+import { StakingFactory as StakingFactoryTemplate } from '../generated/templates'
+import { DisputableVoting as DisputableVotingTemplate } from '../generated/templates'
+import { DisputableAragonApp as DisputableAragonAppContract } from '../generated/templates/DisputableVoting/DisputableAragonApp'
 import { Agreement, Action, Signature, Version, Disputable, Challenge, Dispute, Evidence, Signer, CollateralRequirement, ArbitratorFee } from '../generated/schema'
 import {
   Agreement as AgreementContract,
@@ -23,6 +26,10 @@ import {
 } from '../generated/templates/Agreement/Agreement'
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
+
+const DISPUTABLE_VOTING_OPEN = '0x705b5084c67966bb8e4640b28bab7a1e51e03d209d84e3a04d2a4f7415f93b34'
+const DISPUTABLE_VOTING_PRECEDENCE_CAMPAIGN = '0x39aa9e500efe56efda203714d12c78959ecbf71223162614ab5b56eaba014145'
+
 
 export function handleSettingChanged(event: SettingChanged): void {
   const agreementApp = AgreementContract.bind(event.address)
@@ -193,9 +200,11 @@ function loadOrCreateAgreement(agreementAddress: Address): Agreement {
   let agreement = Agreement.load(agreementAddress.toHexString())
   if (agreement === null) {
     const agreementApp = AgreementContract.bind(agreementAddress)
+    const stakingFactoryAddress = agreementApp.stakingFactory()
     agreement = new Agreement(agreementAddress.toHexString())
     agreement.dao = agreementApp.kernel()
-    agreement.stakingFactory = agreementApp.stakingFactory()
+    agreement.stakingFactory = stakingFactoryAddress
+    StakingFactoryTemplate.create(stakingFactoryAddress)
   }
   return agreement!
 }
@@ -218,8 +227,25 @@ function loadOrCreateDisputable(agreement: Address, disputableAddress: Address):
     disputable = new Disputable(disputableId)
     disputable.agreement = agreement.toHexString()
     disputable.address = disputableAddress
+    createDisputableTemplate(disputableAddress)
   }
   return disputable!
+}
+
+function createDisputableTemplate(disputable: Address): void {
+  const disputableApp = DisputableAragonAppContract.bind(disputable)
+  const optionalAppId = disputableApp.try_appId()
+
+  if (!optionalAppId.reverted) {
+    const appId = optionalAppId.value.toHexString()
+    if (appId == DISPUTABLE_VOTING_OPEN || appId == DISPUTABLE_VOTING_PRECEDENCE_CAMPAIGN) {
+      DisputableVotingTemplate.create(disputable)
+    } else {
+      log.warning('Received unknown disputable app with app ID {}', [appId])
+    }
+  } else {
+    log.warning('Received disputable app without app ID', [])
+  }
 }
 
 function updateChallengeState(agreement: Address, challengeId: BigInt): void {
