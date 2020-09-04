@@ -1,4 +1,8 @@
-import { createAppConnector } from '@aragon/connect-core'
+import {
+  createAppConnector,
+  ErrorInvalid,
+  ErrorUnsupported,
+} from '@aragon/connect-core'
 import Tokens from './models/Tokens'
 import TokensConnectorTheGraph, {
   subgraphUrlFromChainId,
@@ -12,8 +16,15 @@ type Config = {
 export default createAppConnector<Tokens, Config>(
   async ({ app, config, connector, network, orgConnector, verbose }) => {
     if (connector !== 'thegraph') {
-      console.warn(
-        `Connector unsupported: ${connector}. Using "thegraph" instead.`
+      throw new ErrorUnsupported(
+        `Connector unsupported: ${connector}. Please use thegraph.`
+      )
+    }
+
+    if (app.name !== 'token-manager') {
+      throw new ErrorInvalid(
+        `This app (${app.name}) is not compatible with @aragon/connect-tokens. ` +
+          `Please use an app instance of the token-manager.aragonpm.eth repo.`
       )
     }
 
