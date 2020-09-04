@@ -3,20 +3,16 @@ import { ethereum, BigInt, Address } from '@graphprotocol/graph-ts'
 import { Staking, StakingMovement } from '../generated/schema'
 import { buildActionId, buildERC20 } from './Agreement'
 import { Agreement as AgreementContract } from '../generated/templates/Agreement/Agreement'
-import { Staked as StakedEvent, Unstaked as UnstakedEvent, Staking as StakingContract } from '../generated/templates/Staking/Staking'
+import { Staked as StakedEvent, Unstaked as UnstakedEvent, StakeTransferred as StakeTransferredEvent, Staking as StakingContract } from '../generated/templates/Staking/Staking'
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 export function handleStaked(event: StakedEvent): void {
   const stakingApp = StakingContract.bind(event.address)
   const token = stakingApp.token()
+  const staking = updateStaking(event.address, token, event.params.user)
 
-  const staking = loadOrCreateStaking(token, event.params.user)
-  staking.total = staking.total.plus(event.params.amount)
-  staking.available = staking.available.plus(event.params.amount)
-  staking.save()
-
-  const id = buildStakingMovementId(token, event.params.user, event.transaction.hash.toString())
+  const id = buildStakingMovementId(token, event.params.user, buildId(event))
   const movement = new StakingMovement(id)
   movement.amount = event.params.amount
   movement.staking = staking.id
@@ -29,13 +25,9 @@ export function handleStaked(event: StakedEvent): void {
 export function handleUnstaked(event: UnstakedEvent): void {
   const stakingApp = StakingContract.bind(event.address)
   const token = stakingApp.token()
+  const staking = updateStaking(event.address, token, event.params.user)
 
-  const staking = loadOrCreateStaking(token, event.params.user)
-  staking.total = staking.total.minus(event.params.amount)
-  staking.available = staking.available.minus(event.params.amount)
-  staking.save()
-
-  const id = buildStakingMovementId(token, event.params.user, event.transaction.hash.toString())
+  const id = buildStakingMovementId(token, event.params.user, buildId(event))
   const movement = new StakingMovement(id)
   movement.amount = event.params.amount
   movement.staking = staking.id
@@ -43,6 +35,31 @@ export function handleUnstaked(event: UnstakedEvent): void {
   movement.collateralState = 'Withdrawn'
   movement.createdAt = event.block.timestamp
   movement.save()
+}
+
+export function handleStakeTransferred(event: StakeTransferredEvent): void {
+  const stakingApp = StakingContract.bind(event.address)
+  const token = stakingApp.token()
+
+  const fromStaking = updateStaking(event.address, token, event.params.from)
+  const withdrawId = buildStakingMovementId(token, event.params.from, buildId(event))
+  const withdraw = new StakingMovement(withdrawId)
+  withdraw.amount = event.params.amount
+  withdraw.staking = fromStaking.id
+  withdraw.actionState = 'NA'
+  withdraw.collateralState = 'Withdrawn'
+  withdraw.createdAt = event.block.timestamp
+  withdraw.save()
+
+  const toStaking = updateStaking(event.address, token, event.params.to)
+  const despositId = buildStakingMovementId(token, event.params.to, buildId(event))
+  const deposit = new StakingMovement(despositId)
+  deposit.amount = event.params.amount
+  deposit.staking = toStaking.id
+  deposit.actionState = 'NA'
+  deposit.collateralState = 'Available'
+  deposit.createdAt = event.block.timestamp
+  deposit.save()
 }
 
 export function createAgreementStakingMovement(agreement: Address, actionId: BigInt, type: string, event: ethereum.Event): void {
@@ -55,7 +72,7 @@ export function createAgreementStakingMovement(agreement: Address, actionId: Big
   const collateralAmount = collateralData.value2
   const staking = loadOrCreateStaking(token, user)
 
-  const id = buildStakingMovementId(token, user, event.transaction.hash.toString())
+  const id = buildStakingMovementId(token, user, buildId(event))
   const movement = new StakingMovement(id)
   movement.staking = staking.id
   movement.agreement = agreement.toHexString()
@@ -109,9 +126,22 @@ export function createAgreementStakingMovement(agreement: Address, actionId: Big
   movement.save()
 }
 
-function loadOrCreateStaking(token: Address, user: Address): Staking {
+function updateStaking(stakingAddress: Address, token: Address, user: Address): Staking {
   buildERC20(token)
 
+  const stakingApp = StakingContract.bind(stakingAddress)
+  const balance = stakingApp.getBalancesOf(user)
+
+  const staking = loadOrCreateStaking(token, user)
+  staking.total = balance.value0
+  staking.locked = balance.value1
+  staking.available = staking.total.minus(staking.locked)
+  staking.save()
+
+  return staking
+}
+
+function loadOrCreateStaking(token: Address, user: Address): Staking {
   const id = buildStakingId(token, user)
   let staking = Staking.load(id)
 
@@ -123,7 +153,6 @@ function loadOrCreateStaking(token: Address, user: Address): Staking {
     staking.locked = BigInt.fromI32(0)
     staking.available = BigInt.fromI32(0)
     staking.challenged = BigInt.fromI32(0)
-    staking.save()
   }
 
   return staking!
@@ -135,4 +164,8 @@ function buildStakingId(token: Address, user: Address): string {
 
 function buildStakingMovementId(token: Address, user: Address, id: string): string {
   return buildStakingId(token, user) + "-movement-" + id
+}
+
+function buildId(event: ethereum.Event): string {
+  return event.transaction.hash.toHexString() + event.logIndex.toString()
 }
