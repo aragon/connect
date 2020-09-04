@@ -1,3 +1,5 @@
+import ForwardingPath from "./entities/ForwardingPath";
+
 export type {
   Address,
   AppFilters,
@@ -13,6 +15,7 @@ export {
   ConnectorJsonConfig,
 } from './connections/ConnectorJson'
 export { default as App } from './entities/App'
+export { default as ForwardingPath } from './entities/ForwardingPath'
 export { default as Organization } from './entities/Organization'
 export { default as Permission } from './entities/Permission'
 export { default as Repo } from './entities/Repo'
