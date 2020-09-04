@@ -106,15 +106,13 @@ export default class GraphQLWrapper {
       async (error: Error | null, result?: QueryResult) => {
         try {
           if (error || result?.error) {
-            if (result) {
-              throw new Error(
-                'Error performing subscription.\n' +
+            throw new ErrorConnection(
+              result
+                ? 'Error performing subscription.\n' +
                   `${result?.error?.name}: ${result?.error?.message}\n` +
                   this.describeQueryResult(result)
-              )
-            } else {
-              throw error
-            }
+                : undefined
+            )
           }
           callback(
             null,
@@ -138,7 +136,7 @@ export default class GraphQLWrapper {
     }
 
     if (result.error) {
-      throw new Error(
+      throw new ErrorConnection(
         this.describeQueryResultError(result) + this.describeQueryResult(result)
       )
     }
@@ -159,14 +157,10 @@ export default class GraphQLWrapper {
     parser: ParseFunction,
     result: QueryResult
   ): Promise<T> {
-    try {
-      if (result.error) {
-        throw result.error
-      }
-      return parser(result)
-    } catch (error) {
-      throw new Error(error.message + '\n\n' + this.describeQueryResult(result))
+    if (result.error) {
+      throw ErrorUnexpectedResult()
     }
+    return parser(result)
   }
 
   private describeQueryResultError(result: QueryResult): string {

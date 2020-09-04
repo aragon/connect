@@ -1,4 +1,6 @@
 import {
+  ErrorNotFound,
+  ErrorUnexpectedResult,
   Organization,
   PermissionData,
   Role,
@@ -46,8 +48,12 @@ export async function parseRole(
   const app = result?.data?.app
   const role = result?.data?.role
 
+  if (role === null) {
+    throw new ErrorNotFound('No role found.')
+  }
+
   if (!app || !role) {
-    throw new Error('Unable to parse role.')
+    throw new ErrorUnexpectedResult('Unable to parse role.')
   }
 
   return _parseRole(role, app, organization)
@@ -61,7 +67,7 @@ export async function parseRoles(
   const roles = app?.roles
 
   if (!app || !Array.isArray(roles)) {
-    throw new Error('Unable to parse roles.')
+    throw new ErrorUnexpectedResult('Unable to parse roles.')
   }
 
   return Promise.all(
