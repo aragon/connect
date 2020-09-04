@@ -7,6 +7,9 @@ import { GraphQLWrapper, QueryResult } from '@aragon/connect-thegraph'
 import * as queries from './queries'
 import Signer from '../models/Signer'
 import Signature from '../models/Signature'
+import Action from '../models/Action'
+import Staking from '../models/Staking'
+import StakingMovement from '../models/StakingMovement'
 import Version from '../models/Version'
 import DisputableApp from '../models/DisputableApp'
 import CollateralRequirement from '../models/CollateralRequirement'
@@ -21,6 +24,9 @@ import {
   parseVersion,
   parseDisputableApps,
   parseCollateralRequirement,
+  parseAction,
+  parseStaking,
+  parseStakingMovements,
   parseERC20,
 } from './parsers'
 
@@ -239,6 +245,78 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
       { disputableAppId },
       callback,
       (result: QueryResult) => parseCollateralRequirement(result, this)
+    )
+  }
+
+  async staking(
+    stakingId: string
+  ): Promise<Staking> {
+    return this.#gql.performQueryWithParser<Staking>(
+      queries.GET_STAKING('query'),
+      { stakingId },
+      (result: QueryResult) => parseStaking(result, this)
+    )
+  }
+
+  onStaking(
+    stakingId: string,
+    callback: SubscriptionCallback<Staking>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<Staking>(
+      queries.GET_STAKING('query'),
+      { stakingId },
+      callback,
+      (result: QueryResult) => parseStaking(result, this)
+    )
+  }
+
+  async stakingMovements(
+    stakingId: string,
+    agreement: string,
+    first: number,
+    skip: number
+  ): Promise<StakingMovement[]> {
+    return this.#gql.performQueryWithParser<StakingMovement[]>(
+      queries.GET_STAKING_MOVEMENTS('query'),
+      { stakingId, agreement, first, skip },
+      (result: QueryResult) => parseStakingMovements(result, this)
+    )
+  }
+
+  onStakingMovements(
+    stakingId: string,
+    agreement: string,
+    first: number,
+    skip: number,
+    callback: SubscriptionCallback<StakingMovement[]>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<StakingMovement[]>(
+      queries.GET_STAKING_MOVEMENTS('query'),
+      { stakingId, agreement, first, skip },
+      callback,
+      (result: QueryResult) => parseStakingMovements(result, this)
+    )
+  }
+
+  async action(
+    actionId: string
+  ): Promise<Action> {
+    return this.#gql.performQueryWithParser<Action>(
+      queries.GET_ACTION('query'),
+      { actionId },
+      (result: QueryResult) => parseAction(result, this)
+    )
+  }
+
+  onAction(
+    actionId: string,
+    callback: SubscriptionCallback<Action>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<Action>(
+      queries.GET_ACTION('query'),
+      { actionId },
+      callback,
+      (result: QueryResult) => parseAction(result, this)
     )
   }
 

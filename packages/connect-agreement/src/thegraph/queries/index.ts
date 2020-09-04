@@ -120,6 +120,75 @@ export const GET_COLLATERAL_REQUIREMENT = (type: string) => gql`
   }
 `
 
+export const GET_STAKING = (type: string) => gql`
+  ${type} Staking($stakingId: String!) {
+    staking(id: $stakingId) {
+      id
+      user
+      token {
+        id
+        decimals
+      }
+      available
+      locked
+      challenged
+      total
+    }
+  }
+`
+
+export const GET_STAKING_MOVEMENTS = (type: string) => gql`
+  ${type} StakingMovements($agreement: String!, $stakingId: String!, $first: Int!, $skip: Int!) {
+    stakingMovements(where: {
+      staking: $stakingId,
+      agreement_in: [null, $agreement]
+    }, first: $first, skip: $skip) {
+      id
+      staking {
+        id
+        token {
+          id
+          decimals
+        }
+      }
+      agreement {
+        id
+      }
+      action {
+        id
+      }
+      amount
+      actionState
+      collateralState
+      createdAt
+    }
+  }
+`
+
+export const GET_ACTION = (type: string) => gql`
+  ${type} Action($actionId: String!) {
+    action(id: $actionId) {
+      id
+      agreement { 
+        id 
+      }
+      disputable {
+        id
+      }
+      version {
+        id
+      }
+      collateralRequirement {
+        id
+      }
+      disputableActionId
+      script
+      context
+      createdAt
+    }
+  }
+`
+
 export const GET_ERC20 = (type: string) => gql`
   ${type} ERC20($tokenAddress: String!) {
     erc20(id: $tokenAddress) {
