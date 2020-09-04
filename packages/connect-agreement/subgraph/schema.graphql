@@ -45,7 +45,7 @@ type Action @entity {
   submitter: Signer!
   version: Version!
   collateralRequirement: CollateralRequirement!
-  currentChallenge: Challenge
+  lastChallenge: Challenge
   challenges: [Challenge!] @derivedFrom(field: "action")
   createdAt: BigInt!
 }

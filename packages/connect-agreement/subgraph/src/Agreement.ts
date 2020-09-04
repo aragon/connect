@@ -116,7 +116,7 @@ export function handleActionChallenged(event: ActionChallenged): void {
   const agreementApp = AgreementContract.bind(event.address)
 
   const action = Action.load(actionId)!
-  action.currentChallenge = challengeId
+  action.lastChallenge = challengeId
   action.save()
 
   const challenge = new Challenge(challengeId)
