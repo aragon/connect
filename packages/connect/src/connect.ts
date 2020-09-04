@@ -1,13 +1,16 @@
 import {
   getDefaultProvider as getDefaultEthersProvider,
   providers as ethersProviders,
-  utils as ethersUtils,
 } from 'ethers'
 import {
   ConnectorJson,
   ConnectorJsonConfig,
+  ErrorInvalidEthereum,
+  ErrorInvalidLocation,
+  ErrorUnsupported,
   IOrganizationConnector,
   Organization,
+  isAddress,
   toNetwork,
 } from '@aragon/connect-core'
 import ConnectorEthereum, {
@@ -99,7 +102,7 @@ function getConnector(
     return new ConnectorEthereum(config as ConnectorEthereumConfig)
   }
 
-  throw new Error(`Unsupported connector name: ${name}`)
+  throw new ErrorUnsupported(`Unsupported connector name: ${name}`)
 }
 
 function getEthersProvider(
@@ -115,8 +118,10 @@ function getEthersProvider(
     try {
       return new ethersProviders.Web3Provider(ethereumProvider, network)
     } catch (err) {
-      console.error('Invalid provider:', ethereumProvider)
-      throw err
+      console.error('Invalid provider:', ethereumProvider, err)
+      throw new ErrorInvalidEthereum(
+        'The Ethereum provider doesn’t seem to be valid.'
+      )
     }
   }
 
@@ -131,12 +136,18 @@ async function resolveAddress(
   ethersProvider: ethersProviders.Provider,
   location: string
 ): Promise<Address> {
-  const address = ethersUtils.isAddress(location)
+  const isLocationAddress = isAddress(location)
+
+  const address = isLocationAddress
     ? location
     : await ethersProvider.resolveName(location)
 
-  if (!ethersUtils.isAddress(address)) {
-    throw new Error('Please provide a valid address or ENS domain.')
+  if (!isAddress(address)) {
+    throw new ErrorInvalidLocation(
+      isLocationAddress
+        ? `The address (${address}) is not valid.`
+        : `The ENS domain (${location}) doesn’t seem to resolve to an address.`
+    )
   }
 
   return address
