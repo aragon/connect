@@ -32,6 +32,10 @@ templates:
           file: ./abis/Agreement.json
         - name: ERC20
           file: ./abis/MiniMeToken.json
+        - name: Staking
+          file: ./abis/Staking.json
+        - name: StakingFactory
+          file: ./abis/StakingFactory.json
         - name: DisputableAragonApp
           file: ./abis/DisputableAragonApp.json
       eventHandlers:
@@ -85,30 +89,6 @@ templates:
         - event: StartVote(indexed uint256,indexed address,bytes,bytes)
           handler: handleStartVote
       file: ./src/DisputableAragonApp.ts
-  - kind: ethereum/contract
-    name: StakingFactory
-    network: {{network}}
-    source:
-      abi: StakingFactory
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      entities:
-        - StakingFactory
-        - StakingPool
-        - ERC20
-      abis:
-        - name: StakingFactory
-          file: ./abis/StakingFactory.json
-        - name: Staking
-          file: ./abis/Staking.json
-        - name: ERC20
-          file: ./abis/MiniMeToken.json
-      eventHandlers:
-        - event: NewStaking(indexed address,address)
-          handler: handleNewStaking
-      file: ./src/Staking.ts
   - kind: ethereum/contract
     name: Staking
     network: {{network}}

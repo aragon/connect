@@ -3,7 +3,8 @@ import { ethereum, BigInt, Address, log } from '@graphprotocol/graph-ts'
 import { ERC20 } from '../generated/schema'
 import { ERC20 as ERC20Contract } from '../generated/templates/Agreement/ERC20'
 import { createAgreementStakingMovement } from './Staking'
-import { StakingFactory as StakingFactoryTemplate } from '../generated/templates'
+import { Staking as StakingTemplate } from '../generated/templates'
+import { StakingFactory as StakingFactoryContract } from '../generated/templates/StakingFactory/StakingFactory'
 import { DisputableVoting as DisputableVotingTemplate } from '../generated/templates'
 import { DisputableAragonApp as DisputableAragonAppContract } from '../generated/templates/DisputableVoting/DisputableAragonApp'
 import { Agreement, Action, Signature, Version, Disputable, Challenge, Dispute, Evidence, Signer, CollateralRequirement, ArbitratorFee } from '../generated/schema'
@@ -134,7 +135,7 @@ export function handleActionChallenged(event: ActionChallenged): void {
 
   const challengerArbitratorFeeId = challengeId + 'challenger-arbitrator-fee'
   const challengeArbitratorFeesData = agreementApp.getChallengeArbitratorFees(event.params.challengeId)
-  createArbitratorFee(challengerArbitratorFeeId, challengeArbitratorFeesData.value2, challengeArbitratorFeesData.value3)
+  createArbitratorFee(event.address, challengerArbitratorFeeId, challengeArbitratorFeesData.value2, challengeArbitratorFeesData.value3)
   challenge.challengerArbitratorFee = challengerArbitratorFeeId
   challenge.save()
 
@@ -165,7 +166,7 @@ export function handleActionDisputed(event: ActionDisputed): void {
 
   const challenge = Challenge.load(challengeId)!
   const submitterArbitratorFeeId = challengeId + 'submitter-arbitrator-fee'
-  createArbitratorFee(submitterArbitratorFeeId, challengeArbitratorFeesData.value0, challengeArbitratorFeesData.value1)
+  createArbitratorFee(event.address, submitterArbitratorFeeId, challengeArbitratorFeesData.value0, challengeArbitratorFeesData.value1)
   challenge.submitterArbitratorFee = submitterArbitratorFeeId
   challenge.save()
 }
@@ -204,7 +205,6 @@ function loadOrCreateAgreement(agreementAddress: Address): Agreement {
     agreement = new Agreement(agreementAddress.toHexString())
     agreement.dao = agreementApp.kernel()
     agreement.stakingFactory = stakingFactoryAddress
-    StakingFactoryTemplate.create(stakingFactoryAddress)
   }
   return agreement!
 }
@@ -275,21 +275,21 @@ function updateCollateralRequirement(agreement: Address, disputable: Address, co
   const requirement = new CollateralRequirement(requirementId)
   const requirementData = agreementApp.getCollateralRequirement(disputable, collateralRequirementId)
   requirement.disputable = buildDisputableId(agreement, disputable)
-  requirement.token = buildERC20(requirementData.value0)
+  requirement.token = buildERC20(agreement, requirementData.value0)
   requirement.challengeDuration = requirementData.value1
   requirement.actionAmount = requirementData.value2
   requirement.challengeAmount = requirementData.value3
   requirement.save()
 }
 
-function createArbitratorFee(id: string, feeToken: Address, feeAmount: BigInt): void {
+function createArbitratorFee(agreement: Address, id: string, feeToken: Address, feeAmount: BigInt): void {
   const arbitratorFee = new ArbitratorFee(id)
   arbitratorFee.amount = feeAmount
-  arbitratorFee.token = buildERC20(feeToken)
+  arbitratorFee.token = buildERC20(agreement, feeToken)
   arbitratorFee.save()
 }
 
-export function buildERC20(address: Address): string {
+export function buildERC20(agreement: Address, address: Address): string {
   const id = address.toHexString()
   let token = ERC20.load(id)
 
@@ -300,6 +300,14 @@ export function buildERC20(address: Address): string {
     token.symbol = tokenContract.symbol()
     token.decimals = tokenContract.decimals()
     token.save()
+
+    const agreementApp = AgreementContract.bind(agreement)
+    const stakingFactoryAddress = agreementApp.stakingFactory()
+    const stakingFactory = StakingFactoryContract.bind(stakingFactoryAddress)
+    const stakingAddress = stakingFactory.getInstance(Address.fromString(id))
+    if (stakingAddress.toHexString() != '0x0000000000000000000000000000000000000000') {
+      StakingTemplate.create(stakingAddress)
+    }
   }
 
   return token.id

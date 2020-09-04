@@ -1,9 +1,8 @@
-import { ethereum, BigInt, Address } from '@graphprotocol/graph-ts'
+import { ethereum, Bytes, BigInt, Address } from '@graphprotocol/graph-ts'
+
+import { buildActionId } from './Agreement'
 import { Staking, StakingMovement } from '../generated/schema'
-import { buildActionId, buildERC20 } from './Agreement'
 import { Agreement as AgreementContract } from '../generated/templates/Agreement/Agreement'
-import { Staking as StakingTemplate } from '../generated/templates'
-import { NewStaking as NewStakingEvent } from '../generated/templates/StakingFactory/StakingFactory'
 import {
   Staked as StakedEvent,
   Unstaked as UnstakedEvent,
@@ -13,9 +12,6 @@ import {
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
-export function handleNewStaking(event: NewStakingEvent): void {
-  StakingTemplate.create(event.params.instance)
-}
 
 export function handleStaked(event: StakedEvent): void {
   const stakingApp = StakingContract.bind(event.address)
@@ -29,6 +25,7 @@ export function handleStaked(event: StakedEvent): void {
   movement.actionState = 'NA'
   movement.collateralState = 'Available'
   movement.createdAt = event.block.timestamp
+  movement.agreementId = Bytes.fromHexString('0x0000000000000000000000000000000000000000') as Bytes
   movement.save()
 }
 
@@ -44,6 +41,7 @@ export function handleUnstaked(event: UnstakedEvent): void {
   movement.actionState = 'NA'
   movement.collateralState = 'Withdrawn'
   movement.createdAt = event.block.timestamp
+  movement.agreementId = Bytes.fromHexString('0x0000000000000000000000000000000000000000') as Bytes
   movement.save()
 }
 
@@ -59,6 +57,7 @@ export function handleStakeTransferred(event: StakeTransferredEvent): void {
   withdraw.actionState = 'NA'
   withdraw.collateralState = 'Withdrawn'
   withdraw.createdAt = event.block.timestamp
+  withdraw.agreementId = Bytes.fromHexString('0x0000000000000000000000000000000000000000') as Bytes
   withdraw.save()
 
   const toStaking = updateStaking(event.address, token, event.params.to)
@@ -69,6 +68,7 @@ export function handleStakeTransferred(event: StakeTransferredEvent): void {
   deposit.actionState = 'NA'
   deposit.collateralState = 'Available'
   deposit.createdAt = event.block.timestamp
+  deposit.agreementId = Bytes.fromHexString('0x0000000000000000000000000000000000000000') as Bytes
   deposit.save()
 }
 
@@ -91,6 +91,7 @@ export function createAgreementStakingMovement(agreement: Address, actionId: Big
   const movement = new StakingMovement(id)
   movement.staking = staking.id
   movement.agreement = agreement.toHexString()
+  movement.agreementId = agreement
   movement.action = buildActionId(agreement, actionId)
   movement.createdAt = event.block.timestamp
 
@@ -135,8 +136,6 @@ export function createAgreementStakingMovement(agreement: Address, actionId: Big
 }
 
 function updateStaking(stakingAddress: Address, token: Address, user: Address): Staking {
-  buildERC20(token)
-
   const stakingApp = StakingContract.bind(stakingAddress)
   const balance = stakingApp.getBalancesOf(user)
 
