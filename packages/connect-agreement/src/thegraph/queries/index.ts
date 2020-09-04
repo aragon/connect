@@ -138,10 +138,10 @@ export const GET_STAKING = (type: string) => gql`
 `
 
 export const GET_STAKING_MOVEMENTS = (type: string) => gql`
-  ${type} StakingMovements($agreement: String!, $stakingId: String!, $first: Int!, $skip: Int!) {
+  ${type} StakingMovements($stakingId: String!, $agreement: String!, $noAgreement: String!, $first: Int!, $skip: Int!) {
     stakingMovements(where: {
       staking: $stakingId,
-      agreement_in: [null, $agreement]
+      agreementId_in: [$noAgreement, $agreement]
     }, first: $first, skip: $skip) {
       id
       staking {

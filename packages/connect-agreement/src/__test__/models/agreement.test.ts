@@ -157,4 +157,35 @@ describe('Agreement', () => {
       expect(lastSignature.createdAt).toBe('1598479718')
     })
   })
+
+  describe('staking', () => {
+    const TOKEN = '0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42'
+    const USER = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
+
+    test('allows fetching the staking information for a user and a token', async () => {
+      const staking = await agreement.staking(TOKEN, USER)
+
+      expect(staking.total).toBe('3000000000000000000')
+      expect(staking.formattedTotalAmount).toBe('3.00')
+
+      expect(staking.locked).toBe('3000000000000000000')
+      expect(staking.formattedLockedAmount).toBe('3.00')
+
+      expect(staking.available).toBe('0')
+      expect(staking.formattedAvailableAmount).toBe('0.00')
+
+      expect(staking.challenged).toBe('0')
+      expect(staking.formattedChallengedAmount).toBe('0.00')
+    })
+  })
+
+  describe('stakingMovements', () => {
+    const TOKEN = '0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42'
+    const USER = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
+
+    test.only('allows fetching the list of staking movements for a user', async () => {
+      const movements = await agreement.stakingMovements(TOKEN, USER)
+      expect(movements.length).toBeGreaterThan(5)
+    })
+  })
 })
