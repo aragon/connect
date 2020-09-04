@@ -37,6 +37,7 @@ export async function appIntent(
       return new ForwardingPath(
         {
           destination: destinationApp,
+          path: [],
           transactions: [],
         },
         installedApps,

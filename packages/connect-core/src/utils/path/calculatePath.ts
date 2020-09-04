@@ -9,6 +9,7 @@ import {
   createForwarderTransactionBuilder,
   buildForwardingFeePretransaction,
 } from '../transactions'
+import { TransactionPath } from '../../types'
 import App from '../../entities/App'
 import Transaction from '../../entities/Transaction'
 
@@ -23,10 +24,10 @@ async function calculateForwardingPath(
   forwardersWithPermission: string[],
   forwarders: string[],
   provider: ethersProviders.Provider
-): Promise<Transaction[]> {
+): Promise<TransactionPath> {
   // No forwarders can perform the requested action
   if (forwardersWithPermission.length === 0) {
-    return []
+    return { path: [], transactions: [] }
   }
 
   const createForwarderTransaction = createForwarderTransactionBuilder(
@@ -39,7 +40,7 @@ async function calculateForwardingPath(
     script: string,
     path: Transaction[],
     provider: ethersProviders.Provider
-  ): Promise<Transaction[]> => {
+  ): Promise<TransactionPath> => {
     const transaction = createForwarderTransaction(forwarder, script)
 
     // Only apply pretransactions to the first transaction in the path
@@ -52,10 +53,16 @@ async function calculateForwardingPath(
       // If that happens, we give up as we should've been able to perform the action with this
       // forwarding path
       return forwardingFeePretransaction
-        ? [forwardingFeePretransaction, transaction, ...path]
-        : [transaction, ...path]
+        ? {
+            transactions: [forwardingFeePretransaction, transaction],
+            path: [transaction, ...path],
+          }
+        : {
+            transactions: [transaction],
+            path: [transaction, ...path],
+          }
     } catch (err) {
-      return []
+      return { path: [], transactions: [] }
     }
   }
 
@@ -140,7 +147,7 @@ async function calculateForwardingPath(
     queue.push([path, nextQueue])
   } while (queue.length)
 
-  return []
+  return { path: [], transactions: [] }
 }
 
 /**
@@ -156,7 +163,7 @@ export async function calculateTransactionPath(
   apps: App[],
   provider: ethersProviders.Provider,
   finalForwarder?: string //Address of the final forwarder that can perfom the action. Needed for actions that aren't in the ACL but whose execution depends on other factors
-): Promise<Transaction[]> {
+): Promise<TransactionPath> {
   // The direct transaction we eventually want to perform
   const directTransaction = await createDirectTransactionForApp(
     sender,
@@ -183,11 +190,11 @@ export async function calculateTransactionPath(
     (finalForwarder && addressesEqual(finalForwarder, sender))
   ) {
     try {
-      return [directTransaction]
+      return { path: [directTransaction], transactions: [directTransaction] }
     } catch (_) {
       // If the direct transaction fails, we give up as we should have been able to
       // perform the action directly
-      return []
+      return { path: [], transactions: [] }
     }
   }
 
@@ -202,7 +209,7 @@ export async function calculateTransactionPath(
       if (!includesAddress(forwarders, finalForwarder)) {
         // Final forwarder was given, but did not match any available forwarders, so no path
         // could be found
-        return []
+        return { path: [], transactions: [] }
       }
 
       // Only attempt to find path with declared final forwarder; assume the final forwarder
@@ -222,7 +229,7 @@ export async function calculateTransactionPath(
 
     // No one has access, so of course we don't as well
     if (allowedEntities.length === 0) {
-      return []
+      return { path: [], transactions: [] }
     }
 
     // User may have permission; attempt direct transaction
@@ -231,7 +238,7 @@ export async function calculateTransactionPath(
       includesAddress(allowedEntities, ANY_ENTITY)
     ) {
       try {
-        return [directTransaction]
+        return { path: [directTransaction], transactions: [directTransaction] }
       } catch (_) {
         // Don't immediately fail as the permission could have parameters applied that
         // disallows the user from the current action and forces us to use the full

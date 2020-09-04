@@ -24,7 +24,7 @@ export async function getForwardingPath(
   provider: ethersProviders.Provider,
   finalForwarder?: Address
 ): Promise<ForwardingPath> {
-  const transactions = await calculateTransactionPath(
+  const { path, transactions } = await calculateTransactionPath(
     sender,
     destinationApp,
     methodSignature,
@@ -37,6 +37,7 @@ export async function getForwardingPath(
   return new ForwardingPath(
     {
       destination: destinationApp,
+      path,
       transactions,
     },
     installedApps,
