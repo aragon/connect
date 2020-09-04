@@ -9,9 +9,10 @@ import {
 
 export function handleStartVote(event: StartVoteEvent): void {
   const votingApp = DisputableVotingContract.bind(event.address)
+  const agreement = votingApp.getAgreement()
   const voteData = votingApp.getVote(event.params.voteId)
 
-  const actionId = buildActionId(event.address, voteData.value7)
+  const actionId = buildActionId(agreement, voteData.value7)
   const action = Action.load(actionId)!
   action.script = event.params.executionScript
   action.save()
