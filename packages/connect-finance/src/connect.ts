@@ -12,8 +12,15 @@ type Config = {
 export default createAppConnector<Finance, Config>(
   ({ app, config, connector, network, orgConnector, verbose }) => {
     if (connector !== 'thegraph') {
-      console.warn(
-        `Connector unsupported: ${connector}. Using "thegraph" instead.`
+      throw new ErrorUnsupported(
+        `Connector unsupported: ${connector}. Please use thegraph.`
+      )
+    }
+
+    if (app.name !== 'finance') {
+      throw new ErrorInvalid(
+        `This app (${app.name}) is not compatible with @aragon/connect-finance. ` +
+          `Please use an app instance of the finance.aragonpm.eth repo.`
       )
     }
 
