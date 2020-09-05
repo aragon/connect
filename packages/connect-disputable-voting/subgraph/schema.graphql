@@ -45,6 +45,7 @@ type Vote @entity {
   quietEndingSnapshotSupport: VoterState!
   script: Bytes!
   settledAt: BigInt!
+  disputedAt: BigInt!
   executedAt: BigInt!
   isAccepted: Boolean!
   castVotes: [CastVote!] @derivedFrom(field: "vote")

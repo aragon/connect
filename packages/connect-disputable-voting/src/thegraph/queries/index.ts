@@ -113,6 +113,7 @@ export const GET_VOTE = (type: string) => gql`
       quietEndingSnapshotSupport
       script
       settledAt
+      disputedAt
       executedAt
       isAccepted
     }
@@ -155,6 +156,7 @@ export const ALL_VOTES = (type: string) => gql`
       quietEndingSnapshotSupport
       script
       settledAt
+      disputedAt
       executedAt
       isAccepted
     }

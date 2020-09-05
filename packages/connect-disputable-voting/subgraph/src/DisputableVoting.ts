@@ -75,6 +75,7 @@ export function handleStartVote(event: StartVoteEvent): void {
   vote.quietEndingSnapshotSupport = castVoterState(voteData.value11)
   vote.script = event.params.executionScript
   vote.settledAt = BigInt.fromI32(0)
+  vote.disputedAt = BigInt.fromI32(0)
   vote.executedAt = BigInt.fromI32(0)
   vote.isAccepted = isAccepted(vote.yeas, vote.nays, vote.totalPower, vote.setting, votingApp.PCT_BASE())
   vote.save()

@@ -29,10 +29,9 @@ describe('DisputableVoting', () => {
     test('computes the end date properly', async () => {
       const scheduledVote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-0`)
       const expectedScheduledVoteEndDate =
-        parseInt(scheduledVote.startDate) + parseInt(scheduledVote.duration)
-      expect(scheduledVote.endDate).toBe(
-        expectedScheduledVoteEndDate.toString()
-      )
+        parseInt(scheduledVote.startDate) +
+        parseInt(scheduledVote.duration)
+      expect(scheduledVote.endDate).toBe(expectedScheduledVoteEndDate.toString())
 
       const settledVote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-2`)
       const expectedSettledVoteEndDate =

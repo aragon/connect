@@ -28,6 +28,7 @@ function buildVote(vote: any, connector: any): Vote {
     quietEndingSnapshotSupport,
     script,
     settledAt,
+    disputedAt,
     executedAt,
     isAccepted,
   } = vote
@@ -57,6 +58,7 @@ function buildVote(vote: any, connector: any): Vote {
     quietEndingSnapshotSupport,
     script,
     settledAt,
+    disputedAt,
     executedAt,
     isAccepted,
     tokenDecimals: voting.token.decimals,

@@ -44,6 +44,7 @@ export default class Vote {
   readonly quietEndingSnapshotSupport: string
   readonly script: string
   readonly settledAt: string
+  readonly disputedAt: string
   readonly executedAt: string
   readonly isAccepted: boolean
   readonly tokenDecimals: string
@@ -75,6 +76,7 @@ export default class Vote {
     this.quietEndingSnapshotSupport = data.quietEndingSnapshotSupport
     this.script = data.script
     this.settledAt = data.settledAt
+    this.disputedAt = data.disputedAt
     this.executedAt = data.executedAt
     this.isAccepted = data.isAccepted
     this.tokenDecimals = data.tokenDecimals

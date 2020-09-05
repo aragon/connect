@@ -17,6 +17,7 @@ export function handleActionDisputed(event: ActionDisputedEvent): void {
   const vote = VoteEntity.load(voteId)!
   vote.status = 'Disputed'
   vote.disputeId = challengeData.value8
+  vote.disputedAt = event.block.timestamp
   vote.save()
 }
 
