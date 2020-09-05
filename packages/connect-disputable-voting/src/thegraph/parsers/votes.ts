@@ -31,6 +31,8 @@ function buildVote(vote: any, connector: any): Vote {
     disputedAt,
     executedAt,
     isAccepted,
+    submitterArbitratorFee,
+    challengerArbitratorFee,
   } = vote
 
   const voteData: VoteData = {
@@ -62,6 +64,8 @@ function buildVote(vote: any, connector: any): Vote {
     executedAt,
     isAccepted,
     tokenDecimals: voting.token.decimals,
+    submitterArbitratorFeeId: submitterArbitratorFee ? submitterArbitratorFee.id : null,
+    challengerArbitratorFeeId: challengerArbitratorFee ? challengerArbitratorFee.id : null
   }
 
   return new Vote(voteData, connector)

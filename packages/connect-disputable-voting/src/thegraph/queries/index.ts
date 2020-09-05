@@ -116,6 +116,12 @@ export const GET_VOTE = (type: string) => gql`
       disputedAt
       executedAt
       isAccepted
+      submitterArbitratorFee {
+        id
+      }
+      challengerArbitratorFee {
+        id
+      }
     }
   }
 `
@@ -159,6 +165,12 @@ export const ALL_VOTES = (type: string) => gql`
       disputedAt
       executedAt
       isAccepted
+      submitterArbitratorFee {
+        id
+      }
+      challengerArbitratorFee {
+        id  
+      }
     }
   }
 `
@@ -227,7 +239,24 @@ export const GET_COLLATERAL_REQUIREMENT = (type: string) => gql`
         }
         token {
           id
+          decimals
         }
+      }
+    }
+  }
+`
+
+export const GET_ARBITRATOR_FEE = (type: string) => gql`
+  ${type} ArbitratorFee($arbitratorFeeId: String!) {
+    arbitratorFee(id: $arbitratorFeeId) {
+      id
+      amount
+      vote {
+        id
+      }
+      token {
+        id
+        decimals
       }
     }
   }

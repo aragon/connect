@@ -209,7 +209,7 @@ function updateVoteState(votingAddress: Address, voteId: BigInt): void {
   vote.save()
 }
 
-function buildERC20(address: Address): string {
+export function buildERC20(address: Address): string {
   const id = address.toHexString()
   let token = ERC20Entity.load(id)
 

@@ -2,6 +2,7 @@ import {
   ERC20,
   Vote,
   CastVote,
+  ArbitratorFee,
   DisputableVoting,
   CollateralRequirement,
   DisputableVotingConnectorTheGraph,
@@ -154,6 +155,31 @@ describe('DisputableVoting', () => {
       expect(token.name).toBe('DAI Token')
       expect(token.symbol).toBe('DAI')
       expect(token.decimals).toBe(18)
+    })
+  })
+
+  describe('arbitrator fees', () => {
+    let vote: Vote
+    const voteId = `${VOTING_APP_ADDRESS}-vote-13`
+
+    beforeAll(async () => {
+      vote = await voting.vote(voteId)
+    })
+
+    test('can requests the submitter arbitrator fees', async () => {
+      const artbiratorFee = (await vote.submitterArbitratorFee())!
+
+      expect(artbiratorFee.id).toBe(`${voteId}-submitter`)
+      expect(artbiratorFee.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
+      expect(artbiratorFee.formattedAmount).toBe('150.00')
+    })
+
+    test('can requests the submitter arbitrator fees', async () => {
+      const artbiratorFee = (await vote.challengerArbitratorFee())!
+
+      expect(artbiratorFee.id).toBe(`${voteId}-challenger`)
+      expect(artbiratorFee.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
+      expect(artbiratorFee.formattedAmount).toBe('150.00')
     })
   })
 })

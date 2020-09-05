@@ -7,6 +7,7 @@ import { subscription } from '@aragon/connect-core'
 import { IDisputableVotingConnector, VoteData } from '../types'
 import Setting from './Setting'
 import CastVote from './CastVote'
+import ArbitratorFee from './ArbitratorFee'
 import DisputableVoting from './DisputableVoting'
 import CollateralRequirement from './CollateralRequirement'
 import {
@@ -48,6 +49,8 @@ export default class Vote {
   readonly executedAt: string
   readonly isAccepted: boolean
   readonly tokenDecimals: string
+  readonly submitterArbitratorFeeId: string
+  readonly challengerArbitratorFeeId: string
 
   constructor(data: VoteData, connector: IDisputableVotingConnector) {
     this.#connector = connector
@@ -80,6 +83,8 @@ export default class Vote {
     this.executedAt = data.executedAt
     this.isAccepted = data.isAccepted
     this.tokenDecimals = data.tokenDecimals
+    this.submitterArbitratorFeeId = data.submitterArbitratorFeeId
+    this.challengerArbitratorFeeId = data.challengerArbitratorFeeId
   }
 
   get hasEnded(): boolean {
@@ -170,6 +175,30 @@ export default class Vote {
   ): SubscriptionResult<CollateralRequirement> {
     return subscription<CollateralRequirement>(callback, (callback) =>
       this.#connector.onCollateralRequirement(this.id, callback)
+    )
+  }
+
+  async submitterArbitratorFee(): Promise<ArbitratorFee | null> {
+    return this.#connector.arbitratorFee(this.submitterArbitratorFeeId || '')
+  }
+
+  onSubmitterArbitratorFee(
+    callback?: SubscriptionCallback<ArbitratorFee | null>
+  ): SubscriptionResult<ArbitratorFee | null> {
+    return subscription<ArbitratorFee | null>(callback, (callback) =>
+      this.#connector.onArbitratorFee(this.submitterArbitratorFeeId || '', callback)
+    )
+  }
+
+  async challengerArbitratorFee(): Promise<ArbitratorFee | null> {
+    return this.#connector.arbitratorFee(this.challengerArbitratorFeeId || '')
+  }
+
+  onChallengerArbitratorFee(
+    callback?: SubscriptionCallback<ArbitratorFee | null>
+  ): SubscriptionResult<ArbitratorFee | null> {
+    return subscription<ArbitratorFee | null>(callback, (callback) =>
+      this.#connector.onArbitratorFee(this.challengerArbitratorFeeId || '', callback)
     )
   }
 

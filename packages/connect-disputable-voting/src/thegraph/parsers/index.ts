@@ -1,6 +1,7 @@
 export { parseVoter } from './voters'
 export { parseERC20 } from './erc20s'
 export { parseVote, parseVotes } from './votes'
+export { parseArbitratorFee } from './arbitratorFees'
 export { parseDisputableVoting } from './disputableVoting'
 export { parseCollateralRequirement } from './collateralRequirements'
 export { parseCastVote, parseCastVotes } from './castVotes'
