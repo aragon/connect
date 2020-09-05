@@ -27,19 +27,52 @@ describe('DisputableVoting', () => {
   })
 
   describe('end date', () => {
-    test('computes the end date properly', async () => {
-      const scheduledVote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-0`)
-      const expectedScheduledVoteEndDate =
-        parseInt(scheduledVote.startDate) +
-        parseInt(scheduledVote.duration)
-      expect(scheduledVote.endDate).toBe(expectedScheduledVoteEndDate.toString())
+    let scheduledVote: Vote, settledVote: Vote
 
-      const settledVote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-2`)
-      const expectedSettledVoteEndDate =
-        parseInt(settledVote.startDate) +
-        parseInt(settledVote.duration) +
-        parseInt(settledVote.pauseDuration)
-      expect(settledVote.endDate).toBe(expectedSettledVoteEndDate.toString())
+    beforeEach(async () => {
+      scheduledVote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-0`)
+      settledVote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-2`)
+    })
+
+    describe('when it was not flipped', () => {
+      test('computes the end date properly', async () => {
+        const expectedScheduledVoteEndDate =
+          parseInt(scheduledVote.startDate) +
+          parseInt(scheduledVote.duration)
+
+        expect(scheduledVote.endDate).toBe(expectedScheduledVoteEndDate.toString())
+
+        const expectedSettledVoteEndDate =
+          parseInt(settledVote.startDate) +
+          parseInt(settledVote.duration) +
+          parseInt(settledVote.pauseDuration)
+
+        expect(settledVote.endDate).toBe(expectedSettledVoteEndDate.toString())
+      })
+    })
+
+    describe('when it was flipped', () => {
+      beforeEach(async () => {
+        Object.defineProperty(scheduledVote, 'wasFlipped', { value: true })
+        Object.defineProperty(settledVote, 'wasFlipped', { value: true })
+      })
+
+      test('computes the end date properly', async () => {
+        const expectedScheduledVoteEndDate =
+          parseInt(scheduledVote.startDate) +
+          parseInt(scheduledVote.duration) +
+          parseInt(scheduledVote.quietEndingExtension)
+
+        expect(scheduledVote.endDate).toBe(expectedScheduledVoteEndDate.toString())
+
+        const expectedSettledVoteEndDate =
+          parseInt(settledVote.startDate) +
+          parseInt(settledVote.duration) +
+          parseInt(settledVote.pauseDuration) +
+          parseInt(settledVote.quietEndingExtension)
+
+        expect(settledVote.endDate).toBe(expectedSettledVoteEndDate.toString())
+      })
     })
   })
 

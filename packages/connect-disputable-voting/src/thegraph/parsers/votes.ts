@@ -41,6 +41,7 @@ function buildVote(vote: any, connector: any): Vote {
     voteId,
     creator,
     duration: setting.voteTime,
+    quietEndingExtension: setting.quietEndingExtension,
     context,
     status,
     actionId,

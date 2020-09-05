@@ -41,6 +41,7 @@ export default class Vote {
   readonly nays: string
   readonly pausedAt: string
   readonly pauseDuration: string
+  readonly quietEndingExtension: string
   readonly quietEndingExtensionDuration: string
   readonly quietEndingSnapshotSupport: string
   readonly script: string
@@ -59,6 +60,7 @@ export default class Vote {
     this.votingId = data.votingId
     this.voteId = data.voteId
     this.duration = data.duration
+    this.quietEndingExtension = data.quietEndingExtension
     this.creator = data.creator
     this.context = data.context
     this.voteStatus = data.status
@@ -96,9 +98,18 @@ export default class Vote {
   }
 
   get endDate(): string {
-    const originalEndDate = bn(this.startDate).add(bn(this.duration))
-    const endDateAfterPause = originalEndDate.add(bn(this.pauseDuration))
-    return endDateAfterPause.add(bn(this.quietEndingExtensionDuration)).toString()
+    const baseVoteEndDate = bn(this.startDate).add(bn(this.duration))
+    const endDateAfterPause = baseVoteEndDate.add(bn(this.pauseDuration))
+    const lastComputedEndDate = endDateAfterPause.add(bn(this.quietEndingExtensionDuration))
+
+    // The last computed end date is correct if we have not passed it yet or if no flip was detected in the last extension
+    const currentTimestamp = bn(parseInt((Date.now() / 1000).toString()).toString())
+    if (currentTimestamp.lt(lastComputedEndDate) || !this.wasFlipped) {
+      return lastComputedEndDate.toString()
+    }
+
+    // Otherwise, since the last computed end date was reached and included a flip, we need to extend the end date by one more period
+    return lastComputedEndDate.add(bn(this.quietEndingExtension)).toString()
   }
 
   get yeasPct(): string {
@@ -134,6 +145,19 @@ export default class Vote {
       return this.isAccepted ? 'Accepted' : 'Rejected'
     }
     return this.voteStatus
+  }
+
+  get wasFlipped(): boolean {
+    // If there was no snapshot taken, it means no one voted during the quiet ending period. Thus, it cannot have been flipped.
+    if (this.quietEndingSnapshotSupport == 'Absent') {
+      return false;
+    }
+
+    // Otherwise, we calculate if the vote was flipped by comparing its current acceptance state to its last state at the start of the extension period
+    const wasInitiallyAccepted = this.quietEndingSnapshotSupport == 'Yea'
+    const currentExtensions = bn(this.quietEndingExtensionDuration).div(bn(this.quietEndingExtension))
+    const wasAcceptedBeforeLastFlip = wasInitiallyAccepted == (currentExtensions.mod(bn('2')).eq(bn('0')))
+    return wasAcceptedBeforeLastFlip != this.isAccepted
   }
 
   castVoteId(voterAddress: Address): string {

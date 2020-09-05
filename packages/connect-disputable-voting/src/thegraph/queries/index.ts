@@ -101,6 +101,7 @@ export const GET_VOTE = (type: string) => gql`
       setting { 
         id 
         voteTime
+        quietEndingExtension
       }
       startDate
       totalPower
@@ -150,6 +151,7 @@ export const ALL_VOTES = (type: string) => gql`
       setting { 
         id 
         voteTime
+        quietEndingExtension
       }
       startDate
       totalPower
