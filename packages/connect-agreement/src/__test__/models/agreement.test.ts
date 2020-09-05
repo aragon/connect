@@ -177,6 +177,16 @@ describe('Agreement', () => {
       expect(staking.challenged).toBe('0')
       expect(staking.formattedChallengedAmount).toBe('0.00')
     })
+
+    it('allows accessing the token data', async () => {
+      const staking = await agreement.staking(TOKEN, USER)
+      const token = await staking.token()
+
+      expect(token.id).toBe(TOKEN)
+      expect(token.name).toBe('DAI Token')
+      expect(token.symbol).toBe('DAI')
+      expect(token.decimals).toBe(18)
+    })
   })
 
   describe('stakingMovements', () => {
@@ -194,6 +204,34 @@ describe('Agreement', () => {
       expect(movements[1].formattedAmount).toBe('1.00')
       expect(movements[1].actionState).toBe('Scheduled')
       expect(movements[1].collateralState).toBe('Locked')
+    })
+
+    describe('when there is an action associated to it', () => {
+      const MOVEMENT_ID = 1
+
+      it('has an agreement action', async () => {
+        const movements = await agreement.stakingMovements(TOKEN, USER)
+        const movement = movements[MOVEMENT_ID]
+
+        expect(movement.agreementId).toBe(AGREEMENT_APP_ADDRESS)
+        expect(movement.actionId).toBe(`${AGREEMENT_APP_ADDRESS}-action-15`)
+
+        const action = await movement.action()
+        expect(action.script).toBe('0x00000001')
+        expect(action.context).toBe('0x436f6e7465787420666f7220616374696f6e2031')
+      })
+    })
+
+    describe('when there is no action associated to it', () => {
+      const MOVEMENT_ID = 0
+
+      it('has no agreement and no action', async () => {
+        const movements = await agreement.stakingMovements(TOKEN, USER)
+        const movement = await movements[MOVEMENT_ID]
+
+        expect(movement.actionId).toBe(null)
+        expect(movement.agreementId).toBe(null)
+      })
     })
   })
 })
