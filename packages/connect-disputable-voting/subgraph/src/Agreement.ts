@@ -27,6 +27,7 @@ export function handleActionSettled(event: ActionSettledEvent): void {
   const voteId = buildVoteId(actionData.value0, actionData.value1)
 
   const vote = VoteEntity.load(voteId)!
+  vote.status = 'Settled'
   vote.settledAt = event.block.timestamp
   vote.save()
 }

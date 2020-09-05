@@ -83,7 +83,7 @@ export default class Vote {
   }
 
   get hasEnded(): boolean {
-    return this.voteStatus === 'Cancelled' || (
+    return this.voteStatus === 'Cancelled' || this.voteStatus === 'Settled' || (
       this.voteStatus !== 'Challenged' &&
       this.voteStatus !== 'Disputed' &&
       Date.now() >= toMilliseconds(this.endDate)

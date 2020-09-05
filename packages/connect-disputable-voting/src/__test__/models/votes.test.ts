@@ -48,7 +48,7 @@ describe('DisputableVoting', () => {
 
       expect(vote.hasEnded).toBe(true)
       expect(vote.isAccepted).toBe(false)
-      expect(vote.status).toBe('Cancelled')
+      expect(vote.status).toBe('Settled')
 
       expect(vote.totalPower).toBe('3000000000000000000')
       expect(vote.formattedTotalPower).toBe('3.00')
