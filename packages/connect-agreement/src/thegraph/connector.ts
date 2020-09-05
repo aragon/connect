@@ -276,9 +276,10 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     first: number,
     skip: number
   ): Promise<StakingMovement[]> {
+    const agreements = [agreement, '0x0000000000000000000000000000000000000000']
     return this.#gql.performQueryWithParser<StakingMovement[]>(
       queries.GET_STAKING_MOVEMENTS('query'),
-      { stakingId, agreement, noAgreement: '0x0000000000000000000000000000000000000000', first, skip },
+      { stakingId, agreements, first, skip },
       (result: QueryResult) => parseStakingMovements(result, this)
     )
   }
@@ -290,9 +291,10 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     skip: number,
     callback: SubscriptionCallback<StakingMovement[]>
   ): SubscriptionHandler {
+    const agreements = [agreement, '0x0000000000000000000000000000000000000000']
     return this.#gql.subscribeToQueryWithParser<StakingMovement[]>(
       queries.GET_STAKING_MOVEMENTS('query'),
-      { stakingId, agreement, noAgreement: '0x0000000000000000000000000000000000000000', first, skip },
+      { stakingId, agreements, first, skip },
       callback,
       (result: QueryResult) => parseStakingMovements(result, this)
     )

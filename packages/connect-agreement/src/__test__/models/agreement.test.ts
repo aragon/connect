@@ -183,9 +183,17 @@ describe('Agreement', () => {
     const TOKEN = '0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42'
     const USER = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
 
-    test.only('allows fetching the list of staking movements for a user', async () => {
+    test('allows fetching the list of staking movements for a user', async () => {
       const movements = await agreement.stakingMovements(TOKEN, USER)
       expect(movements.length).toBeGreaterThan(5)
+
+      expect(movements[0].formattedAmount).toBe('1.00')
+      expect(movements[0].actionState).toBe('NA')
+      expect(movements[0].collateralState).toBe('Available')
+
+      expect(movements[1].formattedAmount).toBe('1.00')
+      expect(movements[1].actionState).toBe('Scheduled')
+      expect(movements[1].collateralState).toBe('Locked')
     })
   })
 })
