@@ -2,11 +2,11 @@ import { QueryResult } from '@aragon/connect-thegraph'
 
 import Action from '../../models/Action'
 
-export function parseAction(result: QueryResult, connector: any): Action {
+export function parseAction(result: QueryResult, connector: any): Action | null {
   const action = result.data.action
 
   if (!action) {
-    throw new Error('Unable to parse action.')
+    return null
   }
 
   const { id, agreement, collateralRequirement, disputable, version, disputableActionId, script, context, createdAt } = action

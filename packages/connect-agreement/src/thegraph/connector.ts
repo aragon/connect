@@ -302,8 +302,8 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
 
   async action(
     actionId: string
-  ): Promise<Action> {
-    return this.#gql.performQueryWithParser<Action>(
+  ): Promise<Action | null> {
+    return this.#gql.performQueryWithParser<Action | null>(
       queries.GET_ACTION('query'),
       { actionId },
       (result: QueryResult) => parseAction(result, this)
@@ -312,9 +312,9 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
 
   onAction(
     actionId: string,
-    callback: SubscriptionCallback<Action>
+    callback: SubscriptionCallback<Action | null>
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser<Action>(
+    return this.#gql.subscribeToQueryWithParser<Action | null>(
       queries.GET_ACTION('query'),
       { actionId },
       callback,

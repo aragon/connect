@@ -160,10 +160,10 @@ export interface IAgreementConnector {
     disputableAppId: string,
     callback: SubscriptionCallback<CollateralRequirement>
   ): SubscriptionHandler
-  action(actionId: string): Promise<Action>
+  action(actionId: string): Promise<Action | null>
   onAction(
     actionId: string,
-    callback: SubscriptionCallback<Action>
+    callback: SubscriptionCallback<Action | null>
   ): SubscriptionHandler
   staking(stakingId: string): Promise<Staking>
   onStaking(

@@ -216,7 +216,7 @@ describe('Agreement', () => {
         expect(movement.agreementId).toBe(AGREEMENT_APP_ADDRESS)
         expect(movement.actionId).toBe(`${AGREEMENT_APP_ADDRESS}-action-15`)
 
-        const action = await movement.action()
+        const action = (await movement.action())!
         expect(action.script).toBe('0x00000001')
         expect(action.context).toBe('0x436f6e7465787420666f7220616374696f6e2031')
       })
@@ -231,6 +231,9 @@ describe('Agreement', () => {
 
         expect(movement.actionId).toBe(null)
         expect(movement.agreementId).toBe(null)
+
+        const action = await movement.action()
+        expect(action).toBe(null)
       })
     })
   })

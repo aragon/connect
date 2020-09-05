@@ -65,13 +65,13 @@ export default class StakingMovement {
     )
   }
 
-  async action(): Promise<Action> {
-    return this.#connector.action(this.actionId)
+  async action(): Promise<Action | null> {
+    return this.#connector.action(this.actionId || '')
   }
 
-  onAction(callback?: SubscriptionCallback<Action>): SubscriptionResult<Action> {
-    return subscription<Action>(callback, (callback) =>
-      this.#connector.onAction(this.actionId, callback)
+  onAction(callback?: SubscriptionCallback<Action | null>): SubscriptionResult<Action | null> {
+    return subscription<Action | null>(callback, (callback) =>
+      this.#connector.onAction(this.actionId || '', callback)
     )
   }
 }
