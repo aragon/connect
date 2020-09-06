@@ -82,9 +82,7 @@ export default class Agreement {
     )
   }
 
-  async disputableApps({ first = 1000, skip = 0 } = {}): Promise<
-    DisputableApp[]
-  > {
+  async disputableApps({ first = 1000, skip = 0 } = {}): Promise<DisputableApp[]> {
     return this.#connector.disputableApps(this.address, first, skip)
   }
 
@@ -115,7 +113,6 @@ export default class Agreement {
   }
 
   sign(signerAddress: string, versionNumber: string): Promise<ForwardingPath> {
-    const versionId = this.versionId(versionNumber)
-    return this.#app.intent('sign', [versionId], { actAs: signerAddress })
+    return this.#app.intent('sign', [versionNumber], { actAs: signerAddress })
   }
 }
