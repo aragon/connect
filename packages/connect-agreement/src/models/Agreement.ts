@@ -4,6 +4,8 @@ import {
   SubscriptionResult,
 } from '@aragon/connect-types'
 
+import { bn } from '../helpers'
+import Action from './Action'
 import Signer from './Signer'
 import Version from './Version'
 import DisputableApp from './DisputableApp'
@@ -153,5 +155,9 @@ export default class Agreement {
 
   sign(signerAddress: string, versionNumber: string): Promise<ForwardingPath> {
     return this.#app.intent('sign', [versionNumber], { actAs: signerAddress })
+  }
+
+  close(actionNumber: string, signerAddress: string): Promise<ForwardingPath> {
+    return this.#app.intent('closeAction', [actionNumber], { actAs: signerAddress })
   }
 }

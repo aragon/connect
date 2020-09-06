@@ -1,3 +1,4 @@
+import { ethers } from 'ethers'
 import { connect } from '@aragon/connect'
 import { Agreement, Signer, AgreementConnectorTheGraph } from '../../../src'
 
@@ -213,10 +214,32 @@ describe('Agreement', () => {
     const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
 
     it('returns a sign intent', async () => {
+      const abi = new ethers.utils.Interface(['function sign(uint256)'])
       const intent = await agreement.sign(SIGNER_ADDRESS, VERSION_NUMBER)
 
       expect(intent.transactions.length).toBe(1)
       expect(intent.destination.address).toBe(AGREEMENT_APP_ADDRESS)
+
+      const transaction = intent.transactions[0]
+      expect(transaction.to).toBe(AGREEMENT_APP_ADDRESS)
+      expect(transaction.data).toBe(abi.encodeFunctionData('sign', [VERSION_NUMBER]))
+    })
+  })
+
+  describe('close', () => {
+    const ACTION_NUMBER = '1'
+    const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
+
+    it('returns a sign intent', async () => {
+      const abi = new ethers.utils.Interface(['function closeAction(uint256)'])
+      const intent = await agreement.close(ACTION_NUMBER, SIGNER_ADDRESS)
+
+      expect(intent.transactions.length).toBe(1)
+      expect(intent.destination.address).toBe(AGREEMENT_APP_ADDRESS)
+
+      const transaction = intent.transactions[0]
+      expect(transaction.to).toBe(AGREEMENT_APP_ADDRESS)
+      expect(transaction.data).toBe(abi.encodeFunctionData('closeAction', [ACTION_NUMBER]))
     })
   })
 })
