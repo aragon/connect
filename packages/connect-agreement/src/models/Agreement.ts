@@ -157,6 +157,10 @@ export default class Agreement {
     return this.#app.intent('sign', [versionNumber], { actAs: signerAddress })
   }
 
+  settle(actionNumber: string, signerAddress: string): Promise<ForwardingPath> {
+    return this.#app.intent('settleAction', [actionNumber], { actAs: signerAddress })
+  }
+
   close(actionNumber: string, signerAddress: string): Promise<ForwardingPath> {
     return this.#app.intent('closeAction', [actionNumber], { actAs: signerAddress })
   }

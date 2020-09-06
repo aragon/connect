@@ -226,11 +226,28 @@ describe('Agreement', () => {
     })
   })
 
+  describe('settle', () => {
+    const ACTION_NUMBER = '1'
+    const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
+
+    it('returns a settle intent', async () => {
+      const abi = new ethers.utils.Interface(['function settleAction(uint256)'])
+      const intent = await agreement.settle(ACTION_NUMBER, SIGNER_ADDRESS)
+
+      expect(intent.transactions.length).toBe(1)
+      expect(intent.destination.address).toBe(AGREEMENT_APP_ADDRESS)
+
+      const transaction = intent.transactions[0]
+      expect(transaction.to).toBe(AGREEMENT_APP_ADDRESS)
+      expect(transaction.data).toBe(abi.encodeFunctionData('settleAction', [ACTION_NUMBER]))
+    })
+  })
+
   describe('close', () => {
     const ACTION_NUMBER = '1'
     const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
 
-    it('returns a sign intent', async () => {
+    it('returns a close intent', async () => {
       const abi = new ethers.utils.Interface(['function closeAction(uint256)'])
       const intent = await agreement.close(ACTION_NUMBER, SIGNER_ADDRESS)
 
