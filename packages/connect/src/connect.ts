@@ -5,9 +5,9 @@ import {
 import {
   ConnectorJson,
   ConnectorJsonConfig,
+  ErrorInvalidConnector,
   ErrorInvalidEthereum,
   ErrorInvalidLocation,
-  ErrorUnsupported,
   IOrganizationConnector,
   Organization,
   isAddress,
@@ -102,7 +102,7 @@ function getConnector(
     return new ConnectorEthereum(config as ConnectorEthereumConfig)
   }
 
-  throw new ErrorUnsupported(`Unsupported connector name: ${name}`)
+  throw new ErrorInvalidConnector(`Invalid connector: ${name}`)
 }
 
 function getEthersProvider(
