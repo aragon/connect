@@ -1,8 +1,9 @@
 import {
   App,
   ConnectionContext,
+  ErrorInvalidNetwork,
   ErrorNotFound,
-  ErrorUnsupported,
+  ErrorUnexpectedResult,
   IOrganizationConnector,
   Organization,
   Permission,
@@ -79,7 +80,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
       config.orgSubgraphUrl || getOrgSubgraphUrl(this.network)
 
     if (!orgSubgraphUrl) {
-      throw new ErrorUnsupported(
+      throw new ErrorInvalidNetwork(
         `The chainId ${this.network.chainId} is not supported by the TheGraph connector.`
       )
     }
@@ -219,7 +220,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
           if (err instanceof ErrorNotFound) {
             throw new ErrorNotFound('No app found with the current filters.')
           }
-          throw ErrorUnexpectedResult(
+          throw new ErrorUnexpectedResult(
             'Unexpected result when fetching the app.'
           )
         }

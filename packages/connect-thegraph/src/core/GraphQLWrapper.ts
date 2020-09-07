@@ -6,6 +6,7 @@ import {
 } from '@urql/core'
 import { DocumentNode } from 'graphql'
 import { pipe, subscribe } from 'wonka'
+import { ErrorConnection, ErrorUnexpectedResult } from '@aragon/connect-core'
 import {
   SubscriptionCallback,
   SubscriptionHandler,
@@ -158,7 +159,7 @@ export default class GraphQLWrapper {
     result: QueryResult
   ): Promise<T> {
     if (result.error) {
-      throw ErrorUnexpectedResult()
+      throw new ErrorUnexpectedResult()
     }
     return parser(result)
   }
