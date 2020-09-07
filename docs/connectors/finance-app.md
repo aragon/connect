@@ -10,7 +10,7 @@ To connect an app, you need to pass a finance app as a first parameter of the co
 import connect from '@aragon/connect'
 import connectFinance from '@aragon/connect-finance'
 
-const org = connect('myorg.aragonid.eth', 'thegraph')
+const org = await connect('myorg.aragonid.eth', 'thegraph')
 const finance = await connectFinance(org.app('finance'))
 ```
 
