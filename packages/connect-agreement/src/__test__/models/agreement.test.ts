@@ -1,5 +1,7 @@
 import { ethers } from 'ethers'
 import { connect } from '@aragon/connect'
+
+import { bn } from '../../helpers/numbers'
 import { Agreement, Signer, AgreementConnectorTheGraph } from '../../../src'
 
 const RINKEBY_NETWORK = 4
@@ -83,7 +85,7 @@ describe('Agreement', () => {
       expect(disputable.address).toBe('0x0e835020497b2cd716369f8fc713fb7bd0a22dbf')
       expect(disputable.activated).toEqual(true)
       expect(disputable.agreementId).toBe(AGREEMENT_APP_ADDRESS)
-      expect(disputable.collateralRequirementId).toBe(`${AGREEMENT_APP_ADDRESS}-disputable-${disputable.address}-collateral-requirement-1`)
+      expect(disputable.currentCollateralRequirementId).toBe(`${AGREEMENT_APP_ADDRESS}-disputable-${disputable.address}-collateral-requirement-1`)
 
       const collateralRequirement = await disputable.collateralRequirement()
       expect(collateralRequirement.actionAmount).toEqual('0')
@@ -222,6 +224,7 @@ describe('Agreement', () => {
 
       const transaction = intent.transactions[0]
       expect(transaction.to).toBe(AGREEMENT_APP_ADDRESS)
+      expect(transaction.from).toBe(SIGNER_ADDRESS)
       expect(transaction.data).toBe(abi.encodeFunctionData('sign', [VERSION_NUMBER]))
     })
   })
@@ -239,6 +242,7 @@ describe('Agreement', () => {
 
       const transaction = intent.transactions[0]
       expect(transaction.to).toBe(AGREEMENT_APP_ADDRESS)
+      expect(transaction.from).toBe(SIGNER_ADDRESS)
       expect(transaction.data).toBe(abi.encodeFunctionData('settleAction', [ACTION_NUMBER]))
     })
   })
@@ -256,7 +260,43 @@ describe('Agreement', () => {
 
       const transaction = intent.transactions[0]
       expect(transaction.to).toBe(AGREEMENT_APP_ADDRESS)
+      expect(transaction.from).toBe(SIGNER_ADDRESS)
       expect(transaction.data).toBe(abi.encodeFunctionData('closeAction', [ACTION_NUMBER]))
+    })
+  })
+
+  describe('challenge', () => {
+    const ACTION_NUMBER = '1'
+    const SETTLEMENT_OFFER = '20'
+    const CONTEXT = 'challenger evidence'
+    const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
+
+    it('returns a challenge intent', async () => {
+      const erc20ABI = new ethers.utils.Interface(['function approve(address,uint256) returns (bool)'])
+      const agreementABI = new ethers.utils.Interface(['function challengeAction(uint256,uint256,bool,bytes)'])
+      const intent = await agreement.challenge(ACTION_NUMBER, SETTLEMENT_OFFER, true, CONTEXT, SIGNER_ADDRESS)
+
+      expect(intent.transactions.length).toBe(3)
+      expect(intent.destination.address).toBe(AGREEMENT_APP_ADDRESS)
+
+      const action = (await agreement.action(ACTION_NUMBER))!
+      const disputeFees = await agreement.disputeFees(action.versionId)
+      const collateralRequirement = await action.collateralRequirement()
+
+      const firstTransaction = intent.transactions[0]
+      expect(firstTransaction.to.toLowerCase()).toBe(collateralRequirement.tokenId)
+      expect(firstTransaction.from.toLowerCase()).toBe(SIGNER_ADDRESS)
+      expect(firstTransaction.data).toBe(erc20ABI.encodeFunctionData('approve', [AGREEMENT_APP_ADDRESS, '0']))
+
+      const secondTransaction = intent.transactions[1]
+      expect(secondTransaction.to.toLowerCase()).toBe(collateralRequirement.tokenId)
+      expect(secondTransaction.from.toLowerCase()).toBe(SIGNER_ADDRESS)
+      expect(secondTransaction.data).toBe(erc20ABI.encodeFunctionData('approve', [AGREEMENT_APP_ADDRESS, disputeFees.feeAmount.add(bn(collateralRequirement.challengeAmount))]))
+
+      const thirdTransaction = intent.transactions[2]
+      expect(thirdTransaction.to.toLowerCase()).toBe(AGREEMENT_APP_ADDRESS)
+      expect(thirdTransaction.from).toBe(SIGNER_ADDRESS)
+      expect(thirdTransaction.data).toBe(agreementABI.encodeFunctionData('challengeAction', [ACTION_NUMBER, SETTLEMENT_OFFER, true, ethers.utils.toUtf8Bytes(CONTEXT)]))
     })
   })
 })
