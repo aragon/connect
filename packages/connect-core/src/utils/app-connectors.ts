@@ -1,6 +1,6 @@
 import { Network } from '@aragon/connect-types'
 import { ConnectionContext } from '../types'
-import { ErrorInvalid } from '../errors'
+import { ErrorInvalidConnector, ErrorInvalidApp } from '../errors'
 import App from '../entities/App'
 
 type AppConnectContext = {
@@ -24,7 +24,7 @@ function normalizeConnectorConfig<Config extends object>(
   if (typeof connector === 'string') {
     return [connector, {} as Config]
   }
-  throw new ErrorInvalid(
+  throw new ErrorInvalidConnector(
     'The connector should be passed as a string or an array.'
   )
 }
@@ -53,7 +53,7 @@ export function createAppConnector<
     app = await app
 
     if (!isAppValid(app)) {
-      throw new ErrorInvalid(
+      throw new ErrorInvalidApp(
         `App connector: the passed value doesn’t appear to be an App.`
       )
     }
