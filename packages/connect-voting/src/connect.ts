@@ -1,7 +1,8 @@
 import {
+  ErrorInvalidApp,
+  ErrorInvalidConnector,
+  ErrorInvalidNetwork,
   createAppConnector,
-  ErrorInvalid,
-  ErrorUnsupported,
 } from '@aragon/connect-core'
 import Voting from './models/Voting'
 import VotingConnectorTheGraph, {
@@ -16,13 +17,13 @@ type Config = {
 export default createAppConnector<Voting, Config>(
   ({ app, config, connector, network, orgConnector, verbose }) => {
     if (connector !== 'thegraph') {
-      throw new ErrorUnsupported(
+      throw new ErrorInvalidConnector(
         `Connector unsupported: ${connector}. Please use thegraph.`
       )
     }
 
     if (app.name !== 'voting') {
-      throw new ErrorInvalid(
+      throw new ErrorInvalidApp(
         `This app (${app.name}) is not compatible with @aragon/connect-voting. ` +
           `Please use an app instance of the voting.aragonpm.eth repo.`
       )
@@ -30,6 +31,13 @@ export default createAppConnector<Voting, Config>(
 
     const subgraphUrl =
       config.subgraphUrl ?? subgraphUrlFromChainId(network.chainId) ?? undefined
+
+    if (!subgraphUrl) {
+      throw new ErrorInvalidNetwork(
+        'No subgraph could be found for this network. ' +
+          'Please provide a subgraphUrl or use one of the supported networks.'
+      )
+    }
 
     let pollInterval
     if (orgConnector.name === 'thegraph') {
