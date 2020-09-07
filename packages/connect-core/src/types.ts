@@ -1,4 +1,4 @@
-import { providers as ethersProviders, utils as ethersUtils } from 'ethers'
+import { BigNumber, providers as ethersProviders, utils as ethersUtils } from 'ethers'
 import { Address, Network } from '@aragon/connect-types'
 
 import IOrganizationConnector from './connections/IOrganizationConnector'
@@ -128,7 +128,7 @@ export interface TransactionData {
 
 export interface TokenData {
   address: Address
-  value: string
+  value: string | BigNumber
   spender?: Address
 }
 
