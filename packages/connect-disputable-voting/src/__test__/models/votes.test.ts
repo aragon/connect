@@ -10,7 +10,7 @@ import {
 
 const VOTING_APP_ADDRESS = '0x0e835020497b2cd716369f8fc713fb7bd0a22dbf'
 const VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging'
+  'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-dvoting-rinkeby-staging'
 
 describe('DisputableVoting', () => {
   let voting: DisputableVoting
