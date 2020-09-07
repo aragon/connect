@@ -1,4 +1,9 @@
-import { createAppConnector } from '@aragon/connect-core'
+import {
+  ErrorInvalidApp,
+  ErrorInvalidConnector,
+  ErrorInvalidNetwork,
+  createAppConnector,
+} from '@aragon/connect-core'
 import Finance from './models/Finance'
 import FinanceConnectorTheGraph, {
   subgraphUrlFromChainId,
@@ -12,13 +17,13 @@ type Config = {
 export default createAppConnector<Finance, Config>(
   ({ app, config, connector, network, orgConnector, verbose }) => {
     if (connector !== 'thegraph') {
-      throw new ErrorUnsupported(
+      throw new ErrorInvalidConnector(
         `Connector unsupported: ${connector}. Please use thegraph.`
       )
     }
 
     if (app.name !== 'finance') {
-      throw new ErrorInvalid(
+      throw new ErrorInvalidApp(
         `This app (${app.name}) is not compatible with @aragon/connect-finance. ` +
           `Please use an app instance of the finance.aragonpm.eth repo.`
       )
@@ -26,6 +31,13 @@ export default createAppConnector<Finance, Config>(
 
     const subgraphUrl =
       config.subgraphUrl ?? subgraphUrlFromChainId(network.chainId) ?? undefined
+
+    if (!subgraphUrl) {
+      throw new ErrorInvalidNetwork(
+        'No subgraph could be found for this network. ' +
+          'Please provide a subgraphUrl or use one of the supported networks.'
+      )
+    }
 
     let pollInterval
     if (orgConnector.name === 'thegraph') {
