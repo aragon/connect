@@ -4,17 +4,36 @@ This is an app connector for the Tokens app (`token-manager.aragonpm.eth`). It o
 
 ## Usage
 
-To create a new instance of the connector, you need the specific Tokens app address and a Subgraph URL:
+To connect a Tokens app, you need to pass it to `connectTokens()`:
 
 ```js
 import connect from '@aragon/connect'
 import connectTokens from '@aragon/connect-tokens'
 
-const org = connect('myorg.aragonid.eth', 'thegraph')
-const tokens = connectTokens(org.app('token-manager'))
+const org = await connect('myorg.aragonid.eth', 'thegraph')
+const tokens = await connectTokens(org.app('token-manager'))
 ```
 
-It extends the `App` object, which means that every method and properties of [`App`](../api-reference/app.md) are also available on this object.
+It extends the `App` object, which means that every method and property of [`App`](../api-reference/app.md) is also available on this object.
+
+## connect\(app, connector\)
+
+Connects and returns a `Tokens` instance.
+
+| Name        | Type                                   | Description                                                                                                                                            |
+| ----------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `app`       | `App` or `Promise<App>`                | The app to extend with connected capabilities.                                                                                                         |
+| `connector` | `["thegraph", Object]` or `"thegraph"` | Accepts either a string describing the desired connector (only `"thegraph"` for now), or a tuple to also pass a configuration object to the connector. |
+| returns     | `Promise<Tokens>`                      | An `Tokens` instance (see below).                                                                                                                      |
+
+It can throw the following errors:
+
+| Error type                                                     | Description                                                                                                                      |
+| -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| [`ErrorInvalidApp`](./errors.md#error-invalid-app)             | Either the passed value is not a valid app object, or its name is not `token-manager` (`err.reason === "wrong-name"`).           |
+| [`ErrorInvalidConnector`](./errors.md#error-invalid-connector) | Either the connector configuration format is not valid, or the connector name is not supported (`err.reason === "unsupported"`). |
+| [`ErrorInvalidConnector`](./errors.md#error-invalid-connector) | The connector is not supported.                                                                                                  |
+| [`ErrorInvalidNetwork`](./errors.md#error-invalid-network)     | A subgraph couldn’t be found with the current network. Pass a `subgraphUrl` directly, or use one of the supported networks.      |
 
 ## Tokens
 
@@ -28,6 +47,13 @@ Get the `Token` instance used with the app.
 | ------- | ---------------- | ----------------- |
 | returns | `Promise<Token>` | A `Token` object. |
 
+This method can throw one of the following errors:
+
+| Error type                                                     | Description                                 |
+| -------------------------------------------------------------- | ------------------------------------------- |
+| [`ErrorUnexpectedResult`](./errors.md#error-unexpected-result) | The response seems incorrect.               |
+| [`ErrorConnection`](./errors.md#error-connection)              | The connection to the remote source failed. |
+
 ### Tokens\#holders\(filters\)
 
 Get a list of token holders.
@@ -39,6 +65,13 @@ Get a list of token holders.
 | `filters.skip`  | `Number`                 | Skip a number of token holders. Defaults to `0`.      |
 | returns         | `Promise<TokenHolder[]>` | List of token holders.                                |
 
+This method can throw one of the following errors:
+
+| Error type                                                     | Description                                 |
+| -------------------------------------------------------------- | ------------------------------------------- |
+| [`ErrorUnexpectedResult`](./errors.md#error-unexpected-result) | The response seems incorrect.               |
+| [`ErrorConnection`](./errors.md#error-connection)              | The connection to the remote source failed. |
+
 ### Tokens\#onHolders\(filters, callback\)
 
 Subscribe to a list of token holders. The callback is optional, not passing it will return a partially applied function.
@@ -48,6 +81,13 @@ Subscribe to a list of token holders. The callback is optional, not passing it w
 | `filters`  | `Object`                                              | Optional object allowing to filter the token holders. See `Tokens#holders()` for details. |
 | `callback` | `(error: Error, tokenHolders: TokenHolder[]) => void` | A callback that will get called every time the result gets updated.                       |
 | returns    | `{ unsubscribe: () => void }`                         | Unsubscribe function.                                                                     |
+
+The error passed to `callback` can be `null` (no error) or one of the following:
+
+| Error type                                                     | Description                                 |
+| -------------------------------------------------------------- | ------------------------------------------- |
+| [`ErrorUnexpectedResult`](./errors.md#error-unexpected-result) | The data couldn’t be fetched.               |
+| [`ErrorConnection`](./errors.md#error-connection)              | The connection to the remote source failed. |
 
 ## Token
 

@@ -3,6 +3,7 @@ import {
   SubscriptionCallback,
   SubscriptionHandler,
 } from '@aragon/connect-types'
+import { ErrorException } from '@aragon/connect-core'
 import { GraphQLWrapper } from '@aragon/connect-thegraph'
 import { ITokensConnector } from '../types'
 import * as queries from './queries'
@@ -43,13 +44,13 @@ export default class TokensConnectorTheGraph implements ITokensConnector {
     config: TokensConnectorTheGraphConfig
   ): Promise<TokensConnectorTheGraph> {
     if (!config.subgraphUrl) {
-      throw new Error(
+      throw new ErrorException(
         'TokensConnectorTheGraph requires subgraphUrl to be passed.'
       )
     }
 
     if (!config.appAddress) {
-      throw new Error(
+      throw new ErrorException(
         'TokensConnectorTheGraph requires appAddress to be passed.'
       )
     }
