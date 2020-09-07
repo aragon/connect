@@ -199,6 +199,18 @@ export default class Agreement {
     return intent
   }
 
+  async dispute(actionNumber: string, finishedEvidence: boolean, signerAddress: string): Promise<ForwardingPath> {
+    const intent = await this.#app.intent('disputeAction', [actionNumber, finishedEvidence], { actAs: signerAddress })
+
+    const action = (await this.action(actionNumber))!
+    const { feeToken, feeAmount } = await this.disputeFees(action.versionId)
+
+    // approve dispute fees
+    const preTransactions = await intent.buildApprovePreTransactions({ address: feeToken, value: feeAmount })
+    intent.applyPreTransactions(preTransactions)
+    return intent
+  }
+
   settle(actionNumber: string, signerAddress: string): Promise<ForwardingPath> {
     return this.#app.intent('settleAction', [actionNumber], { actAs: signerAddress })
   }
