@@ -8,11 +8,12 @@ import DisputableVoting from './DisputableVoting'
 import CollateralRequirement from './CollateralRequirement'
 import { IDisputableVotingConnector, VoteData } from '../types'
 import {
-  toMilliseconds,
   bn,
   formatBn,
   PCT_BASE,
   PCT_DECIMALS,
+  toMilliseconds,
+  currentTimestampEvm,
 } from '../helpers'
 
 export default class Vote {
@@ -100,7 +101,7 @@ export default class Vote {
     const lastComputedEndDate = endDateAfterPause.add(bn(this.quietEndingExtensionDuration))
 
     // The last computed end date is correct if we have not passed it yet or if no flip was detected in the last extension
-    const currentTimestamp = bn(parseInt((Date.now() / 1000).toString()).toString())
+    const currentTimestamp = currentTimestampEvm()
     if (currentTimestamp.lt(lastComputedEndDate) || !this.wasFlipped) {
       return lastComputedEndDate.toString()
     }
