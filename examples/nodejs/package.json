@@ -1,7 +1,7 @@
 {
   "name": "nodejs",
   "main": "dist/index.js",
-  "version": "0.7.0-beta.3",
+  "version": "0.8.0-alpha.1",
   "private": true,
   "scripts": {
     "build": "yarn clean && yarn compile",
@@ -22,10 +22,10 @@
     "start-create-karma-template": "yarn build; node dist/src/create-karma-template.js"
   },
   "dependencies": {
-    "@aragon/connect": "^0.7.0-beta.3",
-    "@aragon/connect-thegraph": "^0.7.0-beta.3",
-    "@aragon/connect-tokens": "^0.7.0-beta.3",
-    "@aragon/connect-voting": "^0.7.0-beta.3",
+    "@aragon/connect": "^0.8.0-alpha.1",
+    "@aragon/connect-thegraph": "^0.8.0-alpha.1",
+    "@aragon/connect-tokens": "^0.8.0-alpha.1",
+    "@aragon/connect-voting": "^0.8.0-alpha.1",
     "ethers": "^5.0.0",
     "graphql-tag": "^2.10.3"
   },
