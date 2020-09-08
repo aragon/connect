@@ -72,9 +72,10 @@ describe('DisputableVoting votes', () => {
     })
 
     test('allows fetching a single vote', () => {
-      const vote = votes[6]
+      const vote = votes.find(
+        (vote) => vote.id === `${VOTING_APP_ADDRESS}-vote-2`
+      ) as Vote
 
-      expect(vote.id).toBe(`${VOTING_APP_ADDRESS}-vote-2`)
       expect(vote.voteId).toEqual('2')
       expect(vote.votingId).toBe(VOTING_APP_ADDRESS)
       expect(vote.settingId).toBe(`${VOTING_APP_ADDRESS}-setting-0`)
