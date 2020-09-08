@@ -1,8 +1,9 @@
 import { BigInt, Address } from '@graphprotocol/graph-ts'
-import { buildVoteId, buildERC20 } from './DisputableVoting'
+import { buildVoteId, buildERC20, updateVoteState } from './DisputableVoting'
 import { Vote as VoteEntity, ArbitratorFee as ArbitratorFeeEntity } from '../generated/schema'
 import {
   Agreement as AgreementContract,
+  ActionClosed as ActionClosedEvent,
   ActionDisputed as ActionDisputedEvent,
   ActionSettled as ActionSettledEvent,
   ActionChallenged as ActionChallengedEvent
@@ -38,6 +39,12 @@ export function handleActionSettled(event: ActionSettledEvent): void {
   vote.status = 'Settled'
   vote.settledAt = event.block.timestamp
   vote.save()
+}
+
+export function handleActionClosed(event: ActionClosedEvent): void {
+  const agreementApp = AgreementContract.bind(event.address)
+  const actionData = agreementApp.getAction(event.params.actionId)
+  updateVoteState(actionData.value0, actionData.value1)
 }
 
 export function handleActionChallenged(event: ActionChallengedEvent): void {
