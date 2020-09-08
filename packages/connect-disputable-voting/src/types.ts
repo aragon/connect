@@ -176,5 +176,8 @@ export interface IDisputableVotingConnector {
     callback: SubscriptionCallback<ArbitratorFee | null>
   ): SubscriptionHandler
   ERC20(tokenAddress: string): Promise<ERC20>
-  onERC20(tokenAddress: string, callback: Function): SubscriptionHandler
+  onERC20(
+    tokenAddress: string,
+    callback: SubscriptionCallback<ERC20>
+  ): SubscriptionHandler
 }

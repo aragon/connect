@@ -1,15 +1,12 @@
-import {
-  Address,
-  SubscriptionCallback,
-  SubscriptionResult,
-} from '@aragon/connect-types'
 import { subscription } from '@aragon/connect-core'
-import { IDisputableVotingConnector, VoteData } from '../types'
+import { Address, SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
+
 import Setting from './Setting'
 import CastVote from './CastVote'
 import ArbitratorFee from './ArbitratorFee'
 import DisputableVoting from './DisputableVoting'
 import CollateralRequirement from './CollateralRequirement'
+import { IDisputableVotingConnector, VoteData } from '../types'
 import {
   toMilliseconds,
   bn,

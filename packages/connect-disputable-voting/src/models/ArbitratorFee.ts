@@ -1,4 +1,5 @@
-import { SubscriptionHandler } from '@aragon/connect-types'
+import { subscription } from '@aragon/connect-core'
+import { SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
 
 import ERC20 from './ERC20'
 import { formatBn } from '../helpers'
@@ -34,7 +35,9 @@ export default class ArbitratorFee {
     return this.#connector.ERC20(this.tokenId)
   }
 
-  onToken(callback: Function): SubscriptionHandler {
-    return this.#connector.onERC20(this.tokenId, callback)
+  onToken(callback?: SubscriptionCallback<ERC20>): SubscriptionResult<ERC20> {
+    return subscription<ERC20>(callback, (callback) =>
+      this.#connector.onERC20(this.tokenId, callback)
+    )
   }
 }
