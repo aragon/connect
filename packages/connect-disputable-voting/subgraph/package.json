@@ -9,10 +9,10 @@
     "manifest-rinkeby": "scripts/build-manifest.sh rinkeby",
     "manifest-rinkeby-staging": "env STAGING=true dvoting/build-manifest.sh rinkeby",
     "manifest-xdai": "scripts/build-manifest.sh xdai",
-    "deploy-mainnet": "scripts/deploy.sh aragon dvoting mainnet",
-    "deploy-mainnet-staging": "env STAGING=true scripts/deploy.sh aragon dvoting mainnet",
-    "deploy-rinkeby": "scripts/deploy.sh aragon dvoting rinkeby",
-    "deploy-rinkeby-staging": "env STAGING=true scripts/deploy.sh aragon dvoting rinkeby",
+    "deploy-mainnet": "scripts/deploy.sh facuspagnuolo dvoting mainnet",
+    "deploy-mainnet-staging": "env STAGING=true scripts/deploy.sh facuspagnuolo dvoting mainnet",
+    "deploy-rinkeby": "scripts/deploy.sh facuspagnuolo dvoting rinkeby",
+    "deploy-rinkeby-staging": "env STAGING=true scripts/deploy.sh facuspagnuolo dvoting rinkeby",
     "deploy-xdai": "scripts/deploy.sh aragon dvoting xdai"
   },
   "devDependencies": {

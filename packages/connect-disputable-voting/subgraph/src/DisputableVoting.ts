@@ -193,14 +193,14 @@ function loadOrCreateVoter(votingAddress: Address, voterAddress: Address): Voter
   return voter!
 }
 
-function updateVoteState(votingAddress: Address, voteId: BigInt): void {
+export function updateVoteState(votingAddress: Address, voteId: BigInt): void {
   const votingApp = VotingContract.bind(votingAddress)
   const voteData = votingApp.getVote(voteId)
 
   const vote = VoteEntity.load(buildVoteId(votingAddress, voteId))!
   vote.yeas = voteData.value0
   vote.nays = voteData.value1
-  vote.status = castVoteStatus(voteData.value5)
+  vote.status = vote.status == 'Settled' ? 'Settled' : castVoteStatus(voteData.value5)
   vote.pausedAt = voteData.value8
   vote.pauseDuration = voteData.value9
   vote.quietEndingExtensionDuration = voteData.value10
