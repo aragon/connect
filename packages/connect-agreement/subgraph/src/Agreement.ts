@@ -4,7 +4,7 @@ import { ERC20 } from '../generated/schema'
 import { ERC20 as ERC20Contract } from '../generated/templates/Agreement/ERC20'
 import { createAgreementStakingMovement } from './Staking'
 import { Staking as StakingTemplate } from '../generated/templates'
-import { StakingFactory as StakingFactoryContract } from '../generated/templates/StakingFactory/StakingFactory'
+import { StakingFactory as StakingFactoryContract } from '../generated/templates/Agreement/StakingFactory'
 import { DisputableVoting as DisputableVotingTemplate } from '../generated/templates'
 import { DisputableAragonApp as DisputableAragonAppContract } from '../generated/templates/DisputableVoting/DisputableAragonApp'
 import { Agreement, Action, Signature, Version, Disputable, Challenge, Dispute, Evidence, Signer, CollateralRequirement, ArbitratorFee } from '../generated/schema'
@@ -150,40 +150,33 @@ export function handleActionSettled(event: ActionSettled): void {
 export function handleActionDisputed(event: ActionDisputed): void {
   updateChallengeState(event.address, event.params.challengeId)
 
-  const challengeId = buildChallengeId(event.address, event.params.challengeId)
-  const agreementApp = AgreementContract.bind(event.address)
-  const challengeData = agreementApp.getChallenge(event.params.challengeId)
-  const challengeArbitratorFeesData = agreementApp.getChallengeArbitratorFees(event.params.challengeId)
-
-  const dispute = new Dispute(buildDisputeId(event.address, challengeData.value8))
-  dispute.ruling = challengeData.value9
-  dispute.disputeId = challengeData.value8
-  dispute.challenge = challengeId
-  dispute.submitterFinishedEvidence = challengeData.value6
-  dispute.challengerFinishedEvidence = challengeData.value7
-  dispute.createdAt = event.block.timestamp
+  const dispute = loadOrCreateDispute(event.address, event.params.challengeId, event)
   dispute.save()
 
-  const challenge = Challenge.load(challengeId)!
+  const challengeId = buildChallengeId(event.address, event.params.challengeId)
+  const agreementApp = AgreementContract.bind(event.address)
+  const challengeArbitratorFeesData = agreementApp.getChallengeArbitratorFees(event.params.challengeId)
   const submitterArbitratorFeeId = challengeId + 'submitter-arbitrator-fee'
   createArbitratorFee(event.address, submitterArbitratorFeeId, challengeArbitratorFeesData.value0, challengeArbitratorFeesData.value1)
+
+  const challenge = Challenge.load(challengeId)!
   challenge.submitterArbitratorFee = submitterArbitratorFeeId
   challenge.save()
 }
 
 export function handleActionAccepted(event: ActionAccepted): void {
   updateChallengeState(event.address, event.params.challengeId)
-  updateDisputeState(event.address, event.params.challengeId)
+  updateDisputeState(event.address, event.params.challengeId, event)
 }
 
 export function handleActionVoided(event: ActionVoided): void {
   updateChallengeState(event.address, event.params.challengeId)
-  updateDisputeState(event.address, event.params.challengeId)
+  updateDisputeState(event.address, event.params.challengeId, event)
 }
 
 export function handleActionRejected(event: ActionRejected): void {
   updateChallengeState(event.address, event.params.challengeId)
-  updateDisputeState(event.address, event.params.challengeId)
+  updateDisputeState(event.address, event.params.challengeId, event)
   createAgreementStakingMovement(event.address, event.params.actionId, 'rejected', event)
 }
 
@@ -248,6 +241,25 @@ function createDisputableTemplate(disputable: Address): void {
   }
 }
 
+function loadOrCreateDispute(agreement: Address, challengeId: BigInt, event: ethereum.Event): Dispute {
+  const agreementApp = AgreementContract.bind(agreement)
+  const challengeData = agreementApp.getChallenge(challengeId)
+  const disputeId = buildDisputeId(agreement, challengeData.value8)
+
+  let dispute = Dispute.load(disputeId)
+  if (dispute === null) {
+    dispute = new Dispute(disputeId)
+    dispute.ruling = challengeData.value9
+    dispute.disputeId = challengeData.value8
+    dispute.challenge = buildChallengeId(agreement, challengeId)
+    dispute.submitterFinishedEvidence = challengeData.value6
+    dispute.challengerFinishedEvidence = challengeData.value7
+    dispute.createdAt = event.block.timestamp
+  }
+
+  return dispute!
+}
+
 function updateChallengeState(agreement: Address, challengeId: BigInt): void {
   const agreementApp = AgreementContract.bind(agreement)
   const challengeData = agreementApp.getChallenge(challengeId)
@@ -257,11 +269,11 @@ function updateChallengeState(agreement: Address, challengeId: BigInt): void {
   challenge.save()
 }
 
-function updateDisputeState(agreement: Address, challengeId: BigInt): void {
+function updateDisputeState(agreement: Address, challengeId: BigInt, event: ethereum.Event): void {
   const agreementApp = AgreementContract.bind(agreement)
   const challengeData = agreementApp.getChallenge(challengeId)
 
-  const dispute = Dispute.load(buildDisputeId(agreement, challengeId))!
+  const dispute = loadOrCreateDispute(agreement, challengeId, event)
   dispute.ruling = challengeData.value9
   dispute.submitterFinishedEvidence = challengeData.value6
   dispute.challengerFinishedEvidence = challengeData.value7
