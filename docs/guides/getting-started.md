@@ -167,23 +167,17 @@ Methods generating a transaction return an [`TransactionIntent`](https://github.
 Generating a transaction is done in three steps. First, call a method returning a `TransactionIntent` object:
 
 ```javascript
-const intent = await org.appIntent(voting, 'vote', [votes[0].id, true, true])
+const intent = org.appIntent(voting, 'vote', [votes[0].id, true, true])
 ```
 
 Then to retrieve the path you want, pass the account that will be signing the transaction. Aragon Connect will go through the permissions of the organization, and return the shortest path:
 
 ```javascript
-const path = intent.paths(wallet.account)
+const path = await intent.paths(wallet.account)
 ```
 
 Finally, you can sign the different transactions associated to this path. Aragon Connect doesn’t handle any signing itself, but returns an object that is ready to use with the library of your choice: [ethers.js](https://docs.ethers.io/v5/), [Web3.js](https://web3js.readthedocs.io/en/1.0/), or even a [JSON-RPC connection to an Ethereum node](https://eips.ethereum.org/EIPS/eip-1474).
 
-```javascript
-// Sign the transactions using ethers.js
-for (const transaction of path.transactions) {
-  await ethers.sendTransaction(transaction)
-}
-```
 
 ## Going further
 
