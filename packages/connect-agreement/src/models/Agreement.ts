@@ -161,7 +161,15 @@ export default class Agreement {
     return `${this.address.toLowerCase()}-action-${actionNumber}`
   }
 
-  async action(actionNumber: string): Promise<Action | null> {
+  async action(actionNumber: string): Promise<Action> {
+    const action = await this.tryAction(actionNumber)
+    if (!action) {
+      throw Error(`Could not find given action number ${actionNumber}`)
+    }
+    return action as Action
+  }
+
+  async tryAction(actionNumber: string): Promise<Action | null> {
     return this.#connector.action(this.actionId(actionNumber))
   }
 
@@ -178,7 +186,7 @@ export default class Agreement {
   async challenge(actionNumber: string, settlementOffer: string, finishedEvidence: boolean, context: string, signerAddress: string): Promise<ForwardingPath> {
     const intent = await this.#app.intent('challengeAction', [actionNumber, settlementOffer, finishedEvidence, utils.toUtf8Bytes(context)], { actAs: signerAddress })
 
-    const action = (await this.action(actionNumber))!
+    const action = await this.action(actionNumber)
     const { feeToken, feeAmount } = await this.disputeFees(action.versionId)
     const { tokenId: collateralToken, challengeAmount } = await action.collateralRequirement()
     const challengeCollateral = bn(challengeAmount)
@@ -202,7 +210,7 @@ export default class Agreement {
   async dispute(actionNumber: string, finishedEvidence: boolean, signerAddress: string): Promise<ForwardingPath> {
     const intent = await this.#app.intent('disputeAction', [actionNumber, finishedEvidence], { actAs: signerAddress })
 
-    const action = (await this.action(actionNumber))!
+    const action = await this.action(actionNumber)
     const { feeToken, feeAmount } = await this.disputeFees(action.versionId)
 
     // approve dispute fees
