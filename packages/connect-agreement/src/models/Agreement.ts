@@ -4,10 +4,13 @@ import {
   SubscriptionResult,
 } from '@aragon/connect-types'
 import { subscription } from '@aragon/connect-core'
-import { IAgreementConnector } from '../types'
+
 import Signer from './Signer'
 import Version from './Version'
 import DisputableApp from './DisputableApp'
+import Staking from './Staking'
+import StakingMovement from './StakingMovement'
+import { IAgreementConnector } from '../types'
 
 export default class Agreement {
   #address: Address
@@ -108,6 +111,43 @@ export default class Agreement {
   ): SubscriptionResult<Signer> {
     return subscription<Signer>(callback, (callback) =>
       this.#connector.onSigner(this.signerId(signerAddress), callback)
+    )
+  }
+
+  stakingId(tokenAddress: string, userAddress: string): string {
+    return `${tokenAddress.toLowerCase()}-user-${userAddress.toLowerCase()}`
+  }
+
+  async staking(tokenAddress: string, userAddress: string): Promise<Staking> {
+    return this.#connector.staking(this.stakingId(tokenAddress, userAddress))
+  }
+
+  onStaking(
+    tokenAddress: string,
+    userAddress: string,
+    callback?: SubscriptionCallback<Staking>
+  ): SubscriptionResult<Staking> {
+    return subscription<Staking>(callback, (callback) =>
+      this.#connector.onStaking(this.stakingId(tokenAddress, userAddress), callback)
+    )
+  }
+
+  async stakingMovements(
+    tokenAddress: string,
+    userAddress: string,
+    { first = 1000, skip = 0 } = {},
+  ): Promise<StakingMovement[]> {
+    return this.#connector.stakingMovements(this.stakingId(tokenAddress, userAddress), this.#address, first, skip)
+  }
+
+  onStakingMovements(
+    tokenAddress: string,
+    userAddress: string,
+    { first = 1000, skip = 0 } = {},
+    callback?: SubscriptionCallback<StakingMovement[]>
+  ): SubscriptionResult<StakingMovement[]> {
+    return subscription<StakingMovement[]>(callback, (callback) =>
+      this.#connector.onStakingMovements(this.stakingId(tokenAddress, userAddress), this.#address, first, skip, callback)
     )
   }
 }
