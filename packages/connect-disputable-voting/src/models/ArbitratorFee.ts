@@ -3,21 +3,19 @@ import { SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
 
 import ERC20 from './ERC20'
 import { formatBn } from '../helpers'
-import { CollateralRequirementData, IDisputableVotingConnector } from '../types'
+import { ArbitratorFeeData, IDisputableVotingConnector } from '../types'
 
-export default class CollateralRequirement {
+export default class ArbitratorFee {
   #connector: IDisputableVotingConnector
 
   readonly id: string
   readonly voteId: string
   readonly tokenId: string
   readonly tokenDecimals: string
-  readonly actionAmount: string
-  readonly challengeAmount: string
-  readonly challengeDuration: string
+  readonly amount: string
 
   constructor(
-    data: CollateralRequirementData,
+    data: ArbitratorFeeData,
     connector: IDisputableVotingConnector
   ) {
     this.#connector = connector
@@ -26,17 +24,11 @@ export default class CollateralRequirement {
     this.voteId = data.voteId
     this.tokenId = data.tokenId
     this.tokenDecimals = data.tokenDecimals
-    this.actionAmount = data.actionAmount
-    this.challengeAmount = data.challengeAmount
-    this.challengeDuration = data.challengeDuration
+    this.amount = data.amount
   }
 
-  get formattedActionAmount(): string {
-    return formatBn(this.actionAmount, this.tokenDecimals)
-  }
-
-  get formattedChallengeAmount(): string {
-    return formatBn(this.challengeAmount, this.tokenDecimals)
+  get formattedAmount(): string {
+    return formatBn(this.amount, this.tokenDecimals)
   }
 
   async token(): Promise<ERC20> {

@@ -39,12 +39,13 @@ type Action @entity {
   disputable: Disputable!
   actionId: BigInt!
   disputableActionId: BigInt!
+  script: Bytes
   context: Bytes!
   closed: Boolean!
   submitter: Signer!
   version: Version!
   collateralRequirement: CollateralRequirement!
-  currentChallenge: Challenge
+  lastChallenge: Challenge
   challenges: [Challenge!] @derivedFrom(field: "action")
   createdAt: BigInt!
 }
@@ -112,6 +113,46 @@ type CollateralRequirement @entity {
   challengeDuration: BigInt!
   actionAmount: BigInt!
   challengeAmount: BigInt!
+}
+
+type Staking @entity {
+  id: ID!
+  user: Bytes!
+  token: ERC20!
+  available: BigInt!
+  locked: BigInt!
+  challenged: BigInt!
+  total: BigInt!
+  movements: [StakingMovement!] @derivedFrom(field: "staking")
+}
+
+type StakingMovement @entity {
+  id: ID!
+  staking: Staking!
+  amount: BigInt!
+  agreementId: Bytes!
+  agreement: Agreement
+  action: Action
+  actionState: StakingActionState!
+  collateralState: StakingCollateralState!
+  createdAt: BigInt!
+}
+
+enum StakingCollateralState {
+  Available,
+  Locked,
+  Challenged,
+  Slashed,
+  Withdrawn
+}
+
+enum StakingActionState {
+  NA,
+  Scheduled,
+  Challenged,
+  Cancelled,
+  Settled,
+  Completed
 }
 
 type ERC20 @entity {

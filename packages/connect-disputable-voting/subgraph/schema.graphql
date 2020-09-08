@@ -1,6 +1,7 @@
 enum VoteStatus {
   Scheduled,
   Challenged,
+  Settled,
   Disputed,
   Cancelled,
   Executed
@@ -44,8 +45,12 @@ type Vote @entity {
   quietEndingExtensionDuration: BigInt!
   quietEndingSnapshotSupport: VoterState!
   script: Bytes!
+  settledAt: BigInt!
+  disputedAt: BigInt!
   executedAt: BigInt!
   isAccepted: Boolean!
+  submitterArbitratorFee: ArbitratorFee
+  challengerArbitratorFee: ArbitratorFee
   castVotes: [CastVote!] @derivedFrom(field: "vote")
   collateralRequirement: CollateralRequirement! @derivedFrom(field: "vote")
 }
@@ -89,6 +94,13 @@ type CollateralRequirement @entity {
   actionAmount: BigInt!
   challengeAmount: BigInt!
   challengeDuration: BigInt!
+}
+
+type ArbitratorFee @entity {
+  id: ID!
+  vote: Vote!
+  token: ERC20!
+  amount: BigInt!
 }
 
 type ERC20 @entity {

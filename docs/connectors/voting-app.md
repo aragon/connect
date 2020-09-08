@@ -10,8 +10,8 @@ To connect an app, you need to pass a voting app as a first parameter of the con
 import connect from '@aragon/connect'
 import connectVoting from '@aragon/connect-voting'
 
-const org = connect('myorg.aragonid.eth', 'thegraph')
-const voting = connectVoting(org.app('voting'))
+const org = await connect('myorg.aragonid.eth', 'thegraph')
+const voting = await connectVoting(org.app('voting'))
 ```
 
 It extends the `App` object, which means that every method and properties of [`App`](../api-reference/app.md) are also available on this object.

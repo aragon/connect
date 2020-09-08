@@ -72,4 +72,8 @@ templates:
       eventHandlers:
         - event: ActionDisputed(indexed uint256,indexed uint256)
           handler: handleActionDisputed
+        - event: ActionSettled(indexed uint256,indexed uint256)
+          handler: handleActionSettled
+        - event: ActionChallenged(indexed uint256,indexed uint256)
+          handler: handleActionChallenged
       file: ./src/Agreement.ts

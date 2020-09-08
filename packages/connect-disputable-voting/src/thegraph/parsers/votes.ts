@@ -9,7 +9,6 @@ function buildVote(vote: any, connector: any): Vote {
     voting,
     voteId,
     creator,
-    duration,
     context,
     status,
     actionId,
@@ -28,8 +27,12 @@ function buildVote(vote: any, connector: any): Vote {
     quietEndingExtensionDuration,
     quietEndingSnapshotSupport,
     script,
+    settledAt,
+    disputedAt,
     executedAt,
     isAccepted,
+    submitterArbitratorFee,
+    challengerArbitratorFee,
   } = vote
 
   const voteData: VoteData = {
@@ -38,6 +41,7 @@ function buildVote(vote: any, connector: any): Vote {
     voteId,
     creator,
     duration: setting.voteTime,
+    quietEndingExtension: setting.quietEndingExtension,
     context,
     status,
     actionId,
@@ -56,9 +60,13 @@ function buildVote(vote: any, connector: any): Vote {
     quietEndingExtensionDuration,
     quietEndingSnapshotSupport,
     script,
+    settledAt,
+    disputedAt,
     executedAt,
     isAccepted,
     tokenDecimals: voting.token.decimals,
+    submitterArbitratorFeeId: submitterArbitratorFee ? submitterArbitratorFee.id : null,
+    challengerArbitratorFeeId: challengerArbitratorFee ? challengerArbitratorFee.id : null
   }
 
   return new Vote(voteData, connector)
