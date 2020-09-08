@@ -3,6 +3,7 @@ enum VoteStatus {
   Challenged,
   Disputed,
   Cancelled,
+  Settled,
   Executed
 }
 

@@ -136,40 +136,33 @@ export function handleActionSettled(event: ActionSettled): void {
 export function handleActionDisputed(event: ActionDisputed): void {
   updateChallengeState(event.address, event.params.challengeId)
 
-  const challengeId = buildChallengeId(event.address, event.params.challengeId)
-  const agreementApp = AgreementContract.bind(event.address)
-  const challengeData = agreementApp.getChallenge(event.params.challengeId)
-  const challengeArbitratorFeesData = agreementApp.getChallengeArbitratorFees(event.params.challengeId)
-
-  const dispute = new Dispute(buildDisputeId(event.address, challengeData.value8))
-  dispute.ruling = challengeData.value9
-  dispute.disputeId = challengeData.value8
-  dispute.challenge = challengeId
-  dispute.submitterFinishedEvidence = challengeData.value6
-  dispute.challengerFinishedEvidence = challengeData.value7
-  dispute.createdAt = event.block.timestamp
+  const dispute = loadOrCreateDispute(event.address, event.params.challengeId, event)
   dispute.save()
 
-  const challenge = Challenge.load(challengeId)!
+  const challengeId = buildChallengeId(event.address, event.params.challengeId)
+  const agreementApp = AgreementContract.bind(event.address)
+  const challengeArbitratorFeesData = agreementApp.getChallengeArbitratorFees(event.params.challengeId)
   const submitterArbitratorFeeId = challengeId + 'submitter-arbitrator-fee'
   createArbitratorFee(submitterArbitratorFeeId, challengeArbitratorFeesData.value0, challengeArbitratorFeesData.value1)
+
+  const challenge = Challenge.load(challengeId)!
   challenge.submitterArbitratorFee = submitterArbitratorFeeId
   challenge.save()
 }
 
 export function handleActionAccepted(event: ActionAccepted): void {
   updateChallengeState(event.address, event.params.challengeId)
-  updateDisputeState(event.address, event.params.challengeId)
+  updateDisputeState(event.address, event.params.challengeId, event)
 }
 
 export function handleActionVoided(event: ActionVoided): void {
   updateChallengeState(event.address, event.params.challengeId)
-  updateDisputeState(event.address, event.params.challengeId)
+  updateDisputeState(event.address, event.params.challengeId, event)
 }
 
 export function handleActionRejected(event: ActionRejected): void {
   updateChallengeState(event.address, event.params.challengeId)
-  updateDisputeState(event.address, event.params.challengeId)
+  updateDisputeState(event.address, event.params.challengeId, event)
 }
 
 export function handleEvidenceSubmitted(event: EvidenceSubmitted): void {
@@ -215,6 +208,26 @@ function loadOrCreateDisputable(agreement: Address, disputableAddress: Address):
   return disputable!
 }
 
+function loadOrCreateDispute(agreement: Address, challengeId: BigInt, event: ethereum.Event): Dispute {
+  const agreementApp = AgreementContract.bind(event.address)
+  const challengeData = agreementApp.getChallenge(challengeId)
+
+  const disputeId = buildDisputeId(event.address, challengeData.value8)
+  let dispute = Dispute.load(disputeId)
+
+  if (dispute === null) {
+    dispute = new Dispute(disputeId)
+    dispute.ruling = challengeData.value9
+    dispute.disputeId = challengeData.value8
+    dispute.challenge = buildChallengeId(event.address, challengeId)
+    dispute.submitterFinishedEvidence = challengeData.value6
+    dispute.challengerFinishedEvidence = challengeData.value7
+    dispute.createdAt = event.block.timestamp
+  }
+
+  return dispute!
+}
+
 function updateChallengeState(agreement: Address, challengeId: BigInt): void {
   const agreementApp = AgreementContract.bind(agreement)
   const challengeData = agreementApp.getChallenge(challengeId)
@@ -224,11 +237,11 @@ function updateChallengeState(agreement: Address, challengeId: BigInt): void {
   challenge.save()
 }
 
-function updateDisputeState(agreement: Address, challengeId: BigInt): void {
+function updateDisputeState(agreement: Address, challengeId: BigInt, event: ethereum.Event): void {
   const agreementApp = AgreementContract.bind(agreement)
   const challengeData = agreementApp.getChallenge(challengeId)
 
-  const dispute = Dispute.load(buildDisputeId(agreement, challengeId))!
+  const dispute = loadOrCreateDispute(agreement, challengeId, event)
   dispute.ruling = challengeData.value9
   dispute.submitterFinishedEvidence = challengeData.value6
   dispute.challengerFinishedEvidence = challengeData.value7

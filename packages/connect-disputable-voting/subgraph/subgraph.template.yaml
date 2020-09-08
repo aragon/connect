@@ -69,7 +69,15 @@ templates:
       abis:
         - name: Agreement
           file: ./abis/Agreement.json
+        - name: DisputableVoting
+          file: ./abis/DisputableVoting.json
+        - name: ERC20
+          file: ./abis/MiniMeToken.json
       eventHandlers:
         - event: ActionDisputed(indexed uint256,indexed uint256)
           handler: handleActionDisputed
+        - event: ActionSettled(indexed uint256,indexed uint256)
+          handler: handleActionSettled
+        - event: ActionClosed(indexed uint256)
+          handler: handleActionClosed
       file: ./src/Agreement.ts

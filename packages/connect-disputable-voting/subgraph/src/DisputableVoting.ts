@@ -124,23 +124,28 @@ export function handlePauseVote(event: PauseVoteEvent): void {
 }
 
 export function handleResumeVote(event: ResumeVoteEvent): void {
-  updateVoteState(event.address, event.params.voteId)
+  const vote = updateVoteState(event.address, event.params.voteId)
+  vote.status = 'Cancelled'
+  vote.save()
 }
 
 export function handleCancelVote(event: CancelVoteEvent): void {
-  updateVoteState(event.address, event.params.voteId)
+  const vote = updateVoteState(event.address, event.params.voteId)
+  vote.status = 'Scheduled'
+  vote.save()
 }
 
 export function handleExecuteVote(event: ExecuteVoteEvent): void {
-  updateVoteState(event.address, event.params.voteId)
-
-  const vote = VoteEntity.load(buildVoteId(event.address, event.params.voteId))!
+  const vote = updateVoteState(event.address, event.params.voteId)
+  vote.status = 'Cancelled'
   vote.executedAt = event.block.timestamp
   vote.save()
 }
 
 export function handleQuietEndingExtendVote(event: QuietEndingExtendVoteEvent): void {
-  updateVoteState(event.address, event.params.voteId)
+  const vote = updateVoteState(event.address, event.params.voteId)
+  vote.status = 'Cancelled'
+  vote.save()
 }
 
 export function handleChangeRepresentative(event: ChangeRepresentativeEvent): void {
@@ -191,7 +196,7 @@ function loadOrCreateVoter(votingAddress: Address, voterAddress: Address): Voter
   return voter!
 }
 
-function updateVoteState(votingAddress: Address, voteId: BigInt): void {
+export function updateVoteState(votingAddress: Address, voteId: BigInt): VoteEntity {
   const votingApp = VotingContract.bind(votingAddress)
   const voteData = votingApp.getVote(voteId)
 
@@ -205,6 +210,8 @@ function updateVoteState(votingAddress: Address, voteId: BigInt): void {
   vote.quietEndingSnapshotSupport = castVoterState(voteData.value11)
   vote.isAccepted = isAccepted(vote.yeas, vote.nays, vote.totalPower, vote.setting, votingApp.PCT_BASE())
   vote.save()
+
+  return vote
 }
 
 function buildERC20(address: Address): string {

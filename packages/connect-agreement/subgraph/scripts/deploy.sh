@@ -22,10 +22,10 @@ echo '> Generating types'
 graph codegen
 
 # Prepare subgraph name
-FULLNAME=$USER/aragon-$NAME-$NETWORK
-if [ "$STAGING" ]; then
-  FULLNAME=$FULLNAME-staging
-fi
+FULLNAME=facuspagnuolo/ancashdao-$NAME-$NETWORK
+#if [ "$STAGING" ]; then
+#  FULLNAME=$FULLNAME-staging
+#fi
 echo ''
 echo '> Deploying subgraph: '$FULLNAME
 
