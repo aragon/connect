@@ -1,7 +1,8 @@
-import { SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
 import { subscription } from '@aragon/connect-core'
-import { CastVoteData, IDisputableVotingConnector } from '../types'
+import { SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
+
 import Voter from './Voter'
+import { CastVoteData, IDisputableVotingConnector } from '../types'
 
 export default class CastVote {
   #connector: IDisputableVotingConnector
