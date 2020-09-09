@@ -112,6 +112,16 @@ export default class Vote {
     return lastComputedEndDate.add(bn(this.quietEndingExtension)).toString()
   }
 
+  get currentQuietEndingExtensionDuration(): string {
+    const actualEndDate = bn(this.endDate)
+    const baseVoteEndDate = bn(this.startDate).add(bn(this.duration))
+    const endDateAfterPause = baseVoteEndDate.add(bn(this.pauseDuration))
+
+    // To know exactly how many extensions due to quiet ending we had, we subtract
+    // the base vote and pause durations to the actual vote end date
+    return actualEndDate.sub(endDateAfterPause).toString()
+  }
+
   get yeasPct(): string {
     return this._votingPowerPct(this.yeas)
   }
