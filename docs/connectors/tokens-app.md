@@ -10,8 +10,8 @@ To create a new instance of the connector, you need the specific Tokens app addr
 import connect from '@aragon/connect'
 import connectTokens from '@aragon/connect-tokens'
 
-const org = connect('myorg.aragonid.eth', 'thegraph')
-const tokens = connectTokens(org.app('token-manager'))
+const org = await connect('myorg.aragonid.eth', 'thegraph')
+const tokens = await connectTokens(org.app('token-manager'))
 ```
 
 It extends the `App` object, which means that every method and properties of [`App`](../api-reference/app.md) are also available on this object.

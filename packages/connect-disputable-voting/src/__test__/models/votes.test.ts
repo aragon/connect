@@ -2,6 +2,7 @@ import {
   ERC20,
   Vote,
   CastVote,
+  ArbitratorFee,
   DisputableVoting,
   CollateralRequirement,
   DisputableVotingConnectorTheGraph,
@@ -9,7 +10,7 @@ import {
 
 const VOTING_APP_ADDRESS = '0x0e835020497b2cd716369f8fc713fb7bd0a22dbf'
 const VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging'
+  'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-dvoting-rinkeby-staging'
 
 describe('DisputableVoting', () => {
   let voting: DisputableVoting
@@ -26,20 +27,52 @@ describe('DisputableVoting', () => {
   })
 
   describe('end date', () => {
-    test('computes the end date properly', async () => {
-      const scheduledVote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-0`)
-      const expectedScheduledVoteEndDate =
-        parseInt(scheduledVote.startDate) + parseInt(scheduledVote.duration)
-      expect(scheduledVote.endDate).toBe(
-        expectedScheduledVoteEndDate.toString()
-      )
+    let scheduledVote: Vote, settledVote: Vote
 
-      const settledVote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-2`)
-      const expectedSettledVoteEndDate =
-        parseInt(settledVote.startDate) +
-        parseInt(settledVote.duration) +
-        parseInt(settledVote.pauseDuration)
-      expect(settledVote.endDate).toBe(expectedSettledVoteEndDate.toString())
+    beforeEach(async () => {
+      scheduledVote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-0`)
+      settledVote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-2`)
+    })
+
+    describe('when it was not flipped', () => {
+      test('computes the end date properly', async () => {
+        const expectedScheduledVoteEndDate =
+          parseInt(scheduledVote.startDate) +
+          parseInt(scheduledVote.duration)
+
+        expect(scheduledVote.endDate).toBe(expectedScheduledVoteEndDate.toString())
+
+        const expectedSettledVoteEndDate =
+          parseInt(settledVote.startDate) +
+          parseInt(settledVote.duration) +
+          parseInt(settledVote.pauseDuration)
+
+        expect(settledVote.endDate).toBe(expectedSettledVoteEndDate.toString())
+      })
+    })
+
+    describe('when it was flipped', () => {
+      beforeEach(async () => {
+        Object.defineProperty(scheduledVote, 'wasFlipped', { value: true })
+        Object.defineProperty(settledVote, 'wasFlipped', { value: true })
+      })
+
+      test('computes the end date properly', async () => {
+        const expectedScheduledVoteEndDate =
+          parseInt(scheduledVote.startDate) +
+          parseInt(scheduledVote.duration) +
+          parseInt(scheduledVote.quietEndingExtension)
+
+        expect(scheduledVote.endDate).toBe(expectedScheduledVoteEndDate.toString())
+
+        const expectedSettledVoteEndDate =
+          parseInt(settledVote.startDate) +
+          parseInt(settledVote.duration) +
+          parseInt(settledVote.pauseDuration) +
+          parseInt(settledVote.quietEndingExtension)
+
+        expect(settledVote.endDate).toBe(expectedSettledVoteEndDate.toString())
+      })
     })
   })
 
@@ -49,7 +82,7 @@ describe('DisputableVoting', () => {
 
       expect(vote.hasEnded).toBe(true)
       expect(vote.isAccepted).toBe(false)
-      expect(vote.status).toBe('Cancelled')
+      expect(vote.status).toBe('Settled')
 
       expect(vote.totalPower).toBe('3000000000000000000')
       expect(vote.formattedTotalPower).toBe('3.00')
@@ -155,6 +188,31 @@ describe('DisputableVoting', () => {
       expect(token.name).toBe('DAI Token')
       expect(token.symbol).toBe('DAI')
       expect(token.decimals).toBe(18)
+    })
+  })
+
+  describe('arbitrator fees', () => {
+    let vote: Vote
+    const voteId = `${VOTING_APP_ADDRESS}-vote-13`
+
+    beforeAll(async () => {
+      vote = await voting.vote(voteId)
+    })
+
+    test('can requests the submitter arbitrator fees', async () => {
+      const artbiratorFee = (await vote.submitterArbitratorFee())!
+
+      expect(artbiratorFee.id).toBe(`${voteId}-submitter`)
+      expect(artbiratorFee.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
+      expect(artbiratorFee.formattedAmount).toBe('150.00')
+    })
+
+    test('can requests the submitter arbitrator fees', async () => {
+      const artbiratorFee = (await vote.challengerArbitratorFee())!
+
+      expect(artbiratorFee.id).toBe(`${voteId}-challenger`)
+      expect(artbiratorFee.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
+      expect(artbiratorFee.formattedAmount).toBe('150.00')
     })
   })
 })

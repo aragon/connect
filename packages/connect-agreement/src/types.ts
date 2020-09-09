@@ -8,6 +8,9 @@ import Signature from './models/Signature'
 import Version from './models/Version'
 import DisputableApp from './models/DisputableApp'
 import CollateralRequirement from './models/CollateralRequirement'
+import Action from './models/Action'
+import Staking from './models/Staking'
+import StakingMovement from './models/StakingMovement'
 import ERC20 from './models/ERC20'
 
 export interface AgreementData {
@@ -62,6 +65,42 @@ export interface SignatureData {
   id: string
   signerId: string
   versionId: string
+  createdAt: string
+}
+
+export interface ActionData {
+  id: string
+  agreementId: string
+  disputableId: string
+  disputableActionId: string
+  collateralRequirementId: string
+  versionId: string
+  context: string
+  script: string
+  createdAt: string
+}
+
+export interface StakingData {
+  id: string
+  user: string
+  tokenId: string
+  tokenDecimals: string
+  available: string
+  locked: string
+  challenged: string
+  total: string
+}
+
+export interface StakingMovementData {
+  id: string
+  tokenId: string
+  tokenDecimals: string
+  stakingId: string
+  agreementId: string
+  amount: string
+  actionId: string
+  actionState: string
+  collateralState: string
   createdAt: string
 }
 
@@ -120,6 +159,29 @@ export interface IAgreementConnector {
   onCollateralRequirement(
     disputableAppId: string,
     callback: SubscriptionCallback<CollateralRequirement>
+  ): SubscriptionHandler
+  action(actionId: string): Promise<Action | null>
+  onAction(
+    actionId: string,
+    callback: SubscriptionCallback<Action | null>
+  ): SubscriptionHandler
+  staking(stakingId: string): Promise<Staking>
+  onStaking(
+    stakingId: string,
+    callback: SubscriptionCallback<Staking>
+  ): SubscriptionHandler
+  stakingMovements(
+    stakingId: string,
+    agreement: string,
+    first: number,
+    skip: number
+  ): Promise<StakingMovement[]>
+  onStakingMovements(
+    stakingId: string,
+    agreement: string,
+    first: number,
+    skip: number,
+    callback: SubscriptionCallback<StakingMovement[]>
   ): SubscriptionHandler
   ERC20(tokenAddress: string): Promise<ERC20>
   onERC20(

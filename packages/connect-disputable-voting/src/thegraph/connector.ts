@@ -10,6 +10,7 @@ import Voter from '../models/Voter'
 import ERC20 from '../models/ERC20'
 import Setting from '../models/Setting'
 import CastVote from '../models/CastVote'
+import ArbitratorFee from '../models/ArbitratorFee'
 import CollateralRequirement from '../models/CollateralRequirement'
 import * as queries from './queries'
 import {
@@ -23,6 +24,7 @@ import {
   parseVotes,
   parseCastVote,
   parseCastVotes,
+  parseArbitratorFee,
   parseCollateralRequirement,
 } from './parsers'
 
@@ -282,6 +284,26 @@ export default class DisputableVotingConnectorTheGraph
       { voteId },
       callback,
       (result: QueryResult) => parseCollateralRequirement(result, this)
+    )
+  }
+
+  async arbitratorFee(arbitratorFeeId: string): Promise<ArbitratorFee | null> {
+    return this.#gql.performQueryWithParser<ArbitratorFee | null>(
+      queries.GET_ARBITRATOR_FEE('query'),
+      { arbitratorFeeId },
+      (result: QueryResult) => parseArbitratorFee(result, this)
+    )
+  }
+
+  onArbitratorFee(
+    arbitratorFeeId: string,
+    callback: SubscriptionCallback<ArbitratorFee | null>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<ArbitratorFee | null>(
+      queries.GET_ARBITRATOR_FEE('subscription'),
+      { arbitratorFeeId },
+      callback,
+      (result: QueryResult) => parseArbitratorFee(result, this)
     )
   }
 

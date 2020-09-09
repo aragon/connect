@@ -101,6 +101,7 @@ export const GET_VOTE = (type: string) => gql`
       setting { 
         id 
         voteTime
+        quietEndingExtension
       }
       startDate
       totalPower
@@ -112,8 +113,16 @@ export const GET_VOTE = (type: string) => gql`
       quietEndingExtensionDuration
       quietEndingSnapshotSupport
       script
+      settledAt
+      disputedAt
       executedAt
       isAccepted
+      submitterArbitratorFee {
+        id
+      }
+      challengerArbitratorFee {
+        id
+      }
     }
   }
 `
@@ -122,7 +131,7 @@ export const ALL_VOTES = (type: string) => gql`
   ${type} Votes($disputableVoting: String!, $first: Int!, $skip: Int!) {
     votes(where: {
       voting: $disputableVoting
-    }, first: $first, skip: $skip) {
+    }, orderBy: startDate, orderDirection: asc, first: $first, skip: $skip) {
       id
       voting { 
         id 
@@ -142,6 +151,7 @@ export const ALL_VOTES = (type: string) => gql`
       setting { 
         id 
         voteTime
+        quietEndingExtension
       }
       startDate
       totalPower
@@ -153,8 +163,16 @@ export const ALL_VOTES = (type: string) => gql`
       quietEndingExtensionDuration
       quietEndingSnapshotSupport
       script
+      settledAt
+      disputedAt
       executedAt
       isAccepted
+      submitterArbitratorFee {
+        id
+      }
+      challengerArbitratorFee {
+        id  
+      }
     }
   }
 `
@@ -223,7 +241,24 @@ export const GET_COLLATERAL_REQUIREMENT = (type: string) => gql`
         }
         token {
           id
+          decimals
         }
+      }
+    }
+  }
+`
+
+export const GET_ARBITRATOR_FEE = (type: string) => gql`
+  ${type} ArbitratorFee($arbitratorFeeId: String!) {
+    arbitratorFee(id: $arbitratorFeeId) {
+      id
+      amount
+      vote {
+        id
+      }
+      token {
+        id
+        decimals
       }
     }
   }

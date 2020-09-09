@@ -2,7 +2,7 @@ import { DisputableVotingConnectorTheGraph, Vote, CastVote } from '../../../src'
 
 const VOTING_APP_ADDRESS = '0x0e835020497b2cd716369f8fc713fb7bd0a22dbf'
 const VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging'
+  'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-dvoting-rinkeby-staging'
 
 describe('DisputableVoting votes', () => {
   let connector: DisputableVotingConnectorTheGraph
@@ -72,14 +72,15 @@ describe('DisputableVoting votes', () => {
     })
 
     test('allows fetching a single vote', () => {
-      const vote = votes[6]
+      const vote = votes.find(
+        (vote) => vote.id === `${VOTING_APP_ADDRESS}-vote-2`
+      ) as Vote
 
-      expect(vote.id).toBe(`${VOTING_APP_ADDRESS}-vote-2`)
       expect(vote.voteId).toEqual('2')
       expect(vote.votingId).toBe(VOTING_APP_ADDRESS)
       expect(vote.settingId).toBe(`${VOTING_APP_ADDRESS}-setting-0`)
       expect(vote.actionId).toBe('3')
-      expect(vote.voteStatus).toBe('Cancelled')
+      expect(vote.voteStatus).toBe('Settled')
       expect(vote.context).toBe('Context for action 3')
       expect(vote.creator).toBe('0x0090aed150056316e37fe6dfa10dc63e79d173b6')
       expect(vote.startDate).toBe('1598480123')
