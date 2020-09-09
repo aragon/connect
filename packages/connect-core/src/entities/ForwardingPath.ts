@@ -23,6 +23,7 @@ export default class ForwardingPath {
   #installedApps: App[]
   #provider: ethersProviders.Provider
   readonly destination: App
+  readonly path: Transaction[]
   readonly transactions: Transaction[]
 
   constructor(
@@ -33,6 +34,7 @@ export default class ForwardingPath {
     this.#installedApps = installedApps
     this.#provider = provider
     this.destination = data.destination
+    this.path = data.path
     this.transactions = data.transactions
   }
 
@@ -48,10 +50,10 @@ export default class ForwardingPath {
   // Return a description of the forwarding path, to be rendered.
   async describe(): Promise<ForwardingPathDescription> {
     let description: StepDescribed[] = []
-    if (this.transactions.length > 0) {
+    if (this.path.length > 0) {
       try {
         description = await describePath(
-          this.transactions,
+          this.path,
           this.#installedApps,
           this.#provider
         )

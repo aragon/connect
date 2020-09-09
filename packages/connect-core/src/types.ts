@@ -61,6 +61,11 @@ export interface StepDescribed extends StepDecoded {
   annotatedDescription?: Annotation[]
 }
 
+export interface TransactionPath {
+  path: Transaction[]
+  transactions: Transaction[]
+}
+
 ////// ENTITES /////
 
 export interface AppData {
@@ -82,6 +87,7 @@ export interface AppData {
 
 export interface ForwardingPathData {
   destination: App
+  path: Transaction[]
   transactions: Transaction[]
 }
 
