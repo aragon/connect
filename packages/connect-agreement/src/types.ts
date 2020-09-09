@@ -35,7 +35,7 @@ export interface DisputableAppData {
   address: string
   agreementId: string
   activated: boolean
-  collateralRequirementId: string
+  currentCollateralRequirementId: string
 }
 
 export interface CollateralRequirementData {
@@ -155,9 +155,9 @@ export interface IAgreementConnector {
     skip: number,
     callback: SubscriptionCallback<Signature[]>
   ): SubscriptionHandler
-  collateralRequirement(disputableAppId: string): Promise<CollateralRequirement>
+  collateralRequirement(collateralRequirementId: string): Promise<CollateralRequirement>
   onCollateralRequirement(
-    disputableAppId: string,
+    collateralRequirementId: string,
     callback: SubscriptionCallback<CollateralRequirement>
   ): SubscriptionHandler
   action(actionId: string): Promise<Action | null>

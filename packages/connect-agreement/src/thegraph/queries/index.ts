@@ -101,20 +101,18 @@ export const GET_SIGNATURES = (type: string) => gql`
 `
 
 export const GET_COLLATERAL_REQUIREMENT = (type: string) => gql`
-  ${type} CollateralRequirement($disputableAppId: String!) {
-    disputable(id: $disputableAppId) {
-      currentCollateralRequirement {
+  ${type} CollateralRequirement($collateralRequirementId: String!) {
+    collateralRequirement(id: $collateralRequirementId) {
+      id
+      actionAmount
+      challengeAmount
+      challengeDuration
+      disputable {
         id
-        actionAmount
-        challengeAmount
-        challengeDuration
-        disputable {
-          id
-        }
-        token {
-          id
-          decimals
-        }
+      }
+      token {
+        id
+        decimals
       }
     }
   }

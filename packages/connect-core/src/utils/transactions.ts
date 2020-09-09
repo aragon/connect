@@ -60,21 +60,18 @@ export function createForwarderTransactionBuilder(
     })
 }
 
-export async function buildApprovePretransaction(
+export async function buildApprovePreTransactions(
   transaction: Transaction,
   tokenData: TokenData,
   provider: ethersProviders.Provider
-): Promise<Transaction | undefined> {
-  // Token allowance pretransactionn
+): Promise<Transaction[]> {
+  // Token allowance pre-transaction
   const { from, to } = transaction
   const { address: tokenAddress, value: tokenValue, spender } = tokenData
 
-  // Approve the transaction destination unless an spender is passed to approve a different contract
-  const approveSpender = spender ?? to
-
   const tokenContract = new Contract(tokenAddress, erc20ABI, provider)
   const balance = await tokenContract.balanceOf(from)
-  const tokenValueBN = BigInt(tokenValue)
+  const tokenValueBN = BigInt(tokenValue.toString())
 
   if (BigInt(balance) < tokenValueBN) {
     throw new Error(
@@ -82,33 +79,46 @@ export async function buildApprovePretransaction(
     )
   }
 
+  // Approve the transaction destination unless an spender is passed to approve a different contract
+  const approveSpender = spender ?? to
   const allowance = await tokenContract.allowance(from, approveSpender)
-  const allowanceBN = BigInt(allowance)
+
   // If allowance is already greater than or equal to amount, there is no need to do an approve transaction
+  const allowanceBN = BigInt(allowance)
   if (allowanceBN < tokenValueBN) {
-    if (allowanceBN > BigInt(0)) {
-      // TODO: Actually handle existing approvals (some tokens fail when the current allowance is not 0)
-      console.warn(
-        `${from} already approved ${approveSpender}. In some tokens, approval will fail unless the allowance is reset to 0 before re-approving again.`
-      )
-    }
-
-    const erc20 = new ethersUtils.Interface(erc20ABI)
-
-    return new Transaction({
-      from,
-      to: tokenAddress,
-      data: erc20.encodeFunctionData('approve', [approveSpender, tokenValue]),
-    })
+    return []
   }
 
-  return undefined
+  const transactions: Transaction[] = []
+  const erc20 = new ethersUtils.Interface(erc20ABI)
+
+  // If the current allowance is greater than zero, we send a first pre-transaction to set it to zero
+  if (allowanceBN > BigInt(0)) {
+    console.warn(
+      `${from} already approved ${approveSpender} some amount, adding one extra pre-transaction to set it to zero to avoid a failing approval.`
+    )
+    const zeroApprovalPreTransaction = new Transaction({
+      from,
+      to: tokenAddress,
+      data: erc20.encodeFunctionData('approve', [approveSpender, '0']),
+    })
+    transactions.push(zeroApprovalPreTransaction)
+  }
+
+  const requestedApprovalPreTransaction = new Transaction({
+    from,
+    to: tokenAddress,
+    data: erc20.encodeFunctionData('approve', [approveSpender, tokenValue]),
+  })
+
+  transactions.push(requestedApprovalPreTransaction)
+  return transactions
 }
 
-export async function buildForwardingFeePretransaction(
+export async function buildForwardingFeePreTransactions(
   forwardingTransaction: Transaction,
   provider: ethersProviders.Provider
-): Promise<Transaction | undefined> {
+): Promise<Transaction[]> {
   const { to: forwarderAddress, from } = forwardingTransaction
 
   const forwarderFee = new Contract(forwarderAddress, forwarderFeeAbi, provider)
@@ -127,18 +137,18 @@ export async function buildForwardingFeePretransaction(
   }
 
   if (feeDetails.tokenAddress && feeDetails.amount > BigInt(0)) {
-    // Needs a token approval pretransaction
+    // Needs a token approval pre-transaction
     const tokenData: TokenData = {
       address: feeDetails.tokenAddress,
       spender: forwarderAddress, // since it's a forwarding transaction, always show the real spender
       value: feeDetails.amount.toString(),
     }
 
-    return buildApprovePretransaction(
+    return buildApprovePreTransactions(
       forwardingTransaction,
       tokenData,
       provider
     )
   }
-  return undefined
+  return []
 }

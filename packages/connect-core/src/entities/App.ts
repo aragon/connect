@@ -67,7 +67,7 @@ export default class App {
     return this.organization.connection.orgConnector
   }
 
-  private orgProvider(): ethersProvider.Provider {
+  get provider(): ethersProvider.Provider {
     return this.organization.connection.ethersProvider
   }
 
@@ -106,7 +106,7 @@ export default class App {
         `No ABI specified in app for ${this.address}. Make sure the metada for the app is available`
       )
     }
-    return new Contract(this.address, this.abi, this.orgProvider())
+    return new Contract(this.address, this.abi, this.provider)
   }
 
   interface(): ethersUtils.Interface {
@@ -147,7 +147,7 @@ export default class App {
       methodSignature,
       params,
       installedApps,
-      this.orgProvider()
+      this.provider
     )
   }
 }

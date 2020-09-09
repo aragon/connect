@@ -1,6 +1,6 @@
 import { providers as ethersProviders } from 'ethers'
 
-import { buildApprovePretransaction } from '../utils/transactions'
+import { buildApprovePreTransactions } from '../utils/transactions'
 import {
   ForwardingPathData,
   StepDescribed,
@@ -13,13 +13,10 @@ import ForwardingPathDescription, {
 import App from './App'
 import Transaction from './Transaction'
 
-const normalizePretransaction = (
-  pretransaction: Transaction | TransactionData
-): Transaction => {
-  if (pretransaction instanceof Transaction) {
-    return pretransaction
-  }
-  return new Transaction(pretransaction)
+const normalizePreTransactions = (preTransactions: (Transaction | TransactionData)[]): Transaction[] => {
+  return preTransactions.map((preTransaction: Transaction | TransactionData) =>
+    (preTransaction instanceof Transaction) ? preTransaction : new Transaction(preTransaction)
+  )
 }
 
 export default class ForwardingPath {
@@ -67,10 +64,10 @@ export default class ForwardingPath {
   }
 
   // Build a token allowance pretransactionn
-  async buildApprovePretransaction(
+  async buildApprovePreTransactions(
     tokenData: TokenData
-  ): Promise<Transaction | undefined> {
-    return buildApprovePretransaction(
+  ): Promise<Transaction[]> {
+    return buildApprovePreTransactions(
       this.transactions[0],
       tokenData,
       this.#provider
@@ -78,8 +75,10 @@ export default class ForwardingPath {
   }
 
   // Apply a pretransaction to the path
-  applyPretransaction(pretransaction: Transaction | TransactionData): void {
-    normalizePretransaction(pretransaction)
-    this.transactions.push(pretransaction)
+  applyPreTransactions(preTransactions: (Transaction | TransactionData)[]): void {
+    normalizePreTransactions(preTransactions)
+      .reverse()
+      .filter(preTransaction => !!preTransaction)
+      .forEach(preTransaction => this.transactions.unshift(preTransaction))
   }
 }

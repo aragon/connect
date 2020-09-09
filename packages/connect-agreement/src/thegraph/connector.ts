@@ -227,22 +227,22 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
   }
 
   async collateralRequirement(
-    disputableAppId: string
+    collateralRequirementId: string
   ): Promise<CollateralRequirement> {
     return this.#gql.performQueryWithParser<CollateralRequirement>(
       queries.GET_COLLATERAL_REQUIREMENT('query'),
-      { disputableAppId },
+      { collateralRequirementId },
       (result: QueryResult) => parseCollateralRequirement(result, this)
     )
   }
 
   onCollateralRequirement(
-    disputableAppId: string,
+    collateralRequirementId: string,
     callback: SubscriptionCallback<CollateralRequirement>
   ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser<CollateralRequirement>(
       queries.GET_COLLATERAL_REQUIREMENT('subscription'),
-      { disputableAppId },
+      { collateralRequirementId },
       callback,
       (result: QueryResult) => parseCollateralRequirement(result, this)
     )

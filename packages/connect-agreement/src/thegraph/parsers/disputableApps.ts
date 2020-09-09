@@ -17,7 +17,7 @@ function buildDisputableApp(disputableApp: any, connector: any): DisputableApp {
     address,
     activated,
     agreementId: agreement.id,
-    collateralRequirementId: currentCollateralRequirement.id,
+    currentCollateralRequirementId: currentCollateralRequirement.id,
   }
 
   return new DisputableApp(disputableAppData, connector)
