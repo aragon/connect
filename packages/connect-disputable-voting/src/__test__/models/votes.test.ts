@@ -44,6 +44,7 @@ describe('DisputableVoting', () => {
           parseInt(scheduledVote.duration)
 
         expect(scheduledVote.endDate).toBe(expectedScheduledVoteEndDate.toString())
+        expect(scheduledVote.currentQuietEndingExtensionDuration).toBe('0')
 
         const expectedSettledVoteEndDate =
           parseInt(settledVote.startDate) +
@@ -51,6 +52,7 @@ describe('DisputableVoting', () => {
           parseInt(settledVote.pauseDuration)
 
         expect(settledVote.endDate).toBe(expectedSettledVoteEndDate.toString())
+        expect(settledVote.currentQuietEndingExtensionDuration).toBe('0')
       })
     })
 
@@ -67,6 +69,7 @@ describe('DisputableVoting', () => {
           parseInt(scheduledVote.quietEndingExtension)
 
         expect(scheduledVote.endDate).toBe(expectedScheduledVoteEndDate.toString())
+        expect(scheduledVote.currentQuietEndingExtensionDuration).toBe(scheduledVote.quietEndingExtension)
 
         const expectedSettledVoteEndDate =
           parseInt(settledVote.startDate) +
@@ -75,6 +78,7 @@ describe('DisputableVoting', () => {
           parseInt(settledVote.quietEndingExtension)
 
         expect(settledVote.endDate).toBe(expectedSettledVoteEndDate.toString())
+        expect(settledVote.currentQuietEndingExtensionDuration).toBe(settledVote.quietEndingExtension)
       })
     })
   })
