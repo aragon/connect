@@ -1,6 +1,6 @@
 {
   "name": "@aragon/connect-finance",
-  "version": "0.7.0",
+  "version": "0.8.0-alpha.1",
   "license": "LGPL-3.0-or-later",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -34,8 +34,8 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@aragon/connect-core": "^0.7.0",
-    "@aragon/connect-thegraph": "^0.7.0",
+    "@aragon/connect-core": "^0.8.0-alpha.1",
+    "@aragon/connect-thegraph": "^0.8.0-alpha.1",
     "graphql-tag": "^2.10.3"
   },
   "description": "Access and interact with Aragon Organizations and their apps.",
