@@ -161,9 +161,12 @@ export default class DisputableVoting {
     const agreement = await this.agreement()
     const { tokenId: collateralToken, actionAmount } = await this.currentCollateralRequirement()
     const preTransactions = await intent.buildApprovePreTransactions({ address: collateralToken, value: actionAmount, spender: agreement })
-    console.log(preTransactions)
 
     intent.applyPreTransactions(preTransactions)
     return intent
+  }
+
+  async castVote(voteNumber: string, supports: boolean, signerAddress: string): Promise<ForwardingPath> {
+    return this.#app.intent('vote', [voteNumber, supports], { actAs: signerAddress })
   }
 }

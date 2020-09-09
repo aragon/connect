@@ -74,4 +74,23 @@ describe('DisputableVoting', () => {
       expect(transaction.data).toBe(votingABI.encodeFunctionData('newVote', [SCRIPT, ethers.utils.toUtf8Bytes(CONTEXT)]))
     })
   })
+
+  describe('castVote', () => {
+    const VOTE_NUMBER = '12'
+    const SUPPORT = true
+    const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
+
+    it('returns a vote intent', async () => {
+      const votingABI = new ethers.utils.Interface(['function vote(uint256,bool)'])
+      const intent = await voting.castVote(VOTE_NUMBER, SUPPORT, SIGNER_ADDRESS)
+
+      expect(intent.transactions.length).toBe(1)
+      expect(intent.destination.address).toBe(VOTING_APP_ADDRESS)
+
+      const transaction = intent.transactions[0]
+      expect(transaction.to.toLowerCase()).toBe(VOTING_APP_ADDRESS)
+      expect(transaction.from).toBe(SIGNER_ADDRESS)
+      expect(transaction.data).toBe(votingABI.encodeFunctionData('vote', [VOTE_NUMBER, SUPPORT]))
+    })
+  })
 })
