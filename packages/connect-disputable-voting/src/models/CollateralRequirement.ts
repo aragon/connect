@@ -9,12 +9,13 @@ export default class CollateralRequirement {
   #connector: IDisputableVotingConnector
 
   readonly id: string
-  readonly voteId: string
+  readonly votingId: string
   readonly tokenId: string
   readonly tokenDecimals: string
   readonly actionAmount: string
   readonly challengeAmount: string
   readonly challengeDuration: string
+  readonly collateralRequirementId: string
 
   constructor(
     data: CollateralRequirementData,
@@ -23,12 +24,13 @@ export default class CollateralRequirement {
     this.#connector = connector
 
     this.id = data.id
-    this.voteId = data.voteId
+    this.votingId = data.votingId
     this.tokenId = data.tokenId
     this.tokenDecimals = data.tokenDecimals
     this.actionAmount = data.actionAmount
     this.challengeAmount = data.challengeAmount
     this.challengeDuration = data.challengeDuration
+    this.collateralRequirementId = data.collateralRequirementId
   }
 
   get formattedActionAmount(): string {

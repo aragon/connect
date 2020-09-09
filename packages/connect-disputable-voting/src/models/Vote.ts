@@ -48,6 +48,7 @@ export default class Vote {
   readonly executedAt: string
   readonly isAccepted: boolean
   readonly tokenDecimals: string
+  readonly collateralRequirementId: string
   readonly submitterArbitratorFeeId: string
   readonly challengerArbitratorFeeId: string
 
@@ -83,6 +84,7 @@ export default class Vote {
     this.executedAt = data.executedAt
     this.isAccepted = data.isAccepted
     this.tokenDecimals = data.tokenDecimals
+    this.collateralRequirementId = data.collateralRequirementId
     this.submitterArbitratorFeeId = data.submitterArbitratorFeeId
     this.challengerArbitratorFeeId = data.challengerArbitratorFeeId
   }
@@ -189,14 +191,14 @@ export default class Vote {
   }
 
   async collateralRequirement(): Promise<CollateralRequirement> {
-    return this.#connector.collateralRequirement(this.id)
+    return this.#connector.collateralRequirement(this.collateralRequirementId)
   }
 
   onCollateralRequirement(
     callback?: SubscriptionCallback<CollateralRequirement>
   ): SubscriptionResult<CollateralRequirement> {
     return subscription<CollateralRequirement>(callback, (callback) =>
-      this.#connector.onCollateralRequirement(this.id, callback)
+      this.#connector.onCollateralRequirement(this.collateralRequirementId, callback)
     )
   }
 

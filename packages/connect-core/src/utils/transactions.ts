@@ -65,7 +65,7 @@ export async function buildApprovePreTransactions(
   tokenData: TokenData,
   provider: ethersProviders.Provider
 ): Promise<Transaction[]> {
-  // Token allowance pre-transactionn
+  // Token allowance pre-transaction
   const { from, to } = transaction
   const { address: tokenAddress, value: tokenValue, spender } = tokenData
 

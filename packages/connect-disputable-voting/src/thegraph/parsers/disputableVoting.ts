@@ -11,10 +11,14 @@ export function parseDisputableVoting(
     throw new Error('Unable to parse disputable voting.')
   }
 
+  const { id, dao, agreement, token, setting, collateralRequirement } = disputableVoting
+
   return {
-    id: disputableVoting.id,
-    dao: disputableVoting.dao,
-    token: disputableVoting.token.id,
-    currentSettingId: disputableVoting.setting.id,
+    id,
+    dao,
+    agreement,
+    token: token.id,
+    currentSettingId: setting.id,
+    currentCollateralRequirementId: collateralRequirement.id,
   }
 }

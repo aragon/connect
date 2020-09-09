@@ -26,6 +26,7 @@ import {
   parseCastVotes,
   parseArbitratorFee,
   parseCollateralRequirement,
+  parseCurrentCollateralRequirement,
 } from './parsers'
 
 export function subgraphUrlFromChainId(chainId: number) {
@@ -155,6 +156,26 @@ export default class DisputableVotingConnectorTheGraph
     )
   }
 
+  async currentCollateralRequirement(disputableVoting: string): Promise<CollateralRequirement> {
+    return this.#gql.performQueryWithParser<CollateralRequirement>(
+      queries.GET_CURRENT_COLLATERAL_REQUIREMENT('query'),
+      { disputableVoting },
+      (result: QueryResult) => parseCurrentCollateralRequirement(result, this)
+    )
+  }
+
+  onCurrentCollateralRequirement(
+    disputableVoting: string,
+    callback: SubscriptionCallback<CollateralRequirement>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<CollateralRequirement>(
+      queries.GET_CURRENT_COLLATERAL_REQUIREMENT('subscription'),
+      { disputableVoting },
+      callback,
+      (result: QueryResult) => parseCurrentCollateralRequirement(result, this)
+    )
+  }
+
   async vote(voteId: string): Promise<Vote> {
     return this.#gql.performQueryWithParser<Vote>(
       queries.GET_VOTE('query'),
@@ -267,21 +288,21 @@ export default class DisputableVotingConnectorTheGraph
     )
   }
 
-  async collateralRequirement(voteId: string): Promise<CollateralRequirement> {
+  async collateralRequirement(collateralRequirementId: string): Promise<CollateralRequirement> {
     return this.#gql.performQueryWithParser<CollateralRequirement>(
       queries.GET_COLLATERAL_REQUIREMENT('query'),
-      { voteId },
+      { collateralRequirementId },
       (result: QueryResult) => parseCollateralRequirement(result, this)
     )
   }
 
   onCollateralRequirement(
-    voteId: string,
+    collateralRequirementId: string,
     callback: SubscriptionCallback<CollateralRequirement>
   ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser<CollateralRequirement>(
       queries.GET_COLLATERAL_REQUIREMENT('subscription'),
-      { voteId },
+      { collateralRequirementId },
       callback,
       (result: QueryResult) => parseCollateralRequirement(result, this)
     )
