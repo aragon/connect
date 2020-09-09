@@ -5,10 +5,14 @@ export const GET_DISPUTABLE_VOTING = (type: string) => gql`
     disputableVoting(id: $disputableVoting) {
       id
       dao
+      agreement
       token {
         id      
       }
       setting {
+        id
+      }
+      collateralRequirement {
         id
       }
     }
@@ -32,6 +36,27 @@ export const GET_CURRENT_SETTING = (type: string) => gql`
         voting {
           id
         }
+      }
+    }
+  }
+`
+
+export const GET_CURRENT_COLLATERAL_REQUIREMENT = (type: string) => gql`
+  ${type} DisputableVoting($disputableVoting: String!) {
+    disputableVoting(id: $disputableVoting) {
+      collateralRequirement {
+        id
+        voting {
+          id
+        }
+        token {
+          id
+          decimals
+        }
+        actionAmount
+        challengeAmount
+        challengeDuration
+        collateralRequirementId
       }
     }
   }
@@ -117,6 +142,9 @@ export const GET_VOTE = (type: string) => gql`
       disputedAt
       executedAt
       isAccepted
+      collateralRequirement {
+        id
+      }
       submitterArbitratorFee {
         id
       }
@@ -167,6 +195,9 @@ export const ALL_VOTES = (type: string) => gql`
       disputedAt
       executedAt
       isAccepted
+      collateralRequirement {
+        id
+      }
       submitterArbitratorFee {
         id
       }
@@ -229,21 +260,20 @@ export const GET_VOTER = (type: string) => gql`
 `
 
 export const GET_COLLATERAL_REQUIREMENT = (type: string) => gql`
-  ${type} CollateralRequirement($voteId: String!) {
-    vote(id: $voteId) {
-      collateralRequirement {
+  ${type} CollateralRequirement($collateralRequirementId: String!) {
+    collateralRequirement(id: $collateralRequirementId) {
+      id
+      voting {
         id
-        actionAmount
-        challengeAmount
-        challengeDuration
-        vote {
-          id
-        }
-        token {
-          id
-          decimals
-        }
       }
+      token {
+        id
+        decimals
+      }
+      actionAmount
+      challengeAmount
+      challengeDuration
+      collateralRequirementId
     }
   }
 `
