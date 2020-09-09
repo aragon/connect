@@ -238,10 +238,6 @@ export default class Vote {
     )
   }
 
-  _disputableVoting(): DisputableVoting {
-    return new DisputableVoting(this.#connector, this.votingId)
-  }
-
   _votingPowerPct(num: string): string {
     const totalPower = bn(this.totalPower)
     return bn(num).mul(PCT_BASE).div(totalPower).toString()
