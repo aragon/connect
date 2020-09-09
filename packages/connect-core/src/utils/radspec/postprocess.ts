@@ -6,7 +6,6 @@ import {
   AragonArtifactRole,
 } from '../../types'
 import App from '../../entities/App'
-import Role from '../../entities/Role'
 
 interface CompiledTokens {
   description: string[]
@@ -68,7 +67,7 @@ export async function postprocessRadspecDescription(
   }
 
   const annotateBytes32 = (input: string): ProcessToken => {
-    const role = roles.find(({ hash }) => hash === input)
+    const role = roles.find(({ bytes }) => bytes === input)
 
     if (role && role.name) {
       return [input, `“${role.name}”`, { type: 'role', value: role }]
