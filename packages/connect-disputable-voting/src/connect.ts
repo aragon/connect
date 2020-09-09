@@ -32,6 +32,6 @@ export default createAppConnector<DisputableVoting, Config>(
       verbose,
     })
 
-    return new DisputableVoting(connectorTheGraph, app.address)
+    return new DisputableVoting(connectorTheGraph, app)
   }
 )

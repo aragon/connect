@@ -7,8 +7,7 @@ import {
   Vote as VoteEntity,
   CastVote as CastVoteEntity,
   Voter as VoterEntity,
-  ERC20 as ERC20Entity,
-  CollateralRequirement as CollateralRequirementEntity
+  ERC20 as ERC20Entity
 } from '../generated/schema'
 import {
   DisputableVoting as VotingContract,
@@ -50,6 +49,7 @@ export function handleNewSetting(event: NewSettingEvent): void {
 
 export function handleStartVote(event: StartVoteEvent): void {
   const voteId = buildVoteId(event.address, event.params.voteId)
+  const voting = loadOrCreateVoting(event.address)
   const votingApp = VotingContract.bind(event.address)
 
   const vote = new VoteEntity(voteId)
@@ -78,18 +78,8 @@ export function handleStartVote(event: StartVoteEvent): void {
   vote.disputedAt = BigInt.fromI32(0)
   vote.executedAt = BigInt.fromI32(0)
   vote.isAccepted = isAccepted(vote.yeas, vote.nays, vote.totalPower, vote.setting, votingApp.PCT_BASE())
+  vote.collateralRequirement = voting.collateralRequirement
   vote.save()
-
-  const agreementApp = AgreementContract.bind(votingApp.getAgreement())
-  const actionData = agreementApp.getAction(vote.actionId)
-  const collateralRequirementData = agreementApp.getCollateralRequirement(event.address, actionData.value2)
-  const collateralRequirement = new CollateralRequirementEntity(voteId)
-  collateralRequirement.vote = voteId
-  collateralRequirement.token = buildERC20(collateralRequirementData.value0)
-  collateralRequirement.challengeDuration = collateralRequirementData.value1
-  collateralRequirement.actionAmount = collateralRequirementData.value2
-  collateralRequirement.challengeAmount = collateralRequirementData.value3
-  collateralRequirement.save()
 }
 
 export function handleCastVote(event: CastVoteEvent): void {
@@ -167,6 +157,7 @@ function loadOrCreateVoting(votingAddress: Address): DisputableVotingEntity {
     const votingApp = VotingContract.bind(votingAddress)
     voting = new DisputableVotingEntity(votingAddress.toHexString())
     voting.dao = votingApp.kernel()
+    voting.agreement = votingApp.getAgreement()
     voting.token = buildERC20(votingApp.token())
   }
   return voting!

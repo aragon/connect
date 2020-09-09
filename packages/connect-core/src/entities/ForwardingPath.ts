@@ -63,7 +63,7 @@ export default class ForwardingPath {
     return new ForwardingPathDescription(description, this.#installedApps)
   }
 
-  // Build a token allowance pretransactionn
+  // Build a token allowance pre-transaction
   async buildApprovePreTransactions(
     tokenData: TokenData
   ): Promise<Transaction[]> {

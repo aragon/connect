@@ -1,25 +1,28 @@
+import { connect } from '@aragon/connect'
+
 import {
   ERC20,
   Vote,
   CastVote,
-  ArbitratorFee,
   DisputableVoting,
   CollateralRequirement,
   DisputableVotingConnectorTheGraph,
 } from '../../../src'
 
+
+const RINKEBY_NETWORK = 4
+const ORGANIZATION_NAME = 'ancashdao.aragonid.eth'
 const VOTING_APP_ADDRESS = '0x0e835020497b2cd716369f8fc713fb7bd0a22dbf'
-const VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-dvoting-rinkeby-staging'
+const VOTING_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-dvoting-rinkeby-staging'
 
 describe('DisputableVoting', () => {
   let voting: DisputableVoting
 
-  beforeAll(() => {
-    const connector = new DisputableVotingConnectorTheGraph({
-      subgraphUrl: VOTING_SUBGRAPH_URL,
-    })
-    voting = new DisputableVoting(connector, VOTING_APP_ADDRESS)
+  beforeAll(async () => {
+    const organization = await connect(ORGANIZATION_NAME, 'thegraph', { network: RINKEBY_NETWORK })
+    const connector = new DisputableVotingConnectorTheGraph({ subgraphUrl: VOTING_SUBGRAPH_URL })
+    const app = await organization.connection.orgConnector.appByAddress(organization, VOTING_APP_ADDRESS)
+    voting = new DisputableVoting(connector, app)
   })
 
   afterAll(async () => {
@@ -172,10 +175,8 @@ describe('DisputableVoting', () => {
     })
 
     test('has a collateral requirement associated', async () => {
-      expect(collateralRequirement.id).toBe(voteId)
-      expect(collateralRequirement.tokenId).toBe(
-        '0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42'
-      )
+      expect(collateralRequirement.id).toBe(`${VOTING_APP_ADDRESS}-collateral-${collateralRequirement.collateralRequirementId}`)
+      expect(collateralRequirement.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
       expect(collateralRequirement.actionAmount).toBe('0')
       expect(collateralRequirement.challengeAmount).toBe('0')
       expect(collateralRequirement.challengeDuration).toBe('259200')

@@ -2,27 +2,53 @@ import { QueryResult } from '@aragon/connect-thegraph'
 
 import CollateralRequirement from '../../models/CollateralRequirement'
 
+function buildCollateralRequirement(collateralRequirement: any, connector: any): CollateralRequirement {
+  const {
+    id,
+    voting,
+    token,
+    actionAmount,
+    challengeAmount,
+    challengeDuration,
+    collateralRequirementId
+  } = collateralRequirement
+
+  const collateralRequirementData = {
+    id,
+    actionAmount,
+    challengeAmount,
+    challengeDuration,
+    collateralRequirementId,
+    votingId: voting.id,
+    tokenId: token.id,
+    tokenDecimals: token.decimals,
+  }
+
+  return new CollateralRequirement(collateralRequirementData, connector)
+}
+
 export function parseCollateralRequirement(
   result: QueryResult,
   connector: any
 ): CollateralRequirement {
-  const vote = result.data.vote
+  const collateralRequirement = result.data.collateralRequirement
 
-  if (!vote || !vote.collateralRequirement) {
+  if (!collateralRequirement) {
     throw new Error('Unable to parse collateral requirement.')
   }
 
-  const { collateralRequirement } = vote
-  return new CollateralRequirement(
-    {
-      id: collateralRequirement.id,
-      voteId: collateralRequirement.vote.id,
-      tokenId: collateralRequirement.token.id,
-      tokenDecimals: collateralRequirement.token.decimals,
-      actionAmount: collateralRequirement.actionAmount,
-      challengeAmount: collateralRequirement.challengeAmount,
-      challengeDuration: collateralRequirement.challengeDuration,
-    },
-    connector
-  )
+  return buildCollateralRequirement(collateralRequirement, connector)
+}
+
+export function parseCurrentCollateralRequirement(
+  result: QueryResult,
+  connector: any
+): CollateralRequirement {
+  const disputableVoting = result.data.disputableVoting
+
+  if (!disputableVoting || !disputableVoting.collateralRequirement) {
+    throw new Error('Unable to parse current collateral requirement.')
+  }
+
+  return buildCollateralRequirement(disputableVoting.collateralRequirement, connector)
 }

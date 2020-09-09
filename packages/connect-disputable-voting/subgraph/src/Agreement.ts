@@ -1,15 +1,43 @@
 import { BigInt, Address } from '@graphprotocol/graph-ts'
 import { buildVoteId, buildERC20, updateVoteState } from './DisputableVoting'
-import { Vote as VoteEntity, ArbitratorFee as ArbitratorFeeEntity } from '../generated/schema'
+import {
+  Vote as VoteEntity,
+  DisputableVoting as VotingEntity,
+  ArbitratorFee as ArbitratorFeeEntity,
+  CollateralRequirement as CollateralRequirementEntity
+} from '../generated/schema'
 import {
   Agreement as AgreementContract,
   ActionClosed as ActionClosedEvent,
   ActionDisputed as ActionDisputedEvent,
   ActionSettled as ActionSettledEvent,
-  ActionChallenged as ActionChallengedEvent
+  ActionChallenged as ActionChallengedEvent,
+  CollateralRequirementChanged as CollateralRequirementChangedEvent
 } from '../generated/templates/Agreement/Agreement'
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
+
+export function handleCollateralRequirementChanged(event: CollateralRequirementChangedEvent): void {
+  const voting = VotingEntity.load(event.params.disputable.toHexString())
+
+  if (voting) {
+    const agreementApp = AgreementContract.bind(event.address)
+    const requirementId = buildCollateralRequirementId(event.params.disputable, event.params.collateralRequirementId)
+
+    const requirement = new CollateralRequirementEntity(requirementId)
+    const requirementData = agreementApp.getCollateralRequirement(event.params.disputable, event.params.collateralRequirementId)
+    requirement.token = buildERC20(requirementData.value0)
+    requirement.voting = event.params.disputable.toHexString()
+    requirement.challengeDuration = requirementData.value1
+    requirement.actionAmount = requirementData.value2
+    requirement.challengeAmount = requirementData.value3
+    requirement.collateralRequirementId = event.params.collateralRequirementId
+    requirement.save()
+
+    voting.collateralRequirement = requirementId
+    voting.save()
+  }
+}
 
 export function handleActionDisputed(event: ActionDisputedEvent): void {
   const agreementApp = AgreementContract.bind(event.address)
@@ -67,4 +95,8 @@ function createArbitratorFee(voteId: string, id: string, feeToken: Address, feeA
   arbitratorFee.amount = feeAmount
   arbitratorFee.token = buildERC20(feeToken)
   arbitratorFee.save()
+}
+
+function buildCollateralRequirementId(disputable: Address, collateralRequirementId: BigInt): string {
+  return disputable.toHexString() + "-collateral-" + collateralRequirementId.toString()
 }
