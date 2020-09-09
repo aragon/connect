@@ -21,8 +21,6 @@ import { Acl as AclTemplate } from '../../generated/templates'
 
 // Default APP_IDs
 import {
-  KERNEL_CORE_APP_ID,
-  KERNEL_DEFAULT_ACL_APP_ID,
   KERNEL_APP_BASES_NAMESPACE,
   KERNEL_CORE_NAMESPACE,
   KERNEL_CORE_APP_ID,
@@ -179,36 +177,4 @@ function loadOrCreateImplementation(
     implementation = new ImplementationEntity(implementationId)
   }
   return implementation!
-}
-
-function _addKernelApp(
-  kernelProxyAddress: Address,
-  kernel: KernelContract,
-  org: OrganizationEntity
-): void {
-  // handle kernel implementation
-  const implementationId = KERNEL_CORE_NAMESPACE.concat('-').concat(
-    KERNEL_CORE_APP_ID
-  )
-  let implementation = ImplementationEntity.load(implementationId)
-  if (implementation == null) {
-    implementation = new ImplementationEntity(implementationId)
-    implementation.address = kernel.getApp(
-      Bytes.fromHexString(KERNEL_CORE_NAMESPACE) as Bytes,
-      Bytes.fromHexString(KERNEL_CORE_APP_ID) as Bytes
-    )
-    implementation.save()
-  }
-
-  // handle kernel implementation
-  const app = new AppEntity(kernelProxyAddress.toHex())
-  app.address = kernelProxyAddress
-  app.appId = KERNEL_CORE_APP_ID
-  app.implementation = implementationId
-
-  const orgApps = org.apps
-  orgApps.push(app.id)
-  org.apps = orgApps
-
-  app.save()
 }
