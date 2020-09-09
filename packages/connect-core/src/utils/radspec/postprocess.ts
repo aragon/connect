@@ -1,6 +1,10 @@
 import { addressesEqual, ANY_ENTITY } from '../address'
 import { getKernelNamespace } from '../kernel'
-import { Annotation, PostProcessDescription } from '../../types'
+import {
+  Annotation,
+  PostProcessDescription,
+  AragonArtifactRole,
+} from '../../types'
 import App from '../../entities/App'
 import Role from '../../entities/Role'
 
@@ -19,8 +23,7 @@ type ProcessToken = [string, string, Annotation]
  */
 export async function postprocessRadspecDescription(
   description: string,
-  installedApps: App[],
-  roles: Role[]
+  installedApps: App[]
 ): Promise<PostProcessDescription> {
   const addressRegexStr = '0x[a-fA-F0-9]{40}'
   const addressRegex = new RegExp(`^${addressRegexStr}$`)
@@ -38,6 +41,11 @@ export async function postprocessRadspecDescription(
   if (tokens.length < 1) {
     return { description }
   }
+
+  const roles = installedApps.reduce(
+    (roles, app) => roles.concat(app.artifact.roles),
+    [] as AragonArtifactRole[]
+  )
 
   const annotateAddress = (input: string): ProcessToken => {
     if (addressesEqual(input, ANY_ENTITY)) {

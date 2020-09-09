@@ -21,6 +21,7 @@ export { default as Role } from './entities/Role'
 export {
   ConnectionContext,
   AppData,
+  ForwardingPathData,
   PermissionData,
   RepoData,
   RoleData,

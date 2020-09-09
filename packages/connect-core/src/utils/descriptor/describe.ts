@@ -50,8 +50,7 @@ export async function describeStep(
         annotatedDescription,
       } = await postprocessRadspecDescription(
         decoratedStep.description,
-        installedApps,
-        roles
+        installedApps
       )
       decoratedStep.description = description
       decoratedStep.annotatedDescription = annotatedDescription ?? []
@@ -109,8 +108,7 @@ export async function describeTransaction(
     if (description) {
       return postprocessRadspecDescription(
         description.description,
-        installedApps,
-        roles
+        installedApps
       )
     }
   } catch (err) {
