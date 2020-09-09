@@ -12,7 +12,7 @@
     "deploy-mainnet": "scripts/deploy.sh aragon dvoting mainnet",
     "deploy-mainnet-staging": "env STAGING=true scripts/deploy.sh aragon dvoting mainnet",
     "deploy-rinkeby": "scripts/deploy.sh aragon dvoting rinkeby",
-    "deploy-rinkeby-staging": "env STAGING=true scripts/deploy.sh g dvoting rinkeby",
+    "deploy-rinkeby-staging": "env STAGING=true scripts/deploy.sh aragon dvoting rinkeby",
     "deploy-xdai": "scripts/deploy.sh aragon dvoting xdai"
   },
   "devDependencies": {
