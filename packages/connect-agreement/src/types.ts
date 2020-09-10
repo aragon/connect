@@ -139,10 +139,10 @@ export interface IAgreementConnector {
     skip: number,
     callback: SubscriptionCallback<DisputableApp[]>
   ): SubscriptionHandler
-  signer(signerId: string): Promise<Signer>
+  signer(signerId: string): Promise<Signer | null>
   onSigner(
     signerId: string,
-    callback: SubscriptionCallback<Signer>
+    callback: SubscriptionCallback<Signer | null>
   ): SubscriptionHandler
   signatures(
     signerId: string,
