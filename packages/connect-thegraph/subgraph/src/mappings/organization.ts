@@ -39,15 +39,30 @@ export function handleNewProxyApp(event: NewAppProxyEvent): void {
   const app = loadOrCreateApp(proxyAddress, appId, event.params.isUpgradeable)
 
   // Handle system apps
+
   // ACL
   if (appId.toHexString() == KERNEL_DEFAULT_ACL_APP_ID) {
     addKernelApp(orgAddress, org)
     AclTemplate.create(proxyAddress)
     app.name = 'acl'
   }
+
   // EVM Script Registry
   if (appId.toHexString() == EVM_SCRIPT_REGISTRY_APP_ID) {
     app.name = 'evm-script-registry'
+  }
+
+  // Use ens to resolve repo
+  const repoId = resolveRepo(appId)
+  const repo = RepoEntity.load(repoId.toHexString())
+  if (repo != null) {
+    app.version = repo.versions.pop()
+    app.repo = repo.id
+    app.name = repo.name
+
+    repo.appCount += 1
+
+    repo.save()
   }
 
   const orgApps = org.apps
@@ -115,19 +130,6 @@ function loadOrCreateApp(
     )
     app.isForwarder = isForwarder(proxyAddress)
     app.isUpgradeable = isUpgradeable
-
-    // Use ens to resolve repo
-    const repoId = resolveRepo(appId)
-    if (repoId) {
-      const repo = RepoEntity.load(repoId)
-      if (repo !== null) {
-        app.version = repo.versions.pop()
-        app.repo = repo.id
-        app.name = repo.name
-        repo.appCount += 1
-        repo.save()
-      }
-    }
   }
   return app!
 }
