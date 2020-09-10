@@ -102,32 +102,43 @@ describe('Agreement', () => {
   })
 
   describe('signers', () => {
-    let signer: Signer
-    const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
+    describe('when the signer has signed', () => {
+      let signer: Signer
+      const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
 
-    beforeAll(async () => {
-      signer = await agreement.signer(SIGNER_ADDRESS)
+      beforeAll(async () => {
+        signer = (await agreement.signer(SIGNER_ADDRESS))!
+      })
+
+      test('allows querying a particular signer', async () => {
+        expect(signer.id).toBe(`${AGREEMENT_APP_ADDRESS}-signer-${SIGNER_ADDRESS}`)
+        expect(signer.address).toBe(SIGNER_ADDRESS)
+        expect(signer.agreementId).toBe(AGREEMENT_APP_ADDRESS)
+      })
+
+      test('allows telling if a signer signed a version', async () => {
+        expect(await signer.hasSigned('1')).toBe(true)
+        expect(await signer.hasSigned('1000')).toBe(false)
+      })
+
+      test('allows fetching the signatures of the signer', async () => {
+        const signatures = await signer.signatures()
+        expect(signatures.length).toBeGreaterThan(0)
+
+        const lastSignature = signatures[signatures.length - 1]
+        expect(lastSignature.signerId).toBe(`${AGREEMENT_APP_ADDRESS}-signer-${SIGNER_ADDRESS}`)
+        expect(lastSignature.versionId).toBe(`${AGREEMENT_APP_ADDRESS}-version-1`)
+        expect(lastSignature.createdAt).toBe('1598479718')
+      })
     })
 
-    test('allows querying a particular signer', async () => {
-      expect(signer.id).toBe(`${AGREEMENT_APP_ADDRESS}-signer-${SIGNER_ADDRESS}`)
-      expect(signer.address).toBe(SIGNER_ADDRESS)
-      expect(signer.agreementId).toBe(AGREEMENT_APP_ADDRESS)
-    })
+    describe('when the signer has not signed', () => {
+      const SIGNER_ADDRESS = '0x0000000000000000000000000000000000000000'
 
-    test('allows telling if a signer signed a version', async () => {
-      expect(await signer.hasSigned('1')).toBe(true)
-      expect(await signer.hasSigned('1000')).toBe(false)
-    })
-
-    test('allows fetching the signatures of the signer', async () => {
-      const signatures = await signer.signatures()
-      expect(signatures.length).toBeGreaterThan(0)
-
-      const lastSignature = signatures[signatures.length - 1]
-      expect(lastSignature.signerId).toBe(`${AGREEMENT_APP_ADDRESS}-signer-${SIGNER_ADDRESS}`)
-      expect(lastSignature.versionId).toBe(`${AGREEMENT_APP_ADDRESS}-version-1`)
-      expect(lastSignature.createdAt).toBe('1598479718')
+      test('returns null', async () => {
+        const signer = await agreement.signer(SIGNER_ADDRESS)
+        expect(signer).toBeNull()
+      })
     })
   })
 

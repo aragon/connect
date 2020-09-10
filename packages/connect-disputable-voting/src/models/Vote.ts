@@ -4,7 +4,6 @@ import { Address, SubscriptionCallback, SubscriptionResult } from '@aragon/conne
 import Setting from './Setting'
 import CastVote from './CastVote'
 import ArbitratorFee from './ArbitratorFee'
-import DisputableVoting from './DisputableVoting'
 import CollateralRequirement from './CollateralRequirement'
 import { IDisputableVotingConnector, VoteData } from '../types'
 import {
@@ -90,11 +89,10 @@ export default class Vote {
   }
 
   get hasEnded(): boolean {
-    return this.voteStatus === 'Cancelled' || this.voteStatus === 'Settled' || (
-      this.voteStatus !== 'Challenged' &&
-      this.voteStatus !== 'Disputed' &&
-      Date.now() >= toMilliseconds(this.endDate)
-    )
+    const currentTimestamp = currentTimestampEvm()
+    return this.voteStatus === 'Cancelled' || this.voteStatus === 'Settled' ||
+      (this.voteStatus === 'Challenged' && currentTimestamp.gte(this.challengeEndDate)) ||
+      (this.voteStatus !== 'Challenged' && this.voteStatus !== 'Disputed' && currentTimestamp.gte(this.endDate))
   }
 
   get endDate(): string {
@@ -110,6 +108,16 @@ export default class Vote {
 
     // Otherwise, since the last computed end date was reached and included a flip, we need to extend the end date by one more period
     return lastComputedEndDate.add(bn(this.quietEndingExtension)).toString()
+  }
+
+  get currentQuietEndingExtensionDuration(): string {
+    const actualEndDate = bn(this.endDate)
+    const baseVoteEndDate = bn(this.startDate).add(bn(this.duration))
+    const endDateAfterPause = baseVoteEndDate.add(bn(this.pauseDuration))
+
+    // To know exactly how many extensions due to quiet ending we had, we subtract
+    // the base vote and pause durations to the actual vote end date
+    return actualEndDate.sub(endDateAfterPause).toString()
   }
 
   get yeasPct(): string {
@@ -141,8 +149,12 @@ export default class Vote {
   }
 
   get status(): string {
-    if (this.hasEnded && this.voteStatus === 'Scheduled') {
-      return this.isAccepted ? 'Accepted' : 'Rejected'
+    if (this.hasEnded) {
+      if (this.voteStatus === 'Scheduled') {
+        return this.isAccepted ? 'Accepted' : 'Rejected'
+      } else if (this.voteStatus === 'Challenged') {
+        return 'Settled'
+      }
     }
     return this.voteStatus
   }
