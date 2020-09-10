@@ -180,7 +180,9 @@ export default class Agreement {
   }
 
   async sign(signerAddress: string, versionNumber?: string): Promise<ForwardingPath> {
-    if (!versionNumber) versionNumber = (await this.currentVersion()).versionId
+    if (!versionNumber) {
+      versionNumber = (await this.currentVersion()).versionId
+    }
     return this.#app.intent('sign', [versionNumber], { actAs: signerAddress })
   }
 
