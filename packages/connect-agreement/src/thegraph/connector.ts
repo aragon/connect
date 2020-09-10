@@ -180,8 +180,8 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     )
   }
 
-  async signer(signerId: string): Promise<Signer> {
-    return this.#gql.performQueryWithParser<Signer>(
+  async signer(signerId: string): Promise<Signer | null> {
+    return this.#gql.performQueryWithParser<Signer | null>(
       queries.GET_SIGNER('query'),
       { signerId },
       (result: QueryResult) => parseSigner(result, this)
@@ -190,9 +190,9 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
 
   onSigner(
     signerId: string,
-    callback: SubscriptionCallback<Signer>
+    callback: SubscriptionCallback<Signer | null>
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser<Signer>(
+    return this.#gql.subscribeToQueryWithParser<Signer | null>(
       queries.GET_SIGNER('query'),
       { signerId },
       callback,

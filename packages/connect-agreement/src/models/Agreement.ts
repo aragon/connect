@@ -107,15 +107,15 @@ export default class Agreement {
     return `${this.address}-signer-${signerAddress.toLowerCase()}`
   }
 
-  async signer(signerAddress: string): Promise<Signer> {
+  async signer(signerAddress: string): Promise<Signer | null> {
     return this.#connector.signer(this.signerId(signerAddress))
   }
 
   onSigner(
     signerAddress: string,
-    callback?: SubscriptionCallback<Signer>
-  ): SubscriptionResult<Signer> {
-    return subscription<Signer>(callback, (callback) =>
+    callback?: SubscriptionCallback<Signer | null>
+  ): SubscriptionResult<Signer | null> {
+    return subscription<Signer | null>(callback, (callback) =>
       this.#connector.onSigner(this.signerId(signerAddress), callback)
     )
   }
@@ -173,13 +173,16 @@ export default class Agreement {
     return this.#connector.action(this.actionId(actionNumber))
   }
 
-  onAction(acitonNumber: string, callback?: SubscriptionCallback<Action | null>): SubscriptionResult<Action | null> {
+  onAction(actionNumber: string, callback?: SubscriptionCallback<Action | null>): SubscriptionResult<Action | null> {
     return subscription<Action | null>(callback, (callback) =>
-      this.#connector.onAction(this.actionId(acitonNumber), callback)
+      this.#connector.onAction(this.actionId(actionNumber), callback)
     )
   }
 
-  sign(signerAddress: string, versionNumber: string): Promise<ForwardingPath> {
+  async sign(signerAddress: string, versionNumber?: string): Promise<ForwardingPath> {
+    if (!versionNumber) {
+      versionNumber = (await this.currentVersion()).versionId
+    }
     return this.#app.intent('sign', [versionNumber], { actAs: signerAddress })
   }
 
