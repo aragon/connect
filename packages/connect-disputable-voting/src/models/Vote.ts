@@ -151,8 +151,12 @@ export default class Vote {
   }
 
   get status(): string {
-    if (this.hasEnded && this.voteStatus === 'Scheduled') {
-      return this.isAccepted ? 'Accepted' : 'Rejected'
+    if (this.hasEnded) {
+      if (this.voteStatus === 'Scheduled') {
+        return this.isAccepted ? 'Accepted' : 'Rejected'
+      } else if (this.voteStatus === 'Challenged') {
+        return 'Settled'
+      }
     }
     return this.voteStatus
   }
