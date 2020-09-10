@@ -84,25 +84,50 @@ describe('DisputableVoting', () => {
   })
 
   describe('results', () => {
-    test('computes the current outcome properly', async () => {
-      const vote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-2`)
+    describe('when the vote is challenged', () => {
+      test('computes the current outcome properly', async () => {
+        const vote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-1`)
 
-      expect(vote.hasEnded).toBe(true)
-      expect(vote.isAccepted).toBe(false)
-      expect(vote.status).toBe('Settled')
+        expect(vote.hasEnded).toBe(true)
+        expect(vote.isAccepted).toBe(false)
+        expect(vote.status).toBe('Settled')
 
-      expect(vote.totalPower).toBe('3000000000000000000')
-      expect(vote.formattedTotalPower).toBe('3.00')
+        expect(vote.totalPower).toBe('3000000000000000000')
+        expect(vote.formattedTotalPower).toBe('3.00')
 
-      expect(vote.yeas).toBe('0')
-      expect(vote.yeasPct).toBe('0')
-      expect(vote.formattedYeas).toBe('0.00')
-      expect(vote.formattedYeasPct).toBe('0.00')
+        expect(vote.yeas).toBe('0')
+        expect(vote.yeasPct).toBe('0')
+        expect(vote.formattedYeas).toBe('0.00')
+        expect(vote.formattedYeasPct).toBe('0.00')
 
-      expect(vote.nays).toBe('0')
-      expect(vote.naysPct).toBe('0')
-      expect(vote.formattedNays).toBe('0.00')
-      expect(vote.formattedNaysPct).toBe('0.00')
+        expect(vote.nays).toBe('0')
+        expect(vote.naysPct).toBe('0')
+        expect(vote.formattedNays).toBe('0.00')
+        expect(vote.formattedNaysPct).toBe('0.00')
+      })
+    })
+
+    describe('when the vote is settled', () => {
+      test('computes the current outcome properly', async () => {
+        const vote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-2`)
+
+        expect(vote.hasEnded).toBe(true)
+        expect(vote.isAccepted).toBe(false)
+        expect(vote.status).toBe('Settled')
+
+        expect(vote.totalPower).toBe('3000000000000000000')
+        expect(vote.formattedTotalPower).toBe('3.00')
+
+        expect(vote.yeas).toBe('0')
+        expect(vote.yeasPct).toBe('0')
+        expect(vote.formattedYeas).toBe('0.00')
+        expect(vote.formattedYeasPct).toBe('0.00')
+
+        expect(vote.nays).toBe('0')
+        expect(vote.naysPct).toBe('0')
+        expect(vote.formattedNays).toBe('0.00')
+        expect(vote.formattedNaysPct).toBe('0.00')
+      })
     })
   })
 

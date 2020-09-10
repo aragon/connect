@@ -4,7 +4,6 @@ import { Address, SubscriptionCallback, SubscriptionResult } from '@aragon/conne
 import Setting from './Setting'
 import CastVote from './CastVote'
 import ArbitratorFee from './ArbitratorFee'
-import DisputableVoting from './DisputableVoting'
 import CollateralRequirement from './CollateralRequirement'
 import { IDisputableVotingConnector, VoteData } from '../types'
 import {
@@ -90,11 +89,10 @@ export default class Vote {
   }
 
   get hasEnded(): boolean {
-    return this.voteStatus === 'Cancelled' || this.voteStatus === 'Settled' || (
-      this.voteStatus !== 'Challenged' &&
-      this.voteStatus !== 'Disputed' &&
-      Date.now() >= toMilliseconds(this.endDate)
-    )
+    const currentTimestamp = currentTimestampEvm()
+    return this.voteStatus === 'Cancelled' || this.voteStatus === 'Settled' ||
+      (this.voteStatus === 'Challenged' && currentTimestamp.gte(this.challengeEndDate)) ||
+      (this.voteStatus !== 'Challenged' && this.voteStatus !== 'Disputed' && currentTimestamp.gte(this.endDate))
   }
 
   get endDate(): string {
