@@ -1,6 +1,6 @@
 {
   "name": "@aragon/connect",
-  "version": "0.8.0-alpha.2",
+  "version": "0.8.0-alpha.3",
   "description": "Access and interact with Aragon Organizations and their apps.",
   "keywords": [
     "ethereum",
