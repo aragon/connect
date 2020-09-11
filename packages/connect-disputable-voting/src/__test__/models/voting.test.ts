@@ -7,7 +7,6 @@ import {
   CollateralRequirement,
   DisputableVotingConnectorTheGraph,
 } from '../../../src'
-import {bn} from "@aragon/connect-agreement/dist/esm/helpers";
 
 
 const RINKEBY_NETWORK = 4
@@ -65,10 +64,10 @@ describe('DisputableVoting', () => {
       const votingABI = new ethers.utils.Interface(['function newVote(bytes,bytes)'])
       const intent = await voting.newVote(SCRIPT, CONTEXT, SIGNER_ADDRESS)
 
-      expect(intent.transactions.length).toBe(1)
+      expect(intent.transactions.length).toBe(2)
       expect(intent.destination.address).toBe(VOTING_APP_ADDRESS)
 
-      const transaction = intent.transactions[0]
+      const transaction = intent.transactions[1]
       expect(transaction.to.toLowerCase()).toBe(VOTING_APP_ADDRESS)
       expect(transaction.from).toBe(SIGNER_ADDRESS)
       expect(transaction.data).toBe(votingABI.encodeFunctionData('newVote', [SCRIPT, ethers.utils.toUtf8Bytes(CONTEXT)]))

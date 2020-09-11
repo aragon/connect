@@ -95,7 +95,7 @@ export async function buildApprovePreTransactions(
 
   // If allowance is already greater than or equal to amount, there is no need to do an approve transaction
   const allowanceBN = BigInt(allowance)
-  if (allowanceBN < tokenValueBN) {
+  if (allowanceBN >= tokenValueBN) {
     return []
   }
 
