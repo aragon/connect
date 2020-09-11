@@ -101,7 +101,7 @@ Like `Organization#permissions()`, but as a subscription.
 
 | Name       | Type                          | Description                                                         |
 | ---------- | ----------------------------- | ------------------------------------------------------------------- |
-| `callback` | `(error, permission) => void` | A callback that will get called every time the result gets updated. |
+| `callback` | `(error: Error, permission: Permission) => void` | A callback that will get called every time the result gets updated. |
 | returns    | `{ unsubscribe: () => void }` | A handler that allows to stop receiving updates.                    |
 
 The error passed to `callback` can be `null` (no error) or one of the following:
