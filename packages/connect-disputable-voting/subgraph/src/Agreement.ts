@@ -1,8 +1,7 @@
 import { BigInt, Address } from '@graphprotocol/graph-ts'
-import { buildVoteId, buildERC20, updateVoteState } from './DisputableVoting'
+import { buildVoteId, buildERC20, updateVoteState, loadOrCreateVoting } from './DisputableVoting'
 import {
   Vote as VoteEntity,
-  DisputableVoting as VotingEntity,
   ArbitratorFee as ArbitratorFeeEntity,
   CollateralRequirement as CollateralRequirementEntity
 } from '../generated/schema'
@@ -18,25 +17,22 @@ import {
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 export function handleCollateralRequirementChanged(event: CollateralRequirementChangedEvent): void {
-  const voting = VotingEntity.load(event.params.disputable.toHexString())
+  const voting = loadOrCreateVoting(event.params.disputable)
+  const agreementApp = AgreementContract.bind(event.address)
+  const requirementId = buildCollateralRequirementId(event.params.disputable, event.params.collateralRequirementId)
 
-  if (voting) {
-    const agreementApp = AgreementContract.bind(event.address)
-    const requirementId = buildCollateralRequirementId(event.params.disputable, event.params.collateralRequirementId)
+  const requirement = new CollateralRequirementEntity(requirementId)
+  const requirementData = agreementApp.getCollateralRequirement(event.params.disputable, event.params.collateralRequirementId)
+  requirement.token = buildERC20(requirementData.value0)
+  requirement.voting = event.params.disputable.toHexString()
+  requirement.challengeDuration = requirementData.value1
+  requirement.actionAmount = requirementData.value2
+  requirement.challengeAmount = requirementData.value3
+  requirement.collateralRequirementId = event.params.collateralRequirementId
+  requirement.save()
 
-    const requirement = new CollateralRequirementEntity(requirementId)
-    const requirementData = agreementApp.getCollateralRequirement(event.params.disputable, event.params.collateralRequirementId)
-    requirement.token = buildERC20(requirementData.value0)
-    requirement.voting = event.params.disputable.toHexString()
-    requirement.challengeDuration = requirementData.value1
-    requirement.actionAmount = requirementData.value2
-    requirement.challengeAmount = requirementData.value3
-    requirement.collateralRequirementId = event.params.collateralRequirementId
-    requirement.save()
-
-    voting.collateralRequirement = requirementId
-    voting.save()
-  }
+  voting.collateralRequirement = requirementId
+  voting.save()
 }
 
 export function handleActionDisputed(event: ActionDisputedEvent): void {

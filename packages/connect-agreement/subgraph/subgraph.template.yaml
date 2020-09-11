@@ -111,6 +111,6 @@ templates:
           handler: handleStaked
         - event: Unstaked(indexed address,uint256,uint256,bytes)
           handler: handleUnstaked
-        - event: StakeTransferred(indexed address,address,uint256)
+        - event: StakeTransferred(indexed address,indexed address,uint256)
           handler: handleStakeTransferred
       file: ./src/Staking.ts

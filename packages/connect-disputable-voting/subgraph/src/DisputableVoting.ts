@@ -151,7 +151,7 @@ function hasReachedValuePct(value: BigInt, total: BigInt, pct: BigInt, pctBase: 
   return total.notEqual(BigInt.fromI32(0)) && (value.times(pctBase).div(total)).gt(pct)
 }
 
-function loadOrCreateVoting(votingAddress: Address): DisputableVotingEntity {
+export function loadOrCreateVoting(votingAddress: Address): DisputableVotingEntity {
   let voting = DisputableVotingEntity.load(votingAddress.toHexString())
   if (voting === null) {
     const votingApp = VotingContract.bind(votingAddress)
