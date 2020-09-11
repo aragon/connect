@@ -76,7 +76,6 @@ export interface ActionData {
   collateralRequirementId: string
   versionId: string
   context: string
-  script: string
   createdAt: string
 }
 

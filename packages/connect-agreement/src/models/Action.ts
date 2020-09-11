@@ -14,7 +14,6 @@ export default class Action {
   readonly disputableActionId: string
   readonly collateralRequirementId: string
   readonly versionId: string
-  readonly script: string
   readonly context: string
   readonly createdAt: string
 
@@ -28,7 +27,6 @@ export default class Action {
     this.collateralRequirementId = data.collateralRequirementId
     this.versionId = data.versionId
     this.context = data.context
-    this.script = data.script
     this.createdAt = data.createdAt
   }
 
