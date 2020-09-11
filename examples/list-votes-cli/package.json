@@ -1,7 +1,7 @@
 {
   "name": "list-votes-cli",
   "private": true,
-  "version": "0.8.0-alpha.3",
+  "version": "0.8.0-alpha.4",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
@@ -13,7 +13,7 @@
     "typescript": "^3.9.6"
   },
   "dependencies": {
-    "@aragon/connect": "^0.8.0-alpha.3",
-    "@aragon/connect-voting": "^0.8.0-alpha.3"
+    "@aragon/connect": "^0.8.0-alpha.4",
+    "@aragon/connect-voting": "^0.8.0-alpha.4"
   }
 }
