@@ -6,6 +6,7 @@ import {
 } from 'ethers'
 
 import { erc20ABI, forwarderAbi, forwarderFeeAbi } from './abis'
+import { findMethodAbiFragment } from './abi'
 import { TokenData } from '../types'
 import App from '../entities/App'
 import Transaction from '../entities/Transaction'
@@ -13,7 +14,7 @@ import Transaction from '../entities/Transaction'
 export async function createDirectTransaction(
   sender: Address,
   destination: Address,
-  methodAbiFragment: ethersUtils.FunctionFragment,
+  methodAbiFragment: ethersUtils.Fragment,
   params: any[]
 ): Promise<Transaction> {
   if (methodAbiFragment.type === 'fallback' && params.length > 1) {
@@ -39,10 +40,19 @@ export async function createDirectTransactionForApp(
   methodSignature: string,
   params: any[]
 ): Promise<Transaction> {
-  const appInterface = app.interface()
-  const functionFragment = appInterface.getFunction(methodSignature)
+  if (!app.abi) {
+    throw new Error(
+      `No ABI specified in app for ${app.address}. Make sure the metada for the app is available`
+    )
+  }
 
-  return createDirectTransaction(sender, app.address, functionFragment, params)
+  const fragment = findMethodAbiFragment(app.abi, methodSignature)
+
+  if (!fragment) {
+    throw new Error(`${methodSignature} not found on ABI for ${app.address}`)
+  }
+
+  return createDirectTransaction(sender, app.address, fragment, params)
 }
 
 export function createForwarderTransactionBuilder(
