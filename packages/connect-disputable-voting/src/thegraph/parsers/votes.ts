@@ -3,7 +3,7 @@ import { QueryResult } from '@aragon/connect-thegraph'
 import Vote from '../../models/Vote'
 import { VoteData } from '../../types'
 
-function buildVote(vote: any, connector: any): Vote {
+function buildVote(vote: any, connector: any, provider: any): Vote {
   const {
     id,
     voting,
@@ -65,31 +65,32 @@ function buildVote(vote: any, connector: any): Vote {
     disputedAt,
     executedAt,
     isAccepted,
+    tokenId: voting.token.id,
     tokenDecimals: voting.token.decimals,
     collateralRequirementId: collateralRequirement.id,
     submitterArbitratorFeeId: submitterArbitratorFee ? submitterArbitratorFee.id : null,
     challengerArbitratorFeeId: challengerArbitratorFee ? challengerArbitratorFee.id : null
   }
 
-  return new Vote(voteData, connector)
+  return new Vote(voteData, connector, provider)
 }
 
-export function parseVote(result: QueryResult, connector: any): Vote {
+export function parseVote(result: QueryResult, connector: any, provider: any): Vote {
   const vote = result.data.vote
 
   if (!vote) {
     throw new Error('Unable to parse vote.')
   }
 
-  return buildVote(vote, connector)
+  return buildVote(vote, connector, provider)
 }
 
-export function parseVotes(result: QueryResult, connector: any): Vote[] {
+export function parseVotes(result: QueryResult, connector: any, provider: any): Vote[] {
   const votes = result.data.votes
 
   if (!votes) {
     throw new Error('Unable to parse votes.')
   }
 
-  return votes.map((vote: any) => buildVote(vote, connector))
+  return votes.map((vote: any) => buildVote(vote, connector, provider))
 }

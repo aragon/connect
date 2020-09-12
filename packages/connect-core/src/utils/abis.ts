@@ -14,6 +14,11 @@ export const forwarderFeeAbi = [
   'function forwardFee() external view returns (address, uint256)',
 ]
 
+export const miniMeAbi = [
+  'function balanceOf(address _owner) external view returns (uint256)',
+  'function balanceOfAt(address _owner, uint256 _blockNumber) external view returns (uint256)',
+]
+
 export const arbitratorAbi = [
   {
     "inputs": [],

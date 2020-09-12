@@ -1,5 +1,6 @@
 import { connect } from '@aragon/connect'
 
+import { bn } from '../../helpers'
 import {
   ERC20,
   Vote,
@@ -20,8 +21,8 @@ describe('DisputableVoting', () => {
 
   beforeAll(async () => {
     const organization = await connect(ORGANIZATION_NAME, 'thegraph', { network: RINKEBY_NETWORK })
-    const connector = new DisputableVotingConnectorTheGraph({ subgraphUrl: VOTING_SUBGRAPH_URL })
     const app = await organization.connection.orgConnector.appByAddress(organization, VOTING_APP_ADDRESS)
+    const connector = new DisputableVotingConnectorTheGraph({ subgraphUrl: VOTING_SUBGRAPH_URL }, app.provider)
     voting = new DisputableVoting(connector, app)
   })
 
@@ -104,6 +105,9 @@ describe('DisputableVoting', () => {
         expect(vote.naysPct).toBe('0')
         expect(vote.formattedNays).toBe('0.00')
         expect(vote.formattedNaysPct).toBe('0.00')
+
+        expect(await vote.canExecute()).toBe(false)
+        expect(await vote.canVote('0x03acbcb547d03c8e7746ef5988012b59604aa083')).toBe(false)
       })
     })
 
@@ -127,6 +131,9 @@ describe('DisputableVoting', () => {
         expect(vote.naysPct).toBe('0')
         expect(vote.formattedNays).toBe('0.00')
         expect(vote.formattedNaysPct).toBe('0.00')
+
+        expect(await vote.canExecute()).toBe(false)
+        expect(await vote.canVote('0x03acbcb547d03c8e7746ef5988012b59604aa083')).toBe(false)
       })
     })
   })
@@ -162,6 +169,7 @@ describe('DisputableVoting', () => {
 
       beforeAll(async () => {
         castVote = await vote.castVote(VOTER_ADDRESS)
+        expect(await vote.hasVoted(VOTER_ADDRESS)).toBe(false)
       })
 
       it('returns a null value', async () => {
@@ -174,6 +182,7 @@ describe('DisputableVoting', () => {
       const VOTER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
 
       beforeAll(async () => {
+        expect(await vote.hasVoted(VOTER_ADDRESS)).toBe(true)
         castVote = (await vote.castVote(VOTER_ADDRESS))!
       })
 
@@ -243,6 +252,26 @@ describe('DisputableVoting', () => {
       expect(artbiratorFee.id).toBe(`${voteId}-challenger`)
       expect(artbiratorFee.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
       expect(artbiratorFee.formattedAmount).toBe('150.00')
+    })
+  })
+
+  describe('balances', () => {
+    let vote: Vote
+    const VOTE_ID = `${VOTING_APP_ADDRESS}-vote-0`
+    const VOTER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
+
+    beforeAll(async () => {
+      vote = await voting.vote(VOTE_ID)
+    })
+
+    test('tells the balance at the moment of the vote', async () => {
+      expect(await vote.formattedVotingPower(VOTER_ADDRESS)).toBe('1.00')
+    })
+
+    test('tells the current balance of a voter', async () => {
+      const token = await vote.token()
+
+      expect((await token.getBalance(VOTER_ADDRESS)).gte(bn(0))).toBe(true)
     })
   })
 })

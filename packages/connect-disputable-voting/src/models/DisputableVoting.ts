@@ -2,7 +2,6 @@ import { utils } from 'ethers'
 import { subscription, App, ForwardingPath } from '@aragon/connect-core'
 import { Address, SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
 
-import { bn } from '../helpers'
 import ERC20 from './ERC20'
 import Vote from './Vote'
 import Voter from './Voter'
