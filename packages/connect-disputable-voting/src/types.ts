@@ -8,6 +8,7 @@ import Vote from './models/Vote'
 import Voter from './models/Voter'
 import Setting from './models/Setting'
 import CastVote from './models/CastVote'
+import ArbitratorFee from './models/ArbitratorFee'
 import CollateralRequirement from './models/CollateralRequirement'
 
 export interface DisputableVotingData {
@@ -23,6 +24,7 @@ export interface VoteData {
   voteId: string
   creator: string
   duration: string
+  quietEndingExtension: string
   context: string
   status: string
   actionId: string
@@ -41,9 +43,13 @@ export interface VoteData {
   quietEndingExtensionDuration: string
   quietEndingSnapshotSupport: string
   script: string
+  settledAt: string
+  disputedAt: string
   executedAt: string
   tokenDecimals: string
   isAccepted: boolean
+  submitterArbitratorFeeId: string
+  challengerArbitratorFeeId: string
 }
 
 export interface CastVoteData {
@@ -81,9 +87,18 @@ export interface CollateralRequirementData {
   id: string
   voteId: string
   tokenId: string
+  tokenDecimals: string
   actionAmount: string
   challengeAmount: string
   challengeDuration: string
+}
+
+export interface ArbitratorFeeData {
+  id: string
+  voteId: string
+  tokenId: string
+  tokenDecimals: string
+  amount: string
 }
 
 export interface ERC20Data {
@@ -155,6 +170,14 @@ export interface IDisputableVotingConnector {
     voteId: string,
     callback: SubscriptionCallback<CollateralRequirement>
   ): SubscriptionHandler
+  arbitratorFee(arbitratorFeeId: string): Promise<ArbitratorFee | null>
+  onArbitratorFee(
+    arbitratorFeeId: string,
+    callback: SubscriptionCallback<ArbitratorFee | null>
+  ): SubscriptionHandler
   ERC20(tokenAddress: string): Promise<ERC20>
-  onERC20(tokenAddress: string, callback: Function): SubscriptionHandler
+  onERC20(
+    tokenAddress: string,
+    callback: SubscriptionCallback<ERC20>
+  ): SubscriptionHandler
 }

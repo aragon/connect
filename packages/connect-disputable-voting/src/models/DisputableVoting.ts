@@ -1,14 +1,11 @@
-import {
-  Address,
-  SubscriptionCallback,
-  SubscriptionResult,
-} from '@aragon/connect-types'
 import { subscription } from '@aragon/connect-core'
-import { IDisputableVotingConnector } from '../types'
+import { Address, SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
+
 import ERC20 from './ERC20'
 import Vote from './Vote'
 import Voter from './Voter'
 import Setting from './Setting'
+import { IDisputableVotingConnector } from '../types'
 
 export default class DisputableVoting {
   #address: Address
