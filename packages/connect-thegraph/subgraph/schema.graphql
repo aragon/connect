@@ -15,7 +15,7 @@ type Registry @entity {
   node: Bytes
   repoCount: Int!
   repos: [Repo!]!
-  factory: RegistryFactory @derivedFrom(field: "registries")
+  factory: RegistryFactory! @derivedFrom(field: "registries")
 }
 
 type Repo @entity {
@@ -72,7 +72,7 @@ type Organization @entity {
   recoveryVault: Bytes!
   apps: [App!]!
   permissions: [Permission!]!
-  factory: OrgFactory @derivedFrom(field: "organizations")
+  factory: OrgFactory! @derivedFrom(field: "organizations")
 }
 
 type App @entity {
