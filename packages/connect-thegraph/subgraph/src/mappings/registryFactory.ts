@@ -1,67 +1,48 @@
+import { Address } from '@graphprotocol/graph-ts'
+
 // Import event types from the contract ABI
 import { DeployAPM as DeployAPMEvent } from '../../generated/ApmRegistryFactory/APMRegistryFactory'
 
 // Import entity types from the schema
-import {
-  RegistryFactory as RegistryFactoryEntity,
-  Registry as RegistryEntity,
-} from '../../generated/schema'
+import { RegistryFactory as RegistryFactoryEntity } from '../../generated/schema'
 
 // Import templates types
 import { Registry as RegistryTemplate } from '../../generated/templates'
 
-import {
-  APM_REGISTRY_NODE,
-  OPEN_REGISTRY_NODE,
-  HATCH_REGISTRY_NODE,
-  HIVE_REGISTRY_NODE,
-} from '../helpers/constants'
+import { loadOrCreateRegistry } from './registry'
+
+/* eslint-disable @typescript-eslint/no-use-before-define */
 
 export function handleDeployAPM(event: DeployAPMEvent): void {
-  let factory = RegistryFactoryEntity.load('1')
-  const factoryAddress = event.address
+  const factory = loadOrCreateApmFactory(event.address)
 
-  // if no factory yet, set up empty
-  if (factory == null) {
-    factory = new RegistryFactoryEntity('1')
-    factory.address = factoryAddress
-    factory.registryCount = 0
-    factory.registries = []
-  }
-  factory.registryCount = factory.registryCount + 1
-
-  const registryId = event.params.apm.toHexString()
   const registryAddress = event.params.apm
-  const node = event.params.node
-
-  // solve registry name
-  let name = ''
-  if (node.toHex() == APM_REGISTRY_NODE) {
-    name = 'aragonpm.eth'
-  } else if (node.toHex() == OPEN_REGISTRY_NODE) {
-    name = 'open.aragonpm.eth'
-  } else if (node.toHex() == HATCH_REGISTRY_NODE) {
-    name = 'hatch.aragonpm.eth'
-  } else if (node.toHex() == HIVE_REGISTRY_NODE) {
-    name = '1hive.aragonpm.eth'
-  }
-
-  // create new registry
-  const registry = new RegistryEntity(registryId)
-  registry.address = registryAddress
-  registry.node = node
-  registry.name = name
-  registry.repoCount = 0
-  registry.repos = []
+  const registry = loadOrCreateRegistry(registryAddress, event.params.node)
 
   // add the registry to the factory
   const currentRegistries = factory.registries
   currentRegistries.push(registry.id)
   factory.registries = currentRegistries
 
+  factory.registryCount = factory.registryCount + 1
+
   // save to the store
   factory.save()
   registry.save()
 
   RegistryTemplate.create(registryAddress)
+}
+
+function loadOrCreateApmFactory(
+  factoryAddress: Address
+): RegistryFactoryEntity {
+  let factory = RegistryFactoryEntity.load('1')
+  // if no factory yet, set up empty
+  if (factory === null) {
+    factory = new RegistryFactoryEntity('1')
+    factory.address = factoryAddress
+    factory.registryCount = 0
+    factory.registries = []
+  }
+  return factory!
 }

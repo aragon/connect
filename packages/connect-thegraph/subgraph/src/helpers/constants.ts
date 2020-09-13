@@ -1,4 +1,4 @@
-// registry node
+// registry nodes
 export const APM_REGISTRY_NODE =
   '0x9065c3e7f7b7ef1ef4e53d2d0b8e0cef02874ab020c1ece79d5f0d3d0111c0ba'
 export const OPEN_REGISTRY_NODE =
@@ -24,8 +24,5 @@ export const KERNEL_APP_ADDR_NAMESPACE =
 export const KERNEL_CORE_NAMESPACE =
   '0xc681a85306374a5ab27f0bbc385296a54bcd314a1948b6cf61c4ea1bc44bb9f8'
 
-// roles
-export const APP_MANAGER_ROLE =
-  '0xb6d92708f3d4817afc106147d969e229ced5c46e65e0a5002a0d391287762bd0'
-
+// defaults
 export const ZERO_ADDR = '0x0000000000000000000000000000000000000000'
