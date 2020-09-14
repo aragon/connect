@@ -1,7 +1,7 @@
 {
   "name": "minimal-setup-web",
   "private": true,
-  "version": "0.8.0-alpha.4",
+  "version": "0.8.0-alpha.5",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
@@ -9,7 +9,7 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "@aragon/connect-react": "^0.8.0-alpha.4",
+    "@aragon/connect-react": "^0.8.0-alpha.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
