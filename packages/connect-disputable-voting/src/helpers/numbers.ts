@@ -29,5 +29,10 @@ export const formatBn = (
   const roundedDecimals = Math.round(
     parseInt(decimals) / 10 ** (decimalsLength - formattedDecimals)
   )
-  return `${integer}.${roundedDecimals}`
+
+  const parsedRoundedDecimals = (roundedDecimals === 0)
+    ? '0'.repeat(formattedDecimals)
+    : roundedDecimals.toString()
+
+  return `${integer}.${parsedRoundedDecimals}`
 }

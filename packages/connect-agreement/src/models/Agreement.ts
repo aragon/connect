@@ -121,7 +121,7 @@ export default class Agreement {
   }
 
   stakingId(tokenAddress: string, userAddress: string): string {
-    return `${tokenAddress.toLowerCase()}-user-${userAddress.toLowerCase()}`
+    return `${tokenAddress.toLowerCase()}-staking-${userAddress.toLowerCase()}`
   }
 
   async staking(tokenAddress: string, userAddress: string): Promise<Staking> {

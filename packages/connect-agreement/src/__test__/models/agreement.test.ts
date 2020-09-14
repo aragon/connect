@@ -1,13 +1,14 @@
 import { ethers } from 'ethers'
 import { connect } from '@aragon/connect'
 
-import { bn } from '../../helpers/numbers'
+import { bn } from '../../helpers'
 import { Agreement, Signer, AgreementConnectorTheGraph } from '../../../src'
 
 const RINKEBY_NETWORK = 4
-const ORGANIZATION_NAME = 'ancashdao.aragonid.eth'
-const AGREEMENT_APP_ADDRESS = '0x9c92dbd8a8e5903e2741202321073091109f26be'
-const AGREEMENT_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/aragon/aragon-agreement-rinkeby-staging'
+const ORGANIZATION_NAME = '0x6322eb0294c6aadb7e1b37d41fd605a34df661dc'
+const AGREEMENT_APP_ADDRESS = '0xe4575381f0c96f58bd93be6978cc0d9638d874a2'
+const AGREEMENT_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-agreement-rinkeby-staging'
+
 
 describe('Agreement', () => {
   let agreement: Agreement
@@ -29,11 +30,11 @@ describe('Agreement', () => {
     })
 
     test('has a staking factory', async () => {
-      expect(await agreement.stakingFactory()).toBe('0x07429001eea415e967c57b8d43484233d57f8b0b')
+      expect(await agreement.stakingFactory()).toBe('0x6a30c2de7359db110b6322b41038674ae1d276fb')
     })
 
     test('belongs to a DAO', async () => {
-      expect(await agreement.dao()).toBe('0x51a41e43af0774565f0be5cebc50c693cc19e4ee')
+      expect(await agreement.dao()).toBe('0xe990dd6a81c0fdaad6b5cef44676b383350ad94e')
     })
   })
 
@@ -43,11 +44,11 @@ describe('Agreement', () => {
 
       expect(version.id).toBe(`${AGREEMENT_APP_ADDRESS}-version-1`)
       expect(version.versionId).toBe('1')
-      expect(version.title).toBe('Aragon Network Cash Agreement')
-      expect(version.content).toEqual('0x697066733a516d50766657554e743357725a37756142315a77456d6563335a723141424c39436e63534466517970576b6d6e70')
+      expect(version.title).toBe('Aragon Network DAO Agreement')
+      expect(version.content).toEqual('0x697066733a516d646159544a6b36615632706d56527839456456386b64447844397947466b7464366846736b585372344b4445')
       expect(version.arbitrator).toBe('0x52180af656a1923024d1accf1d827ab85ce48878')
       expect(version.appFeesCashier).toBe('0x0000000000000000000000000000000000000000')
-      expect(version.effectiveFrom).toBe('1598475758')
+      expect(version.effectiveFrom).toBe('1599860871')
     })
 
     test('allows querying a particular version', async () => {
@@ -55,11 +56,11 @@ describe('Agreement', () => {
 
       expect(version.id).toBe(`${AGREEMENT_APP_ADDRESS}-version-1`)
       expect(version.versionId).toBe('1')
-      expect(version.title).toBe('Aragon Network Cash Agreement')
-      expect(version.content).toEqual('0x697066733a516d50766657554e743357725a37756142315a77456d6563335a723141424c39436e63534466517970576b6d6e70')
+      expect(version.title).toBe('Aragon Network DAO Agreement')
+      expect(version.content).toEqual('0x697066733a516d646159544a6b36615632706d56527839456456386b64447844397947466b7464366846736b585372344b4445')
       expect(version.arbitrator).toBe('0x52180af656a1923024d1accf1d827ab85ce48878')
       expect(version.appFeesCashier).toBe('0x0000000000000000000000000000000000000000')
-      expect(version.effectiveFrom).toBe('1598475758')
+      expect(version.effectiveFrom).toBe('1599860871')
     })
 
     test('allows fetching a list of versions', async () => {
@@ -67,11 +68,11 @@ describe('Agreement', () => {
       expect(versions.length).toBeGreaterThan(0)
 
       const version = versions[0]
-      expect(version.title).toBe('Aragon Network Cash Agreement')
-      expect(version.content).toEqual('0x697066733a516d50766657554e743357725a37756142315a77456d6563335a723141424c39436e63534466517970576b6d6e70')
+      expect(version.title).toBe('Aragon Network DAO Agreement')
+      expect(version.content).toEqual('0x697066733a516d646159544a6b36615632706d56527839456456386b64447844397947466b7464366846736b585372344b4445')
       expect(version.arbitrator).toBe('0x52180af656a1923024d1accf1d827ab85ce48878')
       expect(version.appFeesCashier).toBe('0x0000000000000000000000000000000000000000')
-      expect(version.effectiveFrom).toBe('1598475758')
+      expect(version.effectiveFrom).toBe('1599860871')
     })
   })
 
@@ -82,17 +83,17 @@ describe('Agreement', () => {
 
       const disputable = disputables[0]
       expect(disputable.id).toBe(`${AGREEMENT_APP_ADDRESS}-disputable-${disputable.address}`)
-      expect(disputable.address).toBe('0x0e835020497b2cd716369f8fc713fb7bd0a22dbf')
+      expect(disputable.address).toBe('0xfae0084f0171fbebf86476b9ac962680c4aa1564')
       expect(disputable.activated).toEqual(true)
       expect(disputable.agreementId).toBe(AGREEMENT_APP_ADDRESS)
       expect(disputable.currentCollateralRequirementId).toBe(`${AGREEMENT_APP_ADDRESS}-disputable-${disputable.address}-collateral-requirement-1`)
 
       const collateralRequirement = await disputable.collateralRequirement()
-      expect(collateralRequirement.actionAmount).toEqual('0')
-      expect(collateralRequirement.formattedActionAmount).toEqual('0.00')
-      expect(collateralRequirement.challengeAmount).toBe('0')
-      expect(collateralRequirement.formattedChallengeAmount).toBe('0.00')
-      expect(collateralRequirement.challengeDuration).toBe('259200')
+      expect(collateralRequirement.actionAmount).toEqual('5000000000000000000')
+      expect(collateralRequirement.formattedActionAmount).toEqual('5.00')
+      expect(collateralRequirement.challengeAmount).toBe('10000000000000000000')
+      expect(collateralRequirement.formattedChallengeAmount).toBe('10.00')
+      expect(collateralRequirement.challengeDuration).toBe('300')
 
       const erc20 = await collateralRequirement.token()
       expect(erc20.decimals).toEqual(18)
@@ -128,7 +129,7 @@ describe('Agreement', () => {
         const lastSignature = signatures[signatures.length - 1]
         expect(lastSignature.signerId).toBe(`${AGREEMENT_APP_ADDRESS}-signer-${SIGNER_ADDRESS}`)
         expect(lastSignature.versionId).toBe(`${AGREEMENT_APP_ADDRESS}-version-1`)
-        expect(lastSignature.createdAt).toBe('1598479718')
+        expect(lastSignature.createdAt).toBe('1599861231')
       })
     })
 
@@ -149,17 +150,17 @@ describe('Agreement', () => {
     test('allows fetching the staking information for a user and a token', async () => {
       const staking = await agreement.staking(TOKEN, USER)
 
-      expect(staking.total).toBe('10000000000000000000')
-      expect(staking.formattedTotalAmount).toBe('10.00')
+      expect(staking.total).toBe('15000000000000000015')
+      expect(staking.formattedTotalAmount).toBe('15.00')
 
-      expect(staking.locked).toBe('9000000000000000000')
-      expect(staking.formattedLockedAmount).toBe('9.00')
+      expect(staking.locked).toBe('10000000000000000001')
+      expect(staking.formattedLockedAmount).toBe('10.00')
 
-      expect(staking.available).toBe('1000000000000000000')
-      expect(staking.formattedAvailableAmount).toBe('1.00')
+      expect(staking.available).toBe('5000000000000000014')
+      expect(staking.formattedAvailableAmount).toBe('5.00')
 
-      expect(staking.challenged).toBe('1000000000000000000')
-      expect(staking.formattedChallengedAmount).toBe('1.00')
+      expect(staking.challenged).toBe('0')
+      expect(staking.formattedChallengedAmount).toBe('0.00')
     })
 
     it('allows accessing the token data', async () => {
@@ -179,46 +180,26 @@ describe('Agreement', () => {
 
     test('allows fetching the list of staking movements for a user', async () => {
       const movements = await agreement.stakingMovements(TOKEN, USER)
-      expect(movements.length).toBeGreaterThan(5)
+      expect(movements.length).toBeGreaterThan(1)
 
-      expect(movements[0].formattedAmount).toBe('1.00')
-      expect(movements[0].actionState).toBe('NA')
-      expect(movements[0].collateralState).toBe('Available')
+      expect(movements[0].formattedAmount).toBe('5.00')
+      expect(movements[0].actionState).toBe('Scheduled')
+      expect(movements[0].collateralState).toBe('Locked')
 
-      expect(movements[1].formattedAmount).toBe('1.00')
+      expect(movements[1].formattedAmount).toBe('5.00')
       expect(movements[1].actionState).toBe('Scheduled')
       expect(movements[1].collateralState).toBe('Locked')
     })
 
-    describe('when there is an action associated to it', () => {
-      const MOVEMENT_ID = 1
+    it('has an agreement action', async () => {
+      const movements = await agreement.stakingMovements(TOKEN, USER)
+      const movement = movements[1]
 
-      it('has an agreement action', async () => {
-        const movements = await agreement.stakingMovements(TOKEN, USER)
-        const movement = movements[MOVEMENT_ID]
+      expect(movement.agreementId).toBe(AGREEMENT_APP_ADDRESS)
+      expect(movement.actionId).toBe(`${AGREEMENT_APP_ADDRESS}-action-2`)
 
-        expect(movement.agreementId).toBe(AGREEMENT_APP_ADDRESS)
-        expect(movement.actionId).toBe(`${AGREEMENT_APP_ADDRESS}-action-15`)
-
-        const action = (await movement.action())!
-        expect(action.script).toBe('0x00000001')
-        expect(action.context).toBe('0x436f6e7465787420666f7220616374696f6e2031')
-      })
-    })
-
-    describe('when there is no action associated to it', () => {
-      const MOVEMENT_ID = 0
-
-      it('has no agreement and no action', async () => {
-        const movements = await agreement.stakingMovements(TOKEN, USER)
-        const movement = await movements[MOVEMENT_ID]
-
-        expect(movement.actionId).toBe(null)
-        expect(movement.agreementId).toBe(null)
-
-        const action = await movement.action()
-        expect(action).toBe(null)
-      })
+      const action = (await movement.action())!
+      expect(action.context).toBe('0x736f6d652066756e6473')
     })
   })
 
@@ -283,16 +264,27 @@ describe('Agreement', () => {
     const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
 
     it('returns a challenge intent', async () => {
+      const erc20ABI = new ethers.utils.Interface(['function approve(address,uint256) public returns (bool)'])
       const agreementABI = new ethers.utils.Interface(['function challengeAction(uint256,uint256,bool,bytes)'])
       const intent = await agreement.challenge(ACTION_NUMBER, SETTLEMENT_OFFER, true, CONTEXT, SIGNER_ADDRESS)
 
-      expect(intent.transactions.length).toBe(1)
+      expect(intent.transactions.length).toBe(2)
       expect(intent.destination.address).toBe(AGREEMENT_APP_ADDRESS)
 
-      const transaction = intent.transactions[0]
-      expect(transaction.to.toLowerCase()).toBe(AGREEMENT_APP_ADDRESS)
-      expect(transaction.from).toBe(SIGNER_ADDRESS)
-      expect(transaction.data).toBe(agreementABI.encodeFunctionData('challengeAction', [ACTION_NUMBER, SETTLEMENT_OFFER, true, ethers.utils.toUtf8Bytes(CONTEXT)]))
+      const action = (await agreement.action(ACTION_NUMBER))!
+      const disputeFees = await agreement.disputeFees(action.versionId)
+      const collateralRequirement = await action.collateralRequirement()
+      const expectedApprovalAmount = bn(collateralRequirement.challengeAmount).add(disputeFees.feeAmount)
+
+      const firstTransaction = intent.transactions[0]
+      expect(firstTransaction.to.toLowerCase()).toBe(disputeFees.feeToken.toLowerCase())
+      expect(firstTransaction.from.toLowerCase()).toBe(SIGNER_ADDRESS)
+      expect(firstTransaction.data).toBe(erc20ABI.encodeFunctionData('approve', [AGREEMENT_APP_ADDRESS, expectedApprovalAmount]))
+
+      const secondTransaction = intent.transactions[1]
+      expect(secondTransaction.to.toLowerCase()).toBe(AGREEMENT_APP_ADDRESS)
+      expect(secondTransaction.from).toBe(SIGNER_ADDRESS)
+      expect(secondTransaction.data).toBe(agreementABI.encodeFunctionData('challengeAction', [ACTION_NUMBER, SETTLEMENT_OFFER, true, ethers.utils.toUtf8Bytes(CONTEXT)]))
     })
   })
 
@@ -300,17 +292,26 @@ describe('Agreement', () => {
     const ACTION_NUMBER = '1'
     const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
 
-    it('returns a challenge intent', async () => {
+    it('returns a dispute intent', async () => {
+      const erc20ABI = new ethers.utils.Interface(['function approve(address,uint256) public returns (bool)'])
       const agreementABI = new ethers.utils.Interface(['function disputeAction(uint256,bool)'])
       const intent = await agreement.dispute(ACTION_NUMBER, true, SIGNER_ADDRESS)
 
-      expect(intent.transactions.length).toBe(1)
+      expect(intent.transactions.length).toBe(2)
       expect(intent.destination.address).toBe(AGREEMENT_APP_ADDRESS)
 
-      const transaction = intent.transactions[0]
-      expect(transaction.to.toLowerCase()).toBe(AGREEMENT_APP_ADDRESS)
-      expect(transaction.from).toBe(SIGNER_ADDRESS)
-      expect(transaction.data).toBe(agreementABI.encodeFunctionData('disputeAction', [ACTION_NUMBER, true]))
+      const action = (await agreement.action(ACTION_NUMBER))!
+      const disputeFees = await agreement.disputeFees(action.versionId)
+
+      const firstTransaction = intent.transactions[0]
+      expect(firstTransaction.to.toLowerCase()).toBe(disputeFees.feeToken.toLowerCase())
+      expect(firstTransaction.from.toLowerCase()).toBe(SIGNER_ADDRESS)
+      expect(firstTransaction.data).toBe(erc20ABI.encodeFunctionData('approve', [AGREEMENT_APP_ADDRESS, disputeFees.feeAmount]))
+
+      const secondTransaction = intent.transactions[1]
+      expect(secondTransaction.to.toLowerCase()).toBe(AGREEMENT_APP_ADDRESS)
+      expect(secondTransaction.from).toBe(SIGNER_ADDRESS)
+      expect(secondTransaction.data).toBe(agreementABI.encodeFunctionData('disputeAction', [ACTION_NUMBER, true]))
     })
   })
 })

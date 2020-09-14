@@ -65,8 +65,16 @@ export default class StakingMovement {
     )
   }
 
-  async action(): Promise<Action | null> {
-    return this.#connector.action(this.actionId || '')
+  async action(): Promise<Action> {
+    const action = await this.tryAction()
+    if (!action) {
+      throw Error(`Could not find given action number ${this.actionId}`)
+    }
+    return action as Action
+  }
+
+  async tryAction(): Promise<Action | null> {
+    return this.#connector.action(this.actionId)
   }
 
   onAction(callback?: SubscriptionCallback<Action | null>): SubscriptionResult<Action | null> {
