@@ -292,7 +292,7 @@ describe('Agreement', () => {
     const ACTION_NUMBER = '1'
     const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
 
-    it('returns a challenge intent', async () => {
+    it('returns a dispute intent', async () => {
       const erc20ABI = new ethers.utils.Interface(['function approve(address,uint256) public returns (bool)'])
       const agreementABI = new ethers.utils.Interface(['function disputeAction(uint256,bool)'])
       const intent = await agreement.dispute(ACTION_NUMBER, true, SIGNER_ADDRESS)
