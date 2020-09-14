@@ -1,29 +1,12 @@
-import { connect } from '@aragon/connect'
-
 import { bn } from '../../helpers'
-import {
-  ERC20,
-  Vote,
-  CastVote,
-  DisputableVoting,
-  CollateralRequirement,
-  DisputableVotingConnectorTheGraph,
-} from '../../../src'
-
-
-const RINKEBY_NETWORK = 4
-const ORGANIZATION_NAME = 'ancashdao.aragonid.eth'
-const VOTING_APP_ADDRESS = '0x0e835020497b2cd716369f8fc713fb7bd0a22dbf'
-const VOTING_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-dvoting-rinkeby-staging'
+import { buildDisputableVoting, VOTING_APP_ADDRESS } from '../utils'
+import { ERC20, Vote, CastVote, DisputableVoting, CollateralRequirement } from '../../../src'
 
 describe('DisputableVoting', () => {
   let voting: DisputableVoting
 
   beforeAll(async () => {
-    const organization = await connect(ORGANIZATION_NAME, 'thegraph', { network: RINKEBY_NETWORK })
-    const app = await organization.connection.orgConnector.appByAddress(organization, VOTING_APP_ADDRESS)
-    const connector = new DisputableVotingConnectorTheGraph({ subgraphUrl: VOTING_SUBGRAPH_URL }, app.provider)
-    voting = new DisputableVoting(connector, app)
+    voting = await buildDisputableVoting()
   })
 
   afterAll(async () => {

@@ -168,4 +168,8 @@ export default class DisputableVoting {
   async castVote(voteNumber: string, supports: boolean, signerAddress: string): Promise<ForwardingPath> {
     return this.#app.intent('vote', [voteNumber, supports], { actAs: signerAddress })
   }
+
+  async executeVote(voteNumber: string, script: string, signerAddress: string): Promise<ForwardingPath> {
+    return this.#app.intent('executeVote', [voteNumber, script], { actAs: signerAddress })
+  }
 }

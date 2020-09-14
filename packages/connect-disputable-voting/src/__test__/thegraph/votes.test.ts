@@ -1,16 +1,11 @@
+import { buildConnector, VOTING_APP_ADDRESS } from '../utils'
 import { DisputableVotingConnectorTheGraph, Vote, CastVote } from '../../../src'
-
-const VOTING_APP_ADDRESS = '0x0e835020497b2cd716369f8fc713fb7bd0a22dbf'
-const VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-dvoting-rinkeby-staging'
 
 describe('DisputableVoting votes', () => {
   let connector: DisputableVotingConnectorTheGraph
 
-  beforeAll(() => {
-    connector = new DisputableVotingConnectorTheGraph({
-      subgraphUrl: VOTING_SUBGRAPH_URL,
-    })
+  beforeAll(async () => {
+    connector = await buildConnector()
   })
 
   afterAll(async () => {
@@ -48,12 +43,8 @@ describe('DisputableVoting votes', () => {
       expect(castVotes.length).toBeGreaterThan(0)
 
       const firstCastVote = castVotes[0]
-      expect(firstCastVote.id).toBe(
-        `${VOTING_APP_ADDRESS}-vote-0-cast-0x0090aed150056316e37fe6dfa10dc63e79d173b6`
-      )
-      expect(firstCastVote.caster).toBe(
-        '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
-      )
+      expect(firstCastVote.id).toBe(`${VOTING_APP_ADDRESS}-vote-0-cast-0x0090aed150056316e37fe6dfa10dc63e79d173b6`)
+      expect(firstCastVote.caster).toBe('0x0090aed150056316e37fe6dfa10dc63e79d173b6')
       expect(firstCastVote.createdAt).toEqual('1598530298')
       expect(firstCastVote.stake).toBe('1000000000000000000')
       expect(firstCastVote.supports).toBe(true)
