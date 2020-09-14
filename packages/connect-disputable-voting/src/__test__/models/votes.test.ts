@@ -271,7 +271,7 @@ describe('DisputableVoting', () => {
     test('tells the current balance of a voter', async () => {
       const token = await vote.token()
 
-      expect((await token.getBalance(VOTER_ADDRESS)).gte(bn(0))).toBe(true)
+      expect((await token.balance(VOTER_ADDRESS)).gte(bn(0))).toBe(true)
     })
   })
 })

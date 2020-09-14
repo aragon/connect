@@ -17,7 +17,7 @@ import {
 } from '../helpers'
 
 export default class Vote {
-  #provider: ethersProviders.Provider
+  #ethersProvider: ethersProviders.Provider
   #connector: IDisputableVotingConnector
 
   readonly id: string
@@ -54,8 +54,8 @@ export default class Vote {
   readonly submitterArbitratorFeeId: string
   readonly challengerArbitratorFeeId: string
 
-  constructor(data: VoteData, connector: IDisputableVotingConnector, provider: ethersProviders.Provider) {
-    this.#provider = provider
+  constructor(data: VoteData, connector: IDisputableVotingConnector, ethersProvider: ethersProviders.Provider) {
+    this.#ethersProvider = ethersProvider
     this.#connector = connector
 
     this.id = data.id
@@ -199,12 +199,12 @@ export default class Vote {
 
   async votingPower(voterAddress: Address): Promise<BigNumber> {
     const token = await this.token()
-    return token.getBalanceAt(voterAddress, this.snapshotBlock)
+    return token.balanceAt(voterAddress, this.snapshotBlock)
   }
 
   async formattedVotingPower(voterAddress: Address): Promise<string> {
     const token = await this.token()
-    const balance = await token.getBalanceAt(voterAddress, this.snapshotBlock)
+    const balance = await token.balanceAt(voterAddress, this.snapshotBlock)
     return formatBn(balance, token.decimals)
   }
 
