@@ -2,7 +2,6 @@ import { utils } from 'ethers'
 import { subscription, App, ForwardingPath } from '@aragon/connect-core'
 import { Address, SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
 
-import { bn } from '../helpers'
 import ERC20 from './ERC20'
 import Vote from './Vote'
 import Voter from './Voter'
@@ -168,5 +167,9 @@ export default class DisputableVoting {
 
   async castVote(voteNumber: string, supports: boolean, signerAddress: string): Promise<ForwardingPath> {
     return this.#app.intent('vote', [voteNumber, supports], { actAs: signerAddress })
+  }
+
+  async executeVote(voteNumber: string, script: string, signerAddress: string): Promise<ForwardingPath> {
+    return this.#app.intent('executeVote', [voteNumber, script], { actAs: signerAddress })
   }
 }

@@ -1,27 +1,12 @@
 import { ethers } from 'ethers'
-import { connect } from '@aragon/connect'
-
-import {
-  ERC20,
-  DisputableVoting,
-  CollateralRequirement,
-  DisputableVotingConnectorTheGraph,
-} from '../../../src'
-
-
-const RINKEBY_NETWORK = 4
-const ORGANIZATION_NAME = 'ancashdao.aragonid.eth'
-const VOTING_APP_ADDRESS = '0x0e835020497b2cd716369f8fc713fb7bd0a22dbf'
-const VOTING_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-dvoting-rinkeby-staging'
+import { buildDisputableVoting, VOTING_APP_ADDRESS } from '../utils'
+import { ERC20, DisputableVoting, CollateralRequirement } from '../../../src'
 
 describe('DisputableVoting', () => {
   let voting: DisputableVoting
 
   beforeAll(async () => {
-    const organization = await connect(ORGANIZATION_NAME, 'thegraph', { network: RINKEBY_NETWORK })
-    const connector = new DisputableVotingConnectorTheGraph({ subgraphUrl: VOTING_SUBGRAPH_URL })
-    const app = await organization.connection.orgConnector.appByAddress(organization, VOTING_APP_ADDRESS)
-    voting = new DisputableVoting(connector, app)
+    voting = await buildDisputableVoting()
   })
 
   afterAll(async () => {
@@ -90,6 +75,25 @@ describe('DisputableVoting', () => {
       expect(transaction.to.toLowerCase()).toBe(VOTING_APP_ADDRESS)
       expect(transaction.from).toBe(SIGNER_ADDRESS)
       expect(transaction.data).toBe(votingABI.encodeFunctionData('vote', [VOTE_NUMBER, SUPPORT]))
+    })
+  })
+
+  describe('executeVote', () => {
+    const VOTE_NUMBER = '12'
+    const SCRIPT = '0xabcdef'
+    const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
+
+    it('returns an execute vote intent', async () => {
+      const votingABI = new ethers.utils.Interface(['function executeVote(uint256,bytes)'])
+      const intent = await voting.executeVote(VOTE_NUMBER, SCRIPT, SIGNER_ADDRESS)
+
+      expect(intent.transactions.length).toBe(1)
+      expect(intent.destination.address).toBe(VOTING_APP_ADDRESS)
+
+      const transaction = intent.transactions[0]
+      expect(transaction.to.toLowerCase()).toBe(VOTING_APP_ADDRESS)
+      expect(transaction.from).toBe(SIGNER_ADDRESS)
+      expect(transaction.data).toBe(votingABI.encodeFunctionData('executeVote', [VOTE_NUMBER, SCRIPT]))
     })
   })
 })

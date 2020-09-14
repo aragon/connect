@@ -1,6 +1,8 @@
 import { subscription } from '@aragon/connect-core'
+import { BigNumber, providers as ethersProviders } from 'ethers'
 import { Address, SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
 
+import ERC20 from './ERC20'
 import Setting from './Setting'
 import CastVote from './CastVote'
 import ArbitratorFee from './ArbitratorFee'
@@ -11,11 +13,11 @@ import {
   formatBn,
   PCT_BASE,
   PCT_DECIMALS,
-  toMilliseconds,
   currentTimestampEvm,
 } from '../helpers'
 
 export default class Vote {
+  #ethersProvider: ethersProviders.Provider
   #connector: IDisputableVotingConnector
 
   readonly id: string
@@ -46,12 +48,14 @@ export default class Vote {
   readonly disputedAt: string
   readonly executedAt: string
   readonly isAccepted: boolean
+  readonly tokenId: string
   readonly tokenDecimals: string
   readonly collateralRequirementId: string
   readonly submitterArbitratorFeeId: string
   readonly challengerArbitratorFeeId: string
 
-  constructor(data: VoteData, connector: IDisputableVotingConnector) {
+  constructor(data: VoteData, connector: IDisputableVotingConnector, ethersProvider: ethersProviders.Provider) {
+    this.#ethersProvider = ethersProvider
     this.#connector = connector
 
     this.id = data.id
@@ -82,6 +86,7 @@ export default class Vote {
     this.disputedAt = data.disputedAt
     this.executedAt = data.executedAt
     this.isAccepted = data.isAccepted
+    this.tokenId = data.tokenId
     this.tokenDecimals = data.tokenDecimals
     this.collateralRequirementId = data.collateralRequirementId
     this.submitterArbitratorFeeId = data.submitterArbitratorFeeId
@@ -170,6 +175,46 @@ export default class Vote {
     const currentExtensions = bn(this.quietEndingExtensionDuration).div(bn(this.quietEndingExtension))
     const wasAcceptedBeforeLastFlip = wasInitiallyAccepted == (currentExtensions.mod(bn('2')).eq(bn('0')))
     return wasAcceptedBeforeLastFlip != this.isAccepted
+  }
+
+  async hasEndedExecutionDelay(): Promise<boolean> {
+    const setting = await this.setting()
+    const currentTimestamp = currentTimestampEvm()
+    const executionDelayEndDate = bn(this.endDate).add(setting.executionDelay)
+    return currentTimestamp.gte(executionDelayEndDate)
+  }
+
+  async canVote(voterAddress: Address): Promise<boolean> {
+    return !this.hasEnded &&
+      this.voteStatus === 'Scheduled' &&
+      !(await this.hasVoted(voterAddress)) &&
+      (await this.votingPower(voterAddress)).gt(bn(0))
+  }
+
+  async canExecute(): Promise<boolean> {
+    return this.isAccepted &&
+      this.voteStatus === 'Scheduled' &&
+      (await this.hasEndedExecutionDelay())
+  }
+
+  async votingPower(voterAddress: Address): Promise<BigNumber> {
+    const token = await this.token()
+    return token.balanceAt(voterAddress, this.snapshotBlock)
+  }
+
+  async formattedVotingPower(voterAddress: Address): Promise<string> {
+    const token = await this.token()
+    const balance = await token.balanceAt(voterAddress, this.snapshotBlock)
+    return formatBn(balance, token.decimals)
+  }
+
+  async token(): Promise<ERC20> {
+    return this.#connector.ERC20(this.tokenId)
+  }
+
+  async hasVoted(voterAddress: Address): Promise<boolean> {
+    const castVote = await this.castVote(voterAddress)
+    return castVote !== null
   }
 
   castVoteId(voterAddress: Address): string {

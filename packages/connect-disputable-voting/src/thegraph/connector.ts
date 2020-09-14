@@ -1,8 +1,6 @@
-import {
-  SubscriptionCallback,
-  SubscriptionHandler,
-} from '@aragon/connect-types'
+import { providers as ethersProviders } from 'ethers'
 import { GraphQLWrapper, QueryResult } from '@aragon/connect-thegraph'
+import { SubscriptionCallback, SubscriptionHandler } from '@aragon/connect-types'
 
 import { DisputableVotingData, IDisputableVotingConnector } from '../types'
 import Vote from '../models/Vote'
@@ -48,20 +46,23 @@ type DisputableVotingConnectorTheGraphConfig = {
   verbose?: boolean
 }
 
-export default class DisputableVotingConnectorTheGraph
-  implements IDisputableVotingConnector {
+export default class DisputableVotingConnectorTheGraph implements IDisputableVotingConnector {
   #gql: GraphQLWrapper
+  #ethersProvider: ethersProviders.Provider
 
-  constructor(config: DisputableVotingConnectorTheGraphConfig) {
+  constructor(config: DisputableVotingConnectorTheGraphConfig, provider: ethersProviders.Provider) {
     if (!config.subgraphUrl) {
       throw new Error(
         'DisputableVotingConnectorTheGraph requires subgraphUrl to be passed.'
       )
     }
+
     this.#gql = new GraphQLWrapper(config.subgraphUrl, {
       pollInterval: config.pollInterval,
       verbose: config.verbose,
     })
+
+    this.#ethersProvider = provider
   }
 
   async disconnect() {
@@ -180,7 +181,7 @@ export default class DisputableVotingConnectorTheGraph
     return this.#gql.performQueryWithParser<Vote>(
       queries.GET_VOTE('query'),
       { voteId },
-      (result: QueryResult) => parseVote(result, this)
+      (result: QueryResult) => parseVote(result, this, this.#ethersProvider)
     )
   }
 
@@ -192,7 +193,7 @@ export default class DisputableVotingConnectorTheGraph
       queries.GET_VOTE('subscription'),
       { voteId },
       callback,
-      (result: QueryResult) => parseVote(result, this)
+      (result: QueryResult) => parseVote(result, this, this.#ethersProvider)
     )
   }
 
@@ -204,7 +205,7 @@ export default class DisputableVotingConnectorTheGraph
     return this.#gql.performQueryWithParser<Vote[]>(
       queries.ALL_VOTES('query'),
       { disputableVoting, first, skip },
-      (result: QueryResult) => parseVotes(result, this)
+      (result: QueryResult) => parseVotes(result, this, this.#ethersProvider)
     )
   }
 
@@ -218,7 +219,7 @@ export default class DisputableVotingConnectorTheGraph
       queries.ALL_VOTES('subscription'),
       { disputableVoting, first, skip },
       callback,
-      (result: QueryResult) => parseVotes(result, this)
+      (result: QueryResult) => parseVotes(result, this, this.#ethersProvider)
     )
   }
 
@@ -332,7 +333,7 @@ export default class DisputableVotingConnectorTheGraph
     return this.#gql.performQueryWithParser(
       queries.GET_ERC20('query'),
       { tokenAddress },
-      (result: QueryResult) => parseERC20(result)
+      (result: QueryResult) => parseERC20(result, this.#ethersProvider)
     )
   }
 
@@ -344,7 +345,7 @@ export default class DisputableVotingConnectorTheGraph
       queries.GET_ERC20('subscription'),
       { tokenAddress },
       callback,
-      (result: QueryResult) => parseERC20(result)
+      (result: QueryResult) => parseERC20(result, this.#ethersProvider)
     )
   }
 }
