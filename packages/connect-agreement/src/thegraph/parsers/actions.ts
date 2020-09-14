@@ -9,7 +9,7 @@ export function parseAction(result: QueryResult, connector: any): Action | null 
     return null
   }
 
-  const { id, agreement, collateralRequirement, disputable, version, disputableActionId, script, context, createdAt } = action
+  const { id, agreement, collateralRequirement, disputable, version, disputableActionId, context, createdAt } = action
 
   return new Action(
     {
@@ -19,7 +19,6 @@ export function parseAction(result: QueryResult, connector: any): Action | null 
       disputableId: disputable.id,
       collateralRequirementId: collateralRequirement.id,
       disputableActionId,
-      script,
       context,
       createdAt
     },

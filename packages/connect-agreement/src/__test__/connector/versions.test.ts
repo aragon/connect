@@ -1,8 +1,8 @@
 import { AgreementConnectorTheGraph, Version } from '../../../src'
 
 const AGREEMENT_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-agreement-rinkeby-staging'
-const AGREEMENT_APP_ADDRESS = '0x9c92dbd8a8e5903e2741202321073091109f26be'
+  'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-agreement-rinkeby-staging'
+const AGREEMENT_APP_ADDRESS = '0xe4575381f0c96f58bd93be6978cc0d9638d874a2'
 
 describe('Agreement versions', () => {
   let connector: AgreementConnectorTheGraph
@@ -27,9 +27,9 @@ describe('Agreement versions', () => {
     test('returns the current version information', () => {
       expect(version.id).toBe(`${AGREEMENT_APP_ADDRESS}-version-1`)
       expect(version.versionId).toBe('1')
-      expect(version.title).toBe('Aragon Network Cash Agreement')
+      expect(version.title).toBe('Aragon Network DAO Agreement')
       expect(version.content).toEqual(
-        '0x697066733a516d50766657554e743357725a37756142315a77456d6563335a723141424c39436e63534466517970576b6d6e70'
+        '0x697066733a516d646159544a6b36615632706d56527839456456386b64447844397947466b7464366846736b585372344b4445'
       )
       expect(version.arbitrator).toBe(
         '0x52180af656a1923024d1accf1d827ab85ce48878'
@@ -37,7 +37,7 @@ describe('Agreement versions', () => {
       expect(version.appFeesCashier).toBe(
         '0x0000000000000000000000000000000000000000'
       )
-      expect(version.effectiveFrom).toBe('1598475758')
+      expect(version.effectiveFrom).toBe('1599860871')
     })
   })
 
@@ -51,9 +51,9 @@ describe('Agreement versions', () => {
     test('returns the requested version information', () => {
       expect(version.id).toBe(`${AGREEMENT_APP_ADDRESS}-version-1`)
       expect(version.versionId).toBe('1')
-      expect(version.title).toBe('Aragon Network Cash Agreement')
+      expect(version.title).toBe('Aragon Network DAO Agreement')
       expect(version.content).toEqual(
-        '0x697066733a516d50766657554e743357725a37756142315a77456d6563335a723141424c39436e63534466517970576b6d6e70'
+        '0x697066733a516d646159544a6b36615632706d56527839456456386b64447844397947466b7464366846736b585372344b4445'
       )
       expect(version.arbitrator).toBe(
         '0x52180af656a1923024d1accf1d827ab85ce48878'
@@ -61,7 +61,7 @@ describe('Agreement versions', () => {
       expect(version.appFeesCashier).toBe(
         '0x0000000000000000000000000000000000000000'
       )
-      expect(version.effectiveFrom).toBe('1598475758')
+      expect(version.effectiveFrom).toBe('1599860871')
     })
   })
 
@@ -79,9 +79,9 @@ describe('Agreement versions', () => {
     test('allows fetching a single version', () => {
       const version = versions[0]
 
-      expect(version.title).toBe('Aragon Network Cash Agreement')
+      expect(version.title).toBe('Aragon Network DAO Agreement')
       expect(version.content).toEqual(
-        '0x697066733a516d50766657554e743357725a37756142315a77456d6563335a723141424c39436e63534466517970576b6d6e70'
+        '0x697066733a516d646159544a6b36615632706d56527839456456386b64447844397947466b7464366846736b585372344b4445'
       )
       expect(version.arbitrator).toBe(
         '0x52180af656a1923024d1accf1d827ab85ce48878'
@@ -89,7 +89,7 @@ describe('Agreement versions', () => {
       expect(version.appFeesCashier).toBe(
         '0x0000000000000000000000000000000000000000'
       )
-      expect(version.effectiveFrom).toBe('1598475758')
+      expect(version.effectiveFrom).toBe('1599860871')
     })
   })
 })
