@@ -143,6 +143,7 @@ export const GET_VOTE = (type: string) => gql`
       disputedAt
       executedAt
       isAccepted
+      settlementOffer
       collateralRequirement {
         id
       }
@@ -197,6 +198,7 @@ export const ALL_VOTES = (type: string) => gql`
       disputedAt
       executedAt
       isAccepted
+      settlementOffer
       collateralRequirement {
         id
       }

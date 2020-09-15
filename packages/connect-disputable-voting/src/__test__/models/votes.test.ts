@@ -188,10 +188,11 @@ describe('DisputableVoting', () => {
   describe('collateralRequirement', () => {
     const voteId = `${VOTING_APP_ADDRESS}-vote-2`
 
+    let vote: Vote
     let collateralRequirement: CollateralRequirement
 
     beforeAll(async () => {
-      const vote = await voting.vote(voteId)
+      vote = await voting.vote(voteId)
       collateralRequirement = await vote.collateralRequirement()
     })
 
@@ -201,6 +202,8 @@ describe('DisputableVoting', () => {
       expect(collateralRequirement.actionAmount).toBe('0')
       expect(collateralRequirement.challengeAmount).toBe('0')
       expect(collateralRequirement.challengeDuration).toBe('259200')
+
+      expect(await vote.formattedSettlementOffer()).toBe('0.00')
     })
 
     test('can requests the related token info', async () => {
@@ -222,19 +225,19 @@ describe('DisputableVoting', () => {
     })
 
     test('can requests the submitter arbitrator fees', async () => {
-      const artbiratorFee = (await vote.submitterArbitratorFee())!
+      const arbitratorFee = (await vote.submitterArbitratorFee())!
 
-      expect(artbiratorFee.id).toBe(`${voteId}-submitter`)
-      expect(artbiratorFee.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
-      expect(artbiratorFee.formattedAmount).toBe('150.00')
+      expect(arbitratorFee.id).toBe(`${voteId}-submitter`)
+      expect(arbitratorFee.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
+      expect(arbitratorFee.formattedAmount).toBe('150.00')
     })
 
     test('can requests the submitter arbitrator fees', async () => {
-      const artbiratorFee = (await vote.challengerArbitratorFee())!
+      const arbitratorFee = (await vote.challengerArbitratorFee())!
 
-      expect(artbiratorFee.id).toBe(`${voteId}-challenger`)
-      expect(artbiratorFee.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
-      expect(artbiratorFee.formattedAmount).toBe('150.00')
+      expect(arbitratorFee.id).toBe(`${voteId}-challenger`)
+      expect(arbitratorFee.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
+      expect(arbitratorFee.formattedAmount).toBe('150.00')
     })
   })
 

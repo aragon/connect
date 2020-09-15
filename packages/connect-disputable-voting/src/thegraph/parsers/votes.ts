@@ -31,6 +31,7 @@ function buildVote(vote: any, connector: any, provider: any): Vote {
     disputedAt,
     executedAt,
     isAccepted,
+    settlementOffer,
     collateralRequirement,
     submitterArbitratorFee,
     challengerArbitratorFee,
@@ -67,6 +68,7 @@ function buildVote(vote: any, connector: any, provider: any): Vote {
     isAccepted,
     tokenId: voting.token.id,
     tokenDecimals: voting.token.decimals,
+    settlementOffer,
     collateralRequirementId: collateralRequirement.id,
     submitterArbitratorFeeId: submitterArbitratorFee ? submitterArbitratorFee.id : null,
     challengerArbitratorFeeId: challengerArbitratorFee ? challengerArbitratorFee.id : null

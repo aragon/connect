@@ -51,6 +51,7 @@ export interface VoteData {
   tokenId: string
   tokenDecimals: string
   isAccepted: boolean
+  settlementOffer: string | null
   collateralRequirementId: string
   submitterArbitratorFeeId: string
   challengerArbitratorFeeId: string
