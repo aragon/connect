@@ -1,3 +1,4 @@
+import { ErrorUnexpectedResult } from '@aragon/connect-core'
 import { QueryResult } from '@aragon/connect-thegraph'
 import Cast from '../../models/Cast'
 import { CastData } from '../../types'
@@ -6,7 +7,7 @@ export function parseCasts(result: QueryResult): Cast[] {
   const casts = result.data.casts
 
   if (!casts) {
-    throw new Error('Unable to parse casts.')
+    throw new ErrorUnexpectedResult('Unable to parse casts.')
   }
 
   const datas = casts.map(

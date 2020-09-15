@@ -15,6 +15,15 @@ Connects and returns an `Organization` for `location`.
 | `options.network`  | [`Networkish`](./types.md#networkish)         | The network to connect to. Defaults to `1`.                                                              |
 | returns            | `Promise<Organization>`                       | An `Organization` instance.                                                                              |
 
+This function can throw the following errors:
+
+| Error type                                                     | Description                                       |
+| -------------------------------------------------------------- | ------------------------------------------------- |
+| [`ErrorInvalidConnector`](./errors.md#error-invalid-connector) | An unsupported or invalid connector was provided. |
+| [`ErrorInvalidEthereum`](./errors.md#error-invalid-ethereum)   | The Ethereum provider doesn’t seem to be valid.   |
+| [`ErrorInvalidLocation`](./errors.md#error-invalid-location)   | The provided location doesn’t seem to be valid.   |
+| [`ErrorInvalidNetwork`](./errors.md#error-invalid-network)     | The network is incorrect or unsupported.          |
+
 ### Example
 
 ```javascript

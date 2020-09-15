@@ -9,12 +9,13 @@ import {
 } from './overrides/index'
 import { DEFAULT_IPFS_GATEWAY } from '../params'
 import { AragonArtifact, AragonManifest } from '../types'
+import { ErrorInvalid, ErrorConnection } from '../errors'
 
 export function parseMetadata(name: string, metadata: string): any {
   try {
     return JSON.parse(metadata)
   } catch (error) {
-    throw new Error(`Can't parse ${name} file, invalid JSON.`)
+    throw new ErrorInvalid(`Can’t parse ${name}: invalid JSON.`)
   }
 }
 
@@ -29,7 +30,7 @@ export async function fetchMetadata(
     try {
       metadata = await ethersUtils.fetchJson(url)
     } catch (error) {
-      throw new Error(`Can't fetch ${url}, failed with error: {error}.`)
+      throw new ErrorConnection(`Couldn’t fetch ${url}, failed with error.`)
     }
     return metadata
   }

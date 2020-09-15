@@ -4,7 +4,7 @@ This is an app connector for the Voting app (`voting.aragonpm.eth`). It only sup
 
 ## Usage
 
-To connect an app, you need to pass a voting app as a first parameter of the connectVoting() function:
+To connect a Voting app, you need to pass it to `connectVoting()`:
 
 ```js
 import connect from '@aragon/connect'
@@ -14,7 +14,25 @@ const org = await connect('myorg.aragonid.eth', 'thegraph')
 const voting = await connectVoting(org.app('voting'))
 ```
 
-It extends the `App` object, which means that every method and properties of [`App`](../api-reference/app.md) are also available on this object.
+It extends the `App` object, which means that every method and property of [`App`](../api-reference/app.md) is also available on this object.
+
+## connect\(app, connector\)
+
+Connects and returns a `Voting` instance.
+
+| Name        | Type                                   | Description                                                                                                                                            |
+| ----------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `app`       | `App` or `Promise<App>`                | The app to extend with connected capabilities.                                                                                                         |
+| `connector` | `["thegraph", Object]` or `"thegraph"` | Accepts either a string describing the desired connector (only `"thegraph"` for now), or a tuple to also pass a configuration object to the connector. |
+| returns     | `Promise<Voting>`                      | An `Voting` instance (see below).                                                                                                                      |
+
+It can throw the following errors:
+
+| Error type                                                     | Description                                                                                                                 |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| [`ErrorInvalidApp`](./errors.md#error-invalid-app)             | Either the passed value is not a valid app object, or its name is not `voting`.                                             |
+| [`ErrorInvalidConnector`](./errors.md#error-invalid-connector) | Either the connector configuration format is not valid, or the connector name is not supported.                             |
+| [`ErrorInvalidNetwork`](./errors.md#error-invalid-network)     | A subgraph couldn’t be found with the current network. Pass a `subgraphUrl` directly, or use one of the supported networks. |
 
 ## Voting
 
@@ -31,6 +49,13 @@ Get the list of votes in the Voting app.
 | `filters.skip`  | `Number`          | Skip a number of votes. Defaults to `0`.      |
 | returns         | `Promise<Vote[]>` | The list of votes.                            |
 
+This method can throw one of the following errors:
+
+| Error type                                                     | Description                                 |
+| -------------------------------------------------------------- | ------------------------------------------- |
+| [`ErrorUnexpectedResult`](./errors.md#error-unexpected-result) | The response seems incorrect.               |
+| [`ErrorConnection`](./errors.md#error-connection)              | The connection to the remote source failed. |
+
 ### Voting\#onVotes\(filters, callback\)
 
 Subscribe to the list of votes in the Voting app. The callback is optional, not passing it will return a partially applied function.
@@ -40,6 +65,13 @@ Subscribe to the list of votes in the Voting app. The callback is optional, not 
 | `filters`  | `Object`                                | Optional object allowing to filter the votes. See `Voting#votes()` for details. |
 | `callback` | `(error: Error, votes: Vote[]) => void` | A callback that will get called every time the result gets updated.             |
 | returns    | `{ unsubscribe: () => void }`           | Unsubscribe function.                                                           |
+
+The error passed to `callback` can be `null` (no error) or one of the following:
+
+| Error type                                                     | Description                                 |
+| -------------------------------------------------------------- | ------------------------------------------- |
+| [`ErrorUnexpectedResult`](./errors.md#error-unexpected-result) | The data couldn’t be fetched.               |
+| [`ErrorConnection`](./errors.md#error-connection)              | The connection to the remote source failed. |
 
 ## Vote
 
@@ -73,6 +105,13 @@ Get the list of casted votes.
 | `filters.skip`  | `Number`          | Skip a number of votes. Defaults to `0`.      |
 | returns         | `Promise<Cast[]>` | The list of casted votes.                     |
 
+This method can throw one of the following errors:
+
+| Error type                                                     | Description                                 |
+| -------------------------------------------------------------- | ------------------------------------------- |
+| [`ErrorUnexpectedResult`](./errors.md#error-unexpected-result) | The response seems incorrect.               |
+| [`ErrorConnection`](./errors.md#error-connection)              | The connection to the remote source failed. |
+
 ### Vote\#onCasts\(filters, callback\)
 
 Subscribe to the list of casted votes. The callback is optional, not passing it will return a partially applied function.
@@ -82,6 +121,13 @@ Subscribe to the list of casted votes. The callback is optional, not passing it 
 | `filters`  | `Object`                                | Optional object allowing to filter the votes. See `Vote#casts()` for details. |
 | `callback` | `(error: Error, votes: Vote[]) => void` | A callback that will get called every time the result gets updated.           |
 | returns    | `{ unsubscribe: () => void }`           | Unsubscribe function.                                                         |
+
+The error passed to `callback` can be `null` (no error) or one of the following:
+
+| Error type                                                     | Description                                 |
+| -------------------------------------------------------------- | ------------------------------------------- |
+| [`ErrorUnexpectedResult`](./errors.md#error-unexpected-result) | The data couldn’t be fetched.               |
+| [`ErrorConnection`](./errors.md#error-connection)              | The connection to the remote source failed. |
 
 ## Cast
 

@@ -1,6 +1,7 @@
 import { providers as ethersProviders } from 'ethers'
 import App from '../entities/App'
 import TransactionRequest from '../transactions/TransactionRequest'
+import { ErrorException, ErrorInvalid } from '../errors'
 import {
   decodeTransactionPath,
   TransactionWithChildren,
@@ -16,10 +17,10 @@ export async function describeTransaction(
   provider?: ethersProviders.Provider
 ): Promise<TransactionRequest> {
   if (!transaction.to) {
-    throw new Error(`Could not describe transaction: missing 'to'`)
+    throw new ErrorInvalid(`Could not describe transaction: missing 'to'`)
   }
   if (!transaction.data) {
-    throw new Error(`Could not describe transaction: missing 'data'`)
+    throw new ErrorInvalid(`Could not describe transaction: missing 'data'`)
   }
   let description, descriptionAnnotated
   try {
@@ -40,7 +41,7 @@ export async function describeTransaction(
       )
     }
   } catch (err) {
-    throw new Error(`Could not describe transaction: ${err}`)
+    throw new ErrorException(`Could not describe transaction: ${err}`)
   }
 
   return new TransactionRequest({

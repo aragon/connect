@@ -3,8 +3,14 @@ import React from 'react'
 import { Connect, useOrganization } from '@aragon/connect-react'
 
 function App() {
-  const [org] = useOrganization()
-  return <div>Org address: {org ? org.address : 'loading…'}</div>
+  const [org, { error, loading }] = useOrganization()
+  if (loading) {
+    return <div>Loading…</div>
+  }
+  if (error) {
+    return <div>Error: {error.message}</div>
+  }
+  return <div>Org address: {org?.address}</div>
 }
 
 ReactDOM.render(
