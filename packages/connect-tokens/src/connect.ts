@@ -25,8 +25,7 @@ export default createAppConnector<Tokens, Config>(
     if (app.name !== 'token-manager') {
       throw new ErrorInvalidApp(
         `This app (${app.name}) is not compatible with @aragon/connect-tokens. ` +
-          `Please use an app instance of the token-manager.aragonpm.eth repo.`,
-        { reason: 'wrong-name' }
+          `Please use an app instance of the token-manager.aragonpm.eth repo.`
       )
     }
 

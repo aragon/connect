@@ -28,12 +28,11 @@ Connects and returns a `Tokens` instance.
 
 It can throw the following errors:
 
-| Error type                                                     | Description                                                                                                                      |
-| -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| [`ErrorInvalidApp`](./errors.md#error-invalid-app)             | Either the passed value is not a valid app object, or its name is not `token-manager` (`err.reason === "wrong-name"`).           |
-| [`ErrorInvalidConnector`](./errors.md#error-invalid-connector) | Either the connector configuration format is not valid, or the connector name is not supported (`err.reason === "unsupported"`). |
-| [`ErrorInvalidConnector`](./errors.md#error-invalid-connector) | The connector is not supported.                                                                                                  |
-| [`ErrorInvalidNetwork`](./errors.md#error-invalid-network)     | A subgraph couldn’t be found with the current network. Pass a `subgraphUrl` directly, or use one of the supported networks.      |
+| Error type                                                     | Description                                                                                                                 |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| [`ErrorInvalidApp`](./errors.md#error-invalid-app)             | Either the passed value is not a valid app object, or its name is not `token-manager`.                                      |
+| [`ErrorInvalidConnector`](./errors.md#error-invalid-connector) | Either the connector configuration format is not valid, or the connector name is not supported.                             |
+| [`ErrorInvalidNetwork`](./errors.md#error-invalid-network)     | A subgraph couldn’t be found with the current network. Pass a `subgraphUrl` directly, or use one of the supported networks. |
 
 ## Tokens
 

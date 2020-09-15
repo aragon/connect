@@ -1,7 +1,3 @@
-function formatMessage(message: string, reason: string): string {
-  return message + reason ? ` (reason: ${reason})` : ''
-}
-
 function defineNonEnumerable(instance: object, name: string, value: any) {
   Object.defineProperty(instance, name, { value, enumerable: false })
 }
@@ -9,70 +5,55 @@ function defineNonEnumerable(instance: object, name: string, value: any) {
 type ErrorOptions = {
   code?: string
   name?: string
-  reason?: string
 }
 
 export class ErrorException extends Error {
   constructor(
     message = 'An unexpected error happened.',
-    {
-      code = 'ErrorException',
-      name = 'ErrorException',
-      reason = '',
-    }: ErrorOptions = {}
+    { code = 'ErrorException', name = 'ErrorException' }: ErrorOptions = {}
   ) {
-    super(formatMessage(message, reason))
+    super(message)
+
+    // We define these as non-enumarable to prevent them
+    // from appearing with the error in the console.
     defineNonEnumerable(this, 'name', name)
     defineNonEnumerable(this, 'code', code)
-    defineNonEnumerable(this, 'reason', reason)
   }
 }
 
 export class ErrorInvalid extends ErrorException {
   constructor(
     message = 'The resource doesn’t seem to be valid.',
-    { code = 'ErrorInvalid', name = 'ErrorInvalid', reason }: ErrorOptions = {}
+    { code = 'ErrorInvalid', name = 'ErrorInvalid' }: ErrorOptions = {}
   ) {
-    super(message, { code, name, reason })
+    super(message, { code, name })
   }
 }
 
 export class ErrorUnsupported extends ErrorException {
   constructor(
     message = 'The resource is not supported.',
-    {
-      code = 'ErrorUnsupported',
-      name = 'ErrorUnsupported',
-      reason,
-    }: ErrorOptions = {}
+    { code = 'ErrorUnsupported', name = 'ErrorUnsupported' }: ErrorOptions = {}
   ) {
-    super(message, { code, name, reason })
+    super(message, { code, name })
   }
 }
 
 export class ErrorNotFound extends ErrorException {
   constructor(
     message = 'The resource couldn’t be found.',
-    {
-      code = 'ErrorNotFound',
-      name = 'ErrorNotFound',
-      reason,
-    }: ErrorOptions = {}
+    { code = 'ErrorNotFound', name = 'ErrorNotFound' }: ErrorOptions = {}
   ) {
-    super(message, { code, name, reason })
+    super(message, { code, name })
   }
 }
 
 export class ErrorConnection extends ErrorException {
   constructor(
     message = 'An error happened while communicating with a remote server.',
-    {
-      code = 'ErrorConnection',
-      name = 'ErrorConnection',
-      reason,
-    }: ErrorOptions = {}
+    { code = 'ErrorConnection', name = 'ErrorConnection' }: ErrorOptions = {}
   ) {
-    super(message, { code, name, reason })
+    super(message, { code, name })
   }
 }
 
@@ -82,10 +63,9 @@ export class ErrorUnexpectedResult extends ErrorException {
     {
       code = 'ErrorUnexpectedResult',
       name = 'ErrorUnexpectedResult',
-      reason,
     }: ErrorOptions = {}
   ) {
-    super(message, { code, name, reason })
+    super(message, { code, name })
   }
 }
 
@@ -95,10 +75,9 @@ export class ErrorInvalidEthereum extends ErrorInvalid {
     {
       code = 'ErrorInvalidEthereum',
       name = 'ErrorInvalidEthereum',
-      reason,
     }: ErrorOptions = {}
   ) {
-    super(message, { code, name, reason })
+    super(message, { code, name })
   }
 }
 
@@ -108,10 +87,9 @@ export class ErrorInvalidLocation extends ErrorInvalid {
     {
       code = 'ErrorInvalidLocation',
       name = 'ErrorInvalidLocation',
-      reason,
     }: ErrorOptions = {}
   ) {
-    super(message, { code, name, reason })
+    super(message, { code, name })
   }
 }
 
@@ -121,10 +99,9 @@ export class ErrorInvalidNetwork extends ErrorInvalid {
     {
       code = 'ErrorInvalidNetwork',
       name = 'ErrorInvalidNetwork',
-      reason,
     }: ErrorOptions = {}
   ) {
-    super(message, { code, name, reason })
+    super(message, { code, name })
   }
 }
 
@@ -134,23 +111,18 @@ export class ErrorInvalidConnector extends ErrorInvalid {
     {
       code = 'ErrorInvalidConnector',
       name = 'ErrorInvalidConnector',
-      reason,
     }: ErrorOptions = {}
   ) {
-    super(message, { code, name, reason })
+    super(message, { code, name })
   }
 }
 
 export class ErrorInvalidApp extends ErrorInvalid {
   constructor(
     message = 'The value doesn’t seem to be an app.',
-    {
-      code = 'ErrorInvalidApp',
-      name = 'ErrorInvalidApp',
-      reason,
-    }: ErrorOptions = {}
+    { code = 'ErrorInvalidApp', name = 'ErrorInvalidApp' }: ErrorOptions = {}
   ) {
-    super(message, { code, name, reason })
+    super(message, { code, name })
   }
 }
 
@@ -160,9 +132,8 @@ export class ErrorUnsufficientBalance extends ErrorException {
     {
       code = 'ErrorUnsufficientBalance',
       name = 'ErrorUnsufficientBalance',
-      reason,
     }: ErrorOptions = {}
   ) {
-    super(message, { code, name, reason })
+    super(message, { code, name })
   }
 }

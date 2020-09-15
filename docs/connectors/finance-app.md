@@ -24,16 +24,15 @@ Connects and returns a `Finance` instance.
 | ----------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `app`       | `App` or `Promise<App>`                | The app to extend with connected capabilities.                                                                                                         |
 | `connector` | `["thegraph", Object]` or `"thegraph"` | Accepts either a string describing the desired connector (only `"thegraph"` for now), or a tuple to also pass a configuration object to the connector. |
-| returns     | `Promise<Finance>`                      | An `Finance` instance (see below).                                                                                                                      |
+| returns     | `Promise<Finance>`                     | An `Finance` instance (see below).                                                                                                                     |
 
 It can throw the following errors:
 
-| Error type                                                     | Description                                                                                                                      |
-| -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| [`ErrorInvalidApp`](./errors.md#error-invalid-app)             | Either the passed value is not a valid app object, or its name is not `finance` (`err.reason === "wrong-name"`).                 |
-| [`ErrorInvalidConnector`](./errors.md#error-invalid-connector) | Either the connector configuration format is not valid, or the connector name is not supported (`err.reason === "unsupported"`). |
-| [`ErrorInvalidConnector`](./errors.md#error-invalid-connector) | The connector is not supported.                                                                                                  |
-| [`ErrorInvalidNetwork`](./errors.md#error-invalid-network)     | A subgraph couldn’t be found with the current network. Pass a `subgraphUrl` directly, or use one of the supported networks.      |
+| Error type                                                     | Description                                                                                                                 |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| [`ErrorInvalidApp`](./errors.md#error-invalid-app)             | Either the passed value is not a valid app object, or its name is not `finance`.                                            |
+| [`ErrorInvalidConnector`](./errors.md#error-invalid-connector) | Either the connector configuration format is not valid, or the connector name is not supported.                             |
+| [`ErrorInvalidNetwork`](./errors.md#error-invalid-network)     | A subgraph couldn’t be found with the current network. Pass a `subgraphUrl` directly, or use one of the supported networks. |
 
 ## Finance
 
