@@ -32,6 +32,12 @@ An error happened while communicating with a remote server. This is a general er
 
 Extends: `ErrorException`
 
+## ErrorUnexpectedResult
+
+The resource doesn’t correspond to the expected result.
+
+Extends: `ErrorException`
+
 ## ErrorInvalidEthereum
 
 The Ethereum provider doesn’t seem to be valid.
