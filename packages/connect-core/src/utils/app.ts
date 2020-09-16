@@ -73,11 +73,11 @@ export function findAppMethodFromData(
   data: string,
   { allowDeprecated = true } = {}
 ): AppMethod | undefined {
-  const methodId = data.substring(2, 10)
+  const methodId = data.substring(0, 10)
   return findAppMethod(
     app,
     (method: AppMethod) =>
-      ethersUtils.id(method.sig).substring(2, 10) === methodId,
+      ethersUtils.id(method.sig).substring(0, 10) === methodId,
     { allowDeprecated }
   )
 }
