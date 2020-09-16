@@ -164,10 +164,10 @@ export interface IAgreementConnector {
     actionId: string,
     callback: SubscriptionCallback<Action | null>
   ): SubscriptionHandler
-  staking(stakingId: string): Promise<Staking>
+  staking(stakingId: string): Promise<Staking | null>
   onStaking(
     stakingId: string,
-    callback: SubscriptionCallback<Staking>
+    callback: SubscriptionCallback<Staking | null>
   ): SubscriptionHandler
   stakingMovements(
     stakingId: string,

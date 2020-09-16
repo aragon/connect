@@ -148,13 +148,13 @@ describe('Agreement', () => {
     const USER = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
 
     test('allows fetching the staking information for a user and a token', async () => {
-      const staking = await agreement.staking(TOKEN, USER)
+      const staking = (await agreement.staking(TOKEN, USER))!
 
-      expect(staking.total).toBe('15000000000000000015')
-      expect(staking.formattedTotalAmount).toBe('15.00')
+      expect(staking.total).toBe('20000000000000000015')
+      expect(staking.formattedTotalAmount).toBe('20.00')
 
-      expect(staking.locked).toBe('10000000000000000001')
-      expect(staking.formattedLockedAmount).toBe('10.00')
+      expect(staking.locked).toBe('15000000000000000001')
+      expect(staking.formattedLockedAmount).toBe('15.00')
 
       expect(staking.available).toBe('5000000000000000014')
       expect(staking.formattedAvailableAmount).toBe('5.00')
@@ -164,7 +164,7 @@ describe('Agreement', () => {
     })
 
     it('allows accessing the token data', async () => {
-      const staking = await agreement.staking(TOKEN, USER)
+      const staking = (await agreement.staking(TOKEN, USER))!
       const token = await staking.token()
 
       expect(token.id).toBe(TOKEN)

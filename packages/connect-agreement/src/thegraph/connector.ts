@@ -250,7 +250,7 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
 
   async staking(
     stakingId: string
-  ): Promise<Staking> {
+  ): Promise<Staking | null> {
     return this.#gql.performQueryWithParser<Staking>(
       queries.GET_STAKING('query'),
       { stakingId },
@@ -260,9 +260,9 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
 
   onStaking(
     stakingId: string,
-    callback: SubscriptionCallback<Staking>
+    callback: SubscriptionCallback<Staking | null>
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser<Staking>(
+    return this.#gql.subscribeToQueryWithParser<Staking | null>(
       queries.GET_STAKING('query'),
       { stakingId },
       callback,
