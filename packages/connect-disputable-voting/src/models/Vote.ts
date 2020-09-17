@@ -50,7 +50,9 @@ export default class Vote {
   readonly isAccepted: boolean
   readonly tokenId: string
   readonly tokenDecimals: string
+  readonly settlementOffer: string | null
   readonly collateralRequirementId: string
+  readonly collateralTokenDecimals: string
   readonly submitterArbitratorFeeId: string
   readonly challengerArbitratorFeeId: string
 
@@ -88,7 +90,9 @@ export default class Vote {
     this.isAccepted = data.isAccepted
     this.tokenId = data.tokenId
     this.tokenDecimals = data.tokenDecimals
+    this.settlementOffer = data.settlementOffer
     this.collateralRequirementId = data.collateralRequirementId
+    this.collateralTokenDecimals = data.collateralTokenDecimals
     this.submitterArbitratorFeeId = data.submitterArbitratorFeeId
     this.challengerArbitratorFeeId = data.challengerArbitratorFeeId
   }
@@ -293,6 +297,14 @@ export default class Vote {
     return subscription<Setting>(callback, (callback) =>
       this.#connector.onSetting(this.settingId, callback)
     )
+  }
+
+  async formattedSettlementOffer(): Promise<string | null> {
+    if (!this.settlementOffer) {
+      return null
+    }
+
+    return formatBn(this.settlementOffer, this.collateralTokenDecimals)
   }
 
   _votingPowerPct(num: string): string {
