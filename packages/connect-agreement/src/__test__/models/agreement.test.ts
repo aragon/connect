@@ -197,6 +197,8 @@ describe('Agreement', () => {
 
       expect(movement.agreementId).toBe(AGREEMENT_APP_ADDRESS)
       expect(movement.actionId).toBe(`${AGREEMENT_APP_ADDRESS}-action-2`)
+      expect(movement.disputableAddress).toBe('0xfae0084f0171fbebf86476b9ac962680c4aa1564')
+      expect(movement.disputableActionId).toBe('1')
 
       const action = (await movement.action())!
       expect(action.context).toBe('0x736f6d652066756e6473')

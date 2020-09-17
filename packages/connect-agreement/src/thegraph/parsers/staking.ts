@@ -39,7 +39,7 @@ export function parseStakingMovements(
   }
 
   return movements.map((movement: any) => {
-    const { id, staking, agreement, action, disputableActionId, amount, actionState, collateralState, createdAt } = movement
+    const { id, staking, agreement, action, amount, actionState, collateralState, createdAt } = movement
 
     return new StakingMovement(
       {
@@ -53,8 +53,8 @@ export function parseStakingMovements(
         tokenSymbol: staking.token.symbol,
         tokenDecimals: staking.token.decimals,
         actionId: action.id,
-        disputableActionId,
         disputableAddress: action.disputable.address,
+        disputableActionId: action.disputableActionId,
         agreementId: agreement.id
       },
       connector
