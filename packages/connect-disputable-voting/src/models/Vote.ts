@@ -227,6 +227,18 @@ export default class Vote {
     return castVote !== null
   }
 
+  onHasVoted(
+    voterAddress: Address,
+    callback?: SubscriptionCallback<any>
+  ): SubscriptionResult<any> {
+    return subscription<any>(
+      (error: Error | null, castVote: any) => {
+        callback?.(error, error ? undefined : (castVote !== null) as boolean)
+      },
+      (callback) => this.#connector.onCastVote(this.castVoteId(voterAddress), callback)
+    )
+  }
+
   castVoteId(voterAddress: Address): string {
     return `${this.id}-cast-${voterAddress.toLowerCase()}`
   }
