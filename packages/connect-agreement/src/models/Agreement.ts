@@ -124,16 +124,16 @@ export default class Agreement {
     return `${tokenAddress.toLowerCase()}-staking-${userAddress.toLowerCase()}`
   }
 
-  async staking(tokenAddress: string, userAddress: string): Promise<Staking> {
+  async staking(tokenAddress: string, userAddress: string): Promise<Staking | null> {
     return this.#connector.staking(this.stakingId(tokenAddress, userAddress))
   }
 
   onStaking(
     tokenAddress: string,
     userAddress: string,
-    callback?: SubscriptionCallback<Staking>
-  ): SubscriptionResult<Staking> {
-    return subscription<Staking>(callback, (callback) =>
+    callback?: SubscriptionCallback<Staking | null>
+  ): SubscriptionResult<Staking | null> {
+    return subscription<Staking | null>(callback, (callback) =>
       this.#connector.onStaking(this.stakingId(tokenAddress, userAddress), callback)
     )
   }
