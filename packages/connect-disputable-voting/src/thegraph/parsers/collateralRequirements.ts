@@ -21,6 +21,7 @@ function buildCollateralRequirement(collateralRequirement: any, connector: any):
     collateralRequirementId,
     votingId: voting.id,
     tokenId: token.id,
+    tokenSymbol: token.symbol,
     tokenDecimals: token.decimals,
   }
 

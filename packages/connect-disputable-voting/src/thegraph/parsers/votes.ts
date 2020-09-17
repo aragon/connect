@@ -67,9 +67,12 @@ function buildVote(vote: any, connector: any, provider: any): Vote {
     executedAt,
     isAccepted,
     tokenId: voting.token.id,
+    tokenSymbol: voting.token.symbol,
     tokenDecimals: voting.token.decimals,
     settlementOffer,
     collateralRequirementId: collateralRequirement.id,
+    collateralTokenId: collateralRequirement.token.id,
+    collateralTokenSymbol: collateralRequirement.token.symbol,
     collateralTokenDecimals: collateralRequirement.token.decimals,
     submitterArbitratorFeeId: submitterArbitratorFee ? submitterArbitratorFee.id : null,
     challengerArbitratorFeeId: challengerArbitratorFee ? challengerArbitratorFee.id : null

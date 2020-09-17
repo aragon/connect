@@ -20,6 +20,7 @@ function buildCollateralRequirement(
     id,
     disputableAppId: disputable.id,
     tokenId: token.id,
+    tokenSymbol: token.symbol,
     tokenDecimals: token.decimals,
     actionAmount,
     challengeAmount,

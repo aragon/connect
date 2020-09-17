@@ -49,9 +49,12 @@ export default class Vote {
   readonly executedAt: string
   readonly isAccepted: boolean
   readonly tokenId: string
+  readonly tokenSymbol: string
   readonly tokenDecimals: string
   readonly settlementOffer: string | null
   readonly collateralRequirementId: string
+  readonly collateralTokenId: string
+  readonly collateralTokenSymbol: string
   readonly collateralTokenDecimals: string
   readonly submitterArbitratorFeeId: string
   readonly challengerArbitratorFeeId: string
@@ -89,9 +92,12 @@ export default class Vote {
     this.executedAt = data.executedAt
     this.isAccepted = data.isAccepted
     this.tokenId = data.tokenId
+    this.tokenSymbol = data.tokenSymbol
     this.tokenDecimals = data.tokenDecimals
     this.settlementOffer = data.settlementOffer
     this.collateralRequirementId = data.collateralRequirementId
+    this.collateralTokenId = data.collateralTokenId
+    this.collateralTokenSymbol = data.collateralTokenSymbol
     this.collateralTokenDecimals = data.collateralTokenDecimals
     this.submitterArbitratorFeeId = data.submitterArbitratorFeeId
     this.challengerArbitratorFeeId = data.challengerArbitratorFeeId

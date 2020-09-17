@@ -49,10 +49,13 @@ export interface VoteData {
   disputedAt: string
   executedAt: string
   tokenId: string
+  tokenSymbol: string
   tokenDecimals: string
   isAccepted: boolean
   settlementOffer: string | null
   collateralRequirementId: string
+  collateralTokenId: string
+  collateralTokenSymbol: string
   collateralTokenDecimals: string
   submitterArbitratorFeeId: string
   challengerArbitratorFeeId: string
@@ -93,6 +96,7 @@ export interface CollateralRequirementData {
   id: string
   votingId: string
   tokenId: string
+  tokenSymbol: string
   tokenDecimals: string
   actionAmount: string
   challengeAmount: string
@@ -104,6 +108,7 @@ export interface ArbitratorFeeData {
   id: string
   voteId: string
   tokenId: string
+  tokenSymbol: string
   tokenDecimals: string
   amount: string
 }

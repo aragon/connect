@@ -42,6 +42,7 @@ export interface CollateralRequirementData {
   id: string
   disputableAppId: string
   tokenId: string
+  tokenSymbol: string
   tokenDecimals: string
   actionAmount: string
   challengeAmount: string
@@ -83,6 +84,7 @@ export interface StakingData {
   id: string
   user: string
   tokenId: string
+  tokenSymbol: string
   tokenDecimals: string
   available: string
   locked: string
@@ -93,11 +95,14 @@ export interface StakingData {
 export interface StakingMovementData {
   id: string
   tokenId: string
+  tokenSymbol: string
   tokenDecimals: string
   stakingId: string
   agreementId: string
   amount: string
   actionId: string
+  disputableAddress: string
+  disputableActionId: string
   actionState: string
   collateralState: string
   createdAt: string

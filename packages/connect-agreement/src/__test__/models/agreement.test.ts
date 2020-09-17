@@ -163,7 +163,7 @@ describe('Agreement', () => {
       expect(staking.formattedChallengedAmount).toBe('0.00')
     })
 
-    it('allows accessing the token data', async () => {
+    test('allows accessing the token data', async () => {
       const staking = (await agreement.staking(TOKEN, USER))!
       const token = await staking.token()
 
@@ -191,7 +191,7 @@ describe('Agreement', () => {
       expect(movements[1].collateralState).toBe('Locked')
     })
 
-    it('has an agreement action', async () => {
+    test('has an agreement action', async () => {
       const movements = await agreement.stakingMovements(TOKEN, USER)
       const movement = movements[1]
 
@@ -207,7 +207,7 @@ describe('Agreement', () => {
     const VERSION_NUMBER = '1'
     const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
 
-    it('returns a sign intent', async () => {
+    test('returns a sign intent', async () => {
       const abi = new ethers.utils.Interface(['function sign(uint256)'])
       const intent = await agreement.sign(SIGNER_ADDRESS, VERSION_NUMBER)
 
@@ -225,7 +225,7 @@ describe('Agreement', () => {
     const ACTION_NUMBER = '1'
     const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
 
-    it('returns a settle intent', async () => {
+    test('returns a settle intent', async () => {
       const abi = new ethers.utils.Interface(['function settleAction(uint256)'])
       const intent = await agreement.settle(ACTION_NUMBER, SIGNER_ADDRESS)
 
@@ -243,7 +243,7 @@ describe('Agreement', () => {
     const ACTION_NUMBER = '1'
     const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
 
-    it('returns a close intent', async () => {
+    test('returns a close intent', async () => {
       const abi = new ethers.utils.Interface(['function closeAction(uint256)'])
       const intent = await agreement.close(ACTION_NUMBER, SIGNER_ADDRESS)
 
@@ -263,7 +263,7 @@ describe('Agreement', () => {
     const CONTEXT = 'challenger evidence'
     const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
 
-    it('returns a challenge intent', async () => {
+    test('returns a challenge intent', async () => {
       const erc20ABI = new ethers.utils.Interface(['function approve(address,uint256) public returns (bool)'])
       const agreementABI = new ethers.utils.Interface(['function challengeAction(uint256,uint256,bool,bytes)'])
       const intent = await agreement.challenge(ACTION_NUMBER, SETTLEMENT_OFFER, true, CONTEXT, SIGNER_ADDRESS)
@@ -292,7 +292,7 @@ describe('Agreement', () => {
     const ACTION_NUMBER = '1'
     const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
 
-    it('returns a dispute intent', async () => {
+    test('returns a dispute intent', async () => {
       const erc20ABI = new ethers.utils.Interface(['function approve(address,uint256) public returns (bool)'])
       const agreementABI = new ethers.utils.Interface(['function disputeAction(uint256,bool)'])
       const intent = await agreement.dispute(ACTION_NUMBER, true, SIGNER_ADDRESS)

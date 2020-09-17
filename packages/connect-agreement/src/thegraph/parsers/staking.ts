@@ -21,6 +21,7 @@ export function parseStaking(result: QueryResult, connector: any): Staking | nul
       locked,
       challenged,
       tokenId: token.id,
+      tokenSymbol: token.symbol,
       tokenDecimals: token.decimals,
     },
     connector
@@ -38,7 +39,7 @@ export function parseStakingMovements(
   }
 
   return movements.map((movement: any) => {
-    const { id, staking, agreement, action, amount, actionState, collateralState, createdAt } = movement
+    const { id, staking, agreement, action, disputableActionId, amount, actionState, collateralState, createdAt } = movement
 
     return new StakingMovement(
       {
@@ -49,9 +50,12 @@ export function parseStakingMovements(
         createdAt,
         stakingId: staking.id,
         tokenId: staking.token.id,
+        tokenSymbol: staking.token.symbol,
         tokenDecimals: staking.token.decimals,
-        actionId: (action ? action.id : null),
-        agreementId: (agreement ? agreement.id : null),
+        actionId: action.id,
+        disputableActionId,
+        disputableAddress: action.disputable.address,
+        agreementId: agreement.id
       },
       connector
     )
