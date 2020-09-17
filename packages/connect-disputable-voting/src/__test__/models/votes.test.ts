@@ -152,11 +152,11 @@ describe('DisputableVoting', () => {
 
       beforeAll(async () => {
         castVote = await vote.castVote(VOTER_ADDRESS)
-        expect(await vote.hasVoted(VOTER_ADDRESS)).toBe(false)
       })
 
       it('returns a null value', async () => {
         expect(castVote).toBeNull()
+        expect(await vote.hasVoted(VOTER_ADDRESS)).toBe(false)
       })
     })
 
@@ -165,7 +165,6 @@ describe('DisputableVoting', () => {
       const VOTER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
 
       beforeAll(async () => {
-        expect(await vote.hasVoted(VOTER_ADDRESS)).toBe(true)
         castVote = (await vote.castVote(VOTER_ADDRESS))!
       })
 
@@ -175,6 +174,8 @@ describe('DisputableVoting', () => {
         expect(castVote.stake).toBe('1000000000000000000')
         expect(castVote.createdAt).toBe('1598530298')
         expect(castVote.caster).toBe(VOTER_ADDRESS)
+
+        expect(await vote.hasVoted(VOTER_ADDRESS)).toBe(true)
       })
 
       test('allows telling the voter', async () => {

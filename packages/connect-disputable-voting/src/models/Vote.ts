@@ -52,6 +52,7 @@ export default class Vote {
   readonly tokenDecimals: string
   readonly settlementOffer: string | null
   readonly collateralRequirementId: string
+  readonly collateralTokenDecimals: string
   readonly submitterArbitratorFeeId: string
   readonly challengerArbitratorFeeId: string
 
@@ -91,6 +92,7 @@ export default class Vote {
     this.tokenDecimals = data.tokenDecimals
     this.settlementOffer = data.settlementOffer
     this.collateralRequirementId = data.collateralRequirementId
+    this.collateralTokenDecimals = data.collateralTokenDecimals
     this.submitterArbitratorFeeId = data.submitterArbitratorFeeId
     this.challengerArbitratorFeeId = data.challengerArbitratorFeeId
   }
@@ -302,9 +304,7 @@ export default class Vote {
       return null
     }
 
-    const collateralRequirement = await this.collateralRequirement()
-    const token = await collateralRequirement.token()
-    return formatBn(this.settlementOffer, token.decimals)
+    return formatBn(this.settlementOffer, this.collateralTokenDecimals)
   }
 
   _votingPowerPct(num: string): string {

@@ -70,6 +70,7 @@ function buildVote(vote: any, connector: any, provider: any): Vote {
     tokenDecimals: voting.token.decimals,
     settlementOffer,
     collateralRequirementId: collateralRequirement.id,
+    collateralTokenDecimals: collateralRequirement.token.decimals,
     submitterArbitratorFeeId: submitterArbitratorFee ? submitterArbitratorFee.id : null,
     challengerArbitratorFeeId: challengerArbitratorFee ? challengerArbitratorFee.id : null
   }

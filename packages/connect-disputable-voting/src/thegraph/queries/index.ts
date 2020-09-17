@@ -146,6 +146,9 @@ export const GET_VOTE = (type: string) => gql`
       settlementOffer
       collateralRequirement {
         id
+        token {
+          decimals
+        }
       }
       submitterArbitratorFee {
         id
@@ -201,6 +204,9 @@ export const ALL_VOTES = (type: string) => gql`
       settlementOffer
       collateralRequirement {
         id
+        token {
+          decimals
+        }
       }
       submitterArbitratorFee {
         id

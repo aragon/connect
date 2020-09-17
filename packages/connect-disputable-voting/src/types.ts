@@ -53,6 +53,7 @@ export interface VoteData {
   isAccepted: boolean
   settlementOffer: string | null
   collateralRequirementId: string
+  collateralTokenDecimals: string
   submitterArbitratorFeeId: string
   challengerArbitratorFeeId: string
 }
