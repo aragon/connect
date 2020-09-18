@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Connect,
   createAppHook,
@@ -89,12 +89,12 @@ const VotingApp = React.memo(function VotingApp() {
   )
 })
 
+const defaultVotes = []
+
 function Votes() {
   const [page, setPage] = useState<number>(0)
-
   const [voting, votingStatus] = useApp(VOTING_APP_FILTER)
-
-  const [votes = [], votesStatus] = useVoting<Vote[]>(
+  const [votes = defaultVotes, votesStatus] = useVoting<Vote[]>(
     voting,
     (app: Voting) => {
       return app.onVotes({
@@ -104,6 +104,10 @@ function Votes() {
     },
     [page]
   )
+
+  useEffect(() => {
+    console.log('VOTES UPDATED', votes, votesStatus)
+  }, [votes, votesStatus])
 
   return (
     <section>
