@@ -47,7 +47,6 @@ export function useSubscription<Data>(
 
     cancelCb.current?.()
     cancelCb.current = () => {
-      console.log('CANCEL CB')
       cancelled = true
       handler?.unsubscribe?.()
     }
@@ -75,11 +74,17 @@ export function useSubscription<Data>(
         loading: false,
       })
     })
-  }, [callback, initValueRef, org, orgLoading])
+  }, [callback, org, orgLoading])
 
   useEffect(() => {
     subscribe()
   }, [subscribe])
+
+  useEffect(() => {
+    return () => {
+      cancelCb.current?.()
+    }
+  }, [])
 
   return [data, { error, loading, retry: subscribe }]
 }
@@ -92,9 +97,12 @@ export function useOrganization(): OrganizationHookResult {
 export function useApp(
   appsFilter?: AppFiltersParam
 ): [App | null, LoadingStatus] {
-  const callback = useCallback((org, onData) => org.onApp(appsFilter, onData), [
-    JSON.stringify(appsFilter),
-  ])
+  const callback = useCallback(
+    (org, onData) => {
+      return org.onApp(appsFilter, onData)
+    },
+    [JSON.stringify(appsFilter)]
+  )
   return useSubscription<App | null>(callback, null)
 }
 
