@@ -1,15 +1,16 @@
-import { utils as ethersUtils } from 'ethers'
+import fetch from 'isomorphic-unfetch'
 import { AppData } from '../entities/App'
 import { RepoData } from '../entities/Repo'
 import { RoleData } from '../entities/Role'
+import { DEFAULT_IPFS_GATEWAY } from '../params'
+import { AragonArtifact, AragonManifest } from '../types'
+import { ErrorInvalid, ErrorConnection } from '../errors'
 import {
   getApmInternalAppInfo,
   getAragonOsInternalAppInfo,
   hasAppInfo,
 } from './overrides/index'
-import { DEFAULT_IPFS_GATEWAY } from '../params'
-import { AragonArtifact, AragonManifest } from '../types'
-import { ErrorInvalid, ErrorConnection } from '../errors'
+import { createCacheStore } from './misc'
 
 export function parseMetadata(name: string, metadata: string): any {
   try {
@@ -19,22 +20,26 @@ export function parseMetadata(name: string, metadata: string): any {
   }
 }
 
+const metadataCacheStore = createCacheStore<object>(10)
+
 export async function fetchMetadata(
   fileName: string,
   contentUri: string
 ): Promise<any> {
-  const contentHashRegEx = contentUri.match(/ipfs:(.*)/)
-  if (contentHashRegEx) {
-    const url = `${DEFAULT_IPFS_GATEWAY}/ipfs/${contentHashRegEx[1]}/${fileName}`
-    let metadata
-    try {
-      metadata = await ethersUtils.fetchJson(url)
-    } catch (error) {
-      throw new ErrorConnection(`Couldn’t fetch ${url}, failed with error.`)
-    }
-    return metadata
+  const contentHash = contentUri.match(/ipfs:(.*)/)?.[1]
+  if (!contentHash) {
+    return {}
   }
-  return {}
+
+  const url = `${DEFAULT_IPFS_GATEWAY}/ipfs/${contentHash}/${fileName}`
+  try {
+    // await before returning to catch any error in the callback
+    return await metadataCacheStore.get(url, () =>
+      fetch(url).then(async (res) => res.json())
+    )
+  } catch (error) {
+    throw new ErrorConnection(`Couldn’t fetch ${url}, failed with error.`)
+  }
 }
 
 export async function resolveMetadata(
