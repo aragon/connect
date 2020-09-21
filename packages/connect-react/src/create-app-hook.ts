@@ -23,9 +23,9 @@ export function useConnectData<T = any>(
     appDataDefaultState
   )
 
-  const callbackRef = useRef<Function>(() => null)
+  const callbackRef = useRef<Function>(() => undefined)
   useEffect(() => {
-    callbackRef.current = callback || (() => null)
+    callbackRef.current = callback || (() => undefined)
   }, [callback])
 
   const previousResultJsonRef = useRef<string>('')
