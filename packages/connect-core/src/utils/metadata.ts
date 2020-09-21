@@ -35,7 +35,7 @@ export async function fetchMetadata(
   try {
     // await before returning to catch any error in the callback
     return await metadataCacheStore.get(url, () =>
-      fetch(url).then(async (res) => res.json())
+      fetch(url).then((res) => res.json())
     )
   } catch (error) {
     throw new ErrorConnection(`Couldn’t fetch ${url}, failed with error.`)
