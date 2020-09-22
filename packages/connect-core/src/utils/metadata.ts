@@ -4,7 +4,7 @@ import { RepoData } from '../entities/Repo'
 import { RoleData } from '../entities/Role'
 import { DEFAULT_IPFS_GATEWAY } from '../params'
 import { AragonArtifact, AragonManifest } from '../types'
-import { ErrorInvalid, ErrorConnection } from '../errors'
+import { ErrorConnection, ErrorInvalid, ErrorUnexpectedResult } from '../errors'
 import {
   getApmInternalAppInfo,
   getAragonOsInternalAppInfo,
@@ -25,21 +25,34 @@ const metadataCacheStore = createCacheStore<object>(10)
 export async function fetchMetadata(
   fileName: string,
   contentUri: string
-): Promise<any> {
+): Promise<object> {
   const contentHash = contentUri.match(/ipfs:(.*)/)?.[1]
   if (!contentHash) {
     return {}
   }
 
   const url = `${DEFAULT_IPFS_GATEWAY}/ipfs/${contentHash}/${fileName}`
-  try {
-    // await before returning to catch any error in the callback
-    return await metadataCacheStore.get(url, () =>
-      fetch(url).then((res) => res.json())
-    )
-  } catch (error) {
-    throw new ErrorConnection(`Couldn’t fetch ${url}, failed with error.`)
-  }
+
+  return metadataCacheStore.get(url, async () => {
+    let response
+    let data
+
+    try {
+      response = await fetch(url)
+    } catch (_) {
+      throw new ErrorConnection(`Couldn’t fetch ${url}.`)
+    }
+
+    try {
+      data = await response.json()
+    } catch (_) {
+      throw new ErrorUnexpectedResult(
+        `Couldn’t parse the result of ${url} as JSON.`
+      )
+    }
+
+    return data
+  })
 }
 
 export async function resolveMetadata(
