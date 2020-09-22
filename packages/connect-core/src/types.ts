@@ -122,11 +122,16 @@ export interface AragonEnvironment {
   appId?: string
 }
 
+export type IpfsResolver = {
+  url: (cid: string, path?: string) => Promise<string>
+  json: (cid: string, path?: string) => Promise<object>
+}
+
 export type ConnectionContext = {
   actAs: Address | null
   ethereumProvider: object | null
   ethersProvider: ethersProviders.Provider
-  ipfs: (cid: string) => string
+  ipfs: IpfsResolver
   network: Network
   orgAddress: Address
   orgConnector: IOrganizationConnector
