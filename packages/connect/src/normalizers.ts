@@ -10,6 +10,7 @@ import {
   ErrorInvalidEthereum,
   IOrganizationConnector,
   IpfsResolver,
+  ipfsResolver,
 } from '@aragon/connect-core'
 import ConnectorEthereum, {
   ConnectorEthereumConfig,
@@ -17,17 +18,40 @@ import ConnectorEthereum, {
 import ConnectorTheGraph, {
   ConnectorTheGraphConfig,
 } from '@aragon/connect-thegraph'
-import { ipfsResolver } from '@aragon/connect-core'
-import { ConnectorDeclaration, ConnectOptions } from './types'
-import { DEFAULT_IPFS_URL, XDAI_WSS_ENDPOINT } from './constants'
+import {
+  ConnectorDeclaration,
+  ConnectOptions,
+  IpfsResolverDeclaration,
+  IpfsResolverDeclarationObject,
+} from './types'
+import {
+  DEFAULT_IPFS_CACHED_ITEMS,
+  DEFAULT_IPFS_URL,
+  XDAI_WSS_ENDPOINT,
+} from './constants'
+
+export function isIpfsResolver(
+  ipfs?: IpfsResolverDeclaration
+): ipfs is IpfsResolver {
+  return (
+    typeof (ipfs as IpfsResolver)?.url === 'function' &&
+    typeof (ipfs as IpfsResolver)?.json === 'function'
+  )
+}
 
 export function normalizeIpfsResolver(
   ipfs: ConnectOptions['ipfs']
 ): IpfsResolver {
-  if (typeof ipfs === 'string') {
-    return ipfsResolver(ipfs || DEFAULT_IPFS_URL)
+  if (isIpfsResolver(ipfs)) {
+    return ipfs
   }
-  return ipfs as IpfsResolver
+  if (typeof ipfs === 'string') {
+    return ipfsResolver(ipfs, DEFAULT_IPFS_CACHED_ITEMS)
+  }
+  return ipfsResolver(
+    (ipfs as IpfsResolverDeclarationObject)?.urlTemplate ?? DEFAULT_IPFS_URL,
+    (ipfs as IpfsResolverDeclarationObject)?.cache ?? DEFAULT_IPFS_CACHED_ITEMS
+  )
 }
 
 export function normalizeConnectorConfig(

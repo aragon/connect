@@ -1,5 +1,6 @@
 export * from './address'
 export * from './app-connectors'
+export * from './cache-store'
 export * from './descriptions'
 export * from './ipfs'
 export * from './misc'
