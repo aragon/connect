@@ -19,7 +19,7 @@ export function createCacheStore<T = string>(
       cache.length = 0
     },
     cachedIndex(id: string): number {
-      return cache.findIndex((entry) => entry && id === entry[0])
+      return cache.findIndex((entry) => entry ?? id === entry[0])
     },
     touch(index: number): void {
       cache.unshift(cache.splice(index, 1)[0])
