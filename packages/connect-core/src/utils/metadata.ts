@@ -1,15 +1,11 @@
-import { utils as ethersUtils } from 'ethers'
-import { AppData } from '../entities/App'
-import { RepoData } from '../entities/Repo'
-import { RoleData } from '../entities/Role'
+import fetch from 'isomorphic-unfetch'
+import { AragonArtifact, AragonManifest, IpfsResolver } from '../types'
+import { ErrorConnection, ErrorInvalid, ErrorUnexpectedResult } from '../errors'
 import {
   getApmInternalAppInfo,
   getAragonOsInternalAppInfo,
   hasAppInfo,
 } from './overrides/index'
-import { DEFAULT_IPFS_GATEWAY } from '../params'
-import { AragonArtifact, AragonManifest } from '../types'
-import { ErrorInvalid, ErrorConnection } from '../errors'
 
 export function parseMetadata(name: string, metadata: string): any {
   try {
@@ -20,24 +16,16 @@ export function parseMetadata(name: string, metadata: string): any {
 }
 
 export async function fetchMetadata(
+  ipfs: IpfsResolver,
   fileName: string,
   contentUri: string
-): Promise<any> {
-  const contentHashRegEx = contentUri.match(/ipfs:(.*)/)
-  if (contentHashRegEx) {
-    const url = `${DEFAULT_IPFS_GATEWAY}/ipfs/${contentHashRegEx[1]}/${fileName}`
-    let metadata
-    try {
-      metadata = await ethersUtils.fetchJson(url)
-    } catch (error) {
-      throw new ErrorConnection(`Couldn’t fetch ${url}, failed with error.`)
-    }
-    return metadata
-  }
-  return {}
+): Promise<object> {
+  const cid = contentUri.match(/ipfs:(.*)/)?.[1]
+  return cid ? ipfs.json(cid, fileName) : {}
 }
 
 export async function resolveMetadata(
+  ipfs: IpfsResolver,
   fileName: string,
   contentUri?: string | null,
   metadata?: string | null
@@ -46,25 +34,34 @@ export async function resolveMetadata(
     return parseMetadata(fileName, metadata)
   }
   if (contentUri) {
-    return fetchMetadata(fileName, contentUri)
+    return fetchMetadata(ipfs, fileName, contentUri)
   }
   return {}
 }
 
 export async function resolveManifest(
-  data: AppData | RepoData
+  ipfs: IpfsResolver,
+  data: {
+    contentUri?: string
+    manifest?: string | null
+  }
 ): Promise<AragonManifest> {
-  return resolveMetadata('manifest.json', data.contentUri, data.manifest)
+  return resolveMetadata(ipfs, 'manifest.json', data.contentUri, data.manifest)
 }
 
 export async function resolveArtifact(
-  data: AppData | RoleData
+  ipfs: IpfsResolver,
+  data: {
+    appId?: string
+    artifact?: string | null
+    contentUri?: string
+  }
 ): Promise<AragonArtifact> {
-  if (hasAppInfo(data.appId, 'apm')) {
+  if (data.appId && hasAppInfo(data.appId, 'apm')) {
     return getApmInternalAppInfo(data.appId)
   }
-  if (hasAppInfo(data.appId, 'aragon')) {
+  if (data.appId && hasAppInfo(data.appId, 'aragon')) {
     return getAragonOsInternalAppInfo(data.appId)
   }
-  return resolveMetadata('artifact.json', data.contentUri, data.artifact)
+  return resolveMetadata(ipfs, 'artifact.json', data.contentUri, data.artifact)
 }
