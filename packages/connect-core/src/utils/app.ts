@@ -6,11 +6,15 @@ import App from '../entities/App'
 export const apmAppId = (appName: string): string =>
   ethersUtils.namehash(`${appName}.aragonpm.eth`)
 
-const checkSignature = (signature: string, abi: Abi): string => {
-  const regex = signature.match(/(.*)\((.*)\)/m)!
+function signatureFromAbi(signature: string, abi: Abi): string {
+  const matches = signature.match(/(.*)\((.*)\)/m)
 
-  const name = regex[1]
-  const params = regex[2].split(',')
+  if (!matches) {
+    throw new Error(`Abi has no method with signature: ${signature}`)
+  }
+
+  const name = matches[1]
+  const params = matches[2].split(',')
 
   // If a single ABI node is found with function name and same number of parameters,
   // generate the signature from ABI. Otherwise, use the one from artifact.
@@ -19,9 +23,9 @@ const checkSignature = (signature: string, abi: Abi): string => {
     .filter((node) => node.inputs.length === params.length)
 
   if (functionAbis.length === 1) {
-    return `${functionAbis[0].name}(${functionAbis[0].inputs.map(
-      (input) => input.type
-    )})`
+    return `${functionAbis[0].name}(${functionAbis[0].inputs
+      .map((input) => input.type)
+      .join(',')})`
   }
 
   return signature
@@ -39,7 +43,7 @@ function findAppMethod(
   if (Array.isArray(functions)) {
     method = functions
       .map((f) => {
-        return { ...f, sig: checkSignature(f.sig, app.abi) }
+        return { ...f, sig: signatureFromAbi(f.sig, app.abi) }
       })
       .find(methodTestFn)
   }

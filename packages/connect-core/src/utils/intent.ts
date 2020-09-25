@@ -20,9 +20,9 @@ export async function appIntent(
   installedApps: App[],
   provider: ethersProvider.Provider
 ): Promise<ForwardingPath> {
-  const acl = installedApps.find((app) => app.name === 'acl')!
+  const acl = installedApps.find((app) => app.name === 'acl')
 
-  if (addressesEqual(destinationApp.address, acl.address)) {
+  if (acl && addressesEqual(destinationApp.address, acl.address)) {
     try {
       return getACLForwardingPath(
         sender,
@@ -60,12 +60,16 @@ export function filterAndDecodeAppUpgradeIntents(
   intents: StepDecoded[],
   installedApps: App[]
 ): ethersUtils.Result[] {
-  const kernelApp = installedApps.find((app) => app.name === 'kernel')!
+  const kernel = installedApps.find((app) => app.name === 'kernel')
+
+  if (!kernel) {
+    throw new Error(`Organization not found.`)
+  }
 
   return (
     intents
       // Filter for setApp() calls to the kernel
-      .filter((intent) => isKernelSetAppIntent(kernelApp, intent))
+      .filter((intent) => isKernelSetAppIntent(kernel, intent))
       // Try to decode setApp() params
       .map((intent) => {
         try {
