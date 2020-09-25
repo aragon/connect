@@ -1,10 +1,35 @@
 import { utils as ethersUtils } from 'ethers'
 
-import { AppMethod } from '../types'
+import { Abi, AppMethod } from '../types'
 import App from '../entities/App'
 
 export const apmAppId = (appName: string): string =>
   ethersUtils.namehash(`${appName}.aragonpm.eth`)
+
+function signatureFromAbi(signature: string, abi: Abi): string {
+  const matches = signature.match(/(.*)\((.*)\)/m)
+
+  if (!matches) {
+    throw new Error(`Abi has no method with signature: ${signature}`)
+  }
+
+  const name = matches[1]
+  const params = matches[2].split(',')
+
+  // If a single ABI node is found with function name and same number of parameters,
+  // generate the signature from ABI. Otherwise, use the one from artifact.
+  const functionAbis = abi
+    .filter((node) => node.name === name)
+    .filter((node) => node.inputs.length === params.length)
+
+  if (functionAbis.length === 1) {
+    return `${functionAbis[0].name}(${functionAbis[0].inputs
+      .map((input) => input.type)
+      .join(',')})`
+  }
+
+  return signature
+}
 
 function findAppMethod(
   app: App,
@@ -16,7 +41,11 @@ function findAppMethod(
   let method
   // First try to find the method in the current functions
   if (Array.isArray(functions)) {
-    method = functions.find(methodTestFn)
+    method = functions
+      .map((f) => {
+        return { ...f, sig: signatureFromAbi(f.sig, app.abi) }
+      })
+      .find(methodTestFn)
   }
 
   if (!method && allowDeprecated) {
@@ -52,7 +81,7 @@ export function findAppMethodFromData(
   return findAppMethod(
     app,
     (method: AppMethod) =>
-      ethersUtils.hexDataSlice(ethersUtils.id(method.sig), 0, 4) === methodId,
+      ethersUtils.id(method.sig).substring(0, 10) === methodId,
     { allowDeprecated }
   )
 }
