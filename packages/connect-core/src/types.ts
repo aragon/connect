@@ -112,7 +112,7 @@ export interface RoleData {
   appAddress: string
   appId: string
   artifact?: string | null
-  contentUri?: string | null
+  contentUri?: string
   hash: string
   manager?: string
   grantees?: PermissionData[] | null
