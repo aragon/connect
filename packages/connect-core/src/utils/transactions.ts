@@ -4,7 +4,7 @@ import {
   providers as ethersProviders,
   utils as ethersUtils,
 } from 'ethers'
-
+import { ErrorInvalid, ErrorUnsufficientBalance } from '../errors'
 import { erc20ABI, forwarderAbi, forwarderFeeAbi } from './abis'
 import { findMethodAbiFragment } from './abi'
 import { TokenData } from '../types'
@@ -40,16 +40,24 @@ export async function createDirectTransactionForApp(
   methodSignature: string,
   params: any[]
 ): Promise<Transaction> {
-  if (!app.abi) {
-    throw new Error(
-      `No ABI specified in app for ${app.address}. Make sure the metada for the app is available`
+  if (!app) {
+    throw new ErrorInvalid(
+      `Could not create transaction due to missing app artifact`
     )
+  }
+
+  const destination = app.address
+
+  if (!app.abi) {
+    throw new ErrorInvalid(`No ABI specified in artifact for ${destination}`)
   }
 
   const fragment = findMethodAbiFragment(app.abi, methodSignature)
 
   if (!fragment) {
-    throw new Error(`${methodSignature} not found on ABI for ${app.address}`)
+    throw new ErrorInvalid(
+      `${methodSignature} not found on ABI for ${destination}`
+    )
   }
 
   return createDirectTransaction(sender, app.address, fragment, params)
@@ -84,7 +92,7 @@ export async function buildApprovePreTransactions(
   const tokenValueBN = BigInt(tokenValue.toString())
 
   if (BigInt(balance) < tokenValueBN) {
-    throw new Error(
+    throw new ErrorUnsufficientBalance(
       `Balance too low. ${from} balance of ${tokenAddress} token is ${balance} (attempting to send ${tokenValue})`
     )
   }

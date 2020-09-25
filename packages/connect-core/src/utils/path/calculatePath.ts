@@ -1,7 +1,10 @@
 import { providers as ethersProviders, utils as ethersUtils } from 'ethers'
 
-import { addressesEqual, includesAddress, ANY_ENTITY } from '../address'
 import { findAppMethodFromSignature } from '../app'
+import { ErrorInvalid } from '../../errors'
+import App from '../../entities/App'
+import Transaction from '../../entities/Transaction'
+import { ANY_ENTITY, addressesEqual, includesAddress } from '../address'
 import { encodeCallScript } from '../callScript'
 import { canForward } from '../forwarding'
 import {
@@ -10,8 +13,6 @@ import {
   buildForwardingFeePreTransactions,
 } from '../transactions'
 import { TransactionPath } from '../../types'
-import App from '../../entities/App'
-import Transaction from '../../entities/Transaction'
 
 /**
  * Calculate the forwarding path for a transaction to `destination`
@@ -173,7 +174,7 @@ export async function calculateTransactionPath(
 
   const method = findAppMethodFromSignature(destinationApp, methodSignature)
   if (!method) {
-    throw new Error(
+    throw new ErrorInvalid(
       `No method named ${methodSignature} on ${destinationApp.address}`
     )
   }

@@ -1,4 +1,5 @@
 import { utils as ethersUtils } from 'ethers'
+import { ErrorInvalid } from '../errors'
 
 import { CallScriptAction } from '../types'
 
@@ -51,7 +52,7 @@ export function isCallScript(script: string): boolean {
  */
 export function decodeCallScript(script: string): CallScriptAction[] {
   if (!isCallScript(script)) {
-    throw new Error(`Not a call script: ${script}`)
+    throw new ErrorInvalid(`Not a call script: ${script}`)
   }
 
   let scriptData = script.substring(10)

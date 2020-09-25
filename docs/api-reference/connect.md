@@ -6,14 +6,24 @@ This file documents the main exports of the library.
 
 Connects and returns an `Organization` for `location`.
 
-| Name               | Type                                          | Description                                                                                              |
-| ------------------ | --------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `location`         | `String`                                      | The Ethereum address or ENS domain of an Aragon organization.                                            |
-| `connector`        | `Connector` or `[String, Object]` or `String` | Accepts a `Connector` instance, and either a string or a tuple for embedded connectors and their config. |
-| `options`          | `Object`                                      | The optional configuration object.                                                                       |
-| `options.ethereum` | `EthereumProvider`                            | An [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compatible object.                                |
-| `options.network`  | [`Networkish`](./types.md#networkish)         | The network to connect to. Defaults to `1`.                                                              |
-| returns            | `Promise<Organization>`                       | An `Organization` instance.                                                                              |
+| Name               | Type                                                              | Description                                                                                                                  |
+| ------------------ | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `location`         | `String`                                                          | The Ethereum address or ENS domain of an Aragon organization.                                                                |
+| `connector`        | `Connector` or `[String, Object]` or `String`                     | Accepts a `Connector` instance, and either a string or a tuple for embedded connectors and their config.                     |
+| `options`          | `Object`                                                          | The optional configuration object.                                                                                           |
+| `options.ethereum` | `EthereumProvider`                                                | An [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compatible object.                                                    |
+| `options.network`  | [`Networkish`](./types.md#networkish)                             | The network to connect to. Defaults to `1`.                                                                                  |
+| `options.ipfs`     | [`IpfsResolverDeclaration`](./types.md#ipfs-resolver-declaration) | The IPFS gateway and cached results. Defaults to `'https://ipfs.eth.aragon.network/ipfs/{cid}{path}'` and `40` respectively. |
+| returns            | `Promise<Organization>`                                           | An `Organization` instance.                                                                                                  |
+
+This function can throw the following errors:
+
+| Error type                                                     | Description                                       |
+| -------------------------------------------------------------- | ------------------------------------------------- |
+| [`ErrorInvalidConnector`](./errors.md#error-invalid-connector) | An unsupported or invalid connector was provided. |
+| [`ErrorInvalidEthereum`](./errors.md#error-invalid-ethereum)   | The Ethereum provider doesn’t seem to be valid.   |
+| [`ErrorInvalidLocation`](./errors.md#error-invalid-location)   | The provided location doesn’t seem to be valid.   |
+| [`ErrorInvalidNetwork`](./errors.md#error-invalid-network)     | The network is incorrect or unsupported.          |
 
 ### Example
 

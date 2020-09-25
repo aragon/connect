@@ -1,5 +1,5 @@
 import { Address, Network, Networkish } from '@aragon/connect-types'
-
+import { ErrorInvalidNetwork } from '../errors'
 import { NETWORKS } from '../params'
 
 export function networkFromChainId(chainId: number): Network | null {
@@ -20,7 +20,7 @@ function networkFromObject({
   name?: string
 }): Network {
   if (name === undefined && chainId === undefined) {
-    throw new Error(
+    throw new ErrorInvalidNetwork(
       `Network: no name or chainId passed. ` +
         `Please provide at least one of these.`
     )
@@ -31,7 +31,7 @@ function networkFromObject({
     chainId = networkFromName(name)?.chainId
 
     if (chainId === undefined) {
-      throw new Error(
+      throw new ErrorInvalidNetwork(
         `Network: invalid name provided: ${name}. ` +
           `Please use provide a chainId or use one of the following names: ` +
           NETWORKS.map((network) => network.chainId).join(', ') +
@@ -47,7 +47,7 @@ function networkFromObject({
   const chainIdNetwork = networkFromChainId(chainId)
 
   if (!chainIdNetwork) {
-    throw new Error(
+    throw new ErrorInvalidNetwork(
       `Network: invalid chainId provided: ${chainId}. ` +
         `Please use one of the following: ` +
         NETWORKS.map((network) => network.chainId).join(', ') +
@@ -69,7 +69,7 @@ function networkFromObject({
 
 export function toNetwork(network: Networkish): Network {
   if (!network) {
-    throw new Error(`Network: incorrect value provided.`)
+    throw new ErrorInvalidNetwork(`Network: incorrect value provided.`)
   }
 
   if (typeof network === 'string') {

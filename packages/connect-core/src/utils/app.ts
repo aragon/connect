@@ -1,6 +1,7 @@
 import { utils as ethersUtils } from 'ethers'
 
 import { Abi, AppMethod } from '../types'
+import { ErrorInvalid } from '../errors'
 import App from '../entities/App'
 
 export const apmAppId = (appName: string): string =>
@@ -10,7 +11,7 @@ function signatureFromAbi(signature: string, abi: Abi): string {
   const matches = signature.match(/(.*)\((.*)\)/m)
 
   if (!matches) {
-    throw new Error(`Abi has no method with signature: ${signature}`)
+    throw new ErrorInvalid(`Abi has no method with signature: ${signature}`)
   }
 
   const name = matches[1]

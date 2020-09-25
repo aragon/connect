@@ -1,3 +1,4 @@
+import { ErrorInvalid } from '../../errors'
 import { StepDecoded } from '../../types'
 import { isCallScript, decodeCallScript } from '../callScript'
 import { isValidForwardCall, parseForwardCall } from '../forwarding'
@@ -11,7 +12,7 @@ export function decodeForwardingPath(script: string): StepDecoded[] {
   // In the future we may support more EVMScripts, but for now let's just assume we're only
   // dealing with call scripts
   if (!isCallScript(script)) {
-    throw new Error(`Script could not be decoded: ${script}`)
+    throw new ErrorInvalid(`Script could not be decoded: ${script}`)
   }
 
   const path = decodeCallScript(script)

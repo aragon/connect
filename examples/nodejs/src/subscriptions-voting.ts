@@ -41,6 +41,7 @@ async function main() {
   console.log(`Vote #1: `, vote1)
 
   const castsSubscription = vote1.onCasts(
+    {},
     (error: Error | null, casts?: Cast[]) => {
       if (error) {
         console.error(error)
@@ -55,12 +56,6 @@ async function main() {
       )
     }
   )
-
-  await keepRunning()
-
-  // Simply to illustrate how to close a subscription
-  votesSubscription.unsubscribe()
-  castsSubscription.unsubscribe()
 }
 
 main()

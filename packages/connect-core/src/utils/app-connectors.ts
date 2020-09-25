@@ -1,5 +1,6 @@
 import { Network } from '@aragon/connect-types'
 import { ConnectionContext } from '../types'
+import { ErrorInvalidConnector, ErrorInvalidApp } from '../errors'
 import App from '../entities/App'
 
 type AppConnectContext = {
@@ -23,7 +24,9 @@ function normalizeConnectorConfig<Config extends object>(
   if (typeof connector === 'string') {
     return [connector, {} as Config]
   }
-  throw new Error('The connector should be passed as a string or an array.')
+  throw new ErrorInvalidConnector(
+    'The connector should be passed as a string or an array.'
+  )
 }
 
 // Check if an app is valid. We are not using instanceof here, because the
@@ -34,6 +37,12 @@ function normalizeConnectorConfig<Config extends object>(
 function isAppValid(app: any): boolean {
   return app && app.name && app.address && app.appId && app.version
 }
+
+type AugmentedApp<T> = App &
+  T & {
+    _app: App
+    _connectedApp: T
+  }
 
 export function createAppConnector<
   ConnectedApp extends object,
@@ -46,11 +55,11 @@ export function createAppConnector<
   return async function connect(
     app: App | Promise<App>,
     connector?: string | [string, Config | undefined]
-  ): Promise<App & ConnectedApp> {
-    app = await app
+  ): Promise<AugmentedApp<ConnectedApp>> {
+    app = (await app) as App
 
     if (!isAppValid(app)) {
-      throw new Error(
+      throw new ErrorInvalidApp(
         `App connector: the passed value doesn’t appear to be an App.`
       )
     }
@@ -76,6 +85,34 @@ export function createAppConnector<
       verbose: connection.verbose,
     })
 
-    return Object.assign(connectedApp, app)
+    const boundMethods = new WeakMap()
+
+    const proxiedApp = new Proxy(connectedApp, {
+      get: (target: ConnectedApp, key: string | symbol) => {
+        const isAppProperty =
+          (connectedApp as any)[key as keyof ConnectedApp] === undefined
+
+        // Pick properties from ConnectedApp first, then App
+        const instance = (isAppProperty ? app : connectedApp) as any
+
+        // Bind methods as they get accessed (so `this` works as expected).
+        // This is done once for reference comparisons to work as expected.
+        if (
+          typeof instance[key] === 'function' &&
+          !boundMethods.has(instance[key])
+        ) {
+          instance[key] = instance[key].bind(instance)
+          boundMethods.set(instance[key], true)
+        }
+
+        return instance[key]
+      },
+    }) as AugmentedApp<ConnectedApp>
+
+    // Useful for inspection
+    proxiedApp._app = app
+    proxiedApp._connectedApp = connectedApp
+
+    return proxiedApp
   }
 }

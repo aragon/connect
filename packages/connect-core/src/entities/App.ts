@@ -5,7 +5,6 @@ import {
 } from 'ethers'
 
 import { appIntent } from '../utils/intent'
-import { resolveManifest, resolveArtifact } from '../utils/metadata'
 import {
   Abi,
   AragonArtifact,
@@ -18,6 +17,7 @@ import ForwardingPath from './ForwardingPath'
 import Organization from './Organization'
 import Repo from './Repo'
 import Role from './Role'
+import { resolveArtifact, resolveManifest } from '../utils/metadata'
 import IOrganizationConnector from '../connections/IOrganizationConnector'
 
 // TODO:
@@ -57,10 +57,9 @@ export default class App {
   }
 
   static async create(data: AppData, organization: Organization): Promise<App> {
-    const artifact = await resolveArtifact(data)
-    const manifest = await resolveManifest(data)
-    const metadata: Metadata = [artifact, manifest]
-    return new App(data, metadata, organization)
+    const artifact = await resolveArtifact(organization.connection.ipfs, data)
+    const manifest = await resolveManifest(organization.connection.ipfs, data)
+    return new App(data, [artifact, manifest], organization)
   }
 
   private orgConnector(): IOrganizationConnector {

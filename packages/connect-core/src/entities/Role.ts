@@ -32,8 +32,7 @@ export default class Role {
     data: RoleData,
     organization: Organization
   ): Promise<Role> {
-    const artifact = await resolveArtifact(data)
-    const metadata: Metadata = [artifact]
-    return new Role(data, metadata, organization)
+    const artifact = await resolveArtifact(organization.connection.ipfs, data)
+    return new Role(data, [artifact], organization)
   }
 }

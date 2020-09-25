@@ -11,8 +11,10 @@ import ForwardingPathDescription, {
   describePath,
   describeTransaction,
 } from '../utils/descriptor/index'
-import { toArrayEntry } from '../utils/misc'
 import { ConnectionContext, PostProcessDescription } from '../types'
+import { ErrorInvalidLocation } from '../errors'
+import { toArrayEntry } from '../utils/misc'
+import { isAddress } from '../utils/address'
 import App from './App'
 import Permission from './Permission'
 import Transaction from './Transaction'
@@ -34,19 +36,21 @@ function normalizeAppFilters(filters?: AppFiltersParam): AppFilters {
   }
 
   if (typeof filters === 'string') {
-    return filters.startsWith('0x')
-      ? { address: [filters] }
-      : { name: [filters] }
+    return isAddress(filters) ? { address: [filters] } : { name: [filters] }
   }
 
   if (Array.isArray(filters)) {
-    return filters[0]?.startsWith('0x')
+    return isAddress(filters[0] ?? '')
       ? { address: filters }
       : { name: filters }
   }
 
   if (filters.address) {
-    return { address: toArrayEntry(filters.address) }
+    const addresses = toArrayEntry(filters.address)
+    if (!addresses.every(isAddress)) {
+      throw new ErrorInvalidLocation()
+    }
+    return { address: addresses }
   }
 
   if (filters.name) {
@@ -90,13 +94,6 @@ export default class Organization {
     )
   }
 
-  async apps(filters?: AppFiltersParam): Promise<App[]> {
-    return this.connection.orgConnector.appsForOrg(
-      this,
-      normalizeAppFilters(filters)
-    )
-  }
-
   onApp(
     filtersOrCallback: AppFiltersParam | OnAppCallback,
     callback?: OnAppCallback
@@ -108,6 +105,13 @@ export default class Organization {
       this,
       normalizeAppFilters(filters),
       _callback
+    )
+  }
+
+  async apps(filters?: AppFiltersParam): Promise<App[]> {
+    return this.connection.orgConnector.appsForOrg(
+      this,
+      normalizeAppFilters(filters)
     )
   }
 
