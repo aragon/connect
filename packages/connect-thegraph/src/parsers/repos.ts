@@ -25,7 +25,7 @@ export async function parseRepo(
     address: repo?.address,
     artifact: repo?.lastVersion?.artifact,
     contentUri: repo?.lastVersion?.contentUri,
-    lastVersion: repo?.lastVersion?.semanticVersion.replace(/,/g, '.'),
+    lastVersion: repo?.lastVersion?.semanticVersion?.replace(/,/g, '.'),
     manifest: repo?.lastVersion?.manifest,
     name: repo?.name,
     registry: repo?.registry?.name,

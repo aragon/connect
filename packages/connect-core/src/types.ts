@@ -31,14 +31,14 @@ export interface CallScriptAction {
   data: string
 }
 
-export interface Annotation {
+export interface DescriptionAnnotation {
   type: string
   value: any
 }
 
 export interface PostProcessDescription {
   description: string
-  annotatedDescription?: Annotation[]
+  annotatedDescription?: DescriptionAnnotation[]
 }
 
 export interface StepDecoded {
@@ -50,7 +50,7 @@ export interface StepDecoded {
 
 export interface StepDescribed extends StepDecoded {
   description: string
-  annotatedDescription?: Annotation[]
+  annotatedDescription?: DescriptionAnnotation[]
 }
 
 export interface TransactionPath {

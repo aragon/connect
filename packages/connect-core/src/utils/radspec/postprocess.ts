@@ -1,7 +1,7 @@
 import { addressesEqual, ANY_ENTITY } from '../address'
 import { getKernelNamespace } from '../kernel'
 import {
-  Annotation,
+  DescriptionAnnotation,
   PostProcessDescription,
   AragonArtifactRole,
 } from '../../types'
@@ -9,10 +9,10 @@ import App from '../../entities/App'
 
 interface CompiledTokens {
   description: string[]
-  annotatedDescription: Annotation[]
+  annotatedDescription: DescriptionAnnotation[]
 }
 
-type ProcessToken = [string, string, Annotation]
+type ProcessToken = [string, string, DescriptionAnnotation]
 
 /**
  * Look for known addresses and roles in a radspec description and substitute them with a human string
@@ -118,7 +118,7 @@ export async function postprocessRadspecDescription(
       return acc
     },
     {
-      annotatedDescription: [] as Annotation[],
+      annotatedDescription: [] as DescriptionAnnotation[],
       description: [] as string[],
     }
   )

@@ -99,7 +99,7 @@ export default class App {
     }
   }
 
-  contract(): Contract {
+  ethersContract(): Contract {
     if (!this.abi) {
       throw new Error(
         `No ABI specified in app for ${this.address}. Make sure the metada for the app is available`
@@ -108,7 +108,7 @@ export default class App {
     return new Contract(this.address, this.abi, this.provider)
   }
 
-  interface(): ethersUtils.Interface {
+  ethersInterface(): ethersUtils.Interface {
     if (!this.abi) {
       throw new Error(
         `No ABI specified in app for ${this.address}. Make sure the metada for the app is available`
@@ -129,7 +129,7 @@ export default class App {
   async intent(
     methodSignature: string,
     params: any[],
-    options: PathOptions
+    options: PathOptions = {}
   ): Promise<ForwardingPath> {
     const sender = options.actAs || this.organization.connection.actAs
     if (!sender) {
