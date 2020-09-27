@@ -10,7 +10,7 @@ type Config = {
 }
 
 export default createAppConnector<Agreement, Config>(
-  ({ app, config, connector, network, orgConnector, verbose }) => {
+  async ({ app, config, connector, network, orgConnector, verbose }) => {
     if (connector !== 'thegraph') {
       console.warn(
         `Connector unsupported: ${connector}. Using "thegraph" instead.`
@@ -26,7 +26,7 @@ export default createAppConnector<Agreement, Config>(
         config?.pollInterval ?? orgConnector.config?.pollInterval ?? undefined
     }
 
-    const connectorTheGraph = new AgreementConnectorTheGraph({
+    const connectorTheGraph = await AgreementConnectorTheGraph.create({
       pollInterval,
       subgraphUrl,
       verbose,
