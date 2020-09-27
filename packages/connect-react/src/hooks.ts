@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   AppFiltersParam,
+  SubscriptionCallback,
   SubscriptionHandler,
   SubscriptionResult,
 } from '@aragon/connect-types'
@@ -14,6 +15,8 @@ type AppDataState<T> = {
   result?: T
 }
 
+type HookResult<T> = [T | undefined, LoadingStatus]
+
 const appDataDefaultState = {
   error: null,
   loading: true,
@@ -21,7 +24,7 @@ const appDataDefaultState = {
 }
 
 export function useConnectData<T = any>(
-  callback?: () => T | Promise<T> | SubscriptionResult<T>,
+  callback?: () => T | Promise<T> | SubscriptionResult<T> | undefined,
   dependencies?: any[]
 ): [T | undefined, LoadingStatus] {
   const [{ result, error, loading }, setStatus] = useState<AppDataState<T>>(
@@ -37,7 +40,7 @@ export function useConnectData<T = any>(
 
   useEffect(() => {
     let cancelled = false
-    let subscriptionHandler: SubscriptionHandler | null = null
+    let subscriptionHandler: SubscriptionHandler | null | undefined = null
 
     const update = async () => {
       // keep the result until the next update
@@ -99,121 +102,28 @@ export function useConnectData<T = any>(
   return [result, status]
 }
 
-export function useSubscription<Data>(
-  callback: (
-    org: Organization,
-    onData: (error: Error | null, data: Data) => void
-  ) => SubscriptionHandler,
-  initValue: Data
-): [Data, LoadingStatus] {
-  const [{ data, error, loading }, setStatus] = useState<{
-    data: Data
-    error: Error | null
-    loading: boolean
-  }>({
-    data: initValue,
-    error: null,
-    loading: true,
-  })
-
-  const {
-    org,
-    orgStatus: { loading: orgLoading },
-  } = useConnectContext()
-  const cancelCb = useRef<Function | null>(null)
-  const dataJsonRef = useRef<string>(JSON.stringify(initValue))
-
-  // The init value never changes
-  const initValueRef = useRef<Data>(initValue)
-
-  const subscribe = useCallback(() => {
-    if (!org) {
-      // If the org is loading, the subscription is loading as well.
-      setStatus({
-        data: initValueRef.current,
-        error: null,
-        loading: orgLoading,
-      })
-      return
-    }
-
-    let cancelled = false
-    let handler: any
-
-    cancelCb.current?.()
-    cancelCb.current = () => {
-      cancelled = true
-      handler?.unsubscribe?.()
-    }
-
-    setStatus((status) => ({ ...status, loading: true }))
-
-    handler = callback(org, (error: Error | null, data: Data) => {
-      if (cancelled) {
-        return
-      }
-
-      // This is necessary because some connectors might keep providing new app
-      // instances, even if these instances are not actually updated.
-      // For example, the Graph connector uses HTTP polling which has this effect.
-      const dataJson = JSON.stringify({ error, data })
-      if (dataJson === dataJsonRef.current) {
-        return
-      }
-
-      dataJsonRef.current = dataJson
-
-      setStatus({
-        error: error || null,
-        data: error ? initValueRef.current : data,
-        loading: false,
-      })
-    })
-  }, [callback, org, orgLoading])
-
-  useEffect(() => {
-    subscribe()
-  }, [subscribe])
-
-  useEffect(() => {
-    return () => {
-      cancelCb.current?.()
-    }
-  }, [])
-
-  return [data, { error, loading, retry: subscribe }]
-}
-
 export function useOrganization(): OrganizationHookResult {
   const { org, orgStatus } = useConnectContext()
   return [org, orgStatus]
 }
 
-export function useApp(
-  appsFilter?: AppFiltersParam
-): [App | null, LoadingStatus] {
-  const callback = useCallback(
-    (org, onData) => {
-      return org.onApp(appsFilter, onData)
-    },
-    [JSON.stringify(appsFilter)]
-  )
-  return useSubscription<App | null>(callback, null)
+export function useApp(appsFilter?: AppFiltersParam): HookResult<App | null> {
+  const [org] = useOrganization()
+  const cb = () => org?.onApp(appsFilter)
+  const deps = [org, JSON.stringify(appsFilter)]
+  return useConnectData<App | null>(cb, deps)
 }
 
-export function useApps(appsFilter?: AppFiltersParam): [App[], LoadingStatus] {
-  const callback = useCallback(
-    (org, onData) => {
-      return org.onApps(appsFilter, onData)
-    },
-    [JSON.stringify(appsFilter)]
-  )
-  return useSubscription<App[]>(callback, [])
+export function useApps(appsFilter?: AppFiltersParam): HookResult<App[]> {
+  const [org] = useOrganization()
+  const cb = org?.onApps(appsFilter)
+  const deps = [org, JSON.stringify(appsFilter)]
+  return useConnectData<App[]>(cb, deps)
 }
 
-export function usePermissions(): [Permission[], LoadingStatus] {
-  const callback = useCallback((org, onData) => {
-    return org.onPermissions(onData)
-  }, [])
-  return useSubscription<Permission[]>(callback, [])
+export function usePermissions(): HookResult<Permission[]> {
+  const [org] = useOrganization()
+  const cb = () => org?.onPermissions()
+  const deps = [org]
+  return useConnectData<Permission[]>(cb, deps)
 }

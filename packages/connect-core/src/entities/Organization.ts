@@ -2,14 +2,18 @@ import {
   Address,
   AppFilters,
   AppFiltersParam,
-  SubscriptionHandler,
   SubscriptionCallback,
+  SubscriptionResult,
 } from '@aragon/connect-types'
 import { ConnectionContext } from '../types'
 import { ErrorInvalidLocation } from '../errors'
+import {
+  isAddress,
+  normalizeFiltersAndCallback,
+  subscription,
+  toArrayEntry,
+} from '../utils'
 import TransactionIntent from '../transactions/TransactionIntent'
-import { toArrayEntry } from '../utils/misc'
-import { isAddress } from '../utils/address'
 import App from './App'
 import Permission from './Permission'
 
@@ -21,7 +25,7 @@ import Permission from './Permission'
 // Organization#roleManager(appAddress, roleId)
 // Organization#setRoleManager(address, appAddress, roleId)
 
-type OnAppCallback = SubscriptionCallback<App>
+type OnAppCallback = SubscriptionCallback<App | null>
 type OnAppsCallback = SubscriptionCallback<App[]>
 
 function normalizeAppFilters(filters?: AppFiltersParam): AppFilters {
@@ -73,8 +77,6 @@ export default class Organization {
     return this.connection
   }
 
-  ///////// APPS ///////////
-
   async app(filters?: AppFiltersParam): Promise<App> {
     return this.connection.orgConnector.appForOrg(
       this,
@@ -83,16 +85,20 @@ export default class Organization {
   }
 
   onApp(
-    filtersOrCallback: AppFiltersParam | OnAppCallback,
+    filtersOrCallback?: AppFiltersParam | OnAppCallback,
     callback?: OnAppCallback
-  ): SubscriptionHandler {
-    const filters = (callback ? filtersOrCallback : null) as AppFiltersParam
-    const _callback = (callback || filtersOrCallback) as OnAppCallback
+  ): SubscriptionResult<App | null> {
+    const [filters, _callback] = normalizeFiltersAndCallback<
+      OnAppCallback,
+      AppFiltersParam
+    >(filtersOrCallback, callback)
 
-    return this.connection.orgConnector.onAppForOrg(
-      this,
-      normalizeAppFilters(filters),
-      _callback
+    return subscription<App | null>(_callback, (callback) =>
+      this.connection.orgConnector.onAppForOrg(
+        this,
+        normalizeAppFilters(filters),
+        callback
+      )
     )
   }
 
@@ -104,31 +110,35 @@ export default class Organization {
   }
 
   onApps(
-    filtersOrCallback: AppFiltersParam | OnAppsCallback,
+    filtersOrCallback?: AppFiltersParam | OnAppsCallback,
     callback?: OnAppsCallback
-  ): SubscriptionHandler {
-    const filters = (callback ? filtersOrCallback : null) as AppFiltersParam
-    const _callback = (callback || filtersOrCallback) as OnAppsCallback
+  ): SubscriptionResult<App[]> {
+    const [filters, _callback] = normalizeFiltersAndCallback<
+      OnAppsCallback,
+      AppFiltersParam
+    >(filtersOrCallback, callback)
 
-    return this.connection.orgConnector.onAppsForOrg(
-      this,
-      normalizeAppFilters(filters),
-      _callback
+    return subscription<App[]>(_callback, (callback) =>
+      this.connection.orgConnector.onAppsForOrg(
+        this,
+        normalizeAppFilters(filters),
+        callback
+      )
     )
   }
 
-  ///////// PERMISSIONS ///////////
   async permissions(): Promise<Permission[]> {
     return this.connection.orgConnector.permissionsForOrg(this)
   }
 
   onPermissions(
-    callback: SubscriptionCallback<Permission[]>
-  ): SubscriptionHandler {
-    return this.connection.orgConnector.onPermissionsForOrg(this, callback)
+    callback?: SubscriptionCallback<Permission[]>
+  ): SubscriptionResult<Permission[]> {
+    return subscription<Permission[]>(callback, (callback) =>
+      this.connection.orgConnector.onPermissionsForOrg(this, callback)
+    )
   }
 
-  ///////// INTENTS ///////////
   appIntent(
     appAddress: Address,
     functionName: string,
