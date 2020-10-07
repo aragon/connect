@@ -1,4 +1,5 @@
 export * from '@aragon/connect'
-export * from './connect-provider'
+export * from './Connect'
 export * from './create-app-hook'
-export * from './hooks'
+export * from './use-connect'
+export * from './deprecated-hooks'

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { SubscriptionResult } from '@aragon/connect-types'
-import { App } from '@aragon/connect'
-import { useConnectData } from './hooks'
+import { App, warn } from '@aragon/connect-core'
+import { useConnect } from './use-connect'
 
 export function createAppHook(
   appConnect: Function,
@@ -54,7 +54,7 @@ export function createAppHook(
       }
     }, [app])
 
-    return useConnectData(() => {
+    return useConnect(() => {
       if (appError) {
         throw appError
       }

@@ -26,3 +26,23 @@ export function normalizeFiltersAndCallback<C, F>(
   // None defined
   return [undefined, undefined]
 }
+
+const warned = new Map<string, boolean>()
+
+export function warn(messages: any | any[], once: boolean = true) {
+  if (process.env.NODE_ENV !== 'development') {
+    return
+  }
+  if (!Array.isArray(messages)) {
+    messages = [messages]
+  }
+  if (!once) {
+    console.warn(...messages)
+    return
+  }
+  const key = JSON.stringify(messages)
+  if (!warned.has(key)) {
+    console.warn(...messages)
+    warned.set(key, true)
+  }
+}
