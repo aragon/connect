@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Connect,
-  createAppHook,
-  useApp,
-  useOrganization,
-} from '@aragon/connect-react'
+import { Connect, useConnect } from '@aragon/connect-react'
 import connectVoting, { Voting, Vote } from '@aragon/connect-voting'
 
 // const NETWORK = 1
@@ -15,8 +10,6 @@ const ORG_ADDRESS = '0x7cee20f778a53403d4fc8596e88deb694bc91c98'
 const VOTING_APP_FILTER = '0xf7f9a33ed13b01324884bd87137609251b5f7c88'
 
 const VOTES_PER_PAGE = 5
-
-const useVoting = createAppHook(connectVoting)
 
 export default function App() {
   const [showActions, setShowActions] = useState(false)
@@ -58,7 +51,7 @@ export default function App() {
 }
 
 function Organization() {
-  const [org] = useOrganization()
+  const [org, orgStatus] = useConnect()
   return (
     <section>
       <h1>Organization</h1> <p>{org?.address || 'Loading…'}</p>
@@ -67,7 +60,10 @@ function Organization() {
 }
 
 const VotingApp = React.memo(function VotingApp() {
-  const [voting, { error, loading }] = useApp(VOTING_APP_FILTER)
+  const [voting, { error, loading }] = useConnect((org) =>
+    org.onApp(VOTING_APP_FILTER)
+  )
+
   return (
     <section>
       <h1>Voting App</h1>
@@ -89,21 +85,21 @@ const VotingApp = React.memo(function VotingApp() {
   )
 })
 
-const defaultVotes = []
+const defaultVotes: Vote[] = []
 
 function Votes() {
   const [page, setPage] = useState<number>(0)
-  const [voting, votingStatus] = useApp(VOTING_APP_FILTER)
-  const [votes = defaultVotes, votesStatus] = useVoting<Vote[]>(
-    voting,
-    (app: Voting) => {
-      return app.onVotes({
-        first: VOTES_PER_PAGE,
-        skip: VOTES_PER_PAGE * page,
-      })
-    },
-    [page]
-  )
+
+  const [voting, votingStatus] = useConnect((org) => {
+    return connectVoting(org.onApp(VOTING_APP_FILTER))
+  })
+
+  const [votes = defaultVotes, votesStatus] = useConnect(() => {
+    return voting?.onVotes({
+      first: VOTES_PER_PAGE,
+      skip: VOTES_PER_PAGE * page,
+    })
+  }, [page, voting])
 
   useEffect(() => {
     console.log('VOTES UPDATED', votes, votesStatus)
