@@ -87,13 +87,13 @@ export default class Organization {
   onApp(
     filtersOrCallback?: AppFiltersParam | OnAppCallback,
     callback?: OnAppCallback
-  ): SubscriptionResult<App | null> {
+  ): SubscriptionResult<App> {
     const [filters, _callback] = normalizeFiltersAndCallback<
       OnAppCallback,
       AppFiltersParam
     >(filtersOrCallback, callback)
 
-    return subscription<App | null>(_callback, (callback) =>
+    return subscription<App>(_callback, (callback) =>
       this.connection.orgConnector.onAppForOrg(
         this,
         normalizeAppFilters(filters),
