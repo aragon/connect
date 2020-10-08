@@ -4,10 +4,12 @@ import {
   SubscriptionCallback,
   SubscriptionHandler,
   SubscriptionStart,
+  isSubscriptionStart,
 } from '@aragon/connect-types'
 import { Organization } from '@aragon/connect'
 import { UseConnectCallback, UseConnectResult } from './types'
 import { useConnectContext } from './connect-context'
+import { hash } from './utils'
 
 type Status<T> = {
   error: Error | null
@@ -35,7 +37,7 @@ function statusReducer<T>(
       : { error: action.error, loading: false, result: undefined }
   }
   if (action.type === 'done') {
-    return state.result === action.result
+    return hash(state.result) === hash(action.result)
       ? state
       : { error: null, loading: false, result: action.result }
   }
@@ -46,10 +48,6 @@ const statusInitial = {
   error: null,
   loading: true,
   result: undefined,
-}
-
-function isSubscriptionStart<T>(value: unknown): value is SubscriptionStart<T> {
-  return typeof value === 'function'
 }
 
 export function useConnect<T>(
@@ -66,8 +64,6 @@ export function useConnect<T>(callback?: any, dependencies?: unknown[]): any {
     Reducer<Status<T>, StatusAction<T>>
   >(statusReducer, statusInitial as Status<T>)
 
-  const previousResultJsonRef = useRef<string>('')
-
   if (callback === undefined) {
     callback = ((org) => org) as UseConnectCallback<Organization>
   }
@@ -77,7 +73,6 @@ export function useConnect<T>(callback?: any, dependencies?: unknown[]): any {
     let subscriptionHandler: SubscriptionHandler | null | undefined = null
 
     const update = async () => {
-      // keep the result until the next update
       setStatus({ type: 'loading' })
 
       try {
@@ -100,20 +95,10 @@ export function useConnect<T>(callback?: any, dependencies?: unknown[]): any {
             if (cancelled) {
               return
             }
-
             if (error) {
               setStatus({ type: 'error', error })
-              previousResultJsonRef.current = JSON.stringify(null)
               return
             }
-
-            const resultJson = JSON.stringify(result)
-            if (resultJson === previousResultJsonRef.current) {
-              // no update
-              return
-            }
-
-            previousResultJsonRef.current = resultJson
             setStatus({ type: 'done', result })
           })
 

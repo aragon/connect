@@ -2,11 +2,16 @@ import { useEffect, useRef, useState } from 'react'
 import { SubscriptionResult } from '@aragon/connect-types'
 import { App, warn } from '@aragon/connect-core'
 import { useConnect } from './use-connect'
+import { hash } from './utils'
 
 export function createAppHook(
   appConnect: Function,
   connector?: string | [string, { [key: string]: any } | undefined]
 ) {
+  warn(
+    'createAppHook is going to be deprecated in the next version. ' +
+      'Please use useConnect() and the appConnectors prop on <Connect />.'
+  )
   return function useAppData<T = any>(
     app: App | null,
     callback?: (app: App | any) => T | Promise<T> | SubscriptionResult<T>,
@@ -21,15 +26,15 @@ export function createAppHook(
     const [[connectedApp, appError], setApp] = useState<
       [App | null, Error | null]
     >([null, null])
-    const appJsonRef = useRef<string>('')
+    const appHashRef = useRef<string>('')
 
     useEffect(() => {
-      const appJson = JSON.stringify(app)
+      const appHash = hash(app)
       // Only update the app when it has changed.
-      if (appJson === appJsonRef.current) {
+      if (appHash === appHashRef.current) {
         return
       }
-      appJsonRef.current = appJson
+      appHashRef.current = appHash
 
       // Don’t try to connect if the app doesn’t exist yet
       if (!app) {

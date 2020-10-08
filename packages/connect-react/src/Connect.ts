@@ -9,6 +9,7 @@ import {
 import { Organization, connect } from '@aragon/connect'
 import { ConnectProps, ContextValue } from './types'
 import { ConnectContext } from './connect-context'
+import { hash } from './utils'
 
 type OrgStatus = {
   org: Organization | null
@@ -52,7 +53,6 @@ export function Connect({
   location,
   options,
 }: ConnectProps): JSX.Element {
-  console.log('render connect')
   const [{ org, orgError, orgLoading }, setOrgStatus] = useReducer(
     orgStatusReducer,
     orgStatusInitial
@@ -62,17 +62,13 @@ export function Connect({
 
   const connectorUpdateValue =
     Array.isArray(connector) || typeof connector === 'string'
-      ? JSON.stringify(connector)
+      ? hash(connector)
       : // If the connector is custom instance,
         // it is the responsibility of the provider to memoize it.
         connector
 
-  const optionsUpdateValue = JSON.stringify(options)
-
   const loadOrg = useCallback(() => {
     let cancelled = false
-
-    console.log('load org');
 
     cancelOrgLoading.current?.()
     cancelOrgLoading.current = () => {
@@ -94,7 +90,7 @@ export function Connect({
       }
     }
     update()
-  }, [location, connectorUpdateValue, optionsUpdateValue])
+  }, [location, connectorUpdateValue, hash(options)])
 
   useEffect(loadOrg, [loadOrg])
 

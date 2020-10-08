@@ -2,6 +2,7 @@ import { AppFiltersParam } from '@aragon/connect-types'
 import { App, Organization, Permission, warn } from '@aragon/connect-core'
 import { UseConnectResult } from './types'
 import { useConnect } from './use-connect'
+import { hash } from './utils'
 
 export function useOrganization(): UseConnectResult<Organization | null> {
   warn(
@@ -19,7 +20,7 @@ export function useApp(
       'Please use useConnect() instead.'
   )
   return useConnect<App | null>((org) => org.onApp(appsFilter), [
-    JSON.stringify(appsFilter),
+    hash(appsFilter),
   ])
 }
 
@@ -28,9 +29,7 @@ export function useApps(appsFilter?: AppFiltersParam): UseConnectResult<App[]> {
     'useApps() is going to be deprecated in the next version. ' +
       'Please use useConnect() instead.'
   )
-  return useConnect<App[]>((org) => org.onApps(appsFilter), [
-    JSON.stringify(appsFilter),
-  ])
+  return useConnect<App[]>((org) => org.onApps(appsFilter), [hash(appsFilter)])
 }
 
 export function usePermissions(): UseConnectResult<Permission[]> {
