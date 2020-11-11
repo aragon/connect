@@ -5,6 +5,7 @@ type Vote @entity {
   creator: Bytes!
   metadata: String!
   executed: Boolean!
+  executedAt: BigInt!
   startDate: BigInt!
   snapshotBlock: BigInt!
   supportRequiredPct: BigInt!
@@ -12,19 +13,24 @@ type Vote @entity {
   yea: BigInt!
   nay: BigInt!
   votingPower: BigInt!
-  script: Bytes!
+  script: String!
   voteNum: BigInt!
-  casts: [Cast!]!
+  castVotes: [Cast!] @derivedFrom(field: "vote")
 }
 
 type Cast @entity {
   id: ID!
-  voteId: ID!
-  voteNum: BigInt!
-  voter: Bytes!
+  vote: Vote!
+  voter: Voter!
   supports: Boolean!
-  voterStake: BigInt!
-  vote: Vote! @derivedFrom(field: "casts")
+  stake: BigInt!
+  createdAt: BigInt!
+}
+
+type Voter @entity {
+  id: ID!
+  address: Bytes!
+  castVotes: [Cast!] @derivedFrom(field: "voter")
 }
 
 type AragonInfo @entity {
