@@ -9,7 +9,6 @@ dataSources:
 {{> Organizations.yaml}}
 {{> OrganizationFactories.yaml}}
 {{> OrganizationTemplates.yaml}}
-{{> LegacyOrganizationTemplates.yaml}}
 {{> TokenFactories.yaml}}
 {{> Tokens.yaml}}
 templates:
