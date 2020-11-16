@@ -53,8 +53,11 @@ export function handleExecuteVote(event: ExecuteVoteEvent): void {
   vote.save()
 }
 
-function _getVoteEntity(appAddress: Address, voteNum: BigInt): VoteEntity {
-  let voteEntityId = _getVoteEntityId(appAddress, voteNum)
+function buildVoteEntityId(appAddress: Address, voteNum: BigInt): string {
+  return (
+    'appAddress:' + appAddress.toHexString() + '-vote:' + voteNum.toHexString()
+  )
+}
 
   let vote = VoteEntity.load(voteEntityId)
   if (!vote) {

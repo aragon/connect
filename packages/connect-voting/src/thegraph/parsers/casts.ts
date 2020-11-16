@@ -13,9 +13,11 @@ export function parseCasts(result: QueryResult): Cast[] {
     (cast: any): CastData => {
       return {
         id: cast.id,
-        voteId: cast.voteId,
+        vote: cast.vote,
         voter: cast.voter,
         supports: cast.supports,
+        stake: cast.stake,
+        createAt: cast.createAt,
       }
     }
   )

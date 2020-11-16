@@ -1,4 +1,4 @@
-import { VotingConnectorTheGraph, Vote, Cast } from '../../src'
+import { VotingConnectorTheGraph, Cast } from '../../src'
 
 const VOTING_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby'
@@ -30,7 +30,9 @@ describe('when connecting to a voting app', () => {
     })
 
     test('was done by the correct voter', () => {
-      expect(cast.voter).toBe('0xb02dc25475988ca3f89f3b62cb1ff6b3031417df')
+      expect(cast.voter.address).toBe(
+        '0x00263da8533175f2e2eca5820f1d565e05b1c31c'
+      )
     })
 
     test('shows the correct support', () => {
