@@ -44,7 +44,7 @@ describe('when connecting to a voting app', () => {
       })
 
       test('should have yeas', () => {
-        expect(vote.yea).toBe('3020546281689066542494264')
+        expect(vote.yea).toBe('3014943555192266542494264')
       })
 
       test('has the expected script', () => {

@@ -10,6 +10,7 @@ export interface VoteData {
   creator: string
   metadata: string
   executed: boolean
+  executedAt: string
   startDate: string
   snapshotBlock: string
   supportRequiredPct: string
@@ -22,9 +23,16 @@ export interface VoteData {
 
 export interface CastData {
   id: string
-  voteId: string
-  voter: string
+  vote: string
+  voter: VoterData
   supports: boolean
+  stake: string
+  createAt: string
+}
+
+export interface VoterData {
+  id: string
+  address: string
 }
 
 export interface IVotingConnector {
@@ -36,9 +44,9 @@ export interface IVotingConnector {
     skip: number,
     callback: SubscriptionCallback<Vote[]>
   ): SubscriptionHandler
-  castsForVote(voteId: string, first: number, skip: number): Promise<Cast[]>
+  castsForVote(vote: string, first: number, skip: number): Promise<Cast[]>
   onCastsForVote(
-    voteId: string,
+    vote: string,
     first: number,
     skip: number,
     callback: SubscriptionCallback<Cast[]>

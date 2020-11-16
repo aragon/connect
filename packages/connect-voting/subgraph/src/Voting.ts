@@ -71,10 +71,7 @@ export function handleExecuteVote(event: ExecuteVoteEvent): void {
 
 function buildVoteEntityId(appAddress: Address, voteNum: BigInt): string {
   return (
-    'appAddress:' +
-    appAddress.toHexString() +
-    '-voteId:' +
-    voteNum.toHexString()
+    'appAddress:' + appAddress.toHexString() + '-vote:' + voteNum.toHexString()
   )
 }
 

@@ -12,7 +12,6 @@ export function parseVotes(result: QueryResult, connector: any): Vote[] {
 
   const datas = votes.map(
     (vote: any): VoteData => {
-      // TODO: ensure vote is safe
       return vote
     }
   )
