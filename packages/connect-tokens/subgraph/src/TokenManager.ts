@@ -12,7 +12,9 @@ export function getTokenManagerId(proxyAddress: Address): string {
   return 'proxyAddress-' + proxyAddress.toHexString()
 }
 
-export function getTokenManagerEntity(proxyAddress: Address): TokenManagerEntity {
+export function getTokenManagerEntity(
+  proxyAddress: Address
+): TokenManagerEntity {
   let tokenManagerId = getTokenManagerId(proxyAddress)
 
   let tokenManagerEntity = TokenManagerEntity.load(tokenManagerId)
@@ -24,10 +26,21 @@ export function getTokenManagerEntity(proxyAddress: Address): TokenManagerEntity
     tokenManagerEntity.address = proxyAddress
     tokenManagerEntity.orgAddress = tokenManagerContract.kernel()
 
+    let tokenAddress: Address
     // See if the TokenManager is already initialized with a token.
     // If it's not, remember it so that we can check later.
-    let tokenAddress = tokenManagerContract.token()
-    if (tokenAddress.toHexString() != '0x0000000000000000000000000000000000000000') {
+    let callResult = tokenManagerContract.try_token()
+    if (callResult.reverted) {
+      tokenAddress = Address.fromString(
+        '0x0000000000000000000000000000000000000000'
+      )
+    } else {
+      tokenAddress = callResult.value
+    }
+
+    if (
+      tokenAddress.toHexString() != '0x0000000000000000000000000000000000000000'
+    ) {
       aragon.processToken(tokenAddress)
     } else {
       _registerOrphanTokenManager(proxyAddress)
@@ -49,8 +62,21 @@ export function processOrphanTokenManagers(): void {
 
       let tokenManagerContract = TokenManagerContract.bind(proxyAddress)
 
-      let tokenAddress = tokenManagerContract.token()
-      if (tokenAddress.toHexString() != '0x0000000000000000000000000000000000000000') {
+      let tokenAddress: Address
+
+      let callResult = tokenManagerContract.try_token()
+      if (callResult.reverted) {
+        tokenAddress = Address.fromString(
+          '0x0000000000000000000000000000000000000000'
+        )
+      } else {
+        tokenAddress = callResult.value
+      }
+
+      if (
+        tokenAddress.toHexString() !=
+        '0x0000000000000000000000000000000000000000'
+      ) {
         _unregisterOrphanTokenManager(proxyAddress)
 
         aragon.processToken(tokenAddress)
