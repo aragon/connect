@@ -7,7 +7,6 @@ const RESET = '\x1b[0m'
 const env = {
   network: parseInt(process.env.CHAIN_ID ?? '1', 10),
   location: process.env.ORGANIZATION ?? 'governance.aragonproject.eth',
-  // location: process.env.ORGANIZATION ?? 'budget.aragonid.eth',
 }
 
 async function main() {
