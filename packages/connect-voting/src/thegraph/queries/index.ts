@@ -26,9 +26,9 @@ export const ALL_VOTES = (type: string) => gql`
 
 export const CASTS_FOR_VOTE = (type: string) => gql`
   ${type} Casts($vote: ID!, $first: Int!, $skip: Int!) {
-    casts(first: $first, skip: $skip) {
+    casts(where: { vote: $vote }, first: $first, skip: $skip) {
       id
-      vote(where: { id: $vote }) {
+      vote {
         id
         appAddress
         orgAddress
