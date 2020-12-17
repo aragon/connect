@@ -92,7 +92,7 @@ export function handleSetApp(event: SetAppEvent): void {
 
 export function loadOrCreateOrg(
   orgAddress: Address,
-  createAt: BigInt
+  blockTime: BigInt
 ): OrganizationEntity {
   const orgId = orgAddress.toHexString()
   let org = OrganizationEntity.load(orgId)
@@ -106,7 +106,7 @@ export function loadOrCreateOrg(
     org.acl = kernel.acl()
     org.apps = []
     org.permissions = []
-    org.createdAt = createAt
+    org.createdAt = blockTime
   }
   return org!
 }
