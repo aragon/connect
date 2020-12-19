@@ -18,7 +18,7 @@ export function parseCasts(result: QueryResult): Cast[] {
         voter: cast.voter,
         supports: cast.supports,
         stake: cast.stake,
-        createAt: cast.createAt,
+        createdAt: cast.createdAt,
       }
     }
   )
