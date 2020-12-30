@@ -3,11 +3,11 @@ import { QueryResult } from '@aragon/connect-thegraph'
 import Signer from '../../models/Signer'
 import Signature from '../../models/Signature'
 
-export function parseSigner(result: QueryResult, connector: any): Signer {
+export function parseSigner(result: QueryResult, connector: any): Signer | null {
   const signer = result.data.signer
 
   if (!signer) {
-    throw new Error('Unable to parse signer.')
+    return null
   }
 
   return new Signer(

@@ -20,6 +20,7 @@ function buildCollateralRequirement(
     id,
     disputableAppId: disputable.id,
     tokenId: token.id,
+    tokenSymbol: token.symbol,
     tokenDecimals: token.decimals,
     actionAmount,
     challengeAmount,
@@ -33,12 +34,11 @@ export function parseCollateralRequirement(
   result: QueryResult,
   connector: any
 ): CollateralRequirement {
-  const disputable = result.data.disputable
+  const collateralRequirement = result.data.collateralRequirement
 
-  if (!disputable || !disputable.currentCollateralRequirement) {
+  if (!collateralRequirement) {
     throw new Error('Unable to parse collateral requirement.')
   }
 
-  const { currentCollateralRequirement } = disputable
-  return buildCollateralRequirement(currentCollateralRequirement, connector)
+  return buildCollateralRequirement(collateralRequirement, connector)
 }

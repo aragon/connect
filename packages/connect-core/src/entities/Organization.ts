@@ -5,17 +5,20 @@ import {
   SubscriptionCallback,
   SubscriptionResult,
 } from '@aragon/connect-types'
-import { ConnectionContext } from '../types'
+
+import ForwardingPathDescription, {
+  decodeForwardingPath,
+  describePath,
+  describeTransaction,
+} from '../utils/descriptor/index'
+import { ConnectionContext, PostProcessDescription } from '../types'
 import { ErrorInvalidLocation } from '../errors'
-import {
-  isAddress,
-  normalizeFiltersAndCallback,
-  subscription,
-  toArrayEntry,
-} from '../utils'
-import TransactionIntent from '../transactions/TransactionIntent'
+import { isAddress } from '../utils/address'
+import { normalizeFiltersAndCallback, toArrayEntry } from '../utils/misc'
+import { subscription } from '../utils/subscriptions'
 import App from './App'
 import Permission from './Permission'
+import Transaction from './Transaction'
 
 // TODO
 // Organization#addApp(repoName, options)
@@ -77,6 +80,14 @@ export default class Organization {
     return this.connection
   }
 
+  //////// ACCOUNT /////////
+
+  actAss(sender: Address): void {
+    this.connection.actAs = sender
+  }
+
+  ///////// APPS ///////////
+
   async app(filters?: AppFiltersParam): Promise<App> {
     return this.connection.orgConnector.appForOrg(
       this,
@@ -127,6 +138,16 @@ export default class Organization {
     )
   }
 
+  async acl(): Promise<App> {
+    return this.app('acl')
+  }
+
+  async kernel(): Promise<App> {
+    return this.app('kernel')
+  }
+
+  ///////// PERMISSIONS ///////////
+
   async permissions(): Promise<Permission[]> {
     return this.connection.orgConnector.permissionsForOrg(this)
   }
@@ -139,14 +160,28 @@ export default class Organization {
     )
   }
 
-  appIntent(
-    appAddress: Address,
-    functionName: string,
-    functionArgs: any[]
-  ): TransactionIntent {
-    return new TransactionIntent(
-      { contractAddress: appAddress, functionName, functionArgs },
-      this,
+  //////// DESCRIPTIONS /////////
+
+  // Return a description of the forwarding path encoded on the evm script
+  async describeScript(script: string): Promise<ForwardingPathDescription> {
+    const installedApps = await this.apps()
+
+    const describedSteps = await describePath(
+      decodeForwardingPath(script),
+      installedApps,
+      this.connection.ethersProvider
+    )
+
+    return new ForwardingPathDescription(describedSteps, installedApps)
+  }
+
+  // Try to describe a single transaction using Radspec on the context of the organization
+  async describeTransaction(
+    transaction: Transaction
+  ): Promise<PostProcessDescription> {
+    return describeTransaction(
+      transaction,
+      await this.apps(),
       this.connection.ethersProvider
     )
   }

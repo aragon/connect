@@ -1,20 +1,18 @@
 import { addressesEqual, ANY_ENTITY } from '../address'
 import { getKernelNamespace } from '../kernel'
+import {
+  DescriptionAnnotation,
+  PostProcessDescription,
+  AragonArtifactRole,
+} from '../../types'
 import App from '../../entities/App'
-import Role from '../../entities/Role'
-import { Annotation } from '../../transactions/TransactionRequest'
-
-export interface PostProcessDescription {
-  description: string
-  annotatedDescription?: Annotation[]
-}
 
 interface CompiledTokens {
   description: string[]
-  annotatedDescription: Annotation[]
+  annotatedDescription: DescriptionAnnotation[]
 }
 
-type ProcessToken = [string, string, Annotation]
+type ProcessToken = [string, string, DescriptionAnnotation]
 
 /**
  * Look for known addresses and roles in a radspec description and substitute them with a human string
@@ -24,7 +22,7 @@ type ProcessToken = [string, string, Annotation]
  */
 export async function postprocessRadspecDescription(
   description: string,
-  apps: App[]
+  installedApps: App[]
 ): Promise<PostProcessDescription> {
   const addressRegexStr = '0x[a-fA-F0-9]{40}'
   const addressRegex = new RegExp(`^${addressRegexStr}$`)
@@ -43,11 +41,10 @@ export async function postprocessRadspecDescription(
     return { description }
   }
 
-  const roles: Role[] = []
-  for (const app of apps) {
-    const appRoles = await app.roles()
-    roles.concat(appRoles)
-  }
+  const roles = installedApps.reduce(
+    (roles, app) => roles.concat(app.artifact.roles),
+    [] as AragonArtifactRole[]
+  )
 
   const annotateAddress = (input: string): ProcessToken => {
     if (addressesEqual(input, ANY_ENTITY)) {
@@ -58,7 +55,9 @@ export async function postprocessRadspecDescription(
       ]
     }
 
-    const app = apps.find(({ address }) => addressesEqual(address, input))
+    const app = installedApps.find(({ address }) =>
+      addressesEqual(address, input)
+    )
     if (app) {
       const replacement = `${app.name}${app.appId ? ` (${app.appId})` : ''}`
       return [input, `“${replacement}”`, { type: 'app', value: app }]
@@ -68,17 +67,21 @@ export async function postprocessRadspecDescription(
   }
 
   const annotateBytes32 = (input: string): ProcessToken => {
-    const role = roles.find(({ hash }) => hash === input)
+    const role = roles.find(({ bytes }) => bytes === input)
 
     if (role && role.name) {
       return [input, `“${role.name}”`, { type: 'role', value: role }]
     }
 
-    const app = apps.find(({ appId }) => appId === input)
+    const app = installedApps.find(({ appId }) => appId === input)
 
     if (app) {
       // return the entire app as it contains APM package details
-      return [input, `“${app.appName}”`, { type: 'apmPackage', value: app }]
+      return [
+        input,
+        `“${app.artifact.appName}”`,
+        { type: 'apmPackage', value: app },
+      ]
     }
 
     const namespace = getKernelNamespace(input)
@@ -115,7 +118,7 @@ export async function postprocessRadspecDescription(
       return acc
     },
     {
-      annotatedDescription: [] as Annotation[],
+      annotatedDescription: [] as DescriptionAnnotation[],
       description: [] as string[],
     }
   )

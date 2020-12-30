@@ -1,14 +1,14 @@
 {
   "name": "list-votes-react",
   "private": true,
-  "version": "0.7.0",
+  "version": "0.8.0-alpha.6",
   "scripts": {
     "start": "snowpack dev",
     "build": "snowpack build"
   },
   "dependencies": {
-    "@aragon/connect-react": "^0.7.0",
-    "@aragon/connect-voting": "^0.7.0",
+    "@aragon/connect-react": "^0.8.0-alpha.6",
+    "@aragon/connect-voting": "^0.8.0-alpha.6",
     "@emotion/core": "^10.0.35",
     "ethers": "^5.0.16",
     "react": "^16.13.1",

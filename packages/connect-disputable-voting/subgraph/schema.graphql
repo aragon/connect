@@ -17,7 +17,9 @@ type DisputableVoting @entity {
   id: ID!
   dao: Bytes!
   token: ERC20
+  agreement: Bytes
   setting: Setting
+  collateralRequirement: CollateralRequirement
   votes: [Vote!] @derivedFrom(field: "voting")
   voters: [Voter!] @derivedFrom(field: "voting")
 }
@@ -51,8 +53,9 @@ type Vote @entity {
   isAccepted: Boolean!
   submitterArbitratorFee: ArbitratorFee
   challengerArbitratorFee: ArbitratorFee
+  collateralRequirement: CollateralRequirement!
+  settlementOffer: BigInt
   castVotes: [CastVote!] @derivedFrom(field: "vote")
-  collateralRequirement: CollateralRequirement! @derivedFrom(field: "vote")
 }
 
 type CastVote @entity {
@@ -89,7 +92,8 @@ type Setting @entity {
 
 type CollateralRequirement @entity {
   id: ID!
-  vote: Vote!
+  voting: DisputableVoting!
+  collateralRequirementId: BigInt!
   token: ERC20!
   actionAmount: BigInt!
   challengeAmount: BigInt!

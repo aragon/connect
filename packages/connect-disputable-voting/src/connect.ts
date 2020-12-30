@@ -30,8 +30,8 @@ export default createAppConnector<DisputableVoting, Config>(
       pollInterval,
       subgraphUrl,
       verbose,
-    })
+    }, app.provider)
 
-    return new DisputableVoting(connectorTheGraph, app.address)
+    return new DisputableVoting(connectorTheGraph, app)
   }
 )

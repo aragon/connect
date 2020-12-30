@@ -2,8 +2,8 @@ import { AgreementData } from '../../types'
 import { AgreementConnectorTheGraph } from '../../../src'
 
 const AGREEMENT_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-agreement-rinkeby-staging'
-const AGREEMENT_APP_ADDRESS = '0x9c92dbd8a8e5903e2741202321073091109f26be'
+  'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-agreement-rinkeby-staging'
+const AGREEMENT_APP_ADDRESS = '0xe4575381f0c96f58bd93be6978cc0d9638d874a2'
 
 describe('Agreement', () => {
   let connector: AgreementConnectorTheGraph
@@ -27,9 +27,9 @@ describe('Agreement', () => {
 
     test('returns the agreement data', () => {
       expect(agreement.id).toBe(AGREEMENT_APP_ADDRESS)
-      expect(agreement.dao).toBe('0x51a41e43af0774565f0be5cebc50c693cc19e4ee')
+      expect(agreement.dao).toBe('0xe990dd6a81c0fdaad6b5cef44676b383350ad94e')
       expect(agreement.stakingFactory).toBe(
-        '0x07429001eea415e967c57b8d43484233d57f8b0b'
+        '0x6a30c2de7359db110b6322b41038674ae1d276fb'
       )
       expect(agreement.currentVersionId).toBe(
         `${AGREEMENT_APP_ADDRESS}-version-1`

@@ -101,20 +101,19 @@ export const GET_SIGNATURES = (type: string) => gql`
 `
 
 export const GET_COLLATERAL_REQUIREMENT = (type: string) => gql`
-  ${type} CollateralRequirement($disputableAppId: String!) {
-    disputable(id: $disputableAppId) {
-      currentCollateralRequirement {
+  ${type} CollateralRequirement($collateralRequirementId: String!) {
+    collateralRequirement(id: $collateralRequirementId) {
+      id
+      actionAmount
+      challengeAmount
+      challengeDuration
+      disputable {
         id
-        actionAmount
-        challengeAmount
-        challengeDuration
-        disputable {
-          id
-        }
-        token {
-          id
-          decimals
-        }
+      }
+      token {
+        id
+        symbol
+        decimals
       }
     }
   }
@@ -127,6 +126,7 @@ export const GET_STAKING = (type: string) => gql`
       user
       token {
         id
+        symbol
         decimals
       }
       available
@@ -138,16 +138,17 @@ export const GET_STAKING = (type: string) => gql`
 `
 
 export const GET_STAKING_MOVEMENTS = (type: string) => gql`
-  ${type} StakingMovements($stakingId: String!, $agreements: [String]!, $first: Int!, $skip: Int!) {
+  ${type} StakingMovements($stakingId: String!, $agreementId: String!, $first: Int!, $skip: Int!) {
     stakingMovements(where: {
       staking: $stakingId,
-      agreementId_in: $agreements,
+      agreement: $agreementId,
     }, orderBy: createdAt, orderDirection: asc, first: $first, skip: $skip) {
       id
       staking {
         id
         token {
           id
+          symbol
           decimals
         }
       }
@@ -156,6 +157,10 @@ export const GET_STAKING_MOVEMENTS = (type: string) => gql`
       }
       action {
         id
+        disputableActionId
+        disputable {
+          address
+        }
       }
       amount
       actionState
@@ -182,7 +187,6 @@ export const GET_ACTION = (type: string) => gql`
         id
       }
       disputableActionId
-      script
       context
       createdAt
     }

@@ -35,13 +35,14 @@ export interface DisputableAppData {
   address: string
   agreementId: string
   activated: boolean
-  collateralRequirementId: string
+  currentCollateralRequirementId: string
 }
 
 export interface CollateralRequirementData {
   id: string
   disputableAppId: string
   tokenId: string
+  tokenSymbol: string
   tokenDecimals: string
   actionAmount: string
   challengeAmount: string
@@ -76,7 +77,6 @@ export interface ActionData {
   collateralRequirementId: string
   versionId: string
   context: string
-  script: string
   createdAt: string
 }
 
@@ -84,6 +84,7 @@ export interface StakingData {
   id: string
   user: string
   tokenId: string
+  tokenSymbol: string
   tokenDecimals: string
   available: string
   locked: string
@@ -94,11 +95,14 @@ export interface StakingData {
 export interface StakingMovementData {
   id: string
   tokenId: string
+  tokenSymbol: string
   tokenDecimals: string
   stakingId: string
   agreementId: string
   amount: string
   actionId: string
+  disputableAddress: string
+  disputableActionId: string
   actionState: string
   collateralState: string
   createdAt: string
@@ -139,10 +143,10 @@ export interface IAgreementConnector {
     skip: number,
     callback: SubscriptionCallback<DisputableApp[]>
   ): SubscriptionHandler
-  signer(signerId: string): Promise<Signer>
+  signer(signerId: string): Promise<Signer | null>
   onSigner(
     signerId: string,
-    callback: SubscriptionCallback<Signer>
+    callback: SubscriptionCallback<Signer | null>
   ): SubscriptionHandler
   signatures(
     signerId: string,
@@ -155,9 +159,9 @@ export interface IAgreementConnector {
     skip: number,
     callback: SubscriptionCallback<Signature[]>
   ): SubscriptionHandler
-  collateralRequirement(disputableAppId: string): Promise<CollateralRequirement>
+  collateralRequirement(collateralRequirementId: string): Promise<CollateralRequirement>
   onCollateralRequirement(
-    disputableAppId: string,
+    collateralRequirementId: string,
     callback: SubscriptionCallback<CollateralRequirement>
   ): SubscriptionHandler
   action(actionId: string): Promise<Action | null>
@@ -165,10 +169,10 @@ export interface IAgreementConnector {
     actionId: string,
     callback: SubscriptionCallback<Action | null>
   ): SubscriptionHandler
-  staking(stakingId: string): Promise<Staking>
+  staking(stakingId: string): Promise<Staking | null>
   onStaking(
     stakingId: string,
-    callback: SubscriptionCallback<Staking>
+    callback: SubscriptionCallback<Staking | null>
   ): SubscriptionHandler
   stakingMovements(
     stakingId: string,

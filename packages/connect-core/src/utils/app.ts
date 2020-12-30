@@ -1,44 +1,63 @@
 import { utils as ethersUtils } from 'ethers'
-import { AppIntent } from '../types'
+
+import { Abi, AppMethod } from '../types'
 import { ErrorInvalid } from '../errors'
 import App from '../entities/App'
-import { TransactionRequestData } from '../transactions/TransactionRequest'
 
 export const apmAppId = (appName: string): string =>
   ethersUtils.namehash(`${appName}.aragonpm.eth`)
 
-// Is the given method a full signature, e.g. 'foo(arg1,arg2,...)'
-export const isFullMethodSignature = (methodSignature: string): boolean => {
-  return (
-    Boolean(methodSignature) &&
-    methodSignature.includes('(') &&
-    methodSignature.includes(')')
-  )
-}
+function signatureFromAbi(signature: string, abi: Abi): string {
+  const matches = signature.match(/(.*)\((.*)\)/m)
 
-export function validateMethod(
-  destination: string,
-  methodSignature: string,
-  destinationApp: App
-): AppIntent {
-  const methods = destinationApp.intents
-  if (!methods) {
-    throw new ErrorInvalid(
-      `No functions specified in artifact for ${destination}`
-    )
+  if (!matches) {
+    throw new ErrorInvalid(`Abi has no method with signature: ${signature}`)
   }
 
-  // Find the relevant method information
-  const method = methods.find((method) =>
-    isFullMethodSignature(methodSignature)
-      ? method.sig === methodSignature
-      : // If the full signature isn't given, just select the first overload declared
-        method.sig.split('(')[0] === methodSignature
-  )
-  if (!method) {
-    throw new ErrorInvalid(
-      `No method named ${methodSignature} on ${destination}`
+  const name = matches[1]
+  const params = matches[2].split(',')
+
+  // If a single ABI node is found with function name and same number of parameters,
+  // generate the signature from ABI. Otherwise, use the one from artifact.
+  const functionAbis = abi
+    .filter((node) => node.name === name)
+    .filter((node) => node.inputs.length === params.length)
+
+  if (functionAbis.length === 1) {
+    return `${functionAbis[0].name}(${functionAbis[0].inputs
+      .map((input) => input.type)
+      .join(',')})`
+  }
+
+  return signature
+}
+
+function findAppMethod(
+  app: App,
+  methodTestFn: any,
+  { allowDeprecated = true } = {}
+): AppMethod | undefined {
+  const { deprecatedFunctions, functions } = app.artifact || {}
+
+  let method
+  // First try to find the method in the current functions
+  if (Array.isArray(functions)) {
+    method = functions
+      .map((f) => {
+        return { ...f, sig: signatureFromAbi(f.sig, app.abi) }
+      })
+      .find(methodTestFn)
+  }
+
+  if (!method && allowDeprecated) {
+    // The current functions didn't have it; try with each deprecated version's functions
+    const deprecatedFunctionsFromVersions = Object.values(
+      deprecatedFunctions || {}
     )
+    if (deprecatedFunctionsFromVersions.every(Array.isArray)) {
+      // Flatten all the deprecated functions and find the method
+      method = deprecatedFunctionsFromVersions.flat().find(methodTestFn)
+    }
   }
 
   return method
@@ -50,43 +69,56 @@ export function validateMethod(
  *
  * @param  {Object} app App artifact
  * @param  {Object} data Data component of a transaction to app
+ * @param  {Object} options Options
+ * @param  {boolean} [options.allowDeprecated] Allow deprecated functions to be returned. Defaults to true.
  * @return {Object|void} Method with radspec notice and function signature, or undefined if none was found
  */
-export function findAppMethodFromIntent(
+export function findAppMethodFromData(
   app: App,
-  transaction: TransactionRequestData
-): AppIntent | undefined {
-  const methodId = transaction.data.substring(0, 10)
+  data: string,
+  { allowDeprecated = true } = {}
+): AppMethod | undefined {
+  const methodId = data.substring(0, 10)
+  return findAppMethod(
+    app,
+    (method: AppMethod) =>
+      ethersUtils.id(method.sig).substring(0, 10) === methodId,
+    { allowDeprecated }
+  )
+}
 
-  const checkMethodSignature = (siganture: string): boolean => {
-    // Hash signature with Ethereum Identity and silce bytes
-    const sigHash = ethersUtils.hexDataSlice(ethersUtils.id(siganture), 0, 4)
-    return sigHash === methodId
-  }
+/**
+ * Find the method descriptor corresponding to an app's method signature.
+ *
+ * @param  {Object} app App
+ * @param  {string} methodSignature Method signature to be called
+ * @param  {Object} options Options
+ * @param  {boolean} [options.allowDeprecated] Allow deprecated functions to be returned. Defaults to true.
+ * @return {Object|void} Method with radspec notice and function signature, or undefined if none was found
+ */
+export function findAppMethodFromSignature(
+  app: App,
+  methodSignature: string,
+  { allowDeprecated = true } = {}
+): AppMethod | undefined {
+  // Is the given method a full signature, e.g. 'foo(arg1,arg2,...)'
+  const fullMethodSignature =
+    Boolean(methodSignature) &&
+    methodSignature.includes('(') &&
+    methodSignature.includes(')')
 
-  const { deprecatedIntents, intents } = app || {}
+  return findAppMethod(
+    app,
+    (method: AppMethod) => {
+      // Note that fallback functions have the signature 'fallback' in an app's artifact.json
+      if (fullMethodSignature) {
+        return method.sig === methodSignature
+      }
 
-  let method
-  // First try to find the method in the current functions
-  if (Array.isArray(intents)) {
-    method = intents.find((method) => checkMethodSignature(method.sig))
-  }
-
-  if (!method) {
-    // The current functions didn't have it; try with each deprecated version's functions
-    const deprecatedFunctionsFromVersions = Object.values(
-      deprecatedIntents || {}
-    )
-    if (deprecatedFunctionsFromVersions.every(Array.isArray)) {
-      // Flatten all the deprecated functions
-      const allDeprecatedFunctions = ([] as AppIntent[]).concat(
-        ...deprecatedFunctionsFromVersions
-      )
-      method = allDeprecatedFunctions.find((method) =>
-        checkMethodSignature(method.sig)
-      )
-    }
-  }
-
-  return method
+      // If full signature isn't given, just match against the method names
+      const methodName = method.sig.split('(')[0]
+      return methodName === methodSignature
+    },
+    { allowDeprecated }
+  )
 }

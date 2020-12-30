@@ -11,6 +11,7 @@ export default class ArbitratorFee {
   readonly id: string
   readonly voteId: string
   readonly tokenId: string
+  readonly tokenSymbol: string
   readonly tokenDecimals: string
   readonly amount: string
 
@@ -23,6 +24,7 @@ export default class ArbitratorFee {
     this.id = data.id
     this.voteId = data.voteId
     this.tokenId = data.tokenId
+    this.tokenSymbol = data.tokenSymbol
     this.tokenDecimals = data.tokenDecimals
     this.amount = data.amount
   }
