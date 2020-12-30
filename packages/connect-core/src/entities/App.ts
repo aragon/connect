@@ -9,9 +9,8 @@ import {
   ConnectionContext,
   Metadata,
 } from '../types'
-import { resolveManifest, resolveArtifact } from '../utils/metadata'
+import { resolveArtifact, resolveManifest } from '../utils/metadata'
 import IOrganizationConnector from '../connections/IOrganizationConnector'
-// import IAppConnected from '../connections/IAppConnected'
 
 // TODO:
 // [ ] (ipfs) contentUrl 	String 	The HTTP URL of the app content. Uses the IPFS HTTP provider. E.g. http://gateway.ipfs.io/ipfs/QmdLEDDfi…/ (ContentUri passing through the resolver)
@@ -19,13 +18,13 @@ import IOrganizationConnector from '../connections/IOrganizationConnector'
 export interface AppData {
   address: string
   appId: string
-  artifact?: string | null
+  artifact?: string
   codeAddress: string
   contentUri?: string
   isForwarder?: boolean
   isUpgradeable?: boolean
   kernelAddress: string
-  manifest?: string | null
+  manifest?: string
   name?: string
   registry?: string
   registryAddress: string
@@ -67,10 +66,9 @@ export default class App {
   }
 
   static async create(data: AppData, organization: Organization): Promise<App> {
-    const artifact = await resolveArtifact(data)
-    const manifest = await resolveManifest(data)
-    const metadata: Metadata = [artifact, manifest]
-    return new App(data, metadata, organization)
+    const artifact = await resolveArtifact(organization.connection.ipfs, data)
+    const manifest = await resolveManifest(organization.connection.ipfs, data)
+    return new App(data, [artifact, manifest], organization)
   }
 
   private orgConnector(): IOrganizationConnector {
