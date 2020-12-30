@@ -12,10 +12,13 @@ const env = {
 async function main() {
   const org = await connect(env.location, 'thegraph', { network: env.network })
   const voting = await connectVoting(org.app('voting'))
-  const votes = await voting.votes()
+  const votes = await voting.votes({ first: 100 })
+  const votesWithCasts = await Promise.all(
+    votes.map(async (vote) => ({ ...vote, casts: await vote.casts() }))
+  )
 
   printOrganization(org)
-  printVotes(votes)
+  printVotes(votesWithCasts)
 }
 
 function printOrganization(organization: any) {
@@ -37,10 +40,10 @@ function printVotes(votes: any) {
 }
 
 function formatVote(vote: any): string {
-  let str = vote.metadata
-  str = str.replace(/\n/g, ' ')
-  str = str.length > 60 ? str.slice(0, 60) + '…' : str
-  return str || '[Action]'
+  let label = vote.metadata
+  label = label.replace(/\n/g, ' ')
+  label = label.length > 60 ? label.slice(0, 60) + '…' : label
+  return `(${vote.casts.length} casts) ${label || '[Action]'}`
 }
 
 main()

@@ -1,8 +1,8 @@
-import { VotingConnectorTheGraph, Vote, Cast } from '../../src'
+import { VotingConnectorTheGraph, Cast } from '../../src'
 
 const VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby'
-const VOTING_APP_ADDRESS = '0xc73e86aab9d232495399d62fc80a36ae52952b81'
+  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby-staging'
+const VOTING_APP_ADDRESS = '0x37187b0f2089b028482809308e776f92eeb7334e'
 
 describe('when connecting to a voting app', () => {
   let connector: VotingConnectorTheGraph
@@ -23,14 +23,16 @@ describe('when connecting to a voting app', () => {
     beforeAll(async () => {
       const votes = await connector.votesForApp(VOTING_APP_ADDRESS, 1000, 0)
 
-      const vote = votes[0]
+      const vote = votes[1]
 
       const casts = await vote.casts()
       cast = casts[0]
     })
 
     test('was done by the correct voter', () => {
-      expect(cast.voter).toBe('0xb02dc25475988ca3f89f3b62cb1ff6b3031417df')
+      expect(cast.voter.address).toBe(
+        '0x5523f2fc0889a6d46ae686bcd8daa9658cf56496'
+      )
     })
 
     test('shows the correct support', () => {

@@ -1,50 +1,47 @@
+import { Address } from '@graphprotocol/graph-ts'
+
 // Import event types from the contract ABI
 import { DeployDAO as DeployDAOEvent } from '../../generated/DaoFactory/DAOFactory'
 
 // Import entity types from the schema
-import {
-  OrgFactory as FactoryEntity,
-  Organization as OrganizationEntity,
-} from '../../generated/schema'
+import { OrgFactory as FactoryEntity } from '../../generated/schema'
 
 // Import templates types
 import { Kernel as OrganizationTemplate } from '../../generated/templates'
-import { Kernel as KernelContract } from '../../generated/templates/Kernel/Kernel'
+
+import { loadOrCreateOrg } from './organization'
+
+/* eslint-disable @typescript-eslint/no-use-before-define */
 
 export function handleDeployDAO(event: DeployDAOEvent): void {
-  let factory = FactoryEntity.load('1')
   const factoryAddress = event.address
+  const factory = loadOrCreateOrgFactory(factoryAddress)
 
-  // if no factory yet, set up empty
-  if (factory == null) {
-    factory = new FactoryEntity('1')
-    factory.address = factoryAddress
-    factory.orgCount = 0
-    factory.organizations = []
-  }
-  factory.orgCount = factory.orgCount + 1
-
-  const orgId = event.params.dao.toHexString()
   const orgAddress = event.params.dao
-
-  const kernel = KernelContract.bind(orgAddress)
-
-  // create new org
-  const org = new OrganizationEntity(orgId)
-  org.address = orgAddress
-  org.recoveryVault = kernel.getRecoveryVault()
-  org.acl = kernel.acl()
-  org.apps = []
-  org.permissions = []
+  const org = loadOrCreateOrg(orgAddress, event.block.timestamp)
 
   // add the org to the factory
   const currentOrganizations = factory.organizations
   currentOrganizations.push(org.id)
   factory.organizations = currentOrganizations
 
+  factory.orgCount = factory.orgCount + 1
+
   // save to the store
   factory.save()
   org.save()
 
   OrganizationTemplate.create(orgAddress)
+}
+
+function loadOrCreateOrgFactory(factoryAddress: Address): FactoryEntity {
+  let factory = FactoryEntity.load('1')
+  // if no factory yet, set up empty
+  if (factory === null) {
+    factory = new FactoryEntity('1')
+    factory.address = factoryAddress
+    factory.orgCount = 0
+    factory.organizations = []
+  }
+  return factory!
 }

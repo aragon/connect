@@ -15,7 +15,7 @@ type Registry @entity {
   node: Bytes
   repoCount: Int!
   repos: [Repo!]!
-  factory: RegistryFactory @derivedFrom(field: "registries")
+  factory: RegistryFactory! @derivedFrom(field: "registries")
 }
 
 type Repo @entity {
@@ -65,13 +65,14 @@ type Organization @entity {
   "Kernel address"
   id: ID!
   address: Bytes!
+  createdAt: BigInt!
   "Acl address"
   acl: Bytes!
   "Address of the recovery Vault instance"
   recoveryVault: Bytes!
   apps: [App!]!
   permissions: [Permission!]!
-  factory: OrgFactory @derivedFrom(field: "organizations")
+  factory: OrgFactory! @derivedFrom(field: "organizations")
 }
 
 type App @entity {
