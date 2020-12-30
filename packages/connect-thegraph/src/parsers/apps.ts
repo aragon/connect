@@ -1,4 +1,10 @@
-import { App, AppData, Organization } from '@aragon/connect-core'
+import {
+  App,
+  AppData,
+  ErrorNotFound,
+  ErrorUnexpectedResult,
+  Organization,
+} from '@aragon/connect-core'
 import { QueryResult } from '../types'
 
 async function _parseApp(app: any, organization: Organization): Promise<App> {
@@ -28,8 +34,12 @@ export async function parseApp(
 ): Promise<App> {
   const app = result?.data?.app
 
+  if (app === null) {
+    throw new ErrorNotFound('No app found.')
+  }
+
   if (!app) {
-    throw new Error('Unable to parse app.')
+    throw new ErrorUnexpectedResult('Unable to parse app.')
   }
 
   return _parseApp(app, organization)
@@ -42,12 +52,8 @@ export async function parseApps(
   const data = result?.data
   const apps = data?.organization?.apps
 
-  if (data?.organization === null || apps?.length === 0) {
-    throw new Error('No apps found with the current filters.')
-  }
-
-  if (!apps) {
-    throw new Error('Unable to parse apps.')
+  if (!apps || data?.organization === null) {
+    throw new ErrorUnexpectedResult('Unable to parse apps.')
   }
 
   return Promise.all(

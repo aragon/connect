@@ -1,6 +1,7 @@
 export * from '@aragon/connect-core'
 export * from '@aragon/connect-ethereum'
 export * from '@aragon/connect-thegraph'
+export * from './types'
 export * from './connect'
 export { default as connect } from './connect'
 export { default } from './connect'

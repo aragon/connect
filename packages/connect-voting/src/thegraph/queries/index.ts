@@ -11,6 +11,7 @@ export const ALL_VOTES = (type: string) => gql`
       creator
       metadata
       executed
+      executedAt
       startDate
       snapshotBlock
       supportRequiredPct
@@ -24,14 +25,33 @@ export const ALL_VOTES = (type: string) => gql`
 `
 
 export const CASTS_FOR_VOTE = (type: string) => gql`
-  ${type} Casts($voteId: ID!, $first: Int!, $skip: Int!) {
-    casts(where: {
-      voteId: $voteId
-    }, first: $first, skip: $skip) {
+  ${type} Casts($vote: ID!, $first: Int!, $skip: Int!) {
+    casts(where: { vote: $vote }, first: $first, skip: $skip) {
       id
-      voteId
-      voter
+      vote {
+        id
+        appAddress
+        orgAddress
+        creator
+        metadata
+        executed
+        executedAt
+        startDate
+        snapshotBlock
+        supportRequiredPct
+        minAcceptQuorum
+        yea
+        nay
+        votingPower
+        script
+      }
+      voter {
+        id
+        address
+      }
       supports
+      stake
+      createdAt
     }
   }
 `

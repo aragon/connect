@@ -1,5 +1,6 @@
 import { utils as ethersUtils } from 'ethers'
 import { AppIntent } from '../types'
+import { ErrorInvalid } from '../errors'
 import App from '../entities/App'
 import { TransactionRequestData } from '../transactions/TransactionRequest'
 
@@ -22,7 +23,9 @@ export function validateMethod(
 ): AppIntent {
   const methods = destinationApp.intents
   if (!methods) {
-    throw new Error(`No functions specified in artifact for ${destination}`)
+    throw new ErrorInvalid(
+      `No functions specified in artifact for ${destination}`
+    )
   }
 
   // Find the relevant method information
@@ -33,7 +36,9 @@ export function validateMethod(
         method.sig.split('(')[0] === methodSignature
   )
   if (!method) {
-    throw new Error(`No method named ${methodSignature} on ${destination}`)
+    throw new ErrorInvalid(
+      `No method named ${methodSignature} on ${destination}`
+    )
   }
 
   return method

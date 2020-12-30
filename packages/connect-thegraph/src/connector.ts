@@ -1,6 +1,9 @@
 import {
   App,
   ConnectionContext,
+  ErrorInvalidNetwork,
+  ErrorNotFound,
+  ErrorUnexpectedResult,
   IOrganizationConnector,
   Organization,
   Permission,
@@ -77,7 +80,7 @@ class ConnectorTheGraph implements IOrganizationConnector {
       config.orgSubgraphUrl || getOrgSubgraphUrl(this.network)
 
     if (!orgSubgraphUrl) {
-      throw new Error(
+      throw new ErrorInvalidNetwork(
         `The chainId ${this.network.chainId} is not supported by the TheGraph connector.`
       )
     }
@@ -101,19 +104,31 @@ class ConnectorTheGraph implements IOrganizationConnector {
     organization: Organization,
     appAddress: Address
   ): Promise<Role[]> {
-    return this.#gql.performQueryWithParser<Role[]>(
-      queries.ROLE_BY_APP_ADDRESS('query'),
-      { appAddress: appAddress.toLowerCase() },
-      (result) => parseRoles(result, organization)
-    )
+    try {
+      return this.#gql.performQueryWithParser<Role[]>(
+        queries.ROLE_BY_APP_ADDRESS('query'),
+        { appAddress: appAddress.toLowerCase() },
+        async (result) => parseRoles(result, organization)
+      )
+    } catch (err) {
+      throw new ErrorUnexpectedResult(
+        'Unexpected result when fetching the roles.'
+      )
+    }
   }
 
   async permissionsForOrg(organization: Organization): Promise<Permission[]> {
-    return this.#gql.performQueryWithParser<Permission[]>(
-      queries.ORGANIZATION_PERMISSIONS('query'),
-      { orgAddress: organization.address.toLowerCase() },
-      (result) => parsePermissions(result, organization)
-    )
+    try {
+      return this.#gql.performQueryWithParser<Permission[]>(
+        queries.ORGANIZATION_PERMISSIONS('query'),
+        { orgAddress: organization.address.toLowerCase() },
+        (result) => parsePermissions(result, organization)
+      )
+    } catch (err) {
+      throw new ErrorUnexpectedResult(
+        'Unexpected result when fetching the permissions.'
+      )
+    }
   }
 
   onPermissionsForOrg(
@@ -124,7 +139,15 @@ class ConnectorTheGraph implements IOrganizationConnector {
       queries.ORGANIZATION_PERMISSIONS('subscription'),
       { orgAddress: organization.address.toLowerCase() },
       callback,
-      (result) => parsePermissions(result, organization)
+      async (result) => {
+        try {
+          return await parsePermissions(result, organization)
+        } catch (err) {
+          throw new ErrorUnexpectedResult(
+            'Unexpected result when fetching the permissions.'
+          )
+        }
+      }
     )
   }
 
@@ -132,27 +155,45 @@ class ConnectorTheGraph implements IOrganizationConnector {
     organization: Organization,
     appAddress: Address
   ): Promise<App> {
-    return this.#gql.performQueryWithParser<App>(
-      queries.APP_BY_ADDRESS('query'),
-      { appAddress: appAddress.toLowerCase() },
-      (result) => parseApp(result, organization)
-    )
+    try {
+      return this.#gql.performQueryWithParser<App>(
+        queries.APP_BY_ADDRESS('query'),
+        { appAddress: appAddress.toLowerCase() },
+        (result) => parseApp(result, organization)
+      )
+    } catch (err) {
+      if (err instanceof ErrorNotFound) {
+        throw new ErrorNotFound('No app found with the current filters.')
+      }
+      throw new ErrorUnexpectedResult(
+        'Unexpected result when fetching the app.'
+      )
+    }
   }
 
   async appForOrg(
     organization: Organization,
     filters: AppFilters
   ): Promise<App> {
-    const apps = await this.#gql.performQueryWithParser<App[]>(
-      queries.ORGANIZATION_APPS('query'),
-      {
-        appFilter: appFiltersToQueryFilter(filters),
-        first: 1,
-        orgAddress: organization.address.toLowerCase(),
-      },
-      (result) => parseApps(result, organization)
-    )
-    return apps[0]
+    try {
+      const apps = await this.#gql.performQueryWithParser<App[]>(
+        queries.ORGANIZATION_APPS('query'),
+        {
+          appFilter: appFiltersToQueryFilter(filters),
+          first: 1,
+          orgAddress: organization.address.toLowerCase(),
+        },
+        async (result) => parseApps(result, organization)
+      )
+      return apps[0]
+    } catch (err) {
+      if (err instanceof ErrorNotFound) {
+        throw new ErrorNotFound('No app found with the current filters.')
+      }
+      throw new ErrorUnexpectedResult(
+        'Unexpected result when fetching the app.'
+      )
+    }
   }
 
   onAppForOrg(
@@ -169,8 +210,20 @@ class ConnectorTheGraph implements IOrganizationConnector {
       },
       callback,
       async (result) => {
-        const apps = await parseApps(result, organization)
-        return apps[0]
+        try {
+          const apps = await parseApps(result, organization)
+          if (!apps[0]) {
+            throw new ErrorNotFound()
+          }
+          return apps[0]
+        } catch (err) {
+          if (err instanceof ErrorNotFound) {
+            throw new ErrorNotFound('No app found with the current filters.')
+          }
+          throw new ErrorUnexpectedResult(
+            'Unexpected result when fetching the app.'
+          )
+        }
       }
     )
   }
@@ -185,7 +238,15 @@ class ConnectorTheGraph implements IOrganizationConnector {
         appFilter: appFiltersToQueryFilter(filters),
         orgAddress: organization.address.toLowerCase(),
       },
-      (result) => parseApps(result, organization)
+      async (result) => {
+        try {
+          return await parseApps(result, organization)
+        } catch (err) {
+          throw new ErrorUnexpectedResult(
+            'Unexpected result when fetching the apps.'
+          )
+        }
+      }
     )
   }
 
@@ -201,7 +262,15 @@ class ConnectorTheGraph implements IOrganizationConnector {
         orgAddress: organization.address.toLowerCase(),
       },
       callback,
-      (result) => parseApps(result, organization)
+      async (result) => {
+        try {
+          return await parseApps(result, organization)
+        } catch (err) {
+          throw new ErrorUnexpectedResult(
+            'Unexpected result when fetching the apps.'
+          )
+        }
+      }
     )
   }
 
@@ -212,7 +281,18 @@ class ConnectorTheGraph implements IOrganizationConnector {
     return this.#gql.performQueryWithParser<Repo>(
       queries.REPO_BY_APP_ADDRESS('query'),
       { appAddress: appAddress.toLowerCase() },
-      (result) => parseRepo(result, organization)
+      async (result) => {
+        try {
+          return await parseRepo(result, organization)
+        } catch (err) {
+          if (err instanceof ErrorNotFound) {
+            throw new ErrorNotFound('The app repo wasn’t found.')
+          }
+          throw new ErrorUnexpectedResult(
+            'Unexpected result when fetching the app repo.'
+          )
+        }
+      }
     )
   }
 }

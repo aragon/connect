@@ -1,4 +1,10 @@
-import { Organization, Repo, RepoData } from '@aragon/connect-core'
+import {
+  ErrorNotFound,
+  ErrorUnexpectedResult,
+  Organization,
+  Repo,
+  RepoData,
+} from '@aragon/connect-core'
 import { QueryResult } from '../types'
 
 export async function parseRepo(
@@ -7,8 +13,12 @@ export async function parseRepo(
 ): Promise<Repo> {
   const repo = result?.data?.app?.repo
 
+  if (repo === null) {
+    throw new ErrorNotFound('No repo found.')
+  }
+
   if (!repo) {
-    throw new Error('Unable to parse repo.')
+    throw new ErrorUnexpectedResult('Unable to parse repo.')
   }
 
   const data: RepoData = {

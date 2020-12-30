@@ -14,6 +14,7 @@ async function main() {
   console.log(token)
 
   const subscription = tokens.onHolders(
+    {},
     (error: Error | null, holders?: TokenHolder[]) => {
       if (error) {
         console.error(error)
@@ -25,11 +26,6 @@ async function main() {
       }
     }
   )
-
-  // await keepRunning()
-
-  // Simply to illustrate how to close a subscription
-  subscription.unsubscribe()
 }
 
 main()

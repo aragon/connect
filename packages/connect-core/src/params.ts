@@ -1,5 +1,3 @@
-export const DEFAULT_IPFS_GATEWAY = 'https://ipfs.eth.aragon.network'
-
 export const NETWORKS = [
   {
     chainId: 1,

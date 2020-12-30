@@ -1,3 +1,4 @@
+import { ErrorUnexpectedResult } from '@aragon/connect-core'
 import { QueryResult } from '@aragon/connect-thegraph'
 import Transaction from '../../models/Transaction'
 import { TransactionData } from '../../types'
@@ -6,7 +7,7 @@ export function parseTransactions(result: QueryResult): Transaction[] {
   const transactions = result.data.transactions
 
   if (!transactions) {
-    throw new Error('Unable to parse transactions.')
+    throw new ErrorUnexpectedResult('Unable to parse transactions.')
   }
 
   const datas = transactions.map(
