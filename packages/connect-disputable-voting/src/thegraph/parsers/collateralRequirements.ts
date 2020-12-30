@@ -2,7 +2,10 @@ import { QueryResult } from '@aragon/connect-thegraph'
 
 import CollateralRequirement from '../../models/CollateralRequirement'
 
-function buildCollateralRequirement(collateralRequirement: any, connector: any): CollateralRequirement {
+function buildCollateralRequirement(
+  collateralRequirement: any,
+  connector: any
+): CollateralRequirement {
   const {
     id,
     voting,
@@ -10,7 +13,7 @@ function buildCollateralRequirement(collateralRequirement: any, connector: any):
     actionAmount,
     challengeAmount,
     challengeDuration,
-    collateralRequirementId
+    collateralRequirementId,
   } = collateralRequirement
 
   const collateralRequirementData = {
@@ -21,6 +24,7 @@ function buildCollateralRequirement(collateralRequirement: any, connector: any):
     collateralRequirementId,
     votingId: voting.id,
     tokenId: token.id,
+    tokenSymbol: token.symbol,
     tokenDecimals: token.decimals,
   }
 
@@ -50,5 +54,8 @@ export function parseCurrentCollateralRequirement(
     throw new Error('Unable to parse current collateral requirement.')
   }
 
-  return buildCollateralRequirement(disputableVoting.collateralRequirement, connector)
+  return buildCollateralRequirement(
+    disputableVoting.collateralRequirement,
+    connector
+  )
 }

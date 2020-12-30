@@ -1,6 +1,7 @@
 import { providers as ethersProviders, utils as ethersUtils } from 'ethers'
 
 import { addressesEqual, includesAddress, ANY_ENTITY } from '../address'
+import { ErrorInvalid } from '../../errors'
 import { findAppMethodFromSignature } from '../app'
 import { encodeCallScript } from '../callScript'
 import { canForward } from '../forwarding'
@@ -173,7 +174,7 @@ export async function calculateTransactionPath(
 
   const method = findAppMethodFromSignature(destinationApp, methodSignature)
   if (!method) {
-    throw new Error(
+    throw new ErrorInvalid(
       `No method named ${methodSignature} on ${destinationApp.address}`
     )
   }

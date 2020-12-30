@@ -15,9 +15,12 @@ export default class StakingMovement {
   readonly stakingId: string
   readonly agreementId: string
   readonly tokenId: string
+  readonly tokenSymbol: string
   readonly tokenDecimals: string
   readonly amount: string
   readonly actionId: string
+  readonly disputableAddress: string
+  readonly disputableActionId: string
   readonly actionState: string
   readonly collateralState: string
   readonly createdAt: string
@@ -29,9 +32,12 @@ export default class StakingMovement {
     this.stakingId = data.stakingId
     this.agreementId = data.agreementId
     this.tokenId = data.tokenId
+    this.tokenSymbol = data.tokenSymbol
     this.tokenDecimals = data.tokenDecimals
     this.amount = data.amount
     this.actionId = data.actionId
+    this.disputableAddress = data.disputableAddress
+    this.disputableActionId = data.disputableActionId
     this.actionState = data.actionState
     this.collateralState = data.collateralState
     this.createdAt = data.createdAt
@@ -55,12 +61,12 @@ export default class StakingMovement {
     )
   }
 
-  async staking(): Promise<Staking> {
+  async staking(): Promise<Staking | null> {
     return this.#connector.staking(this.stakingId)
   }
 
-  onStaking(callback?: SubscriptionCallback<Staking>): SubscriptionResult<Staking> {
-    return subscription<Staking>(callback, (callback) =>
+  onStaking(callback?: SubscriptionCallback<Staking | null>): SubscriptionResult<Staking | null> {
+    return subscription<Staking | null>(callback, (callback) =>
       this.#connector.onStaking(this.stakingId, callback)
     )
   }

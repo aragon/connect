@@ -1,4 +1,9 @@
-import { Organization, Permission, PermissionData } from '@aragon/connect-core'
+import {
+  ErrorUnexpectedResult,
+  Organization,
+  Permission,
+  PermissionData,
+} from '@aragon/connect-core'
 import { QueryResult } from '../types'
 
 export function parsePermissions(
@@ -8,7 +13,7 @@ export function parsePermissions(
   const permissions = result?.data?.organization?.permissions
 
   if (!Array.isArray(permissions)) {
-    throw new Error('Unable to parse permissions.')
+    throw new ErrorUnexpectedResult('Unable to parse permissions.')
   }
 
   const datas = permissions.map(

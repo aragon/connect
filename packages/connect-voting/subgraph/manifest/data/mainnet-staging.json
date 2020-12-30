@@ -3,9 +3,9 @@
   "dataSources": {
     "Organizations": [
       {
-        "name": "PieDAO",
-        "address": "0x0c188B183FF758500D1D18B432313d10e9F6b8a4",
-        "startBlock": "9593674"
+        "name": "decentraland",
+        "address": "0xf47917b108ca4b820ccea2587546fbb9f7564b56",
+        "startBlock": "9351139"
       }
     ],
     "OrganizationFactories": [],
@@ -15,4 +15,3 @@
     "Tokens": []
   }
 }
-

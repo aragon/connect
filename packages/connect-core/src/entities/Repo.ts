@@ -1,4 +1,3 @@
-import { resolveMetadata, resolveManifest } from '../utils/metadata'
 import {
   AragonArtifact,
   AragonArtifactRole,
@@ -7,6 +6,7 @@ import {
   RepoData,
 } from '../types'
 import Organization from './Organization'
+import { resolveArtifact, resolveManifest } from '../utils/metadata'
 
 export default class Repo {
   #metadata!: Metadata
@@ -17,11 +17,8 @@ export default class Repo {
   readonly registry?: string
   readonly registryAddress?: string
 
-  constructor(data: RepoData, metadata: Metadata, organization: Organization) {
+  constructor(data: RepoData, metadata: Metadata) {
     this.#metadata = metadata
-
-    this.#metadata = metadata
-
     this.address = data.address
     this.contentUri = data.contentUri
     this.lastVersion = data.lastVersion
@@ -34,16 +31,9 @@ export default class Repo {
     data: RepoData,
     organization: Organization
   ): Promise<Repo> {
-    const artifact = await resolveMetadata(
-      'artifact.json',
-      data.contentUri,
-      data.artifact
-    )
-    const manifest = await resolveManifest(data)
-
-    const metadata: Metadata = [artifact, manifest]
-
-    return new Repo(data, metadata, organization)
+    const artifact = await resolveArtifact(organization.connection.ipfs, data)
+    const manifest = await resolveManifest(organization.connection.ipfs, data)
+    return new Repo(data, [artifact, manifest])
   }
 
   get artifact(): AragonArtifact {

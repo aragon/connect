@@ -49,9 +49,14 @@ export interface VoteData {
   disputedAt: string
   executedAt: string
   tokenId: string
+  tokenSymbol: string
   tokenDecimals: string
   isAccepted: boolean
+  settlementOffer: string | null
   collateralRequirementId: string
+  collateralTokenId: string
+  collateralTokenSymbol: string
+  collateralTokenDecimals: string
   submitterArbitratorFeeId: string
   challengerArbitratorFeeId: string
 }
@@ -91,6 +96,7 @@ export interface CollateralRequirementData {
   id: string
   votingId: string
   tokenId: string
+  tokenSymbol: string
   tokenDecimals: string
   actionAmount: string
   challengeAmount: string
@@ -102,6 +108,7 @@ export interface ArbitratorFeeData {
   id: string
   voteId: string
   tokenId: string
+  tokenSymbol: string
   tokenDecimals: string
   amount: string
 }
@@ -141,7 +148,9 @@ export interface IDisputableVotingConnector {
     skip: number,
     callback: SubscriptionCallback<Setting[]>
   ): SubscriptionHandler
-  currentCollateralRequirement(disputableVoting: string): Promise<CollateralRequirement>
+  currentCollateralRequirement(
+    disputableVoting: string
+  ): Promise<CollateralRequirement>
   onCurrentCollateralRequirement(
     disputableVoting: string,
     callback: SubscriptionCallback<CollateralRequirement>
@@ -175,7 +184,9 @@ export interface IDisputableVotingConnector {
     voterId: string,
     callback: SubscriptionCallback<Voter>
   ): SubscriptionHandler
-  collateralRequirement(collateralRequirementId: string): Promise<CollateralRequirement>
+  collateralRequirement(
+    collateralRequirementId: string
+  ): Promise<CollateralRequirement>
   onCollateralRequirement(
     collateralRequirementId: string,
     callback: SubscriptionCallback<CollateralRequirement>

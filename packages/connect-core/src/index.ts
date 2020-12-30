@@ -20,6 +20,7 @@ export { default as Repo } from './entities/Repo'
 export { default as Role } from './entities/Role'
 export {
   ConnectionContext,
+  IpfsResolver,
   AppData,
   ForwardingPathData,
   PermissionData,
@@ -27,3 +28,4 @@ export {
   RoleData,
 } from './types'
 export * from './utils'
+export * from './errors'

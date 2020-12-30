@@ -3,19 +3,21 @@
   "description": "Development subgraph for Aragon organizations.",
   "repository": "https://github.com/aragon/connect",
   "ens": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+  "ens_old": "0x314159265dD8dbb310642f98f50C066173C1259b",
   "DAOFactoryDataSources": [],
-  "RegistryDataSources": [
-    {
-      "name": "aragonpm.eth",
-      "address": "0x346854c542d437565339E60dE8CB3EfE1cAB30dC",
-      "startBlock": "6592998"
-    }
-  ],
   "KernelDataSources": [
     {
-      "name": "PieDAO",
-      "address": "0x0c188B183FF758500D1D18B432313d10e9F6b8a4",
-      "startBlock": "9593674"
+      "name": "decentraland",
+      "address": "0xf47917b108ca4b820ccea2587546fbb9f7564b56",
+      "startBlock": "9351139"
     }
-  ]
+  ],
+  "APMFactoryDataSources": [
+    {
+      "name": "ApmRegistryFactory",
+      "address": "0xce5c6811bd801aa0cf72760534604f833cbcc0b9",
+      "startBlock": "6592933"
+    }
+  ],
+  "RegistryDataSources": []
 }

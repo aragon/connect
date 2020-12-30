@@ -10,11 +10,15 @@
     apiVersion: 0.0.1
     language: wasm/assemblyscript
     entities:
+      - App
+      - Implementation
       - OrgFactory
       - Organization
     abis:
       - name: DAOFactory
         file: ./abis/DAOFactory.json
+      - name: ACL
+        file: ./abis/ACL.json
       - name: Kernel
         file: ./abis/Kernel.json
     eventHandlers:

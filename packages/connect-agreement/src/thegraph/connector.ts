@@ -1,7 +1,9 @@
 import {
+  Address,
   SubscriptionCallback,
   SubscriptionHandler,
 } from '@aragon/connect-types'
+import { ErrorException } from '@aragon/connect-core'
 import { GraphQLWrapper, QueryResult } from '@aragon/connect-thegraph'
 
 import * as queries from './queries'
@@ -44,6 +46,7 @@ export function subgraphUrlFromChainId(chainId: number) {
 }
 
 type AgreementConnectorTheGraphConfig = {
+  appAddress?: Address
   pollInterval?: number
   subgraphUrl?: string
   verbose?: boolean
@@ -52,16 +55,31 @@ type AgreementConnectorTheGraphConfig = {
 export default class AgreementConnectorTheGraph implements IAgreementConnector {
   #gql: GraphQLWrapper
 
-  constructor(config: AgreementConnectorTheGraphConfig) {
+  constructor(gql: GraphQLWrapper) {
+    this.#gql = gql
+  }
+
+  static async create(
+    config: AgreementConnectorTheGraphConfig
+  ): Promise<AgreementConnectorTheGraph> {
     if (!config.subgraphUrl) {
-      throw new Error(
+      throw new ErrorException(
         'AgreementConnectorTheGraph requires subgraphUrl to be passed.'
       )
     }
-    this.#gql = new GraphQLWrapper(config.subgraphUrl, {
+
+    if (!config.appAddress) {
+      throw new ErrorException(
+        'AgreementConnectorTheGraph requires appAddress to be passed.'
+      )
+    }
+
+    const gql = new GraphQLWrapper(config.subgraphUrl, {
       pollInterval: config.pollInterval,
       verbose: config.verbose,
     })
+
+    return new AgreementConnectorTheGraph(gql)
   }
 
   async disconnect() {
@@ -250,7 +268,7 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
 
   async staking(
     stakingId: string
-  ): Promise<Staking> {
+  ): Promise<Staking | null> {
     return this.#gql.performQueryWithParser<Staking>(
       queries.GET_STAKING('query'),
       { stakingId },
@@ -260,9 +278,9 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
 
   onStaking(
     stakingId: string,
-    callback: SubscriptionCallback<Staking>
+    callback: SubscriptionCallback<Staking | null>
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser<Staking>(
+    return this.#gql.subscribeToQueryWithParser<Staking | null>(
       queries.GET_STAKING('query'),
       { stakingId },
       callback,
@@ -298,9 +316,7 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     )
   }
 
-  async action(
-    actionId: string
-  ): Promise<Action | null> {
+  async action(actionId: string): Promise<Action | null> {
     return this.#gql.performQueryWithParser<Action | null>(
       queries.GET_ACTION('query'),
       { actionId },
@@ -320,7 +336,7 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     )
   }
 
-  async ERC20(tokenAddress: string): Promise<ERC20> {
+  async ERC20(tokenAddress: Address): Promise<ERC20> {
     return this.#gql.performQueryWithParser<ERC20>(
       queries.GET_ERC20('query'),
       { tokenAddress },
@@ -329,7 +345,7 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
   }
 
   onERC20(
-    tokenAddress: string,
+    tokenAddress: Address,
     callback: SubscriptionCallback<ERC20>
   ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser<ERC20>(

@@ -3,8 +3,8 @@ const baseConfig = require('./jest.config.base')
 module.exports = {
   ...baseConfig,
   projects: [
-    '<rootDir>/packages/connect-core/jest.config.js',
     '<rootDir>/packages/connect/jest.config.js',
+    '<rootDir>/packages/connect-core/jest.config.js',
     '<rootDir>/packages/connect-thegraph/jest.config.js',
     '<rootDir>/packages/connect-react/jest.config.js',
     '<rootDir>/packages/connect-finance/jest.config.js',

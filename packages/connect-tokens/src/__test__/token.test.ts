@@ -1,4 +1,4 @@
-import { connect } from '@aragon/connect'
+import { connect, App } from '@aragon/connect'
 import { Organization } from '@aragon/connect-core'
 import connectTokens, { Token, Tokens } from '../../src'
 
@@ -11,8 +11,7 @@ describe('when connecting to a token manager app', () => {
 
   beforeAll(async () => {
     org = await connect(ORG, 'thegraph', { network: 4 })
-    const token = await org.app('token-manager')
-    tokens = await connectTokens(token)
+    tokens = (await connectTokens(org.app(TOKEN_ADDRESS))) as Tokens
   })
 
   afterAll(async () => {

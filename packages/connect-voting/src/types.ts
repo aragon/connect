@@ -27,7 +27,7 @@ export interface CastData {
   voter: VoterData
   supports: boolean
   stake: string
-  createAt: string
+  createdAt: string
 }
 
 export interface VoterData {

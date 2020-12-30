@@ -1,4 +1,8 @@
-import { BigNumber, providers as ethersProviders, utils as ethersUtils } from 'ethers'
+import {
+  BigNumber,
+  providers as ethersProviders,
+  utils as ethersUtils,
+} from 'ethers'
 import { Address, Network } from '@aragon/connect-types'
 
 import IOrganizationConnector from './connections/IOrganizationConnector'
@@ -7,11 +11,16 @@ import Transaction from './entities/Transaction'
 
 export type Abi = (ethersUtils.EventFragment | ethersUtils.FunctionFragment)[]
 
+export type IpfsResolver = {
+  url: (cid: string, path?: string) => Promise<string>
+  json: (cid: string, path?: string) => Promise<object>
+}
+
 export type ConnectionContext = {
   actAs: Address | null
   ethereumProvider: object | null
   ethersProvider: ethersProviders.Provider
-  ipfs: (cid: string) => string
+  ipfs: IpfsResolver
   network: Network
   orgAddress: Address
   orgConnector: IOrganizationConnector

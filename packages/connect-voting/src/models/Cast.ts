@@ -6,7 +6,7 @@ export default class Cast {
   readonly voter: VoterData
   readonly supports: boolean
   readonly stake: string
-  readonly createAt: string
+  readonly createdAt: string
 
   constructor(data: CastData) {
     this.id = data.id
@@ -14,6 +14,6 @@ export default class Cast {
     this.voter = data.voter
     this.supports = data.supports
     this.stake = data.stake
-    this.createAt = data.createAt
+    this.createdAt = data.createdAt
   }
 }

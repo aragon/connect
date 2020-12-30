@@ -1,12 +1,12 @@
+import { ErrorUnexpectedResult } from '@aragon/connect-core'
 import { QueryResult } from '@aragon/connect-thegraph'
-
 import { AgreementData } from '../../types'
 
 export function parseAgreement(result: QueryResult): AgreementData {
-  const agreement = result.data.agreement
+  const agreement = result.data?.agreement
 
   if (!agreement) {
-    throw new Error('Unable to parse agreement.')
+    throw new ErrorUnexpectedResult('Unable to parse agreement.')
   }
 
   return {

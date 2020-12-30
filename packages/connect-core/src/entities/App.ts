@@ -57,10 +57,9 @@ export default class App {
   }
 
   static async create(data: AppData, organization: Organization): Promise<App> {
-    const artifact = await resolveArtifact(data)
-    const manifest = await resolveManifest(data)
-    const metadata: Metadata = [artifact, manifest]
-    return new App(data, metadata, organization)
+    const artifact = await resolveArtifact(organization.connection.ipfs, data)
+    const manifest = await resolveManifest(organization.connection.ipfs, data)
+    return new App(data, [artifact, manifest], organization)
   }
 
   private orgConnector(): IOrganizationConnector {
@@ -100,7 +99,7 @@ export default class App {
     }
   }
 
-  contract(): Contract {
+  ethersContract(): Contract {
     if (!this.abi) {
       throw new Error(
         `No ABI specified in app for ${this.address}. Make sure the metada for the app is available`
@@ -109,7 +108,7 @@ export default class App {
     return new Contract(this.address, this.abi, this.provider)
   }
 
-  interface(): ethersUtils.Interface {
+  ethersInterface(): ethersUtils.Interface {
     if (!this.abi) {
       throw new Error(
         `No ABI specified in app for ${this.address}. Make sure the metada for the app is available`
@@ -130,7 +129,7 @@ export default class App {
   async intent(
     methodSignature: string,
     params: any[],
-    options: PathOptions
+    options: PathOptions = {}
   ): Promise<ForwardingPath> {
     const sender = options.actAs || this.organization.connection.actAs
     if (!sender) {

@@ -157,6 +157,7 @@ describe('DisputableVoting', () => {
 
       it('returns a null value', async () => {
         expect(castVote).toBeNull()
+        expect(await vote.hasVoted(VOTER_ADDRESS)).toBe(false)
       })
     })
 
@@ -175,6 +176,8 @@ describe('DisputableVoting', () => {
         expect(castVote.stake).toBe('1000000000000000000')
         expect(castVote.createdAt).toBe('1598530298')
         expect(castVote.caster).toBe(VOTER_ADDRESS)
+
+        expect(await vote.hasVoted(VOTER_ADDRESS)).toBe(true)
       })
 
       test('allows telling the voter', async () => {
@@ -188,10 +191,11 @@ describe('DisputableVoting', () => {
   describe('collateralRequirement', () => {
     const voteId = `${VOTING_APP_ADDRESS}-vote-2`
 
+    let vote: Vote
     let collateralRequirement: CollateralRequirement
 
     beforeAll(async () => {
-      const vote = await voting.vote(voteId)
+      vote = await voting.vote(voteId)
       collateralRequirement = await vote.collateralRequirement()
     })
 
@@ -201,6 +205,8 @@ describe('DisputableVoting', () => {
       expect(collateralRequirement.actionAmount).toBe('0')
       expect(collateralRequirement.challengeAmount).toBe('0')
       expect(collateralRequirement.challengeDuration).toBe('259200')
+
+      expect(await vote.formattedSettlementOffer()).toBe('0.00')
     })
 
     test('can requests the related token info', async () => {
@@ -222,19 +228,39 @@ describe('DisputableVoting', () => {
     })
 
     test('can requests the submitter arbitrator fees', async () => {
-      const artbiratorFee = (await vote.submitterArbitratorFee())!
+      const arbitratorFee = (await vote.submitterArbitratorFee())!
 
-      expect(artbiratorFee.id).toBe(`${voteId}-submitter`)
-      expect(artbiratorFee.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
-      expect(artbiratorFee.formattedAmount).toBe('150.00')
+      expect(arbitratorFee.id).toBe(`${voteId}-submitter`)
+      expect(arbitratorFee.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
+      expect(arbitratorFee.formattedAmount).toBe('150.00')
     })
 
     test('can requests the submitter arbitrator fees', async () => {
-      const artbiratorFee = (await vote.challengerArbitratorFee())!
+      const arbitratorFee = (await vote.challengerArbitratorFee())!
 
-      expect(artbiratorFee.id).toBe(`${voteId}-challenger`)
-      expect(artbiratorFee.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
-      expect(artbiratorFee.formattedAmount).toBe('150.00')
+      expect(arbitratorFee.id).toBe(`${voteId}-challenger`)
+      expect(arbitratorFee.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
+      expect(arbitratorFee.formattedAmount).toBe('150.00')
+    })
+  })
+
+  describe('balances', () => {
+    let vote: Vote
+    const VOTE_ID = `${VOTING_APP_ADDRESS}-vote-0`
+    const VOTER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
+
+    beforeAll(async () => {
+      vote = await voting.vote(VOTE_ID)
+    })
+
+    test('tells the balance at the moment of the vote', async () => {
+      expect(await vote.formattedVotingPower(VOTER_ADDRESS)).toBe('1.00')
+    })
+
+    test('tells the current balance of a voter', async () => {
+      const token = await vote.token()
+
+      expect((await token.balance(VOTER_ADDRESS)).gte(bn(0))).toBe(true)
     })
   })
 

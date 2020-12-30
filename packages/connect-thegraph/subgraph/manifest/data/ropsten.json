@@ -3,6 +3,7 @@
   "description": "Subgraph for Aragon organizations.",
   "repository": "https://github.com/aragon/connect",
   "ens": "0x6afe2cacee211ea9179992f89dc61ff25c61e923",
+  "ens_old": "0x0000000000000000000000000000000000000000",
   "DAOFactoryDataSources": [
     {
       "name": "DAOFactory",

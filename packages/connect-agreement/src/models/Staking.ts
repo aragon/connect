@@ -11,6 +11,7 @@ export default class Staking {
   readonly id: string
   readonly user: string
   readonly tokenId: string
+  readonly tokenSymbol: string
   readonly tokenDecimals: string
   readonly available: string
   readonly locked: string
@@ -23,6 +24,7 @@ export default class Staking {
     this.id = data.id
     this.user = data.user
     this.tokenId = data.tokenId
+    this.tokenSymbol = data.tokenSymbol
     this.tokenDecimals = data.tokenDecimals
     this.available = data.available
     this.locked = data.locked

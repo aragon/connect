@@ -51,6 +51,7 @@ export const GET_CURRENT_COLLATERAL_REQUIREMENT = (type: string) => gql`
         }
         token {
           id
+          symbol
           decimals
         }
         actionAmount
@@ -112,6 +113,7 @@ export const GET_VOTE = (type: string) => gql`
         id 
         token {
           id
+          symbol  
           decimals
         }
       }
@@ -143,8 +145,14 @@ export const GET_VOTE = (type: string) => gql`
       disputedAt
       executedAt
       isAccepted
+      settlementOffer
       collateralRequirement {
         id
+        token {
+          id
+          symbol
+          decimals
+        }
       }
       submitterArbitratorFee {
         id
@@ -166,6 +174,7 @@ export const ALL_VOTES = (type: string) => gql`
         id 
         token {
           id
+          symbol
           decimals
         }
       }
@@ -197,8 +206,14 @@ export const ALL_VOTES = (type: string) => gql`
       disputedAt
       executedAt
       isAccepted
+      settlementOffer
       collateralRequirement {
         id
+        token {
+          id
+          symbol
+          decimals
+        }
       }
       submitterArbitratorFee {
         id
@@ -270,6 +285,7 @@ export const GET_COLLATERAL_REQUIREMENT = (type: string) => gql`
       }
       token {
         id
+        symbol
         decimals
       }
       actionAmount
@@ -290,6 +306,7 @@ export const GET_ARBITRATOR_FEE = (type: string) => gql`
       }
       token {
         id
+        symbol
         decimals
       }
     }

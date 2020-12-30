@@ -112,6 +112,7 @@ export const GET_COLLATERAL_REQUIREMENT = (type: string) => gql`
       }
       token {
         id
+        symbol
         decimals
       }
     }
@@ -125,6 +126,7 @@ export const GET_STAKING = (type: string) => gql`
       user
       token {
         id
+        symbol
         decimals
       }
       available
@@ -146,6 +148,7 @@ export const GET_STAKING_MOVEMENTS = (type: string) => gql`
         id
         token {
           id
+          symbol
           decimals
         }
       }
@@ -154,6 +157,10 @@ export const GET_STAKING_MOVEMENTS = (type: string) => gql`
       }
       action {
         id
+        disputableActionId
+        disputable {
+          address
+        }
       }
       amount
       actionState

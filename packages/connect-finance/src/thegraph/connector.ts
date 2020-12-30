@@ -3,6 +3,7 @@ import {
   SubscriptionCallback,
   SubscriptionHandler,
 } from '@aragon/connect-types'
+import { ErrorException } from '@aragon/connect-core'
 import { GraphQLWrapper, QueryResult } from '@aragon/connect-thegraph'
 import { IFinanceConnector } from '../types'
 import Transaction from '../models/Transaction'
@@ -34,7 +35,7 @@ export default class FinanceConnectorTheGraph implements IFinanceConnector {
 
   constructor(config: FinanceConnectorTheGraphConfig) {
     if (!config.subgraphUrl) {
-      throw new Error(
+      throw new ErrorException(
         'FinanceConnectorTheGraph requires subgraphUrl to be passed.'
       )
     }

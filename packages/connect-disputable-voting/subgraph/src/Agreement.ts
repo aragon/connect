@@ -74,6 +74,7 @@ export function handleActionClosed(event: ActionClosedEvent): void {
 export function handleActionChallenged(event: ActionChallengedEvent): void {
   const agreementApp = AgreementContract.bind(event.address)
   const actionData = agreementApp.getAction(event.params.actionId)
+  const challengeData = agreementApp.getChallenge(event.params.challengeId)
   const voteId = buildVoteId(actionData.value0, actionData.value1)
 
   const challengerArbitratorFeeId = voteId + '-challenger'
@@ -82,6 +83,7 @@ export function handleActionChallenged(event: ActionChallengedEvent): void {
 
   const vote = VoteEntity.load(voteId)!
   vote.challengerArbitratorFee = challengerArbitratorFeeId
+  vote.settlementOffer = challengeData.value4
   vote.save()
 }
 
