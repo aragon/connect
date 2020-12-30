@@ -22,11 +22,10 @@
       - Organization
       - App
       - Implementation
+      - Repo
     abis:
       - name: Kernel
         file: ./abis/Kernel.json
-      - name: ACL
-        file: ./abis/ACL.json
       - name: AppProxyForwarder
         file: ./abis/IForwarder.json
       - name: ENS

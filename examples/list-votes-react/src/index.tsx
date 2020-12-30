@@ -4,10 +4,16 @@ import ReactDOM from 'react-dom'
 import { jsx } from '@emotion/core'
 import App from './App'
 
+const STRICT_MODE = false
+
 ReactDOM.render(
-  <React.StrictMode>
+  STRICT_MODE ? (
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  ) : (
     <App />
-  </React.StrictMode>,
+  ),
   document.getElementById('root')
 )
 

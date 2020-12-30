@@ -23,7 +23,6 @@ export function handleStartVote(event: StartVoteEvent): void {
   vote.creator = event.params.creator
   vote.metadata = event.params.metadata
   vote.voteNum = event.params.voteId
-  vote.executed = voteData.value1
   vote.startDate = voteData.value2
   vote.snapshotBlock = voteData.value3
   vote.supportRequiredPct = voteData.value4
@@ -31,7 +30,7 @@ export function handleStartVote(event: StartVoteEvent): void {
   vote.yea = voteData.value6
   vote.nay = voteData.value7
   vote.votingPower = voteData.value8
-  vote.script = voteData.value9
+  vote.script = voteData.value9.toHex()
   vote.orgAddress = voting.kernel()
   vote.executedAt = BigInt.fromI32(0)
   vote.executed = false
@@ -72,10 +71,7 @@ export function handleExecuteVote(event: ExecuteVoteEvent): void {
 
 function buildVoteEntityId(appAddress: Address, voteNum: BigInt): string {
   return (
-    'appAddress:' +
-    appAddress.toHexString() +
-    '-voteId:' +
-    voteNum.toHexString()
+    'appAddress:' + appAddress.toHexString() + '-vote:' + voteNum.toHexString()
   )
 }
 

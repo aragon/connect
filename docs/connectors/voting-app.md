@@ -83,6 +83,7 @@ A single `Vote` object contains the following properties:
 | `creator`            | `Address` | Address of the vote creator.                                                                  |
 | `metadata`           | `String`  | An arbitrary string that can be used to describe the vote.                                    |
 | `executed`           | `Boolean` | Whether the vote has been executed.                                                           |
+| `executedAt`         | `String`  | Block timestamp for the vote execution. .                                                     |
 | `startDate`          | `String`  | The start date. Expressed in Unix time (seconds).                                             |
 | `snapshotBlock`      | `String`  | Number of the block before the one in which the vote was created.                             |
 | `supportRequiredPct` | `String`  | Percentage of positive votes required, compared to the negatives votes, for the vote to pass. |
@@ -133,9 +134,11 @@ The error passed to `callback` can be `null` (no error) or one of the following:
 
 Represents a casted vote. This object contains the following properties:
 
-| Name       | Type     | Description                            |
-| ---------- | -------- | -------------------------------------- |
-| `id`       | `String` | Unique identifier for the casted vote. |
-| `voteId`   | `String` | Identifier of the vote. See `Vote#id`. |
-| `voter`    | `String` | The address that casted the vote.      |
-| `supports` | `String` | Whether or not the vote is positive.   |
+| Name        | Type     | Description                            |
+| ----------- | -------- | -------------------------------------- |
+| `id`        | `String` | Unique identifier for the casted vote. |
+| `vote`      | `String` | The casted `Vote` object.              |
+| `voter`     | `String` | The address that casted the vote.      |
+| `supports`  | `String` | Whether or not the vote is positive.   |
+| `stake`     | `String` | Voter stake for the casted vote.       |
+| `createdAt` | `String` | Block timestamp for the casted vote.   |

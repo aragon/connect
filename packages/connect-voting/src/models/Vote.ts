@@ -10,6 +10,7 @@ export default class Vote {
   readonly creator: string
   readonly metadata: string
   readonly executed: boolean
+  readonly executedAt: string
   readonly startDate: string
   readonly snapshotBlock: string
   readonly supportRequiredPct: string
@@ -26,6 +27,7 @@ export default class Vote {
     this.creator = data.creator
     this.metadata = data.metadata
     this.executed = data.executed
+    this.executedAt = data.executedAt
     this.startDate = data.startDate
     this.snapshotBlock = data.snapshotBlock
     this.supportRequiredPct = data.supportRequiredPct
