@@ -1,6 +1,10 @@
 import { subscription } from '@aragon/connect-core'
 import { BigNumber, providers as ethersProviders } from 'ethers'
-import { Address, SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
+import {
+  Address,
+  SubscriptionCallback,
+  SubscriptionResult,
+} from '@aragon/connect-types'
 
 import ERC20 from './ERC20'
 import Setting from './Setting'
@@ -59,7 +63,11 @@ export default class Vote {
   readonly submitterArbitratorFeeId: string
   readonly challengerArbitratorFeeId: string
 
-  constructor(data: VoteData, connector: IDisputableVotingConnector, ethersProvider: ethersProviders.Provider) {
+  constructor(
+    data: VoteData,
+    connector: IDisputableVotingConnector,
+    ethersProvider: ethersProviders.Provider
+  ) {
     this.#ethersProvider = ethersProvider
     this.#connector = connector
 
@@ -105,15 +113,23 @@ export default class Vote {
 
   get hasEnded(): boolean {
     const currentTimestamp = currentTimestampEvm()
-    return this.voteStatus === 'Cancelled' || this.voteStatus === 'Settled' ||
-      (this.voteStatus === 'Challenged' && currentTimestamp.gte(this.challengeEndDate)) ||
-      (this.voteStatus !== 'Challenged' && this.voteStatus !== 'Disputed' && currentTimestamp.gte(this.endDate))
+    return (
+      this.voteStatus === 'Cancelled' ||
+      this.voteStatus === 'Settled' ||
+      (this.voteStatus === 'Challenged' &&
+        currentTimestamp.gte(this.challengeEndDate)) ||
+      (this.voteStatus !== 'Challenged' &&
+        this.voteStatus !== 'Disputed' &&
+        currentTimestamp.gte(this.endDate))
+    )
   }
 
   get endDate(): string {
     const baseVoteEndDate = bn(this.startDate).add(bn(this.duration))
     const endDateAfterPause = baseVoteEndDate.add(bn(this.pauseDuration))
-    const lastComputedEndDate = endDateAfterPause.add(bn(this.quietEndingExtensionDuration))
+    const lastComputedEndDate = endDateAfterPause.add(
+      bn(this.quietEndingExtensionDuration)
+    )
 
     // The last computed end date is correct if we have not passed it yet or if no flip was detected in the last extension
     const currentTimestamp = currentTimestampEvm()
@@ -177,13 +193,16 @@ export default class Vote {
   get wasFlipped(): boolean {
     // If there was no snapshot taken, it means no one voted during the quiet ending period. Thus, it cannot have been flipped.
     if (this.quietEndingSnapshotSupport == 'Absent') {
-      return false;
+      return false
     }
 
     // Otherwise, we calculate if the vote was flipped by comparing its current acceptance state to its last state at the start of the extension period
     const wasInitiallyAccepted = this.quietEndingSnapshotSupport == 'Yea'
-    const currentExtensions = bn(this.quietEndingExtensionDuration).div(bn(this.quietEndingExtension))
-    const wasAcceptedBeforeLastFlip = wasInitiallyAccepted == (currentExtensions.mod(bn('2')).eq(bn('0')))
+    const currentExtensions = bn(this.quietEndingExtensionDuration).div(
+      bn(this.quietEndingExtension)
+    )
+    const wasAcceptedBeforeLastFlip =
+      wasInitiallyAccepted == currentExtensions.mod(bn('2')).eq(bn('0'))
     return wasAcceptedBeforeLastFlip != this.isAccepted
   }
 
@@ -195,16 +214,20 @@ export default class Vote {
   }
 
   async canVote(voterAddress: Address): Promise<boolean> {
-    return !this.hasEnded &&
+    return (
+      !this.hasEnded &&
       this.voteStatus === 'Scheduled' &&
       !(await this.hasVoted(voterAddress)) &&
       (await this.votingPower(voterAddress)).gt(bn(0))
+    )
   }
 
   async canExecute(): Promise<boolean> {
-    return this.isAccepted &&
+    return (
+      this.isAccepted &&
       this.voteStatus === 'Scheduled' &&
       (await this.hasEndedExecutionDelay())
+    )
   }
 
   async votingPower(voterAddress: Address): Promise<BigNumber> {
@@ -233,9 +256,10 @@ export default class Vote {
   ): SubscriptionResult<any> {
     return subscription<any>(
       (error: Error | null, castVote: any) => {
-        callback?.(error, error ? undefined : (castVote !== null) as boolean)
+        callback?.(error, error ? undefined : ((castVote !== null) as boolean))
       },
-      (callback) => this.#connector.onCastVote(this.castVoteId(voterAddress), callback)
+      (callback) =>
+        this.#connector.onCastVote(this.castVoteId(voterAddress), callback)
     )
   }
 
@@ -277,7 +301,10 @@ export default class Vote {
     callback?: SubscriptionCallback<CollateralRequirement>
   ): SubscriptionResult<CollateralRequirement> {
     return subscription<CollateralRequirement>(callback, (callback) =>
-      this.#connector.onCollateralRequirement(this.collateralRequirementId, callback)
+      this.#connector.onCollateralRequirement(
+        this.collateralRequirementId,
+        callback
+      )
     )
   }
 
@@ -289,7 +316,10 @@ export default class Vote {
     callback?: SubscriptionCallback<ArbitratorFee | null>
   ): SubscriptionResult<ArbitratorFee | null> {
     return subscription<ArbitratorFee | null>(callback, (callback) =>
-      this.#connector.onArbitratorFee(this.submitterArbitratorFeeId || '', callback)
+      this.#connector.onArbitratorFee(
+        this.submitterArbitratorFeeId || '',
+        callback
+      )
     )
   }
 
@@ -301,7 +331,10 @@ export default class Vote {
     callback?: SubscriptionCallback<ArbitratorFee | null>
   ): SubscriptionResult<ArbitratorFee | null> {
     return subscription<ArbitratorFee | null>(callback, (callback) =>
-      this.#connector.onArbitratorFee(this.challengerArbitratorFeeId || '', callback)
+      this.#connector.onArbitratorFee(
+        this.challengerArbitratorFeeId || '',
+        callback
+      )
     )
   }
 

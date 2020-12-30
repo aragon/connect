@@ -11,6 +11,23 @@ import Transaction from './entities/Transaction'
 
 export type Abi = (ethersUtils.EventFragment | ethersUtils.FunctionFragment)[]
 
+export type IpfsResolver = {
+  url: (cid: string, path?: string) => Promise<string>
+  json: (cid: string, path?: string) => Promise<object>
+}
+
+export type ConnectionContext = {
+  actAs: Address | null
+  ethereumProvider: object | null
+  ethersProvider: ethersProviders.Provider
+  ipfs: IpfsResolver
+  network: Network
+  orgAddress: Address
+  orgConnector: IOrganizationConnector
+  orgLocation: string
+  verbose: boolean
+}
+
 export type AppOrAddress = App | Address
 
 export type ForwardingPathDeclaration = AppOrAddress[]
@@ -31,14 +48,14 @@ export interface CallScriptAction {
   data: string
 }
 
-export interface DescriptionAnnotation {
+export interface Annotation {
   type: string
   value: any
 }
 
 export interface PostProcessDescription {
   description: string
-  annotatedDescription?: DescriptionAnnotation[]
+  annotatedDescription?: Annotation[]
 }
 
 export interface StepDecoded {
@@ -50,7 +67,7 @@ export interface StepDecoded {
 
 export interface StepDescribed extends StepDecoded {
   description: string
-  annotatedDescription?: DescriptionAnnotation[]
+  annotatedDescription?: Annotation[]
 }
 
 export interface TransactionPath {
@@ -245,21 +262,4 @@ export interface AragonEnvironment {
   gasPrice?: string
   wsRPC?: string
   appId?: string
-}
-
-export type IpfsResolver = {
-  url: (cid: string, path?: string) => Promise<string>
-  json: (cid: string, path?: string) => Promise<object>
-}
-
-export type ConnectionContext = {
-  actAs: Address | null
-  ethereumProvider: object | null
-  ethersProvider: ethersProviders.Provider
-  ipfs: IpfsResolver
-  network: Network
-  orgAddress: Address
-  orgConnector: IOrganizationConnector
-  orgLocation: string
-  verbose: boolean
 }

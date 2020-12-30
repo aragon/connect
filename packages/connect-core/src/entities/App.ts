@@ -5,6 +5,7 @@ import {
 } from 'ethers'
 
 import { appIntent } from '../utils/intent'
+import { resolveManifest, resolveArtifact } from '../utils/metadata'
 import {
   Abi,
   AragonArtifact,
@@ -17,7 +18,6 @@ import ForwardingPath from './ForwardingPath'
 import Organization from './Organization'
 import Repo from './Repo'
 import Role from './Role'
-import { resolveArtifact, resolveManifest } from '../utils/metadata'
 import IOrganizationConnector from '../connections/IOrganizationConnector'
 
 // TODO:

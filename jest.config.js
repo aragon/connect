@@ -6,6 +6,7 @@ module.exports = {
     '<rootDir>/packages/connect/jest.config.js',
     '<rootDir>/packages/connect-core/jest.config.js',
     '<rootDir>/packages/connect-thegraph/jest.config.js',
+    '<rootDir>/packages/connect-react/jest.config.js',
     '<rootDir>/packages/connect-finance/jest.config.js',
     '<rootDir>/packages/connect-tokens/jest.config.js',
     '<rootDir>/packages/connect-voting/jest.config.js',

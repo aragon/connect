@@ -40,23 +40,17 @@ export async function createDirectTransactionForApp(
   methodSignature: string,
   params: any[]
 ): Promise<Transaction> {
-  if (!app) {
-    throw new ErrorInvalid(
-      `Could not create transaction due to missing app artifact`
-    )
-  }
-
-  const destination = app.address
-
   if (!app.abi) {
-    throw new ErrorInvalid(`No ABI specified in artifact for ${destination}`)
+    throw new ErrorInvalid(
+      `No ABI specified in app for ${app.address}. Make sure the metada for the app is available`
+    )
   }
 
   const fragment = findMethodAbiFragment(app.abi, methodSignature)
 
   if (!fragment) {
     throw new ErrorInvalid(
-      `${methodSignature} not found on ABI for ${destination}`
+      `${methodSignature} not found on ABI for ${app.address}`
     )
   }
 

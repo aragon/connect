@@ -1,18 +1,17 @@
-import { connect, App } from '@aragon/connect'
+import { connect } from '@aragon/connect'
 import { Organization } from '@aragon/connect-core'
 import connectTokens, { Token, Tokens } from '../../src'
 
-const ORG_NAME = '0x059bcfbc477c46ab39d76c05b7b40f3a42e7de3b'
-const APP_ADDRESS = '0xB5146c785A64feFC17bCbAE1f07ad0000E300442'
-const TOKEN_ADDRESS = '0x4445bcd1f3e18bafca435379c46a11f40461e2ef'
+const ORG = '0x1882d9e76e500dec9ef152b86895fc8f719f4fd3'
+const TOKEN_ADDRESS = '0x00187b24acbda90bcced15944ac0fd09513ccc19'
 
 describe('when connecting to a token manager app', () => {
   let org: Organization
   let tokens: Tokens
 
   beforeAll(async () => {
-    org = await connect(ORG_NAME, 'thegraph', { network: 4 })
-    tokens = (await connectTokens(org.app(APP_ADDRESS))) as Tokens
+    org = await connect(ORG, 'thegraph', { network: 4 })
+    tokens = (await connectTokens(org.app(TOKEN_ADDRESS))) as Tokens
   })
 
   afterAll(async () => {
@@ -32,19 +31,19 @@ describe('when connecting to a token manager app', () => {
     })
 
     test('has the expected address', () => {
-      expect(token.address).toBe(TOKEN_ADDRESS)
+      expect(token.address).toBe('0x94fed500630d647deee446ceef2d3f418ee7f095')
     })
 
     test('has the expected name', () => {
-      expect(token.name).toBe('AleCoin')
+      expect(token.name).toBe('VINE TOKEN')
     })
 
     test('has the expected symbol', () => {
-      expect(token.symbol).toBe('ALE')
+      expect(token.symbol).toBe('VINE')
     })
 
     test('has the correct totalSupply', () => {
-      expect(token.totalSupply).toBe('3000000000000000000')
+      expect(token.totalSupply).toBe('1000000000000000000')
     })
 
     test('is transferable', () => {

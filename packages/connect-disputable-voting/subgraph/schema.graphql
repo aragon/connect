@@ -1,15 +1,15 @@
 enum VoteStatus {
-  Scheduled,
-  Challenged,
-  Settled,
-  Disputed,
-  Cancelled,
+  Scheduled
+  Challenged
+  Settled
+  Disputed
+  Cancelled
   Executed
 }
 
 enum VoterState {
-  Absent,
-  Yea,
+  Absent
+  Yea
   Nay
 }
 
