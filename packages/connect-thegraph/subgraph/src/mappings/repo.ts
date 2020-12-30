@@ -28,14 +28,6 @@ export function handleNewVersion(event: NewVersionEvent): void {
       event.params.versionId
     )
 
-    // update repo info
-    version.repoName = repo.name
-    version.repoAddress = repo.address
-    version.repoNamehash = repo.node
-
-    // update repo last version
-    repo.lastVersion = version.id
-
     // add the version to the repo
     const currentVersions = repo.versions
     currentVersions.push(version.id)
@@ -44,6 +36,37 @@ export function handleNewVersion(event: NewVersionEvent): void {
     repo.save()
     version.save()
   }
+}
+
+function buildVersionId(repoId: string, semanticVersion: string): string {
+  return repoId.concat('-').concat(semanticVersion)
+}
+
+function loadOrCreateVersion(
+  repo: Address,
+  semanticVersion: string,
+  versionContractId: BigInt
+): VersionEntity {
+  const versionId = buildVersionId(repo.toHexString(), semanticVersion)
+  // create new version
+  let version = VersionEntity.load(versionId)
+  if (version === null) {
+    version = new VersionEntity(versionId)
+    version.semanticVersion = semanticVersion
+    version.codeAddress = Bytes.fromHexString(ZERO_ADDR) as Bytes
+    version.contentUri = ''
+
+    const repoContract = RepoContract.bind(repo)
+    const callVersionResult = repoContract.try_getByVersionId(versionContractId)
+    if (callVersionResult.reverted) {
+      log.info('get repo version by id reverted', [])
+    } else {
+      const versionData = callVersionResult.value
+      version.codeAddress = versionData.value1
+      version.contentUri = versionData.value2.toString()
+    }
+  }
+  return version!
 }
 
 function buildVersionId(repoId: string, semanticVersion: string): string {

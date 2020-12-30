@@ -44,22 +44,21 @@ export function handleNewProxyApp(event: NewAppProxyEvent): void {
   if (appId.toHexString() == KERNEL_DEFAULT_ACL_APP_ID) {
     addKernelApp(orgAddress, org)
     AclTemplate.create(proxyAddress)
-    app.repoName = 'acl'
+    app.name = 'acl'
   }
 
   // EVM Script Registry
   if (appId.toHexString() == EVM_SCRIPT_REGISTRY_APP_ID) {
-    app.repoName = 'evm-script-registry'
+    app.name = 'evm-script-registry'
   }
 
   // Use ens to resolve repo
   const repoId = resolveRepo(appId)
   const repo = RepoEntity.load(repoId.toHexString())
   if (repo != null) {
-    app.version = repo.lastVersion
+    app.version = repo.versions.pop()
     app.repo = repo.id
-    app.repoName = repo.name
-    app.repoAddress = repo.address
+    app.name = repo.name
 
     repo.appCount += 1
 
@@ -92,7 +91,7 @@ export function handleSetApp(event: SetAppEvent): void {
 
 export function loadOrCreateOrg(
   orgAddress: Address,
-  blockTime: BigInt
+  createAt: BigInt
 ): OrganizationEntity {
   const orgId = orgAddress.toHexString()
   let org = OrganizationEntity.load(orgId)
@@ -106,7 +105,7 @@ export function loadOrCreateOrg(
     org.acl = kernel.acl()
     org.apps = []
     org.permissions = []
-    org.createdAt = blockTime
+    org.createdAt = createAt
   }
   return org!
 }
@@ -123,7 +122,7 @@ function loadOrCreateApp(
     app = new AppEntity(proxyAppId)
 
     app.address = proxyAddress
-    app.repoName = ''
+    app.name = ''
     app.appId = appId.toHexString()
     app.implementation = buildImplementationId(
       KERNEL_APP_BASES_NAMESPACE,
@@ -154,7 +153,7 @@ function addKernelApp(kernelProxy: Address, org: OrganizationEntity): void {
   const app = new AppEntity(kernelProxy.toHex())
   app.address = kernelProxy
   app.appId = KERNEL_CORE_APP_ID
-  app.repoName = 'kernel'
+  app.name = 'kernel'
   app.implementation = implementation.id
   app.isForwarder = false
   app.isUpgradeable = true

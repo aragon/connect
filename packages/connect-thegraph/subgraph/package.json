@@ -1,6 +1,6 @@
 {
   "name": "org-subgraph",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "repository": "https://github.com/graphprotocol/aragon-network",
   "license": "AGPL-3.0",
   "private": true,
@@ -12,6 +12,7 @@
     "manifest-staging": "env STAGING=true scripts/build-manifest.sh mainnet",
     "manifest-rinkeby": "scripts/build-manifest.sh rinkeby",
     "manifest-rinkeby-staging": "env STAGING=true scripts/build-manifest.sh rinkeby",
+    "manifest-xdai": "scripts/build-manifest.sh xdai",
     "manifest-ropsten": "scripts/build-manifest.sh ropsten",
     "deploy": "scripts/deploy.sh aragon mainnet",
     "deploy-staging": "env STAGING=true scripts/deploy.sh aragon mainnet",
