@@ -12,7 +12,7 @@ describe('when connecting to a token manager app', () => {
 
   beforeAll(async () => {
     org = await connect(ORG_NAME, 'thegraph', { network: 4 })
-    tokens = await connectTokens(org.app(APP_ADDRESS))
+    tokens = (await connectTokens(org.app(APP_ADDRESS))) as Tokens
   })
 
   afterAll(async () => {
