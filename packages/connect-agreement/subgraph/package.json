@@ -11,7 +11,7 @@
     "manifest-xdai": "scripts/build-manifest.sh xdai",
     "deploy-mainnet": "scripts/deploy.sh aragon agreement mainnet",
     "deploy-mainnet-staging": "env STAGING=true scripts/deploy.sh aragon agreement mainnet",
-    "deploy-rinkeby": "scripts/deploy.sh aragon agreement rinkeby",
+    "deploy-rinkeby": "scripts/deploy.sh rinkeby",
     "deploy-rinkeby-staging": "env STAGING=true scripts/deploy.sh aragon agreement rinkeby",
     "deploy-xdai": "scripts/deploy.sh aragon agreement xdai"
   },

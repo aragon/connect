@@ -1,4 +1,4 @@
-import { Address, DataSourceTemplate } from '@graphprotocol/graph-ts'
+import { Address, DataSourceTemplate, log } from '@graphprotocol/graph-ts'
 import { AragonInfo as AragonInfoEntity } from '../../generated/schema'
 import { Kernel as KernelTemplate } from '../../generated/templates'
 import { MiniMeToken as MiniMeTokenTemplate } from '../../generated/templates'
@@ -17,7 +17,7 @@ export function processOrg(orgAddress: Address): void {
 
 export function processApp(appAddress: Address, appId: string): void {
   if (!_isRegistered(appAddress, 'app')) {
-    const templateType = hooks.getTemplateForApp(appId)
+    const templateType = hooks.getTemplateForApp(appAddress)
     if (templateType) {
       DataSourceTemplate.create(templateType, [appAddress.toHexString()])
       hooks.onAppTemplateCreated(appAddress, appId)

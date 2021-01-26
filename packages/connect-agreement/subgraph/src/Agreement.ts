@@ -28,10 +28,6 @@ import {
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
-const DISPUTABLE_VOTING_OPEN = '0x705b5084c67966bb8e4640b28bab7a1e51e03d209d84e3a04d2a4f7415f93b34'
-const DISPUTABLE_VOTING_PRECEDENCE_CAMPAIGN = '0x39aa9e500efe56efda203714d12c78959ecbf71223162614ab5b56eaba014145'
-
-
 export function handleSettingChanged(event: SettingChanged): void {
   const agreementApp = AgreementContract.bind(event.address)
   const settingData = agreementApp.getSetting(event.params.settingId)
@@ -220,25 +216,8 @@ function loadOrCreateDisputable(agreement: Address, disputableAddress: Address):
     disputable = new Disputable(disputableId)
     disputable.agreement = agreement.toHexString()
     disputable.address = disputableAddress
-    createDisputableTemplate(disputableAddress)
   }
   return disputable!
-}
-
-function createDisputableTemplate(disputable: Address): void {
-  const disputableApp = DisputableAragonAppContract.bind(disputable)
-  const optionalAppId = disputableApp.try_appId()
-
-  if (!optionalAppId.reverted) {
-    const appId = optionalAppId.value.toHexString()
-    if (appId == DISPUTABLE_VOTING_OPEN || appId == DISPUTABLE_VOTING_PRECEDENCE_CAMPAIGN) {
-      DisputableVotingTemplate.create(disputable)
-    } else {
-      log.warning('Received unknown disputable app with app ID {}', [appId])
-    }
-  } else {
-    log.warning('Received disputable app without app ID', [])
-  }
 }
 
 function loadOrCreateDispute(agreement: Address, challengeId: BigInt, event: ethereum.Event): Dispute {

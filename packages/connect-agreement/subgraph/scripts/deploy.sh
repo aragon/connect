@@ -1,9 +1,7 @@
 #!/bin/bash
 
 # Arguments
-USER=$1
-NAME=$2
-NETWORK=$3
+NETWORK=$1
 
 # Require $GRAPHKEY to be set
 if [[ -z "${GRAPHKEY}" ]]; then
@@ -21,16 +19,10 @@ echo ''
 echo '> Generating types'
 graph codegen
 
-# Prepare subgraph name
-FULLNAME=$USER/aragon-$NAME-$NETWORK
-if [ "$STAGING" ]; then
-  FULLNAME=$FULLNAME-staging
-fi
-echo ''
-echo '> Deploying subgraph: '$FULLNAME
+echo Deploying subgraph 1hive/agreement-$NETWORK
+
+GRAPH_NODE="https://api.thegraph.com/deploy/"
+IPFS_NODE="https://api.thegraph.com/ipfs/"
 
 # Deploy subgraph
-graph deploy $FULLNAME \
-  --ipfs https://api.thegraph.com/ipfs/ \
-  --node https://api.thegraph.com/deploy/ \
-  --access-token $GRAPHKEY
+graph deploy 1hive/agreement-$NETWORK --ipfs ${IPFS_NODE} --node ${GRAPH_NODE} --access-token ${GRAPHKEY}

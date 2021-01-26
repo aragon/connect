@@ -1,4 +1,4 @@
-import { Address } from '@graphprotocol/graph-ts'
+import { Address, log } from '@graphprotocol/graph-ts'
 
 /*
  * Called when an app proxy is detected.
@@ -9,14 +9,20 @@ import { Address } from '@graphprotocol/graph-ts'
  * The returned name is used to instantiate a template declared in the subgraph manifest file,
  * which must have the same name.
  */
-export function getTemplateForApp(appId: string): string | null {
-  const AGREEMENT_OPEN = '0x34c62f3aec3073826f39c2c35e9a1297d9dbf3cc77472283106f09eee9cf47bf'
-  const AGREEMENT_PRECEDENCE_CAMPAIGN = '0x15a969a0e134d745b604fb43f699bb5c146424792084c198d53050c4d08126d1'
+export function getTemplateForApp(appAddress: Address): string | null {
+  const AGREEMENT_ADDRESS = Address.fromString('0x8a9893db28fe41bcafc07c9c4da73a6a85d3732c')
+  const STAKING_ADDRESS = Address.fromString('0xe5d38ff3b8bee1d69049fa0dac41a98446746f0b')
 
-  if (appId == AGREEMENT_OPEN || appId == AGREEMENT_PRECEDENCE_CAMPAIGN) {
+  if (AGREEMENT_ADDRESS.equals(appAddress)) {
+    log.info(" ********** FOUND AGREEMENT *********  ", [])
     return 'Agreement'
   } else {
-    return null
+    if (STAKING_ADDRESS.equals(appAddress)) {
+      log.info(" ********** FOUND STAKINGGGGGGGGG *********  ", [])
+      return 'Staking'
+    } else {
+        return null
+    }
   }
 }
 
