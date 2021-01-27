@@ -12,6 +12,7 @@ import {
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
+const AGREEMENT_ADDRESS = Address.fromString('0x8a9893db28fe41bcafc07c9c4da73a6a85d3732c')
 
 export function handleStaked(event: StakedEvent): void {
   const stakingApp = StakingContract.bind(event.address)
@@ -25,7 +26,7 @@ export function handleStaked(event: StakedEvent): void {
   movement.actionState = 'NA'
   movement.collateralState = 'Available'
   movement.createdAt = event.block.timestamp
-  movement.agreementId = Bytes.fromHexString('0x0000000000000000000000000000000000000000') as Bytes
+  movement.agreement = AGREEMENT_ADDRESS.toHexString() // Check what to do here
   movement.save()
 }
 
@@ -41,7 +42,7 @@ export function handleUnstaked(event: UnstakedEvent): void {
   movement.actionState = 'NA'
   movement.collateralState = 'Withdrawn'
   movement.createdAt = event.block.timestamp
-  movement.agreementId = Bytes.fromHexString('0x0000000000000000000000000000000000000000') as Bytes
+  movement.agreement = AGREEMENT_ADDRESS.toHexString() // Check what to do here
   movement.save()
 }
 
@@ -57,7 +58,7 @@ export function handleStakeTransferred(event: StakeTransferredEvent): void {
   withdraw.actionState = 'NA'
   withdraw.collateralState = 'Withdrawn'
   withdraw.createdAt = event.block.timestamp
-  withdraw.agreementId = Bytes.fromHexString('0x0000000000000000000000000000000000000000') as Bytes
+  withdraw.agreement = Address.fromString('0x8a9893db28fe41bcafc07c9c4da73a6a85d3732c').toHexString() // Check what to do here
   withdraw.save()
 
   const toStaking = updateStaking(event.address, token, event.params.to)
@@ -68,7 +69,7 @@ export function handleStakeTransferred(event: StakeTransferredEvent): void {
   deposit.actionState = 'NA'
   deposit.collateralState = 'Available'
   deposit.createdAt = event.block.timestamp
-  deposit.agreementId = Bytes.fromHexString('0x0000000000000000000000000000000000000000') as Bytes
+  deposit.agreement = Address.fromString('0x8a9893db28fe41bcafc07c9c4da73a6a85d3732c').toHexString() // Check what to do here
   deposit.save()
 }
 
@@ -91,7 +92,6 @@ export function createAgreementStakingMovement(agreement: Address, actionId: Big
   const movement = new StakingMovement(id)
   movement.staking = staking.id
   movement.agreement = agreement.toHexString()
-  movement.agreementId = agreement
   movement.action = buildActionId(agreement, actionId)
   movement.createdAt = event.block.timestamp
 
@@ -166,7 +166,7 @@ function loadOrCreateStaking(token: Address, user: Address): Staking {
 }
 
 function buildStakingId(token: Address, user: Address): string {
-  return token.toHexString() + "-user-" + user.toHexString()
+  return token.toHexString() + "-staking-" + user.toHexString()
 }
 
 function buildStakingMovementId(token: Address, user: Address, id: string): string {

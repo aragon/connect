@@ -130,8 +130,7 @@ type StakingMovement @entity {
   id: ID!
   staking: Staking!
   amount: BigInt!
-  agreementId: Bytes!
-  agreement: Agreement
+  agreement: Agreement!
   action: Action
   actionState: StakingActionState!
   collateralState: StakingCollateralState!
