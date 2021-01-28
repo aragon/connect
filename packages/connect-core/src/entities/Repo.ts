@@ -2,26 +2,17 @@ import {
   AragonArtifact,
   AragonArtifactRole,
   AragonManifest,
-  ConnectionContext,
   Metadata,
+  RepoData,
 } from '../types'
-import { resolveArtifact, resolveManifest } from '../utils/metadata'
 import Organization from './Organization'
-
-export interface RepoData {
-  address: string
-  artifact?: string
-  contentUri?: string
-  manifest?: string
-  name: string
-  registry?: string
-  registryAddress?: string
-}
+import { resolveArtifact, resolveManifest } from '../utils/metadata'
 
 export default class Repo {
   #metadata!: Metadata
   readonly address: string
   readonly contentUri?: string
+  readonly lastVersion?: string
   readonly name: string
   readonly registry?: string
   readonly registryAddress?: string
@@ -30,6 +21,7 @@ export default class Repo {
     this.#metadata = metadata
     this.address = data.address
     this.contentUri = data.contentUri
+    this.lastVersion = data.lastVersion
     this.name = data.name
     this.registry = data.registry
     this.registryAddress = data.registryAddress

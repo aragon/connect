@@ -14,11 +14,9 @@ export function getTemplateForApp(appAddress: Address): string | null {
   const STAKING_ADDRESS = Address.fromString('0xe5d38ff3b8bee1d69049fa0dac41a98446746f0b')
 
   if (AGREEMENT_ADDRESS.equals(appAddress)) {
-    log.info(" ********** FOUND AGREEMENT *********  ", [])
     return 'Agreement'
   } else {
     if (STAKING_ADDRESS.equals(appAddress)) {
-      log.info(" ********** FOUND STAKINGGGGGGGGG *********  ", [])
       return 'Staking'
     } else {
         return null

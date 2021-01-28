@@ -1,6 +1,5 @@
-import fetch from 'isomorphic-unfetch'
 import { AragonArtifact, AragonManifest, IpfsResolver } from '../types'
-import { ErrorConnection, ErrorInvalid, ErrorUnexpectedResult } from '../errors'
+import { ErrorInvalid } from '../errors'
 import {
   getApmInternalAppInfo,
   getAragonOsInternalAppInfo,

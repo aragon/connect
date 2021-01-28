@@ -1,17 +1,7 @@
-import { AragonArtifact, ConnectionContext, Metadata } from '../types'
 import { resolveArtifact } from '../utils/metadata'
+import { AragonArtifact, Metadata, RoleData } from '../types'
 import Organization from './Organization'
-import Permission, { PermissionData } from './Permission'
-
-export interface RoleData {
-  appAddress: string
-  appId: string
-  artifact?: string
-  contentUri?: string
-  hash: string
-  manager?: string
-  grantees?: PermissionData[] | null
-}
+import Permission from './Permission'
 
 export default class Role {
   readonly appAddress!: string

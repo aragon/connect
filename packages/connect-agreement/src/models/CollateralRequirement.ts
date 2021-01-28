@@ -10,6 +10,7 @@ export default class CollateralRequirement {
   readonly id: string
   readonly disputableAppId: string
   readonly tokenId: string
+  readonly tokenSymbol: string
   readonly tokenDecimals: string
   readonly actionAmount: string
   readonly challengeAmount: string
@@ -21,6 +22,7 @@ export default class CollateralRequirement {
     this.id = data.id
     this.disputableAppId = data.disputableAppId
     this.tokenId = data.tokenId
+    this.tokenSymbol = data.tokenSymbol
     this.tokenDecimals = data.tokenDecimals
     this.actionAmount = data.actionAmount
     this.challengeAmount = data.challengeAmount

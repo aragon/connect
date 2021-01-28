@@ -3,11 +3,11 @@ import { QueryResult } from '@aragon/connect-thegraph'
 import Staking from '../../models/Staking'
 import StakingMovement from '../../models/StakingMovement'
 
-export function parseStaking(result: QueryResult, connector: any): Staking {
+export function parseStaking(result: QueryResult, connector: any): Staking | null {
   const staking = result.data.staking
 
   if (!staking) {
-    throw new Error('Unable to parse staking.')
+    return null
   }
 
   const { id, token, user, total, available, locked, challenged } = staking
@@ -21,6 +21,7 @@ export function parseStaking(result: QueryResult, connector: any): Staking {
       locked,
       challenged,
       tokenId: token.id,
+      tokenSymbol: token.symbol,
       tokenDecimals: token.decimals,
     },
     connector
@@ -49,9 +50,12 @@ export function parseStakingMovements(
         createdAt,
         stakingId: staking.id,
         tokenId: staking.token.id,
+        tokenSymbol: staking.token.symbol,
         tokenDecimals: staking.token.decimals,
-        actionId: (action ? action.id : null),
-        agreementId: (agreement ? agreement.id : null),
+        actionId: action.id,
+        disputableAddress: action.disputable.address,
+        disputableActionId: action.disputableActionId,
+        agreementId: agreement.id
       },
       connector
     )

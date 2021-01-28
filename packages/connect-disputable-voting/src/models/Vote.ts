@@ -1,10 +1,11 @@
 import { subscription } from '@aragon/connect-core'
+import { BigNumber, providers as ethersProviders } from 'ethers'
 import { Address, SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
 
+import ERC20 from './ERC20'
 import Setting from './Setting'
 import CastVote from './CastVote'
 import ArbitratorFee from './ArbitratorFee'
-import DisputableVoting from './DisputableVoting'
 import CollateralRequirement from './CollateralRequirement'
 import { IDisputableVotingConnector, VoteData } from '../types'
 import {
@@ -12,11 +13,11 @@ import {
   formatBn,
   PCT_BASE,
   PCT_DECIMALS,
-  toMilliseconds,
   currentTimestampEvm,
 } from '../helpers'
 
 export default class Vote {
+  #ethersProvider: ethersProviders.Provider
   #connector: IDisputableVotingConnector
 
   readonly id: string
@@ -47,11 +48,19 @@ export default class Vote {
   readonly disputedAt: string
   readonly executedAt: string
   readonly isAccepted: boolean
+  readonly tokenId: string
+  readonly tokenSymbol: string
   readonly tokenDecimals: string
+  readonly settlementOffer: string | null
+  readonly collateralRequirementId: string
+  readonly collateralTokenId: string
+  readonly collateralTokenSymbol: string
+  readonly collateralTokenDecimals: string
   readonly submitterArbitratorFeeId: string
   readonly challengerArbitratorFeeId: string
 
-  constructor(data: VoteData, connector: IDisputableVotingConnector) {
+  constructor(data: VoteData, connector: IDisputableVotingConnector, ethersProvider: ethersProviders.Provider) {
+    this.#ethersProvider = ethersProvider
     this.#connector = connector
 
     this.id = data.id
@@ -82,17 +91,23 @@ export default class Vote {
     this.disputedAt = data.disputedAt
     this.executedAt = data.executedAt
     this.isAccepted = data.isAccepted
+    this.tokenId = data.tokenId
+    this.tokenSymbol = data.tokenSymbol
     this.tokenDecimals = data.tokenDecimals
+    this.settlementOffer = data.settlementOffer
+    this.collateralRequirementId = data.collateralRequirementId
+    this.collateralTokenId = data.collateralTokenId
+    this.collateralTokenSymbol = data.collateralTokenSymbol
+    this.collateralTokenDecimals = data.collateralTokenDecimals
     this.submitterArbitratorFeeId = data.submitterArbitratorFeeId
     this.challengerArbitratorFeeId = data.challengerArbitratorFeeId
   }
 
   get hasEnded(): boolean {
-    return this.voteStatus === 'Cancelled' || this.voteStatus === 'Settled' || (
-      this.voteStatus !== 'Challenged' &&
-      this.voteStatus !== 'Disputed' &&
-      Date.now() >= toMilliseconds(this.endDate)
-    )
+    const currentTimestamp = currentTimestampEvm()
+    return this.voteStatus === 'Cancelled' || this.voteStatus === 'Settled' ||
+      (this.voteStatus === 'Challenged' && currentTimestamp.gte(this.challengeEndDate)) ||
+      (this.voteStatus !== 'Challenged' && this.voteStatus !== 'Disputed' && currentTimestamp.gte(this.endDate))
   }
 
   get endDate(): string {
@@ -108,6 +123,16 @@ export default class Vote {
 
     // Otherwise, since the last computed end date was reached and included a flip, we need to extend the end date by one more period
     return lastComputedEndDate.add(bn(this.quietEndingExtension)).toString()
+  }
+
+  get currentQuietEndingExtensionDuration(): string {
+    const actualEndDate = bn(this.endDate)
+    const baseVoteEndDate = bn(this.startDate).add(bn(this.duration))
+    const endDateAfterPause = baseVoteEndDate.add(bn(this.pauseDuration))
+
+    // To know exactly how many extensions due to quiet ending we had, we subtract
+    // the base vote and pause durations to the actual vote end date
+    return actualEndDate.sub(endDateAfterPause).toString()
   }
 
   get yeasPct(): string {
@@ -139,8 +164,12 @@ export default class Vote {
   }
 
   get status(): string {
-    if (this.hasEnded && this.voteStatus === 'Scheduled') {
-      return this.isAccepted ? 'Accepted' : 'Rejected'
+    if (this.hasEnded) {
+      if (this.voteStatus === 'Scheduled') {
+        return this.isAccepted ? 'Accepted' : 'Rejected'
+      } else if (this.voteStatus === 'Challenged') {
+        return 'Settled'
+      }
     }
     return this.voteStatus
   }
@@ -156,6 +185,58 @@ export default class Vote {
     const currentExtensions = bn(this.quietEndingExtensionDuration).div(bn(this.quietEndingExtension))
     const wasAcceptedBeforeLastFlip = wasInitiallyAccepted == (currentExtensions.mod(bn('2')).eq(bn('0')))
     return wasAcceptedBeforeLastFlip != this.isAccepted
+  }
+
+  async hasEndedExecutionDelay(): Promise<boolean> {
+    const setting = await this.setting()
+    const currentTimestamp = currentTimestampEvm()
+    const executionDelayEndDate = bn(this.endDate).add(setting.executionDelay)
+    return currentTimestamp.gte(executionDelayEndDate)
+  }
+
+  async canVote(voterAddress: Address): Promise<boolean> {
+    return !this.hasEnded &&
+      this.voteStatus === 'Scheduled' &&
+      !(await this.hasVoted(voterAddress)) &&
+      (await this.votingPower(voterAddress)).gt(bn(0))
+  }
+
+  async canExecute(): Promise<boolean> {
+    return this.isAccepted &&
+      this.voteStatus === 'Scheduled' &&
+      (await this.hasEndedExecutionDelay())
+  }
+
+  async votingPower(voterAddress: Address): Promise<BigNumber> {
+    const token = await this.token()
+    return token.balanceAt(voterAddress, this.snapshotBlock)
+  }
+
+  async formattedVotingPower(voterAddress: Address): Promise<string> {
+    const token = await this.token()
+    const balance = await token.balanceAt(voterAddress, this.snapshotBlock)
+    return formatBn(balance, token.decimals)
+  }
+
+  async token(): Promise<ERC20> {
+    return this.#connector.ERC20(this.tokenId)
+  }
+
+  async hasVoted(voterAddress: Address): Promise<boolean> {
+    const castVote = await this.castVote(voterAddress)
+    return castVote !== null
+  }
+
+  onHasVoted(
+    voterAddress: Address,
+    callback?: SubscriptionCallback<any>
+  ): SubscriptionResult<any> {
+    return subscription<any>(
+      (error: Error | null, castVote: any) => {
+        callback?.(error, error ? undefined : (castVote !== null) as boolean)
+      },
+      (callback) => this.#connector.onCastVote(this.castVoteId(voterAddress), callback)
+    )
   }
 
   castVoteId(voterAddress: Address): string {
@@ -189,14 +270,14 @@ export default class Vote {
   }
 
   async collateralRequirement(): Promise<CollateralRequirement> {
-    return this.#connector.collateralRequirement(this.id)
+    return this.#connector.collateralRequirement(this.collateralRequirementId)
   }
 
   onCollateralRequirement(
     callback?: SubscriptionCallback<CollateralRequirement>
   ): SubscriptionResult<CollateralRequirement> {
     return subscription<CollateralRequirement>(callback, (callback) =>
-      this.#connector.onCollateralRequirement(this.id, callback)
+      this.#connector.onCollateralRequirement(this.collateralRequirementId, callback)
     )
   }
 
@@ -236,8 +317,12 @@ export default class Vote {
     )
   }
 
-  _disputableVoting(): DisputableVoting {
-    return new DisputableVoting(this.#connector, this.votingId)
+  async formattedSettlementOffer(): Promise<string | null> {
+    if (!this.settlementOffer) {
+      return null
+    }
+
+    return formatBn(this.settlementOffer, this.collateralTokenDecimals)
   }
 
   _votingPowerPct(num: string): string {

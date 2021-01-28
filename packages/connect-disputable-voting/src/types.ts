@@ -15,7 +15,9 @@ export interface DisputableVotingData {
   id: string
   dao: string
   token: string
+  agreement: string
   currentSettingId: string
+  currentCollateralRequirementId: string
 }
 
 export interface VoteData {
@@ -46,8 +48,15 @@ export interface VoteData {
   settledAt: string
   disputedAt: string
   executedAt: string
+  tokenId: string
+  tokenSymbol: string
   tokenDecimals: string
   isAccepted: boolean
+  settlementOffer: string | null
+  collateralRequirementId: string
+  collateralTokenId: string
+  collateralTokenSymbol: string
+  collateralTokenDecimals: string
   submitterArbitratorFeeId: string
   challengerArbitratorFeeId: string
 }
@@ -85,18 +94,21 @@ export interface SettingData {
 
 export interface CollateralRequirementData {
   id: string
-  voteId: string
+  votingId: string
   tokenId: string
+  tokenSymbol: string
   tokenDecimals: string
   actionAmount: string
   challengeAmount: string
   challengeDuration: string
+  collateralRequirementId: string
 }
 
 export interface ArbitratorFeeData {
   id: string
   voteId: string
   tokenId: string
+  tokenSymbol: string
   tokenDecimals: string
   amount: string
 }
@@ -136,6 +148,11 @@ export interface IDisputableVotingConnector {
     skip: number,
     callback: SubscriptionCallback<Setting[]>
   ): SubscriptionHandler
+  currentCollateralRequirement(disputableVoting: string): Promise<CollateralRequirement>
+  onCurrentCollateralRequirement(
+    disputableVoting: string,
+    callback: SubscriptionCallback<CollateralRequirement>
+  ): SubscriptionHandler
   vote(voteId: string): Promise<Vote>
   onVote(
     voteId: string,
@@ -165,9 +182,9 @@ export interface IDisputableVotingConnector {
     voterId: string,
     callback: SubscriptionCallback<Voter>
   ): SubscriptionHandler
-  collateralRequirement(voteId: string): Promise<CollateralRequirement>
+  collateralRequirement(collateralRequirementId: string): Promise<CollateralRequirement>
   onCollateralRequirement(
-    voteId: string,
+    collateralRequirementId: string,
     callback: SubscriptionCallback<CollateralRequirement>
   ): SubscriptionHandler
   arbitratorFee(arbitratorFeeId: string): Promise<ArbitratorFee | null>

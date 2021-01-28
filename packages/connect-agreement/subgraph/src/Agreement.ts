@@ -1,13 +1,10 @@
-import { ethereum, BigInt, Address, log } from '@graphprotocol/graph-ts'
+import { ethereum, BigInt, Address } from '@graphprotocol/graph-ts'
 
 import { ERC20 } from '../generated/schema'
 import { ERC20 as ERC20Contract } from '../generated/templates/Agreement/ERC20'
-import { createAgreementStakingMovement } from './Staking'
-import { Staking as StakingTemplate } from '../generated/templates'
+import { Staking as StakingContract } from '../generated/templates/Agreement/Staking'
 import { StakingFactory as StakingFactoryContract } from '../generated/templates/Agreement/StakingFactory'
-import { DisputableVoting as DisputableVotingTemplate } from '../generated/templates'
-import { DisputableAragonApp as DisputableAragonAppContract } from '../generated/templates/DisputableVoting/DisputableAragonApp'
-import { Agreement, Action, Signature, Version, Disputable, Challenge, Dispute, Evidence, Signer, CollateralRequirement, ArbitratorFee } from '../generated/schema'
+import { Agreement, Action, Signature, Version, Disputable, Challenge, Dispute, Evidence, Signer, CollateralRequirement, ArbitratorFee, StakingMovement, Staking } from '../generated/schema'
 import {
   Agreement as AgreementContract,
   ActionSubmitted,
@@ -98,7 +95,7 @@ export function handleActionSubmitted(event: ActionSubmitted): void {
   action.createdAt = event.block.timestamp
   action.save()
 
-  createAgreementStakingMovement(event.address, event.params.actionId, 'new', event)
+  createStakingMovement(event.address, event.params.actionId, 'new', event)
 }
 
 export function handleActionClosed(event: ActionClosed): void {
@@ -106,7 +103,11 @@ export function handleActionClosed(event: ActionClosed): void {
   action.closed = true
   action.save()
 
-  createAgreementStakingMovement(event.address, event.params.actionId, 'closed', event)
+  const challenge  = Challenge.load(action.lastChallenge)
+
+  if(challenge.state != 'Settled'){
+    createStakingMovement(event.address, event.params.actionId, 'closed', event)
+  }
 }
 
 export function handleActionChallenged(event: ActionChallenged): void {
@@ -135,12 +136,12 @@ export function handleActionChallenged(event: ActionChallenged): void {
   challenge.challengerArbitratorFee = challengerArbitratorFeeId
   challenge.save()
 
-  createAgreementStakingMovement(event.address, event.params.actionId, 'challenged', event)
+  createStakingMovement(event.address, event.params.actionId, 'challenged', event)
 }
 
 export function handleActionSettled(event: ActionSettled): void {
   updateChallengeState(event.address, event.params.challengeId)
-  createAgreementStakingMovement(event.address, event.params.actionId, 'settled', event)
+  createStakingMovement(event.address, event.params.actionId, 'settled', event)
 }
 
 export function handleActionDisputed(event: ActionDisputed): void {
@@ -173,7 +174,7 @@ export function handleActionVoided(event: ActionVoided): void {
 export function handleActionRejected(event: ActionRejected): void {
   updateChallengeState(event.address, event.params.challengeId)
   updateDisputeState(event.address, event.params.challengeId, event)
-  createAgreementStakingMovement(event.address, event.params.actionId, 'rejected', event)
+  createStakingMovement(event.address, event.params.actionId, 'rejected', event)
 }
 
 export function handleEvidenceSubmitted(event: EvidenceSubmitted): void {
@@ -273,6 +274,91 @@ function updateCollateralRequirement(agreement: Address, disputable: Address, co
   requirement.save()
 }
 
+function createStakingMovement(agreement: Address, actionId: BigInt, type: string, event: ethereum.Event): void {
+  const agreementApp = AgreementContract.bind(agreement)
+  const actionData = agreementApp.getAction(actionId)
+  const collateralData = agreementApp.getCollateralRequirement(actionData.value0, actionData.value2)
+
+  const user = actionData.value4
+  const token = collateralData.value0
+  const collateralAmount = collateralData.value2
+
+  if (collateralAmount.equals(BigInt.fromI32(0))) {
+    return
+  }
+
+  const factory = StakingFactoryContract.bind(agreementApp.stakingFactory())
+  const stakingAddress = factory.getInstance(token)
+  const staking = updateStaking(stakingAddress, token, user)
+
+  const id = buildStakingMovementId(token, user, buildId(event))
+  const movement = new StakingMovement(id)
+  movement.staking = staking.id
+  movement.agreement = agreement.toHexString()
+  movement.action = buildActionId(agreement, actionId)
+  movement.createdAt = event.block.timestamp
+
+  if (type == 'new') {
+    movement.amount = collateralAmount
+    movement.actionState = 'Scheduled'
+    movement.collateralState = 'Locked'
+  } else if (type == 'challenged') {
+    movement.amount = collateralAmount
+    movement.actionState = 'Challenged'
+    movement.collateralState = 'Challenged'
+    staking.challenged = staking.challenged.plus(collateralAmount)
+  } else if (type == 'settled') {
+    const challengeData = agreementApp.getChallenge(actionData.value7)
+    movement.amount = challengeData.value4
+    movement.actionState = 'Settled'
+    movement.collateralState = 'Slashed'
+    staking.challenged = staking.challenged.minus(collateralAmount)
+  } else if (type == 'rejected') {
+    movement.amount = collateralAmount
+    movement.actionState = 'Cancelled'
+    movement.collateralState = 'Slashed'
+    staking.challenged = staking.challenged.minus(collateralAmount)
+  } else { // closed
+    movement.amount = collateralAmount
+    movement.actionState = 'Completed'
+    movement.collateralState = 'Available'
+    staking.challenged = staking.challenged.minus(collateralAmount)
+  }
+
+  staking.save()
+  movement.save()
+}
+
+function updateStaking(stakingAddress: Address, token: Address, user: Address): Staking {
+  const stakingApp = StakingContract.bind(stakingAddress)
+  const balance = stakingApp.getBalancesOf(user)
+
+  const staking = loadOrCreateStaking(token, user)
+  staking.total = balance.value0
+  staking.locked = balance.value1
+  staking.available = staking.total.minus(staking.locked)
+  staking.save()
+
+  return staking
+}
+
+function loadOrCreateStaking(token: Address, user: Address): Staking {
+  const id = buildStakingId(token, user)
+  let staking = Staking.load(id)
+
+  if (staking === null) {
+    staking = new Staking(id)
+    staking.user = user
+    staking.token = token.toHexString()
+    staking.total = BigInt.fromI32(0)
+    staking.locked = BigInt.fromI32(0)
+    staking.available = BigInt.fromI32(0)
+    staking.challenged = BigInt.fromI32(0)
+  }
+
+  return staking!
+}
+
 function createArbitratorFee(agreement: Address, id: string, feeToken: Address, feeAmount: BigInt): void {
   const arbitratorFee = new ArbitratorFee(id)
   arbitratorFee.amount = feeAmount
@@ -291,14 +377,6 @@ export function buildERC20(agreement: Address, address: Address): string {
     token.symbol = tokenContract.symbol()
     token.decimals = tokenContract.decimals()
     token.save()
-
-    const agreementApp = AgreementContract.bind(agreement)
-    const stakingFactoryAddress = agreementApp.stakingFactory()
-    const stakingFactory = StakingFactoryContract.bind(stakingFactoryAddress)
-    const stakingAddress = stakingFactory.getInstance(Address.fromString(id))
-    if (stakingAddress.toHexString() != '0x0000000000000000000000000000000000000000') {
-      StakingTemplate.create(stakingAddress)
-    }
   }
 
   return token.id
@@ -330,6 +408,14 @@ function buildVersionId(agreement: Address, versionId: BigInt): string {
 
 function buildCollateralRequirementId(agreement: Address, disputable: Address, collateralRequirementId: BigInt): string {
   return buildDisputableId(agreement, disputable) + "-collateral-requirement-" + collateralRequirementId.toString()
+}
+
+function buildStakingId(token: Address, user: Address): string {
+  return token.toHexString() + "-staking-" + user.toHexString()
+}
+
+function buildStakingMovementId(token: Address, user: Address, id: string): string {
+  return buildStakingId(token, user) + "-movement-" + id
 }
 
 function buildId(event: ethereum.Event): string {

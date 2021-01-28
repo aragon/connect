@@ -11,4 +11,5 @@ module.exports = {
   name: packageName,
   displayName: 'DISPUTABLE-VOTING',
   rootDir: '../..',
+  testTimeout: 20000
 }

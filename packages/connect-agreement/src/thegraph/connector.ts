@@ -198,8 +198,8 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     )
   }
 
-  async signer(signerId: string): Promise<Signer> {
-    return this.#gql.performQueryWithParser<Signer>(
+  async signer(signerId: string): Promise<Signer | null> {
+    return this.#gql.performQueryWithParser<Signer | null>(
       queries.GET_SIGNER('query'),
       { signerId },
       (result: QueryResult) => parseSigner(result, this)
@@ -208,9 +208,9 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
 
   onSigner(
     signerId: string,
-    callback: SubscriptionCallback<Signer>
+    callback: SubscriptionCallback<Signer | null>
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser<Signer>(
+    return this.#gql.subscribeToQueryWithParser<Signer | null>(
       queries.GET_SIGNER('query'),
       { signerId },
       callback,
@@ -245,28 +245,30 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
   }
 
   async collateralRequirement(
-    disputableAppId: string
+    collateralRequirementId: string
   ): Promise<CollateralRequirement> {
     return this.#gql.performQueryWithParser<CollateralRequirement>(
       queries.GET_COLLATERAL_REQUIREMENT('query'),
-      { disputableAppId },
+      { collateralRequirementId },
       (result: QueryResult) => parseCollateralRequirement(result, this)
     )
   }
 
   onCollateralRequirement(
-    disputableAppId: string,
+    collateralRequirementId: string,
     callback: SubscriptionCallback<CollateralRequirement>
   ): SubscriptionHandler {
     return this.#gql.subscribeToQueryWithParser<CollateralRequirement>(
       queries.GET_COLLATERAL_REQUIREMENT('subscription'),
-      { disputableAppId },
+      { collateralRequirementId },
       callback,
       (result: QueryResult) => parseCollateralRequirement(result, this)
     )
   }
 
-  async staking(stakingId: string): Promise<Staking> {
+  async staking(
+    stakingId: string
+  ): Promise<Staking | null> {
     return this.#gql.performQueryWithParser<Staking>(
       queries.GET_STAKING('query'),
       { stakingId },
@@ -276,9 +278,9 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
 
   onStaking(
     stakingId: string,
-    callback: SubscriptionCallback<Staking>
+    callback: SubscriptionCallback<Staking | null>
   ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser<Staking>(
+    return this.#gql.subscribeToQueryWithParser<Staking | null>(
       queries.GET_STAKING('query'),
       { stakingId },
       callback,
@@ -288,29 +290,27 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
 
   async stakingMovements(
     stakingId: string,
-    agreement: string,
+    agreementId: string,
     first: number,
     skip: number
   ): Promise<StakingMovement[]> {
-    const agreements = [agreement, '0x0000000000000000000000000000000000000000']
     return this.#gql.performQueryWithParser<StakingMovement[]>(
       queries.GET_STAKING_MOVEMENTS('query'),
-      { stakingId, agreements, first, skip },
+      { stakingId, agreementId, first, skip },
       (result: QueryResult) => parseStakingMovements(result, this)
     )
   }
 
   onStakingMovements(
     stakingId: string,
-    agreement: string,
+    agreementId: string,
     first: number,
     skip: number,
     callback: SubscriptionCallback<StakingMovement[]>
   ): SubscriptionHandler {
-    const agreements = [agreement, '0x0000000000000000000000000000000000000000']
     return this.#gql.subscribeToQueryWithParser<StakingMovement[]>(
       queries.GET_STAKING_MOVEMENTS('query'),
-      { stakingId, agreements, first, skip },
+      { stakingId, agreementId, first, skip },
       callback,
       (result: QueryResult) => parseStakingMovements(result, this)
     )

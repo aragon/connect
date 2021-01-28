@@ -33,8 +33,8 @@ describe('when connecting to the mainnet subgraph', () => {
     })
 
     test('should have a valid appName', () => {
-      expect(app.appName).toBeDefined()
-      expect(app.appName!.length).toBeGreaterThan(0)
+      expect(app.artifact.appName).toBeDefined()
+      expect(app.artifact.appName!.length).toBeGreaterThan(0)
     })
 
     test('should have a valid artifact', () => {
@@ -50,9 +50,9 @@ describe('when connecting to the mainnet subgraph', () => {
       expect(app.contentUri!.length).toBeGreaterThan(0)
     })
 
-    test('should have valid intents', () => {
-      expect(app.intents).toBeDefined()
-      expect(app.intents!.length).toBeGreaterThan(0)
+    test('should have valid methods', () => {
+      expect(app.artifact.functions).toBeDefined()
+      expect(app.artifact.functions!.length).toBeGreaterThan(0)
     })
     test('should have valid isForwarder', () => {
       expect(app.isForwarder).toBeDefined()

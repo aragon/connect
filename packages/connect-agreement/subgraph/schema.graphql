@@ -39,7 +39,6 @@ type Action @entity {
   disputable: Disputable!
   actionId: BigInt!
   disputableActionId: BigInt!
-  script: Bytes
   context: Bytes!
   closed: Boolean!
   submitter: Signer!
@@ -131,7 +130,7 @@ type StakingMovement @entity {
   staking: Staking!
   amount: BigInt!
   agreement: Agreement!
-  action: Action
+  action: Action!
   actionState: StakingActionState!
   collateralState: StakingCollateralState!
   createdAt: BigInt!
@@ -141,8 +140,7 @@ enum StakingCollateralState {
   Available,
   Locked,
   Challenged,
-  Slashed,
-  Withdrawn
+  Slashed
 }
 
 enum StakingActionState {

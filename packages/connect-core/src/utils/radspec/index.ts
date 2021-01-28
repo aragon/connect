@@ -1,13 +1,14 @@
-import { providers as ethersProviders } from 'ethers'
 import * as radspec from 'radspec'
+import { providers as ethersProviders } from 'ethers'
+
 import { addressesEqual } from '../address'
-import { findAppMethodFromIntent } from '../app'
+import { findAppMethodFromData } from '../app'
+import { filterAndDecodeAppUpgradeIntents } from '../intent'
+import { Abi, AppMethod, StepDecoded, StepDescribed } from '../../types'
 import App from '../../entities/App'
-import { TransactionRequestData } from '../../transactions/TransactionRequest'
-import { Abi, AppIntent } from '../../types'
 
 interface FoundMethod {
-  method?: AppIntent
+  method?: AppMethod
   abi?: Abi
 }
 
@@ -15,22 +16,24 @@ interface FoundMethod {
  * Attempt to describe intent via radspec.
  */
 export async function tryEvaluatingRadspec(
-  intent: TransactionRequestData,
-  apps: App[],
-  provider?: ethersProviders.Provider // Decorated intent with description, if one could be made
-): Promise<string> {
-  const app = apps.find((app) => addressesEqual(app.address, intent.to))
+  intent: StepDecoded,
+  installedApps: App[],
+  provider: ethersProviders.Provider // Decorated intent with description, if one could be made
+): Promise<StepDescribed> {
+  const app = installedApps.find((app) =>
+    addressesEqual(app.address, intent.to)
+  )
 
   // If the intent matches an installed app, use only that app to search for a
   // method match, otherwise fallback to searching all installed apps
-  const appsToSearch = app ? [app] : apps
+  const appsToSearch = app ? [app] : installedApps
   const foundMethod = appsToSearch.reduce<FoundMethod | undefined>(
     (found, app) => {
       if (found) {
         return found
       }
 
-      const method = findAppMethodFromIntent(app, intent)
+      const method = findAppMethodFromData(app, intent.data)
       if (method) {
         return {
           method,
@@ -65,10 +68,37 @@ export async function tryEvaluatingRadspec(
     }
   }
 
-  return evaluatedNotice
+  return { ...intent, description: evaluatedNotice }
 }
 
-export {
-  postprocessRadspecDescription,
-  PostProcessDescription,
-} from './postprocess'
+/**
+ * Attempt to describe a setApp() intent. Only describes the APP_BASE namespace.
+ *
+ * @param  {Object} intent transaction intent
+ * @param  {Object} wrapper
+ * @return {Promise<Object>} Decorated intent with description, if one could be made
+ */
+export async function tryDescribingUpdateAppIntent(
+  intent: StepDecoded,
+  installedApps: App[]
+): Promise<StepDescribed | undefined> {
+  const upgradeIntentParams = filterAndDecodeAppUpgradeIntents(
+    [intent],
+    installedApps
+  )[0]
+  if (Array.isArray(upgradeIntentParams) && upgradeIntentParams.length === 0)
+    return undefined
+
+  const { appId, appAddress } = upgradeIntentParams
+
+  const app = installedApps.find((app) => app.address === appAddress)
+
+  const repo = await app?.repo()
+
+  return {
+    ...intent,
+    description: `Upgrade ${appId} app instances to v${repo?.lastVersion}`,
+  }
+}
+
+export { postprocessRadspecDescription } from './postprocess'

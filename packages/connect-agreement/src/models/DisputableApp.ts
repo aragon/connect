@@ -9,7 +9,7 @@ export default class DisputableApp {
   readonly id: string
   readonly address: string
   readonly agreementId: string
-  readonly collateralRequirementId: string
+  readonly currentCollateralRequirementId: string
   readonly activated: boolean
 
   constructor(data: DisputableAppData, connector: IAgreementConnector) {
@@ -18,19 +18,19 @@ export default class DisputableApp {
     this.id = data.id
     this.address = data.address
     this.agreementId = data.agreementId
-    this.collateralRequirementId = data.collateralRequirementId
+    this.currentCollateralRequirementId = data.currentCollateralRequirementId
     this.activated = data.activated
   }
 
   async collateralRequirement(): Promise<CollateralRequirement> {
-    return this.#connector.collateralRequirement(this.id)
+    return this.#connector.collateralRequirement(this.currentCollateralRequirementId)
   }
 
   onCollateralRequirement(
     callback?: SubscriptionCallback<CollateralRequirement>
   ): SubscriptionResult<CollateralRequirement> {
     return subscription<CollateralRequirement>(callback, (callback) =>
-      this.#connector.onCollateralRequirement(this.id, callback)
+      this.#connector.onCollateralRequirement(this.currentCollateralRequirementId, callback)
     )
   }
 }

@@ -1,25 +1,12 @@
-import {
-  ERC20,
-  Vote,
-  CastVote,
-  ArbitratorFee,
-  DisputableVoting,
-  CollateralRequirement,
-  DisputableVotingConnectorTheGraph,
-} from '../../../src'
-
-const VOTING_APP_ADDRESS = '0x0e835020497b2cd716369f8fc713fb7bd0a22dbf'
-const VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-dvoting-rinkeby-staging'
+import { bn } from '../../helpers'
+import { buildDisputableVoting, VOTING_APP_ADDRESS } from '../utils'
+import { ERC20, Vote, CastVote, DisputableVoting, CollateralRequirement } from '../../../src'
 
 describe('DisputableVoting', () => {
   let voting: DisputableVoting
 
-  beforeAll(() => {
-    const connector = new DisputableVotingConnectorTheGraph({
-      subgraphUrl: VOTING_SUBGRAPH_URL,
-    })
-    voting = new DisputableVoting(connector, VOTING_APP_ADDRESS)
+  beforeAll(async () => {
+    voting = await buildDisputableVoting()
   })
 
   afterAll(async () => {
@@ -41,6 +28,7 @@ describe('DisputableVoting', () => {
           parseInt(scheduledVote.duration)
 
         expect(scheduledVote.endDate).toBe(expectedScheduledVoteEndDate.toString())
+        expect(scheduledVote.currentQuietEndingExtensionDuration).toBe('0')
 
         const expectedSettledVoteEndDate =
           parseInt(settledVote.startDate) +
@@ -48,6 +36,7 @@ describe('DisputableVoting', () => {
           parseInt(settledVote.pauseDuration)
 
         expect(settledVote.endDate).toBe(expectedSettledVoteEndDate.toString())
+        expect(settledVote.currentQuietEndingExtensionDuration).toBe('0')
       })
     })
 
@@ -64,6 +53,7 @@ describe('DisputableVoting', () => {
           parseInt(scheduledVote.quietEndingExtension)
 
         expect(scheduledVote.endDate).toBe(expectedScheduledVoteEndDate.toString())
+        expect(scheduledVote.currentQuietEndingExtensionDuration).toBe(scheduledVote.quietEndingExtension)
 
         const expectedSettledVoteEndDate =
           parseInt(settledVote.startDate) +
@@ -72,30 +62,62 @@ describe('DisputableVoting', () => {
           parseInt(settledVote.quietEndingExtension)
 
         expect(settledVote.endDate).toBe(expectedSettledVoteEndDate.toString())
+        expect(settledVote.currentQuietEndingExtensionDuration).toBe(settledVote.quietEndingExtension)
       })
     })
   })
 
   describe('results', () => {
-    test('computes the current outcome properly', async () => {
-      const vote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-2`)
+    describe('when the vote is challenged', () => {
+      test('computes the current outcome properly', async () => {
+        const vote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-1`)
 
-      expect(vote.hasEnded).toBe(true)
-      expect(vote.isAccepted).toBe(false)
-      expect(vote.status).toBe('Settled')
+        expect(vote.hasEnded).toBe(true)
+        expect(vote.isAccepted).toBe(false)
+        expect(vote.status).toBe('Settled')
 
-      expect(vote.totalPower).toBe('3000000000000000000')
-      expect(vote.formattedTotalPower).toBe('3.00')
+        expect(vote.totalPower).toBe('3000000000000000000')
+        expect(vote.formattedTotalPower).toBe('3.00')
 
-      expect(vote.yeas).toBe('0')
-      expect(vote.yeasPct).toBe('0')
-      expect(vote.formattedYeas).toBe('0.00')
-      expect(vote.formattedYeasPct).toBe('0.00')
+        expect(vote.yeas).toBe('0')
+        expect(vote.yeasPct).toBe('0')
+        expect(vote.formattedYeas).toBe('0.00')
+        expect(vote.formattedYeasPct).toBe('0.00')
 
-      expect(vote.nays).toBe('0')
-      expect(vote.naysPct).toBe('0')
-      expect(vote.formattedNays).toBe('0.00')
-      expect(vote.formattedNaysPct).toBe('0.00')
+        expect(vote.nays).toBe('0')
+        expect(vote.naysPct).toBe('0')
+        expect(vote.formattedNays).toBe('0.00')
+        expect(vote.formattedNaysPct).toBe('0.00')
+
+        expect(await vote.canExecute()).toBe(false)
+        expect(await vote.canVote('0x03acbcb547d03c8e7746ef5988012b59604aa083')).toBe(false)
+      })
+    })
+
+    describe('when the vote is settled', () => {
+      test('computes the current outcome properly', async () => {
+        const vote = await voting.vote(`${VOTING_APP_ADDRESS}-vote-2`)
+
+        expect(vote.hasEnded).toBe(true)
+        expect(vote.isAccepted).toBe(false)
+        expect(vote.status).toBe('Settled')
+
+        expect(vote.totalPower).toBe('3000000000000000000')
+        expect(vote.formattedTotalPower).toBe('3.00')
+
+        expect(vote.yeas).toBe('0')
+        expect(vote.yeasPct).toBe('0')
+        expect(vote.formattedYeas).toBe('0.00')
+        expect(vote.formattedYeasPct).toBe('0.00')
+
+        expect(vote.nays).toBe('0')
+        expect(vote.naysPct).toBe('0')
+        expect(vote.formattedNays).toBe('0.00')
+        expect(vote.formattedNaysPct).toBe('0.00')
+
+        expect(await vote.canExecute()).toBe(false)
+        expect(await vote.canVote('0x03acbcb547d03c8e7746ef5988012b59604aa083')).toBe(false)
+      })
     })
   })
 
@@ -134,6 +156,7 @@ describe('DisputableVoting', () => {
 
       it('returns a null value', async () => {
         expect(castVote).toBeNull()
+        expect(await vote.hasVoted(VOTER_ADDRESS)).toBe(false)
       })
     })
 
@@ -151,6 +174,8 @@ describe('DisputableVoting', () => {
         expect(castVote.stake).toBe('1000000000000000000')
         expect(castVote.createdAt).toBe('1598530298')
         expect(castVote.caster).toBe(VOTER_ADDRESS)
+
+        expect(await vote.hasVoted(VOTER_ADDRESS)).toBe(true)
       })
 
       test('allows telling the voter', async () => {
@@ -164,21 +189,22 @@ describe('DisputableVoting', () => {
   describe('collateralRequirement', () => {
     const voteId = `${VOTING_APP_ADDRESS}-vote-2`
 
+    let vote: Vote
     let collateralRequirement: CollateralRequirement
 
     beforeAll(async () => {
-      const vote = await voting.vote(voteId)
+      vote = await voting.vote(voteId)
       collateralRequirement = await vote.collateralRequirement()
     })
 
     test('has a collateral requirement associated', async () => {
-      expect(collateralRequirement.id).toBe(voteId)
-      expect(collateralRequirement.tokenId).toBe(
-        '0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42'
-      )
+      expect(collateralRequirement.id).toBe(`${VOTING_APP_ADDRESS}-collateral-${collateralRequirement.collateralRequirementId}`)
+      expect(collateralRequirement.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
       expect(collateralRequirement.actionAmount).toBe('0')
       expect(collateralRequirement.challengeAmount).toBe('0')
       expect(collateralRequirement.challengeDuration).toBe('259200')
+
+      expect(await vote.formattedSettlementOffer()).toBe('0.00')
     })
 
     test('can requests the related token info', async () => {
@@ -200,19 +226,39 @@ describe('DisputableVoting', () => {
     })
 
     test('can requests the submitter arbitrator fees', async () => {
-      const artbiratorFee = (await vote.submitterArbitratorFee())!
+      const arbitratorFee = (await vote.submitterArbitratorFee())!
 
-      expect(artbiratorFee.id).toBe(`${voteId}-submitter`)
-      expect(artbiratorFee.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
-      expect(artbiratorFee.formattedAmount).toBe('150.00')
+      expect(arbitratorFee.id).toBe(`${voteId}-submitter`)
+      expect(arbitratorFee.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
+      expect(arbitratorFee.formattedAmount).toBe('150.00')
     })
 
     test('can requests the submitter arbitrator fees', async () => {
-      const artbiratorFee = (await vote.challengerArbitratorFee())!
+      const arbitratorFee = (await vote.challengerArbitratorFee())!
 
-      expect(artbiratorFee.id).toBe(`${voteId}-challenger`)
-      expect(artbiratorFee.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
-      expect(artbiratorFee.formattedAmount).toBe('150.00')
+      expect(arbitratorFee.id).toBe(`${voteId}-challenger`)
+      expect(arbitratorFee.tokenId).toBe('0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42')
+      expect(arbitratorFee.formattedAmount).toBe('150.00')
+    })
+  })
+
+  describe('balances', () => {
+    let vote: Vote
+    const VOTE_ID = `${VOTING_APP_ADDRESS}-vote-0`
+    const VOTER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
+
+    beforeAll(async () => {
+      vote = await voting.vote(VOTE_ID)
+    })
+
+    test('tells the balance at the moment of the vote', async () => {
+      expect(await vote.formattedVotingPower(VOTER_ADDRESS)).toBe('1.00')
+    })
+
+    test('tells the current balance of a voter', async () => {
+      const token = await vote.token()
+
+      expect((await token.balance(VOTER_ADDRESS)).gte(bn(0))).toBe(true)
     })
   })
 })

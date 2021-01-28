@@ -1,36 +1,27 @@
+import {
+  Contract,
+  providers as ethersProvider,
+  utils as ethersUtils,
+} from 'ethers'
+
+import { appIntent } from '../utils/intent'
+import {
+  Abi,
+  AragonArtifact,
+  AragonManifest,
+  Metadata,
+  AppData,
+  PathOptions,
+} from '../types'
+import ForwardingPath from './ForwardingPath'
 import Organization from './Organization'
 import Repo from './Repo'
 import Role from './Role'
-import {
-  Abi,
-  AppIntent,
-  AragonArtifact,
-  AragonManifest,
-  ConnectionContext,
-  Metadata,
-} from '../types'
 import { resolveArtifact, resolveManifest } from '../utils/metadata'
 import IOrganizationConnector from '../connections/IOrganizationConnector'
 
 // TODO:
 // [ ] (ipfs) contentUrl 	String 	The HTTP URL of the app content. Uses the IPFS HTTP provider. E.g. http://gateway.ipfs.io/ipfs/QmdLEDDfi…/ (ContentUri passing through the resolver)
-
-export interface AppData {
-  address: string
-  appId: string
-  artifact?: string
-  codeAddress: string
-  contentUri?: string
-  isForwarder?: boolean
-  isUpgradeable?: boolean
-  kernelAddress: string
-  manifest?: string
-  name?: string
-  registry?: string
-  registryAddress: string
-  repoAddress?: string
-  version?: string
-}
 
 export default class App {
   #metadata: Metadata
@@ -75,12 +66,8 @@ export default class App {
     return this.organization.connection.orgConnector
   }
 
-  async repo(): Promise<Repo> {
-    return this.orgConnector().repoForApp(this.organization, this.address)
-  }
-
-  async roles(): Promise<Role[]> {
-    return this.orgConnector().rolesForAddress(this.organization, this.address)
+  get provider(): ethersProvider.Provider {
+    return this.organization.connection.ethersProvider
   }
 
   get artifact(): AragonArtifact {
@@ -95,16 +82,12 @@ export default class App {
     return this.artifact.abi
   }
 
-  get intents(): AppIntent[] {
-    return this.artifact.functions
+  async repo(): Promise<Repo> {
+    return this.orgConnector().repoForApp(this.organization, this.address)
   }
 
-  get deprecatedIntents(): { [version: string]: AppIntent[] } {
-    return this.artifact.deprecatedFunctions
-  }
-
-  get appName(): string {
-    return this.artifact.appName
+  async roles(): Promise<Role[]> {
+    return this.orgConnector().rolesForAddress(this.organization, this.address)
   }
 
   toJSON() {
@@ -114,5 +97,56 @@ export default class App {
       // the object impossible to pass through JSON.stringify().
       organization: null,
     }
+  }
+
+  ethersContract(): Contract {
+    if (!this.abi) {
+      throw new Error(
+        `No ABI specified in app for ${this.address}. Make sure the metada for the app is available`
+      )
+    }
+    return new Contract(this.address, this.abi, this.provider)
+  }
+
+  ethersInterface(): ethersUtils.Interface {
+    if (!this.abi) {
+      throw new Error(
+        `No ABI specified in app for ${this.address}. Make sure the metada for the app is available`
+      )
+    }
+    return new ethersUtils.Interface(this.abi)
+  }
+
+  /**
+   * Calculate the forwarding path for an app action
+   * that invokes `methodSignature` with `params`.
+   *
+   * @param  {string} methodSignature
+   * @param  {Array<*>} params
+   * @param  {Object} options
+   * @return {Promise<ForwardingPath>} An object that represents the forwarding path corresponding to an action.
+   */
+  async intent(
+    methodSignature: string,
+    params: any[],
+    options: PathOptions = {}
+  ): Promise<ForwardingPath> {
+    const sender = options.actAs || this.organization.connection.actAs
+    if (!sender) {
+      throw new Error(
+        `No sender address specified. Use 'actAs' option or set one as default on your organization connection.`
+      )
+    }
+
+    const installedApps = await this.organization.apps()
+
+    return appIntent(
+      sender,
+      this,
+      methodSignature,
+      params,
+      installedApps,
+      this.provider
+    )
   }
 }

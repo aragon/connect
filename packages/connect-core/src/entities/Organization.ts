@@ -2,16 +2,23 @@ import {
   Address,
   AppFilters,
   AppFiltersParam,
-  SubscriptionHandler,
   SubscriptionCallback,
+  SubscriptionResult,
 } from '@aragon/connect-types'
-import { ConnectionContext } from '../types'
+
+import ForwardingPathDescription, {
+  decodeForwardingPath,
+  describePath,
+  describeTransaction,
+} from '../utils/descriptor/index'
+import { ConnectionContext, PostProcessDescription } from '../types'
 import { ErrorInvalidLocation } from '../errors'
-import TransactionIntent from '../transactions/TransactionIntent'
-import { toArrayEntry } from '../utils/misc'
 import { isAddress } from '../utils/address'
+import { normalizeFiltersAndCallback, toArrayEntry } from '../utils/misc'
+import { subscription } from '../utils/subscriptions'
 import App from './App'
 import Permission from './Permission'
+import Transaction from './Transaction'
 
 // TODO
 // Organization#addApp(repoName, options)
@@ -21,7 +28,7 @@ import Permission from './Permission'
 // Organization#roleManager(appAddress, roleId)
 // Organization#setRoleManager(address, appAddress, roleId)
 
-type OnAppCallback = SubscriptionCallback<App>
+type OnAppCallback = SubscriptionCallback<App | null>
 type OnAppsCallback = SubscriptionCallback<App[]>
 
 function normalizeAppFilters(filters?: AppFiltersParam): AppFilters {
@@ -73,6 +80,12 @@ export default class Organization {
     return this.connection
   }
 
+  //////// ACCOUNT /////////
+
+  actAss(sender: Address): void {
+    this.connection.actAs = sender
+  }
+
   ///////// APPS ///////////
 
   async app(filters?: AppFiltersParam): Promise<App> {
@@ -83,16 +96,20 @@ export default class Organization {
   }
 
   onApp(
-    filtersOrCallback: AppFiltersParam | OnAppCallback,
+    filtersOrCallback?: AppFiltersParam | OnAppCallback,
     callback?: OnAppCallback
-  ): SubscriptionHandler {
-    const filters = (callback ? filtersOrCallback : null) as AppFiltersParam
-    const _callback = (callback || filtersOrCallback) as OnAppCallback
+  ): SubscriptionResult<App> {
+    const [filters, _callback] = normalizeFiltersAndCallback<
+      OnAppCallback,
+      AppFiltersParam
+    >(filtersOrCallback, callback)
 
-    return this.connection.orgConnector.onAppForOrg(
-      this,
-      normalizeAppFilters(filters),
-      _callback
+    return subscription<App>(_callback, (callback) =>
+      this.connection.orgConnector.onAppForOrg(
+        this,
+        normalizeAppFilters(filters),
+        callback
+      )
     )
   }
 
@@ -104,39 +121,67 @@ export default class Organization {
   }
 
   onApps(
-    filtersOrCallback: AppFiltersParam | OnAppsCallback,
+    filtersOrCallback?: AppFiltersParam | OnAppsCallback,
     callback?: OnAppsCallback
-  ): SubscriptionHandler {
-    const filters = (callback ? filtersOrCallback : null) as AppFiltersParam
-    const _callback = (callback || filtersOrCallback) as OnAppsCallback
+  ): SubscriptionResult<App[]> {
+    const [filters, _callback] = normalizeFiltersAndCallback<
+      OnAppsCallback,
+      AppFiltersParam
+    >(filtersOrCallback, callback)
 
-    return this.connection.orgConnector.onAppsForOrg(
-      this,
-      normalizeAppFilters(filters),
-      _callback
+    return subscription<App[]>(_callback, (callback) =>
+      this.connection.orgConnector.onAppsForOrg(
+        this,
+        normalizeAppFilters(filters),
+        callback
+      )
     )
   }
 
+  async acl(): Promise<App> {
+    return this.app('acl')
+  }
+
+  async kernel(): Promise<App> {
+    return this.app('kernel')
+  }
+
   ///////// PERMISSIONS ///////////
+
   async permissions(): Promise<Permission[]> {
     return this.connection.orgConnector.permissionsForOrg(this)
   }
 
   onPermissions(
-    callback: SubscriptionCallback<Permission[]>
-  ): SubscriptionHandler {
-    return this.connection.orgConnector.onPermissionsForOrg(this, callback)
+    callback?: SubscriptionCallback<Permission[]>
+  ): SubscriptionResult<Permission[]> {
+    return subscription<Permission[]>(callback, (callback) =>
+      this.connection.orgConnector.onPermissionsForOrg(this, callback)
+    )
   }
 
-  ///////// INTENTS ///////////
-  appIntent(
-    appAddress: Address,
-    functionName: string,
-    functionArgs: any[]
-  ): TransactionIntent {
-    return new TransactionIntent(
-      { contractAddress: appAddress, functionName, functionArgs },
-      this,
+  //////// DESCRIPTIONS /////////
+
+  // Return a description of the forwarding path encoded on the evm script
+  async describeScript(script: string): Promise<ForwardingPathDescription> {
+    const installedApps = await this.apps()
+
+    const describedSteps = await describePath(
+      decodeForwardingPath(script),
+      installedApps,
+      this.connection.ethersProvider
+    )
+
+    return new ForwardingPathDescription(describedSteps, installedApps)
+  }
+
+  // Try to describe a single transaction using Radspec on the context of the organization
+  async describeTransaction(
+    transaction: Transaction
+  ): Promise<PostProcessDescription> {
+    return describeTransaction(
+      transaction,
+      await this.apps(),
       this.connection.ethersProvider
     )
   }
