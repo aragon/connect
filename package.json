@@ -1,5 +1,5 @@
 {
-  "name": "@aragon/connect",
+  "name": "@1hive/connect",
   "version": "0.8.0-alpha.6",
   "description": "Access and interact with Aragon Organizations and their apps.",
   "keywords": [
@@ -9,7 +9,7 @@
     "dapp",
     "aragon"
   ],
-  "author": "Aragon Association <legal@aragon.org>",
+  "author": "Aragon Association <legal@1hive.org>",
   "license": "LGPL-3.0-or-later",
   "homepage": "https://github.com/aragon/connect",
   "repository": "https://github.com/aragon/connect",
@@ -28,16 +28,11 @@
     ]
   },
   "scripts": {
-    "connect": "yarn workspace @aragon/connect",
-    "connect-agreement": "yarn workspace @aragon/connect-agreement",
-    "connect-core": "yarn workspace @aragon/connect-core",
-    "connect-react": "yarn workspace @aragon/connect-react",
-    "connect-ethereum": "yarn workspace @aragon/connect-ethereum",
-    "connect-thegraph": "yarn workspace @aragon/connect-thegraph",
-    "connect-finance": "yarn workspace @aragon/connect-finance",
-    "connect-voting": "yarn workspace @aragon/connect-voting",
-    "connect-tokens": "yarn workspace @aragon/connect-tokens",
-    "connect-types": "yarn workspace @aragon/connect-types",
+    "connect": "yarn workspace @1hive/connect",
+    "connect-core": "yarn workspace @1hive/connect-core",
+    "connect-react": "yarn workspace @1hive/connect-react",
+    "connect-thegraph": "yarn workspace @1hive/connect-thegraph",
+    "connect-types": "yarn workspace @1hive/connect-types",
     "test": "is-ci \"test:coverage\" \"jest\"",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",

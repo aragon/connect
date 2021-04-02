@@ -1,5 +1,0 @@
-# Organization templates
-{{#dataSources.OrganizationTemplates}}
-  {{> DAOTemplate.template.yaml}}
-{{/dataSources.OrganizationTemplates}}
-# /Organization templates

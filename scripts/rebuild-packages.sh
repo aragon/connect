@@ -37,7 +37,7 @@ oao run-script --ignore-src '!packages/connect-core' build --parallel
 
 # Build the connectors.
 echo 'Building the connectors…'
-oao run-script --ignore-src '!packages/connect-{thegraph,ethereum}' build --parallel
+oao run-script --ignore-src '!packages/connect-{thegraph}' build --parallel
 
 # Build the main connect library.
 echo 'Building @aragon/connect…'
@@ -45,7 +45,7 @@ oao run-script --ignore-src '!packages/connect' build --parallel
 
 # Build the app connectors and the React library.
 echo 'Building the app connectors…'
-oao run-script --ignore-src '!packages/connect-{agreement,finance,react,tokens,voting,disputable-voting}' build --parallel
+oao run-script --ignore-src '!packages/connect-{react}' build --parallel
 
 # Build the examples.
 if [ $MODE != "libs-only" ]; then
