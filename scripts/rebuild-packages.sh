@@ -37,7 +37,7 @@ oao run-script --ignore-src '!packages/connect-core' build --parallel
 
 # Build the connectors.
 echo 'Building the connectors…'
-oao run-script --ignore-src '!packages/connect-{thegraph}' build --parallel
+oao run-script --ignore-src '!packages/connect-{thegraph,ethereum}' build --parallel
 
 # Build the main connect library.
 echo 'Building @aragon/connect…'
