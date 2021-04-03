@@ -9,7 +9,7 @@ import {
   Network,
   SubscriptionCallback,
   SubscriptionHandler,
-} from '@aragon/connect-types'
+} from '@1hive/connect-types'
 import { ConnectionContext } from '../types'
 import IOrganizationConnector from './IOrganizationConnector'
 import App from '../entities/App'

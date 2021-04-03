@@ -9,7 +9,7 @@ import {
   Network,
   SubscriptionCallback,
   SubscriptionHandler,
-} from '@aragon/connect-types'
+} from '@1hive/connect-types'
 import {
   App,
   ConnectionContext,
@@ -18,7 +18,7 @@ import {
   Permission,
   Repo,
   Role,
-} from '@aragon/connect-core'
+} from '@1hive/connect-core'
 
 export type ConnectorEthereumConfig = {
   network: Network

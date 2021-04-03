@@ -4,7 +4,7 @@ import {
   AppFiltersParam,
   SubscriptionCallback,
   SubscriptionResult,
-} from '@aragon/connect-types'
+} from '@1hive/connect-types'
 
 import ForwardingPathDescription, {
   decodeForwardingPath,

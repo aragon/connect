@@ -1,4 +1,4 @@
-import { Address } from '@aragon/connect-types'
+import { Address } from '@1hive/connect-types'
 import { utils as ethersUtils, providers as ethersProvider } from 'ethers'
 
 import { addressesEqual } from './address'

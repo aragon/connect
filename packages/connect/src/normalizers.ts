@@ -2,7 +2,7 @@ import {
   getDefaultProvider as getDefaultEthersProvider,
   providers as ethersProviders,
 } from 'ethers'
-import { Network, Networkish } from '@aragon/connect-types'
+import { Network, Networkish } from '@1hive/connect-types'
 import {
   ConnectorJson,
   ConnectorJsonConfig,
@@ -11,13 +11,13 @@ import {
   IOrganizationConnector,
   IpfsResolver,
   ipfsResolver,
-} from '@aragon/connect-core'
+} from '@1hive/connect-core'
 import ConnectorEthereum, {
   ConnectorEthereumConfig,
-} from '@aragon/connect-ethereum'
+} from '@1hive/connect-ethereum'
 import ConnectorTheGraph, {
   ConnectorTheGraphConfig,
-} from '@aragon/connect-thegraph'
+} from '@1hive/connect-thegraph'
 import {
   ConnectorDeclaration,
   ConnectOptions,

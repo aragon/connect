@@ -1,6 +1,6 @@
 const baseConfig = require('../../jest.config.base')
 
-const packageName = require('./package.json').name.split('@aragon/').pop()
+const packageName = require('./package.json').name.split('@1hive/').pop()
 
 module.exports = {
   ...baseConfig,

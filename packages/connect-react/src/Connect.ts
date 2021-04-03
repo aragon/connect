@@ -6,7 +6,7 @@ import {
   useReducer,
   useRef,
 } from 'react'
-import { Organization, connect } from '@aragon/connect'
+import { Organization, connect } from '@1hive/connect'
 import { ConnectProps, ContextValue } from './types'
 import { ConnectContext } from './connect-context'
 import { hash } from './utils'

@@ -7,8 +7,8 @@ This is an app connector for the Finance app (`finance.aragonpm.eth`). It only s
 To connect a Finance app, you need to pass it to `connectFinance()`:
 
 ```js
-import connect from '@aragon/connect'
-import connectFinance from '@aragon/connect-finance'
+import connect from '@1hive/connect'
+import connectFinance from '@1hive/connect-finance'
 
 const org = await connect('myorg.aragonid.eth', 'thegraph')
 const finance = await connectFinance(org.app('finance'))

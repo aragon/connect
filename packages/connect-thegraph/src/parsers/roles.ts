@@ -5,7 +5,7 @@ import {
   PermissionData,
   Role,
   RoleData,
-} from '@aragon/connect-core'
+} from '@1hive/connect-core'
 import { QueryResult } from '../types'
 
 async function _parseRole(

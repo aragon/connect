@@ -1,4 +1,4 @@
-import { Organization, resolveAddress, toNetwork } from '@aragon/connect-core'
+import { Organization, resolveAddress, toNetwork } from '@1hive/connect-core'
 import { ConnectorDeclaration, ConnectOptions } from './types'
 import {
   normalizeConnector,

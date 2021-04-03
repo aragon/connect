@@ -12,7 +12,7 @@ You can use any tool that supports GraphQL, but for simplicity in illustration, 
 
 ```javascript
 import gql from 'graphql-tag'
-import { GraphQLWrapper } from '@aragon/connect-thegraph'
+import { GraphQLWrapper } from '@1hive/connect-thegraph'
 
 // Construct the query
 const QUERY = gql`
@@ -46,7 +46,7 @@ It is also possible to create a subscription to a custom query:
 
 ```javascript
 import gql from 'graphql-tag'
-import { GraphQLWrapper } from '@aragon/connect-thegraph'
+import { GraphQLWrapper } from '@1hive/connect-thegraph'
 
 // Construct the query
 const QUERY = gql`

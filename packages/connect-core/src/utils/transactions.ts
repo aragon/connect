@@ -1,4 +1,4 @@
-import { Address } from '@aragon/connect-types'
+import { Address } from '@1hive/connect-types'
 import {
   Contract,
   providers as ethersProviders,

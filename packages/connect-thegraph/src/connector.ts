@@ -10,7 +10,7 @@ import {
   Repo,
   Role,
   toNetwork,
-} from '@aragon/connect-core'
+} from '@1hive/connect-core'
 import {
   Address,
   AppFilters,
@@ -18,7 +18,7 @@ import {
   Networkish,
   SubscriptionHandler,
   SubscriptionCallback,
-} from '@aragon/connect-types'
+} from '@1hive/connect-types'
 import * as queries from './queries'
 import GraphQLWrapper from './core/GraphQLWrapper'
 import {

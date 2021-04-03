@@ -5,8 +5,8 @@ import {
   SubscriptionHandler,
   SubscriptionStart,
   isSubscriptionStart,
-} from '@aragon/connect-types'
-import { Organization } from '@aragon/connect'
+} from '@1hive/connect-types'
+import { Organization } from '@1hive/connect'
 import { UseConnectCallback, UseConnectResult } from './types'
 import { useConnectContext } from './connect-context'
 import { hash } from './utils'

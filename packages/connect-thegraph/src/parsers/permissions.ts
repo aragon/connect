@@ -3,7 +3,7 @@ import {
   Organization,
   Permission,
   PermissionData,
-} from '@aragon/connect-core'
+} from '@1hive/connect-core'
 import { QueryResult } from '../types'
 
 export function parsePermissions(

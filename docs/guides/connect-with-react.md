@@ -6,7 +6,7 @@ Aragon Connect provides a series of utilities that simplify the usage of Aragon 
 
 It consists of the `<Connect />` component, through which a connection to an organization is described, and a series of hooks: `useApp()`, `useApps()`, `useOrganization()`, `usePermissions()`.
 
-To get started, add the `@aragon/connect-react` package to your project. It contains all the exports of the `@aragon/connect`, so you don’t have to install both.
+To get started, add the `@1hive/connect-react` package to your project. It contains all the exports of the `@1hive/connect`, so you don’t have to install both.
 
 ## Usage
 
@@ -16,7 +16,7 @@ import {
   useApps,
   useOrganization,
   usePermissions,
-} from '@aragon/connect-react'
+} from '@1hive/connect-react'
 
 function App() {
   const [org, orgStatus] = useOrganization()
@@ -116,8 +116,8 @@ This utility function makes app connectors available in your React app.
 This is how it works at the most basic level:
 
 ```jsx
-import { createAppHook, useApp } from '@aragon/connect-react'
-import connectVoting from '@aragon/connect-voting'
+import { createAppHook, useApp } from '@1hive/connect-react'
+import connectVoting from '@1hive/connect-voting'
 
 // We create a hook corresponding to the app connector. This is usually enough,
 // since the app connector will inherit from the connection set on <Connect />.
@@ -148,9 +148,9 @@ By default, the callback will be called once, and never update afterwards. This 
 This is how you can use it:
 
 ```jsx
-import connect from '@aragon/connect'
-import connectVoting from '@aragon/connect-voting'
-import { createAppHook, useApp } from '@aragon/connect-react'
+import connect from '@1hive/connect'
+import connectVoting from '@1hive/connect-voting'
+import { createAppHook, useApp } from '@1hive/connect-react'
 
 const useVoting = createAppHook(connectVoting)
 
@@ -187,9 +187,9 @@ An issue with the previous examples is that we only fetch the data once, instead
 Using them with `createAppHook()` hooks requires to call the `onX` equivalent of the async method you want to use, but without passing a callback. App connectors return a partially applied function when the callback is omitted, which `createAppHook()` takes advantage of by entirely managing the subscription.
 
 ```jsx
-import connect from '@aragon/connect'
-import connectVoting from '@aragon/connect-voting'
-import { createAppHook, useApp } from '@aragon/connect-react'
+import connect from '@1hive/connect'
+import connectVoting from '@1hive/connect-voting'
+import { createAppHook, useApp } from '@1hive/connect-react'
 
 const useVoting = createAppHook(connectVoting)
 

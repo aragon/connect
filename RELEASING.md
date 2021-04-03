@@ -46,7 +46,7 @@ Protect the branch on GitHub:
 
 Reorder the menu in GitBook:
 
-- Go to [the GitBook admin page](https://app.gitbook.com/@aragon-one/s/connect/).
+- Go to [the GitBook admin page](https://app.gitbook.com/@1hive-one/s/connect/).
 - Open the versions menu (it should be on “latest” by default).
 - Drag and drop the new version so that it is right below “latest”.
 - Click on the “Save” button, then “Merge”.

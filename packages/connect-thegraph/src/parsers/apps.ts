@@ -4,7 +4,7 @@ import {
   ErrorNotFound,
   ErrorUnexpectedResult,
   Organization,
-} from '@aragon/connect-core'
+} from '@1hive/connect-core'
 import { QueryResult } from '../types'
 
 async function _parseApp(app: any, organization: Organization): Promise<App> {

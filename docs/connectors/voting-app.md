@@ -7,8 +7,8 @@ This is an app connector for the Voting app (`voting.aragonpm.eth`). It only sup
 To connect a Voting app, you need to pass it to `connectVoting()`:
 
 ```js
-import connect from '@aragon/connect'
-import connectVoting from '@aragon/connect-voting'
+import connect from '@1hive/connect'
+import connectVoting from '@1hive/connect-voting'
 
 const org = await connect('myorg.aragonid.eth', 'thegraph')
 const voting = await connectVoting(org.app('voting'))

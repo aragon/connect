@@ -7,8 +7,8 @@ This is an app connector for the Tokens app (`token-manager.aragonpm.eth`). It o
 To connect a Tokens app, you need to pass it to `connectTokens()`:
 
 ```js
-import connect from '@aragon/connect'
-import connectTokens from '@aragon/connect-tokens'
+import connect from '@1hive/connect'
+import connectTokens from '@1hive/connect-tokens'
 
 const org = await connect('myorg.aragonid.eth', 'thegraph')
 const tokens = await connectTokens(org.app('token-manager'))

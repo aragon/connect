@@ -28,7 +28,7 @@ This function can throw the following errors:
 ### Example
 
 ```javascript
-import connect from '@aragon/connect'
+import connect from '@1hive/connect'
 
 // Connections should get wrapped in a try / catch to capture connection errors
 try {

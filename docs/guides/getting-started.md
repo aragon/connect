@@ -11,7 +11,7 @@ This guide assumes that you are familiar with the way Aragon organizations work.
 This is how to connect to an organization and list its apps:
 
 ```javascript
-import connect from '@aragon/connect'
+import connect from '@1hive/connect'
 
 // Initiates the connection to an organization
 const org = await connect('example.aragonid.eth', 'thegraph')
@@ -37,34 +37,34 @@ A connector can be of two types: **organization** or **app**, to fetch data from
 
 Aragon Connect consists of a few parts:
 
-- `@aragon/connect`: this is the main library. It provides the main features to connect and interact with organizations, and includes the basic organization connectors.
-- `@aragon/connect-finance`: an app connector for fetching data from the Finance app.
-- `@aragon/connect-voting`: an app connector for fetching data from the Voting app.
-- `@aragon/connect-tokens`: an app connector for fetching data from the Tokens app.
+- `@1hive/connect`: this is the main library. It provides the main features to connect and interact with organizations, and includes the basic organization connectors.
+- `@1hive/connect-finance`: an app connector for fetching data from the Finance app.
+- `@1hive/connect-voting`: an app connector for fetching data from the Voting app.
+- `@1hive/connect-tokens`: an app connector for fetching data from the Tokens app.
 - Additional app connectors published by individual app authors
 
 [A few other packages](https://github.com/aragon/connect/tree/master/packages) are also published, but they are only needed to author or extend connectors and not to use the library.
 
 ## Installation
 
-Start by adding [`@aragon/connect`](https://www.npmjs.com/package/@aragon/connect) to your project:
+Start by adding [`@1hive/connect`](https://www.npmjs.com/package/@1hive/connect) to your project:
 
 ```console
-yarn add @aragon/connect
+yarn add @1hive/connect
 ```
 
 You can now import it:
 
 ```javascript
-import connect from '@aragon/connect'
+import connect from '@1hive/connect'
 ```
 
 If you want to interact with the Finance, Voting or the Tokens app, you should also install their respective connectors:
 
 ```text
-yarn add @aragon/connect-finance
-yarn add @aragon/connect-voting
-yarn add @aragon/connect-tokens
+yarn add @1hive/connect-finance
+yarn add @1hive/connect-voting
+yarn add @1hive/connect-tokens
 ```
 
 See [“Fetching an app’s state”](getting-started.md#fetching-an-apps-state) below to understand how to use these app connectors.
@@ -104,8 +104,8 @@ Apps can be obtained from an [`Organization`](../api-reference/organization.md) 
 Let’s see how to retrieve all the votes from a Voting app:
 
 ```javascript
-import connect from '@aragon/connect'
-import connectVoting from '@aragon/connect-voting'
+import connect from '@1hive/connect'
+import connectVoting from '@1hive/connect-voting'
 
 const org = await connect('example.aragonid.eth', 'thegraph')
 
@@ -123,7 +123,7 @@ It is also possible to subscribe to receive data updates as they arrive.
 For example, this is how it can be done for the list of apps:
 
 ```javascript
-import connect from '@aragon/connect'
+import connect from '@1hive/connect'
 
 const org = await connect('example.aragonid.eth', 'thegraph')
 
@@ -146,8 +146,8 @@ handler.unsubscribe()
 App connectors also support subscriptions in an identical way:
 
 ```javascript
-import connect from '@aragon/connect'
-import connectVoting from '@aragon/connect-voting'
+import connect from '@1hive/connect'
+import connectVoting from '@1hive/connect-voting'
 
 const org = await connect('example.aragonid.eth', 'thegraph')
 const voting = connectVoting(org.app('voting'))
@@ -177,7 +177,6 @@ const path = await intent.paths(wallet.account)
 ```
 
 Finally, you can sign the different transactions associated to this path. Aragon Connect doesn’t handle any signing itself, but returns an object that is ready to use with the library of your choice: [ethers.js](https://docs.ethers.io/v5/), [Web3.js](https://web3js.readthedocs.io/en/1.0/), or even a [JSON-RPC connection to an Ethereum node](https://eips.ethereum.org/EIPS/eip-1474).
-
 
 ## Going further
 

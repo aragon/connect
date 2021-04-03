@@ -3,7 +3,7 @@ import {
   providers as ethersProviders,
   utils as ethersUtils,
 } from 'ethers'
-import { Address, Network } from '@aragon/connect-types'
+import { Address, Network } from '@1hive/connect-types'
 
 import IOrganizationConnector from './connections/IOrganizationConnector'
 import App from './entities/App'

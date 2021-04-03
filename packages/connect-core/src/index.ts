@@ -5,7 +5,7 @@ export type {
   Network,
   Networkish,
   SubscriptionHandler,
-} from '@aragon/connect-types'
+} from '@1hive/connect-types'
 
 export { default as IOrganizationConnector } from './connections/IOrganizationConnector'
 export {

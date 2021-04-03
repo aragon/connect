@@ -1,5 +1,5 @@
 {
-  "name": "@aragon/connect-thegraph",
+  "name": "@1hive/connect-thegraph",
   "version": "0.8.0-alpha.6",
   "license": "LGPL-3.0-or-later",
   "main": "dist/cjs/index.js",
@@ -35,7 +35,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@aragon/connect-core": "^0.8.0-alpha.6",
+    "@1hive/connect-core": "^0.8.0-alpha.6",
     "@urql/core": "^1.11.7",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",
@@ -51,7 +51,7 @@
     "dapp",
     "aragon"
   ],
-  "author": "Aragon Association <legal@aragon.org>",
+  "author": "Aragon Association <legal@1hive.org>",
   "homepage": "https://github.com/aragon/connect",
   "bugs": "https://github.com/aragon/connect/issues",
   "repository": "https://github.com/aragon/connect"

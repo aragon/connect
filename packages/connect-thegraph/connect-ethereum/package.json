@@ -1,5 +1,5 @@
 {
-  "name": "@aragon/connect-ethereum",
+  "name": "@1hive/connect-ethereum",
   "version": "0.8.0-alpha.6",
   "license": "LGPL-3.0-or-later",
   "main": "dist/cjs/index.js",
@@ -34,7 +34,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@aragon/connect-core": "^0.8.0-alpha.6"
+    "@1hive/connect-core": "^0.8.0-alpha.6"
   },
   "description": "Access and interact with Aragon Organizations and their apps.",
   "keywords": [
@@ -44,7 +44,7 @@
     "dapp",
     "aragon"
   ],
-  "author": "Aragon Association <legal@aragon.org>",
+  "author": "Aragon Association <legal@1hive.org>",
   "homepage": "https://github.com/aragon/connect",
   "bugs": "https://github.com/aragon/connect/issues",
   "repository": "https://github.com/aragon/connect"
