@@ -13,6 +13,7 @@ query {
     id
     metadata
     creator
+    originalCreator
   }
 }
 `
