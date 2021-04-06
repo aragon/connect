@@ -3,6 +3,7 @@ type Vote @entity {
   orgAddress: Bytes!
   appAddress: Bytes!
   creator: Bytes!
+  originalCreator: Bytes!
   metadata: String!
   executed: Boolean!
   executedAt: BigInt!

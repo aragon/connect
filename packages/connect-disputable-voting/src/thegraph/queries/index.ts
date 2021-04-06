@@ -119,6 +119,7 @@ export const GET_VOTE = (type: string) => gql`
       }
       voteId
       creator
+      originalCreator
       context
       status
       actionId
@@ -180,6 +181,7 @@ export const ALL_VOTES = (type: string) => gql`
       }
       voteId
       creator
+      originalCreator
       context
       status
       actionId

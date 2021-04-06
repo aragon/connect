@@ -8,6 +8,7 @@ export default class Vote {
 
   readonly id: string
   readonly creator: string
+  readonly originalCreator: string
   readonly metadata: string
   readonly executed: boolean
   readonly executedAt: string
@@ -25,6 +26,7 @@ export default class Vote {
 
     this.id = data.id
     this.creator = data.creator
+    this.originalCreator = data.originalCreator
     this.metadata = data.metadata
     this.executed = data.executed
     this.executedAt = data.executedAt
