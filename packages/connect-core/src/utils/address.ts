@@ -1,4 +1,4 @@
-import { Address } from '@1hive/connect-types'
+import type { Address } from '@1hive/connect-types'
 import { providers as ethersProviders, utils as ethersUtils } from 'ethers'
 import { ErrorInvalidLocation } from '../errors'
 

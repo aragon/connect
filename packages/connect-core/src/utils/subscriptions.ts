@@ -1,4 +1,7 @@
-import { SubscriptionCallback, SubscriptionHandler } from '@1hive/connect-types'
+import type {
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@1hive/connect-types'
 
 // This is used by methods allowing subscription. It allows to a create a
 // function that either subscribes directly and return a handler if a callback

@@ -3,7 +3,12 @@ import {
   providers as ethersProviders,
   utils as ethersUtils,
 } from 'ethers'
-import { Address, Network } from '@1hive/connect-types'
+import type {
+  Address,
+  Network,
+  SubscriptionHandler,
+  SubscriptionStart,
+} from '@1hive/connect-types'
 
 import IOrganizationConnector from './connections/IOrganizationConnector'
 import App from './entities/App'
@@ -262,4 +267,19 @@ export type ConnectionContext = {
   orgConnector: IOrganizationConnector
   orgLocation: string
   verbose: boolean
+}
+
+export function isSubscriptionStart<T>(
+  value: unknown
+): value is SubscriptionStart<T> {
+  return typeof value === 'function'
+}
+
+export function isSubscriptionHandler(
+  value: unknown
+): value is SubscriptionHandler {
+  return (
+    typeof value === 'object' &&
+    typeof (value as SubscriptionHandler)?.unsubscribe === 'function'
+  )
 }

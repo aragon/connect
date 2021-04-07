@@ -2,7 +2,7 @@ import {
   getDefaultProvider as getDefaultEthersProvider,
   providers as ethersProviders,
 } from 'ethers'
-import { Network, Networkish } from '@1hive/connect-types'
+import type { Network } from '@1hive/connect-types'
 import {
   ConnectorJson,
   ConnectorJsonConfig,

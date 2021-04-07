@@ -7,7 +7,10 @@ import {
 import { DocumentNode } from 'graphql'
 import { pipe, subscribe } from 'wonka'
 import { ErrorConnection, ErrorUnexpectedResult } from '@1hive/connect-core'
-import { SubscriptionCallback, SubscriptionHandler } from '@1hive/connect-types'
+import type {
+  SubscriptionCallback,
+  SubscriptionHandler,
+} from '@1hive/connect-types'
 import { ParseFunction, QueryResult } from '../types'
 
 // Average block time is about 13 seconds on the 2020-08-14

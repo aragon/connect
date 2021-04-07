@@ -1,4 +1,4 @@
-import { Address, Network, Networkish } from '@1hive/connect-types'
+import type { Address, Network, Networkish } from '@1hive/connect-types'
 import { ErrorInvalidNetwork } from '../errors'
 import { NETWORKS } from '../params'
 

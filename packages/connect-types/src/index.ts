@@ -35,18 +35,3 @@ export type SubscriptionStart<T> = (
   callback: SubscriptionCallback<T>
 ) => SubscriptionHandler
 export type SubscriptionResult<T> = SubscriptionHandler | SubscriptionStart<T>
-
-export function isSubscriptionStart<T>(
-  value: unknown
-): value is SubscriptionStart<T> {
-  return typeof value === 'function'
-}
-
-export function isSubscriptionHandler(
-  value: unknown
-): value is SubscriptionHandler {
-  return (
-    typeof value === 'object' &&
-    typeof (value as SubscriptionHandler)?.unsubscribe === 'function'
-  )
-}

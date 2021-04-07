@@ -1,13 +1,11 @@
 import { useEffect, useMemo, useRef, useReducer, Reducer } from 'react'
-import {
-  AppFiltersParam,
-  SubscriptionCallback,
-  SubscriptionHandler,
-  SubscriptionStart,
-  isSubscriptionStart,
-} from '@1hive/connect-types'
+import type { SubscriptionHandler } from '@1hive/connect-types'
 import { Organization } from '@1hive/connect'
-import { UseConnectCallback, UseConnectResult } from './types'
+import {
+  UseConnectCallback,
+  UseConnectResult,
+  isSubscriptionStart,
+} from './types'
 import { useConnectContext } from './connect-context'
 import { hash } from './utils'
 

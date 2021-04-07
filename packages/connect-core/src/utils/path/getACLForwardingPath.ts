@@ -1,4 +1,4 @@
-import { Address } from '@1hive/connect-types'
+import type { Address } from '@1hive/connect-types'
 import { providers as ethersProviders } from 'ethers'
 
 import { getForwardingPath } from './getForwardingPath'
