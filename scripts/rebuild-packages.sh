@@ -43,8 +43,13 @@ oao run-script --ignore-src '!packages/connect-{thegraph,ethereum}' build --para
 echo 'Building @1hive/connect…'
 oao run-script --ignore-src '!packages/connect' build --parallel
 
+<<<<<<< HEAD
+# Build the app connectors and the React library.
+echo 'Building the app connectors…'
+=======
 # Build the React library.
 echo 'Building @1hive/connect-react…'
+>>>>>>> 1hive/master
 oao run-script --ignore-src '!packages/connect-react' build --parallel
 
 # Build the examples.
