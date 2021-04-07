@@ -1,6 +1,6 @@
 {
   "name": "@1hive/connect",
-  "version": "0.8.2",
+  "version": "0.8.5",
   "description": "Access and interact with Aragon Organizations and their apps.",
   "keywords": [
     "ethereum",
@@ -9,16 +9,15 @@
     "dapp",
     "aragon"
   ],
-  "author": "Aragon Association <legal@1hive.org>",
+  "author": "1hive <legal@1hive.org>",
   "license": "LGPL-3.0-or-later",
-  "homepage": "https://github.com/aragon/connect",
-  "repository": "https://github.com/aragon/connect",
-  "bugs": "https://github.com/aragon/connect/issues",
+  "homepage": "https://github.com/1hive/connect",
+  "repository": "https://github.com/1hive/connect",
+  "bugs": "https://github.com/1hive/connect/issues",
   "private": true,
   "workspaces": {
     "packages": [
-      "packages/*",
-      "examples/*"
+      "packages/*"
     ],
     "nohoist": [
       "**/@graphprotocol/graph-ts",
@@ -38,9 +37,8 @@
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",
     "test:debug": "node --inspect-brk node_modules/jest/bin/jest.js --runInBand --watch",
-    "clean": "oao clean",
+    "clean": "oao run-script --ignore-src !packages/* clean && oao clean",
     "build": "MODE=libs-only ./scripts/rebuild-packages.sh",
-    "build:examples": "MODE=all ./scripts/rebuild-packages.sh",
     "status": "oao status",
     "publish-version": "./scripts/publish-version.sh",
     "postinstall": "yarn build",
