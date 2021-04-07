@@ -11,7 +11,7 @@ import {
   Role,
   toNetwork,
 } from '@1hive/connect-core'
-import {
+import type {
   Address,
   AppFilters,
   Network,

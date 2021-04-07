@@ -1,4 +1,4 @@
-import { Networkish } from '@1hive/connect-types'
+import type { Networkish } from '@1hive/connect-types'
 import { IpfsResolver } from '@1hive/connect-core'
 import {
   ConnectorJsonConfig,
