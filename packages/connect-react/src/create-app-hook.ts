@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { SubscriptionResult } from '@1hive/connect-types'
+import type { SubscriptionResult } from '@1hive/connect-types'
 import { App, warn } from '@1hive/connect-core'
 import { useConnect } from './use-connect'
 import { hash } from './utils'

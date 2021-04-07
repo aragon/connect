@@ -1,4 +1,4 @@
-import { AppFiltersParam } from '@1hive/connect-types'
+import type { AppFiltersParam } from '@1hive/connect-types'
 import { App, Organization, Permission, warn } from '@1hive/connect-core'
 import { UseConnectResult } from './types'
 import { useConnect } from './use-connect'

@@ -1,10 +1,10 @@
 import { ReactNode } from 'react'
-import {
+import type {
   ConnectOptions,
   ConnectorDeclaration,
   Organization,
 } from '@1hive/connect'
-import { SubscriptionResult } from '@1hive/connect-types'
+import { SubscriptionResult, SubscriptionStart } from '@1hive/connect-types'
 
 export type ConnectProps = {
   children: ReactNode
@@ -27,3 +27,9 @@ export type UseConnectResult<T> = [T | undefined, LoadingStatus]
 export type UseConnectCallback<T> = (
   organization: Organization
 ) => T | Promise<T> | SubscriptionResult<T> | undefined
+
+export function isSubscriptionStart<T>(
+  value: unknown
+): value is SubscriptionStart<T> {
+  return typeof value === 'function'
+}
