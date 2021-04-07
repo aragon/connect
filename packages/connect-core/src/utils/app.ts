@@ -8,6 +8,10 @@ export const apmAppId = (appName: string): string =>
   ethersUtils.namehash(`${appName}.aragonpm.eth`)
 
 function signatureFromAbi(signature: string, abi: Abi): string {
+  if (signature === 'fallback') {
+    return 'fallback()'
+  }
+
   const matches = signature.match(/(.*)\((.*)\)/m)
 
   if (!matches) {
