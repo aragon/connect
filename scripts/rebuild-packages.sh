@@ -45,7 +45,7 @@ oao run-script --ignore-src '!packages/connect' build --parallel
 
 # Build the app connectors and the React library.
 echo 'Building the app connectors…'
-oao run-script --ignore-src '!packages/connect-{react}' build --parallel
+oao run-script --ignore-src '!packages/connect-react' build --parallel
 
 # Build the examples.
 if [ $MODE != "libs-only" ]; then
