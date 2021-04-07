@@ -25,14 +25,14 @@ oao all --ignore-src "$glob_packages" 'yarn install' --parallel
 # Building the types first.
 # Note that oao is not strictly needed here as we want to execute the command
 # on a single package, but using it results in a consistent output.
-echo 'Building @aragon/connect-types…'
+echo 'Building @1hive/connect-types…'
 oao run-script --ignore-src '!packages/connect-types' build --parallel
 
 # Then we build connect-core, as the other packages depend on it.
-# Ideally we would only build @aragon/connect and tsc would figure out the
-# references, but it doesn’t seem to work: @aragon/connect-core doesn’t get
+# Ideally we would only build @1hive/connect and tsc would figure out the
+# references, but it doesn’t seem to work: @1hive/connect-core doesn’t get
 # built first.
-echo 'Building @aragon/connect-core…'
+echo 'Building @1hive/connect-core…'
 oao run-script --ignore-src '!packages/connect-core' build --parallel
 
 # Build the connectors.
@@ -40,11 +40,16 @@ echo 'Building the connectors…'
 oao run-script --ignore-src '!packages/connect-{thegraph,ethereum}' build --parallel
 
 # Build the main connect library.
-echo 'Building @aragon/connect…'
+echo 'Building @1hive/connect…'
 oao run-script --ignore-src '!packages/connect' build --parallel
 
+<<<<<<< HEAD
 # Build the app connectors and the React library.
 echo 'Building the app connectors…'
+=======
+# Build the React library.
+echo 'Building @1hive/connect-react…'
+>>>>>>> 1hive/master
 oao run-script --ignore-src '!packages/connect-react' build --parallel
 
 # Build the examples.
