@@ -8,21 +8,29 @@ import {
 import { QueryResult } from '../types'
 
 async function _parseApp(app: any, organization: Organization): Promise<App> {
+  const version = app.repo?.versions
+    .sort(
+      (v1: any, v2: any) =>
+        parseInt(v2.semanticVersion.replace(/,/g, '.')) -
+        parseInt(v1.semanticVersion.replace(/,/g, '.'))
+    )
+    .find((version: any) => version.codeAddress === app.implementation.address)
+
   const data: AppData = {
     address: app.address,
     appId: app.appId,
-    artifact: app.version?.artifact,
+    artifact: version?.artifact,
     codeAddress: app.implementation.address,
-    contentUri: app.version?.contentUri,
+    contentUri: version?.contentUri,
     isForwarder: app.isForwarder,
     isUpgradeable: app.isUpgradeable,
     kernelAddress: app.organization?.address,
-    manifest: app.version?.manifest,
+    manifest: version?.manifest,
     name: app.repoName,
     registry: app.repo?.registry?.name,
     registryAddress: app.repo?.registry?.address,
     repoAddress: app.repo?.address,
-    version: app.version?.semanticVersion.replace(/,/g, '.'),
+    version: version?.semanticVersion.replace(/,/g, '.'),
   }
 
   return App.create(data, organization)
