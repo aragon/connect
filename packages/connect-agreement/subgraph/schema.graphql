@@ -1,0 +1,173 @@
+type Agreement @entity {
+  id: ID!
+  dao: Bytes!
+  stakingFactory: Bytes
+  currentVersion: Version
+  actions: [Action!] @derivedFrom(field: "agreement")
+  signers: [Signer!] @derivedFrom(field: "agreement")
+  versions: [Version!] @derivedFrom(field: "agreement")
+  disputables: [Disputable!] @derivedFrom(field: "agreement")
+}
+
+enum ChallengeState {
+  Waiting,
+  Settled,
+  Disputed,
+  Rejected,
+  Accepted,
+  Voided
+}
+
+type Signer @entity {
+  id: ID!
+  agreement: Agreement!
+  address: Bytes!
+  actions: [Action!] @derivedFrom(field: "submitter")
+  signatures: [Signature!] @derivedFrom(field: "signer")
+}
+
+type Signature @entity {
+  id: ID!
+  signer: Signer!
+  version: Version!
+  createdAt: BigInt!
+}
+
+type Action @entity {
+  id: ID!
+  agreement: Agreement!
+  disputable: Disputable!
+  actionId: BigInt!
+  disputableActionId: BigInt!
+  context: Bytes!
+  closed: Boolean!
+  submitter: Signer!
+  version: Version!
+  collateralRequirement: CollateralRequirement!
+  lastChallenge: Challenge
+  challenges: [Challenge!] @derivedFrom(field: "action")
+  createdAt: BigInt!
+}
+
+type Challenge @entity {
+  id: ID!
+  action: Action!
+  challengeId: BigInt!
+  context: Bytes!
+  endDate: BigInt!
+  challenger: Bytes!
+  settlementOffer: BigInt!
+  state: ChallengeState!
+  submitterArbitratorFee: ArbitratorFee
+  challengerArbitratorFee: ArbitratorFee!
+  dispute: Dispute @derivedFrom(field: "challenge")
+  createdAt: BigInt!
+}
+
+type Dispute @entity {
+  id: ID!
+  disputeId: BigInt!
+  ruling: BigInt!
+  challenge: Challenge!
+  submitterFinishedEvidence: Boolean!
+  challengerFinishedEvidence: Boolean!
+  evidences: [Evidence!] @derivedFrom(field: "dispute")
+  createdAt: BigInt!
+}
+
+type Evidence @entity {
+  id: ID!
+  dispute: Dispute!
+  data: Bytes!
+  submitter: Bytes!
+  createdAt: BigInt!
+}
+
+type Version @entity {
+  id: ID!
+  agreement: Agreement!
+  versionId: BigInt!
+  content: Bytes!
+  title: String!
+  arbitrator: Bytes!
+  appFeesCashier: Bytes!
+  effectiveFrom: BigInt!
+  signatures: [Signature!] @derivedFrom(field: "version")
+}
+
+type Disputable @entity {
+  id: ID!
+  address: Bytes!
+  agreement: Agreement!
+  activated: Boolean!
+  currentCollateralRequirement: CollateralRequirement!
+  collateralRequirements: [CollateralRequirement!] @derivedFrom(field: "disputable")
+  actions: [Action!] @derivedFrom(field: "disputable")
+}
+
+type CollateralRequirement @entity {
+  id: ID!
+  disputable: Disputable!
+  token: ERC20!
+  challengeDuration: BigInt!
+  actionAmount: BigInt!
+  challengeAmount: BigInt!
+}
+
+type Staking @entity {
+  id: ID!
+  user: Bytes!
+  token: ERC20!
+  available: BigInt!
+  locked: BigInt!
+  challenged: BigInt!
+  total: BigInt!
+  movements: [StakingMovement!] @derivedFrom(field: "staking")
+}
+
+type StakingMovement @entity {
+  id: ID!
+  staking: Staking!
+  amount: BigInt!
+  agreement: Agreement!
+  action: Action!
+  actionState: StakingActionState!
+  collateralState: StakingCollateralState!
+  createdAt: BigInt!
+}
+
+enum StakingCollateralState {
+  Available,
+  Locked,
+  Challenged,
+  Slashed
+}
+
+enum StakingActionState {
+  NA,
+  Scheduled,
+  Challenged,
+  Cancelled,
+  Settled,
+  Completed
+}
+
+type ERC20 @entity {
+  id: ID!
+  name: String!
+  symbol: String!
+  decimals: Int!
+}
+
+type ArbitratorFee @entity {
+  id: ID!
+  token: ERC20!
+  amount: BigInt!
+}
+
+type AragonInfo @entity {
+  id: ID!
+  orgs: [Bytes!]!
+  apps: [Bytes!]!
+  tokens: [Bytes!]!
+}
