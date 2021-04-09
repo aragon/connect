@@ -20,8 +20,12 @@ export default class Voting {
     await this.#connector.disconnect()
   }
 
+  async votesWithCasts({ first = 1000, skip = 0 } = {}): Promise<Vote[]> {
+    return this.#connector.votesForApp(this.#appAddress, first, skip, true)
+  }
+
   async votes({ first = 1000, skip = 0 } = {}): Promise<Vote[]> {
-    return this.#connector.votesForApp(this.#appAddress, first, skip)
+    return this.#connector.votesForApp(this.#appAddress, first, skip, false)
   }
 
   onVotes(

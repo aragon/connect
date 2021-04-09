@@ -1,4 +1,4 @@
-import { connect, describeScript, App } from '@aragon/connect'
+import { connect, App } from '@aragon/connect'
 import connectVoting, { Vote } from '@aragon/connect-voting'
 
 const VOTING_SUBGRAPH_URL =
@@ -14,15 +14,15 @@ function voteId(vote: Vote) {
 async function main() {
   const org = await connect('beehive.aragonid.eth', 'thegraph')
   const apps = await org.apps()
+  
   const voting = await connectVoting(org.app('voting'))
   const votes = await voting.votes()
 
-  const { script } = votes.find((vote) => voteId(vote) === '#54')!
+  const { script } = votes.find((vote) => voteId(vote) === '#23')!
 
-  const description = await describeScript(script, apps)
-
+  const description = await org.describeScript(script)
   console.log('\nScript descriptions:')
-  description.map((tx: any) => console.log(tx.description))
+  description.describedSteps.map((tx: any) => console.log(tx.description))
 }
 
 main()

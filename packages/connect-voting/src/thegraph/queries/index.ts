@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-export const ALL_VOTES = (type: string) => gql`
+const voteQueryString = (type: string, withCasts: boolean) => gql`
   ${type} Votes($appAddress: String!, $first: Int!, $skip: Int!) {
     votes(where: {
       appAddress: $appAddress
@@ -20,9 +20,22 @@ export const ALL_VOTES = (type: string) => gql`
       nay
       votingPower
       script
+      ${
+        withCasts ? 
+        `castVotes {
+          id
+          supports
+          stake
+          createdAt
+        }` : ``
+      }
     }
   }
-`
+  `
+
+export const ALL_VOTES = (type: string) => voteQueryString(type, false)
+
+export const ALL_VOTES_WITH_CASTS = (type: string) => voteQueryString(type, true)
 
 export const CASTS_FOR_VOTE = (type: string) => gql`
   ${type} Casts($vote: ID!, $first: Int!, $skip: Int!) {

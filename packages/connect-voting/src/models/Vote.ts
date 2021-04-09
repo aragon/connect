@@ -19,6 +19,7 @@ export default class Vote {
   readonly nay: string
   readonly votingPower: string
   readonly script: string
+  readonly castVotes: Cast[]
 
   constructor(data: VoteData, connector: IVotingConnector) {
     this.#connector = connector
@@ -36,6 +37,7 @@ export default class Vote {
     this.nay = data.nay
     this.votingPower = data.votingPower
     this.script = data.script
+    this.castVotes = data.castVotes
   }
 
   async casts({ first = 1000, skip = 0 } = {}): Promise<Cast[]> {

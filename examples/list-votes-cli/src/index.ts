@@ -1,5 +1,5 @@
 import { connect } from '@aragon/connect'
-import connectVoting from '@aragon/connect-voting'
+import connectVoting, { Voting } from '@aragon/connect-voting'
 
 const BLUE = '\x1b[36m'
 const RESET = '\x1b[0m'
@@ -12,6 +12,8 @@ const env = {
 async function main() {
   const org = await connect(env.location, 'thegraph', { network: env.network })
   const voting = await connectVoting(org.app('voting'))
+
+  console.log("Fetching votes and casts in separate calls...")
   const votes = await voting.votes({ first: 100 })
   const votesWithCasts = await Promise.all(
     votes.map(async (vote) => ({ ...vote, casts: await vote.casts() }))
@@ -19,6 +21,10 @@ async function main() {
 
   printOrganization(org)
   printVotes(votesWithCasts)
+
+  console.log("Fetching votes and casts in one call...")
+  const votesAndCastsBundled = await voting.votesWithCasts({ first: 100 })
+  printVotes(votesAndCastsBundled)
 }
 
 function printOrganization(organization: any) {
@@ -43,7 +49,8 @@ function formatVote(vote: any): string {
   let label = vote.metadata
   label = label.replace(/\n/g, ' ')
   label = label.length > 60 ? label.slice(0, 60) + '…' : label
-  return `(${vote.casts.length} casts) ${label || '[Action]'}`
+  const numCasts = vote.castVotes ? vote.castVotes.length : vote.casts.length
+  return `(${numCasts} casts) ${label || '[Action]'}`
 }
 
 main()

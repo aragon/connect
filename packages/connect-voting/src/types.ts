@@ -19,6 +19,7 @@ export interface VoteData {
   nay: string
   votingPower: string
   script: string
+  castVotes: [CastData]
 }
 
 export interface CastData {
@@ -37,7 +38,7 @@ export interface VoterData {
 
 export interface IVotingConnector {
   disconnect(): Promise<void>
-  votesForApp(appAddress: string, first: number, skip: number): Promise<Vote[]>
+  votesForApp(appAddress: string, first: number, skip: number, withCasts?: boolean): Promise<Vote[]>
   onVotesForApp(
     appAddress: string,
     first: number,

@@ -30,6 +30,7 @@ export interface VoteData {
   context: string
   status: string
   actionId: string
+  castVotes: [CastVoteData]
   challengeId: string
   challenger: string
   challengeEndDate: string

@@ -50,10 +50,11 @@ export default class VotingConnectorTheGraph implements IVotingConnector {
   async votesForApp(
     appAddress: string,
     first: number,
-    skip: number
+    skip: number,
+    withCasts = false
   ): Promise<Vote[]> {
     return this.#gql.performQueryWithParser<Vote[]>(
-      queries.ALL_VOTES('query'),
+      withCasts ? queries.ALL_VOTES_WITH_CASTS('query') : queries.ALL_VOTES('query'),
       { appAddress, first, skip },
       (result: QueryResult) => parseVotes(result, this)
     )
