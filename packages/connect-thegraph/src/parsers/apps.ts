@@ -11,8 +11,8 @@ async function _parseApp(app: any, organization: Organization): Promise<App> {
   const version = app.repo?.versions
     .sort(
       (v1: any, v2: any) =>
-        parseInt(v2.semanticVersion.replace(/,/g, '.')) -
-        parseInt(v1.semanticVersion.replace(/,/g, '.'))
+        parseInt(v2.semanticVersion.replace(/,/g, '')) -
+        parseInt(v1.semanticVersion.replace(/,/g, ''))
     )
     .find((version: any) => version.codeAddress === app.implementation.address)
 
