@@ -1,0 +1,54 @@
+{
+  "name": "@aragon/connect-agreement",
+  "version": "0.8.0-alpha.6",
+  "private": true,
+  "license": "LGPL-3.0-or-later",
+  "description": "Access and interact with Aragon Organizations and their apps.",
+  "author": "Aragon Association <legal@aragon.org>",
+  "homepage": "https://github.com/aragon/connect",
+  "bugs": "https://github.com/aragon/connect/issues",
+  "repository": "https://github.com/aragon/connect",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/cjs/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "ethereum",
+    "javascript",
+    "web3",
+    "dapp",
+    "aragon"
+  ],
+  "scripts": {
+    "build": "yarn build:esm && yarn build:cjs",
+    "build:esm": "tsc --build",
+    "build:cjs": "tsc --build ./tsconfig.cjs.json",
+    "dev:esm": "yarn build:esm --watch",
+    "dev:cjs": "yarn build:cjs --watch",
+    "test": "is-ci \"test:coverage\" \"test:watch\"",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:debug": "node --inspect-brk ../../node_modules/jest/bin/jest.js --runInBand --watch",
+    "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo",
+    "lint": "eslint --ext .ts ./src"
+  },
+  "dependencies": {
+    "@aragon/connect-core": "^0.8.0-alpha.6",
+    "@aragon/connect-thegraph": "^0.8.0-alpha.6",
+    "graphql-tag": "^2.10.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.0",
+    "@types/react": "^16.9.34",
+    "@typescript-eslint/eslint-plugin": "^2.29.0",
+    "@typescript-eslint/parser": "^2.29.0",
+    "eslint": "^6.8.0",
+    "prettier": "^2.0.5",
+    "jest": "^26.0.1",
+    "ts-jest": "^26.1.0",
+    "typescript": "^3.8.3"
+  }
+}

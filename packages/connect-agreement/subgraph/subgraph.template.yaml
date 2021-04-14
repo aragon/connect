@@ -1,0 +1,70 @@
+# Do not edit subgraph.yaml, this is a generated file.
+# Instead, edit subgraph.template.yaml and run `yarn manifest-<network>-[staging]`
+specVersion: 0.0.2
+description: A template for Aragon subgraphs
+repository: https://github.com/aragon/connect
+schema:
+  file: ./schema.graphql
+dataSources:
+{{> Organizations.yaml}}
+{{> OrganizationFactories.yaml}}
+{{> OrganizationTemplates.yaml}}
+{{> LegacyOrganizationTemplates.yaml}}
+{{> TokenFactories.yaml}}
+{{> Tokens.yaml}}
+templates:
+  {{> Kernel.template.yaml}}
+  {{> MiniMeToken.template.yaml}}
+  - kind: ethereum/contract
+    name: Agreement
+    network: {{network}}
+    source:
+      abi: Agreement
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      entities:
+        - Agreement
+        - ERC20
+      abis:
+        - name: Agreement
+          file: ./abis/Agreement.json
+        - name: ERC20
+          file: ./abis/MiniMeToken.json
+        - name: Staking
+          file: ./abis/Staking.json
+        - name: StakingFactory
+          file: ./abis/StakingFactory.json
+        - name: DisputableAragonApp
+          file: ./abis/DisputableAragonApp.json
+      eventHandlers:
+        - event: ActionSubmitted(indexed uint256,indexed address)
+          handler: handleActionSubmitted
+        - event: ActionChallenged(indexed uint256,indexed uint256)
+          handler: handleActionChallenged
+        - event: ActionClosed(indexed uint256)
+          handler: handleActionClosed
+        - event: ActionSettled(indexed uint256,indexed uint256)
+          handler: handleActionSettled
+        - event: ActionDisputed(indexed uint256,indexed uint256)
+          handler: handleActionDisputed
+        - event: ActionAccepted(indexed uint256,indexed uint256)
+          handler: handleActionAccepted
+        - event: ActionVoided(indexed uint256,indexed uint256)
+          handler: handleActionVoided
+        - event: ActionRejected(indexed uint256,indexed uint256)
+          handler: handleActionRejected
+        - event: DisputableAppActivated(indexed address)
+          handler: handleDisputableAppActivated
+        - event: DisputableAppDeactivated(indexed address)
+          handler: handleDisputableAppDeactivated
+        - event: CollateralRequirementChanged(indexed address,uint256)
+          handler: handleCollateralRequirementChanged
+        - event: EvidenceSubmitted(indexed address,indexed uint256,indexed address,bytes,bool)
+          handler: handleEvidenceSubmitted
+        - event: SettingChanged(uint256)
+          handler: handleSettingChanged
+        - event: Signed(indexed address,uint256)
+          handler: handleSigned
+      file: ./src/Agreement.ts
