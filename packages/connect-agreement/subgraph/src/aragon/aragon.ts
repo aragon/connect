@@ -17,7 +17,7 @@ export function processOrg(orgAddress: Address): void {
 
 export function processApp(appAddress: Address, appId: string): void {
   if (!_isRegistered(appAddress, 'app')) {
-    const templateType = hooks.getTemplateForApp(appAddress)
+    const templateType = hooks.getTemplateForApp(appId)
     if (templateType) {
       DataSourceTemplate.create(templateType, [appAddress.toHexString()])
       hooks.onAppTemplateCreated(appAddress, appId)

@@ -1,4 +1,4 @@
-import { Address, log } from '@graphprotocol/graph-ts'
+import { Address } from '@graphprotocol/graph-ts'
 
 /*
  * Called when an app proxy is detected.
@@ -9,17 +9,15 @@ import { Address, log } from '@graphprotocol/graph-ts'
  * The returned name is used to instantiate a template declared in the subgraph manifest file,
  * which must have the same name.
  */
-export function getTemplateForApp(appAddress: Address): string | null {
-  //Once we start gardens we could use this appId instead of the address, leaving the address for now because the subgraph entities id are not 
-  //using the app address
-  // const AGREEMENT_OPEN = '0x41dd0b999b443a19321f2f34fe8078d1af95a1487b49af4c2ca57fb9e3e5331e'
+export function getTemplateForApp(appId: string): string | null {
+  const AGREEMENT_OPEN = '0x41dd0b999b443a19321f2f34fe8078d1af95a1487b49af4c2ca57fb9e3e5331e' // agreement-1hive.open.aragonpm.eth
+  const AGREEMENT_1HIVE = '0x34c62f3aec3073826f39c2c35e9a1297d9dbf3cc77472283106f09eee9cf47bf' // agreement.open.aragonpm.eth
 
-  // const AGREEMENT_ADDRESS = Address.fromString('0x15d99c0ba7cd951a9cadeb9bff4d603a1af23c3c') // RINKEBY AGREEMENT
-   const AGREEMENT_ADDRESS = Address.fromString('0x59a15718992a42082ab2306bc6cbd662958a178c')
-  if (AGREEMENT_ADDRESS.equals(appAddress)) {
+  if (appId == AGREEMENT_OPEN || appId == AGREEMENT_1HIVE) {
     return 'Agreement'
-  } 
-  return null
+  } else {
+    return null
+  }
 }
 
 export function onOrgTemplateCreated(orgAddress: Address): void {}
