@@ -1,11 +1,11 @@
-import { utils as ethersUtils } from 'ethers'
+import { Fragment } from '@ethersproject/abi'
 
 import { Abi } from '../types'
 
 export function findMethodAbiFragment(
   abi: Abi,
   methodSignature: string
-): ethersUtils.Fragment | undefined {
+): Fragment | undefined {
   if (methodSignature === 'fallback') {
     // Note that fallback functions in the ABI do not contain a `name` or `inputs` key
     return abi.find((method) => method.type === 'fallback')

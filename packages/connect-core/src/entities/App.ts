@@ -1,8 +1,6 @@
-import {
-  Contract,
-  providers as ethersProvider,
-  utils as ethersUtils,
-} from 'ethers'
+import { Interface } from '@ethersproject/abi'
+import { Contract } from '@ethersproject/contracts'
+import { Provider } from '@ethersproject/providers'
 
 import { appIntent } from '../utils/intent'
 import {
@@ -66,7 +64,7 @@ export default class App {
     return this.organization.connection.orgConnector
   }
 
-  get provider(): ethersProvider.Provider {
+  get provider(): Provider {
     return this.organization.connection.ethersProvider
   }
 
@@ -108,13 +106,13 @@ export default class App {
     return new Contract(this.address, this.abi, this.provider)
   }
 
-  ethersInterface(): ethersUtils.Interface {
+  ethersInterface(): Interface {
     if (!this.abi) {
       throw new Error(
         `No ABI specified in app for ${this.address}. Make sure the metada for the app is available`
       )
     }
-    return new ethersUtils.Interface(this.abi)
+    return new Interface(this.abi)
   }
 
   /**

@@ -1,13 +1,14 @@
-import { utils as ethersUtils } from 'ethers'
+import { defaultAbiCoder, ParamType, Result } from '@ethersproject/abi'
+import { keccak256 as solidityKeccak256 } from '@ethersproject/solidity'
 
 import { addressesEqual } from './address'
 import { findAppMethodFromData } from './app'
 import { StepDecoded } from '../types'
 import App from '../entities/App'
 
-const CORE_NAMESPACE = ethersUtils.solidityKeccak256(['string'], ['core'])
-const APP_ADDR_NAMESPACE = ethersUtils.solidityKeccak256(['string'], ['app'])
-const APP_BASES_NAMESPACE = ethersUtils.solidityKeccak256(['string'], ['base'])
+const CORE_NAMESPACE = solidityKeccak256(['string'], ['core'])
+const APP_ADDR_NAMESPACE = solidityKeccak256(['string'], ['app'])
+const APP_BASES_NAMESPACE = solidityKeccak256(['string'], ['base'])
 
 const KERNEL_NAMESPACES_NAMES = new Map([
   [CORE_NAMESPACE, 'Core'],
@@ -19,7 +20,7 @@ const SET_APP_ABI = [
   { name: 'namespace', type: 'bytes32' },
   { name: 'appId', type: 'bytes32' },
   { name: 'appAddress', type: 'address' },
-].map((param) => ethersUtils.ParamType.from(param))
+].map((param) => ParamType.from(param))
 
 interface KernelNamespace {
   name: string
@@ -38,10 +39,10 @@ export function getKernelNamespace(hash: string): KernelNamespace | null {
  * @param  {Object} data Transaction data
  * @return {Object} Decoded parameters for `setApp()` (namespace, appId, appAddress)
  */
-export function decodeKernelSetAppParameters(data: string): ethersUtils.Result {
+export function decodeKernelSetAppParameters(data: string): Result {
   // Strip 0x prefix + bytes4 sig to get parameter data
   const paramData = data.substring(10)
-  return ethersUtils.defaultAbiCoder.decode(SET_APP_ABI, paramData)
+  return defaultAbiCoder.decode(SET_APP_ABI, paramData)
 }
 
 export function isKernelAppCodeNamespace(namespaceHash: string): boolean {

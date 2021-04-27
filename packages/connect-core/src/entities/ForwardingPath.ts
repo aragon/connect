@@ -1,4 +1,4 @@
-import { providers as ethersProviders } from 'ethers'
+import { Provider } from '@ethersproject/providers'
 
 import { buildApprovePreTransactions } from '../utils/transactions'
 import {
@@ -25,7 +25,7 @@ const normalizePreTransactions = (
 
 export default class ForwardingPath {
   #installedApps: App[]
-  #provider: ethersProviders.Provider
+  #provider: Provider
   readonly destination: App
   readonly path: Transaction[]
   readonly transactions: Transaction[]
@@ -33,7 +33,7 @@ export default class ForwardingPath {
   constructor(
     data: ForwardingPathData,
     installedApps: App[],
-    provider: ethersProviders.Provider
+    provider: Provider
   ) {
     this.#installedApps = installedApps
     this.#provider = provider
@@ -61,6 +61,7 @@ export default class ForwardingPath {
           this.#installedApps,
           this.#provider
         )
+        // eslint-disable-next-line no-empty
       } catch (_) {}
     }
 

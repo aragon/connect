@@ -1,5 +1,5 @@
 import type { Address } from '@1hive/connect-types'
-import { providers as ethersProviders } from 'ethers'
+import { Provider } from '@ethersproject/providers'
 
 import { getForwardingPath } from './getForwardingPath'
 import { findMethodAbiFragment } from '../abi'
@@ -38,7 +38,7 @@ export async function getACLForwardingPath(
   methodSignature: string,
   params: any[],
   installedApps: App[],
-  provider: ethersProviders.Provider
+  provider: Provider
 ): Promise<ForwardingPath> {
   const method = findAppMethodFromSignature(acl, methodSignature, {
     allowDeprecated: false,

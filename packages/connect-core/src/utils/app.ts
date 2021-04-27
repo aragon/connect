@@ -1,11 +1,11 @@
-import { utils as ethersUtils } from 'ethers'
+import { id, namehash } from '@ethersproject/hash'
 
 import { Abi, AppMethod } from '../types'
 import { ErrorInvalid } from '../errors'
 import App from '../entities/App'
 
 export const apmAppId = (appName: string): string =>
-  ethersUtils.namehash(`${appName}.aragonpm.eth`)
+  namehash(`${appName}.aragonpm.eth`)
 
 function signatureFromAbi(signature: string, abi: Abi): string {
   if (signature === 'fallback') {
@@ -85,8 +85,7 @@ export function findAppMethodFromData(
   const methodId = data.substring(0, 10)
   return findAppMethod(
     app,
-    (method: AppMethod) =>
-      ethersUtils.id(method.sig).substring(0, 10) === methodId,
+    (method: AppMethod) => id(method.sig).substring(0, 10) === methodId,
     { allowDeprecated }
   )
 }

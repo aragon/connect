@@ -1,4 +1,5 @@
-import { Contract, providers as ethersProviders } from 'ethers'
+import { Contract } from '@ethersproject/contracts'
+import { Provider } from '@ethersproject/providers'
 import { forwarderAbi } from './abis'
 
 export const FORWARD_SIG = '0xd948d468' // function forward(bytes)
@@ -57,7 +58,7 @@ export function canForward(
   forwarderAddress: string,
   sender: string,
   script: string,
-  provider: ethersProviders.Provider
+  provider: Provider
 ): Promise<boolean> {
   // Check if a token approval pretransaction is needed due to the forwarder requiring a fee
   const forwarder = new Contract(forwarderAddress, forwarderAbi, provider)

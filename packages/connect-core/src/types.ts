@@ -1,20 +1,18 @@
-import {
-  BigNumber,
-  providers as ethersProviders,
-  utils as ethersUtils,
-} from 'ethers'
 import type {
   Address,
   Network,
   SubscriptionHandler,
   SubscriptionStart,
 } from '@1hive/connect-types'
+import { EventFragment, FunctionFragment } from '@ethersproject/abi'
+import { BigNumber } from '@ethersproject/bignumber'
+import { Provider } from '@ethersproject/providers'
 
 import IOrganizationConnector from './connections/IOrganizationConnector'
 import App from './entities/App'
 import Transaction from './entities/Transaction'
 
-export type Abi = (ethersUtils.EventFragment | ethersUtils.FunctionFragment)[]
+export type Abi = (EventFragment | FunctionFragment)[]
 
 export type AppOrAddress = App | Address
 
@@ -152,7 +150,7 @@ export interface AppMethod {
    * The function's ABI element is included for convenience of the client
    * null if ABI is not found for this signature
    */
-  abi: ethersUtils.FunctionFragment | null
+  abi: FunctionFragment | null
 }
 
 // The aragon manifest requires the use of camelcase for some names
@@ -260,7 +258,7 @@ export type IpfsResolver = {
 export type ConnectionContext = {
   actAs: Address | null
   ethereumProvider: object | null
-  ethersProvider: ethersProviders.Provider
+  ethersProvider: Provider
   ipfs: IpfsResolver
   network: Network
   orgAddress: Address

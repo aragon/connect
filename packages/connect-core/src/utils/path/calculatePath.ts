@@ -1,4 +1,5 @@
-import { providers as ethersProviders, utils as ethersUtils } from 'ethers'
+import { Provider } from '@ethersproject/providers'
+import { isAddress } from '@ethersproject/address'
 
 import { ErrorInvalid } from '../../errors'
 import { TransactionPath } from '../../types'
@@ -24,7 +25,7 @@ async function calculateForwardingPath(
   directTransaction: Transaction,
   forwardersWithPermission: string[],
   forwarders: string[],
-  provider: ethersProviders.Provider
+  provider: Provider
 ): Promise<TransactionPath> {
   // No forwarders can perform the requested action
   if (forwardersWithPermission.length === 0) {
@@ -40,7 +41,7 @@ async function calculateForwardingPath(
     forwarder: string,
     script: string,
     path: Transaction[],
-    provider: ethersProviders.Provider
+    provider: Provider
   ): Promise<TransactionPath> => {
     const transaction = createForwarderTransaction(forwarder, script)
 
@@ -157,7 +158,7 @@ export async function calculateTransactionPath(
   methodSignature: string,
   params: any[],
   apps: App[],
-  provider: ethersProviders.Provider,
+  provider: Provider,
   finalForwarder?: string //Address of the final forwarder that can perfom the action. Needed for actions that aren't in the ACL but whose execution depends on other factors
 ): Promise<TransactionPath> {
   // The direct transaction we eventually want to perform
@@ -169,7 +170,7 @@ export async function calculateTransactionPath(
   )
 
   const finalForwarderProvided = finalForwarder
-    ? ethersUtils.isAddress(finalForwarder)
+    ? isAddress(finalForwarder)
     : false
 
   const method = findAppMethodFromSignature(destinationApp, methodSignature)

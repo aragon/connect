@@ -1,4 +1,4 @@
-import { utils as ethersUtils } from 'ethers'
+import { defaultAbiCoder } from '@ethersproject/abi'
 import { ErrorInvalid } from '../errors'
 
 import { CallScriptAction } from '../types'
@@ -88,8 +88,8 @@ export function decodeCallScript(script: string): CallScriptAction[] {
  */
 export function encodeCallScript(actions: CallScriptAction[]): string {
   return actions.reduce((script: string, { to, data }) => {
-    const address = ethersUtils.defaultAbiCoder.encode(['address'], [to])
-    const dataLength = ethersUtils.defaultAbiCoder.encode(
+    const address = defaultAbiCoder.encode(['address'], [to])
+    const dataLength = defaultAbiCoder.encode(
       ['uint256'],
       [(data.length - 2) / 2]
     )

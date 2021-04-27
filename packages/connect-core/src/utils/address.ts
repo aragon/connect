@@ -1,5 +1,6 @@
 import type { Address } from '@1hive/connect-types'
-import { providers as ethersProviders, utils as ethersUtils } from 'ethers'
+import { isAddress } from '@ethersproject/address'
+import { Provider } from '@ethersproject/providers'
 import { ErrorInvalidLocation } from '../errors'
 
 export const ANY_ENTITY = '0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF'
@@ -16,12 +17,8 @@ export function includesAddress(arr: Address[], address: Address): boolean {
   return arr.some((a) => addressesEqual(a, address))
 }
 
-export function isAddress(address: string): boolean {
-  return ethersUtils.isAddress(address)
-}
-
 export async function resolveAddress(
-  ethersProvider: ethersProviders.Provider,
+  ethersProvider: Provider,
   location: string
 ): Promise<Address> {
   const isLocationAddress = isAddress(location)
