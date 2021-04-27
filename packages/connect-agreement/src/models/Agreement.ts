@@ -1,6 +1,11 @@
 import { Contract, utils } from 'ethers'
 import { SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
-import { subscription, App, ForwardingPath, arbitratorAbi } from '@aragon/connect-core'
+import {
+  subscription,
+  App,
+  ForwardingPath,
+  arbitratorAbi,
+} from '@aragon/connect-core'
 
 import { bn } from '../helpers'
 import Action from './Action'
@@ -73,7 +78,11 @@ export default class Agreement {
 
   async disputeFees(versionId: string): Promise<any> {
     const version = await this.#connector.version(versionId)
-    const arbitrator = new Contract(version.arbitrator, arbitratorAbi, this.#app.provider)
+    const arbitrator = new Contract(
+      version.arbitrator,
+      arbitratorAbi,
+      this.#app.provider
+    )
     return arbitrator.getDisputeFees()
   }
 
@@ -90,7 +99,9 @@ export default class Agreement {
     )
   }
 
-  async disputableApps({ first = 1000, skip = 0 } = {}): Promise<DisputableApp[]> {
+  async disputableApps({ first = 1000, skip = 0 } = {}): Promise<
+    DisputableApp[]
+  > {
     return this.#connector.disputableApps(this.address, first, skip)
   }
 
@@ -124,7 +135,10 @@ export default class Agreement {
     return `${tokenAddress.toLowerCase()}-staking-${userAddress.toLowerCase()}`
   }
 
-  async staking(tokenAddress: string, userAddress: string): Promise<Staking | null> {
+  async staking(
+    tokenAddress: string,
+    userAddress: string
+  ): Promise<Staking | null> {
     return this.#connector.staking(this.stakingId(tokenAddress, userAddress))
   }
 
@@ -134,16 +148,24 @@ export default class Agreement {
     callback?: SubscriptionCallback<Staking | null>
   ): SubscriptionResult<Staking | null> {
     return subscription<Staking | null>(callback, (callback) =>
-      this.#connector.onStaking(this.stakingId(tokenAddress, userAddress), callback)
+      this.#connector.onStaking(
+        this.stakingId(tokenAddress, userAddress),
+        callback
+      )
     )
   }
 
   async stakingMovements(
     tokenAddress: string,
     userAddress: string,
-    { first = 1000, skip = 0 } = {},
+    { first = 1000, skip = 0 } = {}
   ): Promise<StakingMovement[]> {
-    return this.#connector.stakingMovements(this.stakingId(tokenAddress, userAddress), this.address, first, skip)
+    return this.#connector.stakingMovements(
+      this.stakingId(tokenAddress, userAddress),
+      this.address,
+      first,
+      skip
+    )
   }
 
   onStakingMovements(
@@ -153,7 +175,13 @@ export default class Agreement {
     callback?: SubscriptionCallback<StakingMovement[]>
   ): SubscriptionResult<StakingMovement[]> {
     return subscription<StakingMovement[]>(callback, (callback) =>
-      this.#connector.onStakingMovements(this.stakingId(tokenAddress, userAddress), this.address, first, skip, callback)
+      this.#connector.onStakingMovements(
+        this.stakingId(tokenAddress, userAddress),
+        this.address,
+        first,
+        skip,
+        callback
+      )
     )
   }
 
@@ -173,36 +201,68 @@ export default class Agreement {
     return this.#connector.action(this.actionId(actionNumber))
   }
 
-  onAction(actionNumber: string, callback?: SubscriptionCallback<Action | null>): SubscriptionResult<Action | null> {
+  onAction(
+    actionNumber: string,
+    callback?: SubscriptionCallback<Action | null>
+  ): SubscriptionResult<Action | null> {
     return subscription<Action | null>(callback, (callback) =>
       this.#connector.onAction(this.actionId(actionNumber), callback)
     )
   }
 
-  async sign(signerAddress: string, versionNumber?: string): Promise<ForwardingPath> {
+  async sign(
+    signerAddress: string,
+    versionNumber?: string
+  ): Promise<ForwardingPath> {
     if (!versionNumber) {
       versionNumber = (await this.currentVersion()).versionId
     }
     return this.#app.intent('sign', [versionNumber], { actAs: signerAddress })
   }
 
-  async challenge(actionNumber: string, settlementOffer: string, finishedEvidence: boolean, context: string, signerAddress: string): Promise<ForwardingPath> {
-    const intent = await this.#app.intent('challengeAction', [actionNumber, settlementOffer, finishedEvidence, utils.toUtf8Bytes(context)], { actAs: signerAddress })
+  async challenge(
+    actionNumber: string,
+    settlementOffer: string,
+    finishedEvidence: boolean,
+    context: string,
+    signerAddress: string
+  ): Promise<ForwardingPath> {
+    const intent = await this.#app.intent(
+      'challengeAction',
+      [
+        actionNumber,
+        settlementOffer,
+        finishedEvidence,
+        utils.toUtf8Bytes(context),
+      ],
+      { actAs: signerAddress }
+    )
 
     const action = await this.action(actionNumber)
     const { feeToken, feeAmount } = await this.disputeFees(action.versionId)
-    const { tokenId: collateralToken, challengeAmount } = await action.collateralRequirement()
+    const {
+      tokenId: collateralToken,
+      challengeAmount,
+    } = await action.collateralRequirement()
     const challengeCollateral = bn(challengeAmount)
 
     // approve challenge collateral and dispute fees
     const preTransactions = []
     if (feeToken.toLowerCase() == collateralToken.toLowerCase()) {
       const approvalAmount = challengeCollateral.add(feeAmount)
-      const approvePreTransactions = await intent.buildApprovePreTransactions({ address: feeToken, value: approvalAmount })
+      const approvePreTransactions = await intent.buildApprovePreTransactions({
+        address: feeToken,
+        value: approvalAmount,
+      })
       preTransactions.push(...approvePreTransactions)
     } else {
-      const feesPreTransactions = await intent.buildApprovePreTransactions({ address: feeToken, value: feeAmount })
-      const collateralPreTransactions = await intent.buildApprovePreTransactions({ address: collateralToken, value: challengeCollateral })
+      const feesPreTransactions = await intent.buildApprovePreTransactions({
+        address: feeToken,
+        value: feeAmount,
+      })
+      const collateralPreTransactions = await intent.buildApprovePreTransactions(
+        { address: collateralToken, value: challengeCollateral }
+      )
       preTransactions.push(...feesPreTransactions, ...collateralPreTransactions)
     }
 
@@ -210,23 +270,38 @@ export default class Agreement {
     return intent
   }
 
-  async dispute(actionNumber: string, finishedEvidence: boolean, signerAddress: string): Promise<ForwardingPath> {
-    const intent = await this.#app.intent('disputeAction', [actionNumber, finishedEvidence], { actAs: signerAddress })
+  async dispute(
+    actionNumber: string,
+    finishedEvidence: boolean,
+    signerAddress: string
+  ): Promise<ForwardingPath> {
+    const intent = await this.#app.intent(
+      'disputeAction',
+      [actionNumber, finishedEvidence],
+      { actAs: signerAddress }
+    )
 
     const action = await this.action(actionNumber)
     const { feeToken, feeAmount } = await this.disputeFees(action.versionId)
 
     // approve dispute fees
-    const preTransactions = await intent.buildApprovePreTransactions({ address: feeToken, value: feeAmount })
+    const preTransactions = await intent.buildApprovePreTransactions({
+      address: feeToken,
+      value: feeAmount,
+    })
     intent.applyPreTransactions(preTransactions)
     return intent
   }
 
   settle(actionNumber: string, signerAddress: string): Promise<ForwardingPath> {
-    return this.#app.intent('settleAction', [actionNumber], { actAs: signerAddress })
+    return this.#app.intent('settleAction', [actionNumber], {
+      actAs: signerAddress,
+    })
   }
 
   close(actionNumber: string, signerAddress: string): Promise<ForwardingPath> {
-    return this.#app.intent('closeAction', [actionNumber], { actAs: signerAddress })
+    return this.#app.intent('closeAction', [actionNumber], {
+      actAs: signerAddress,
+    })
   }
 }

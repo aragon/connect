@@ -4,7 +4,21 @@ import { ERC20 } from '../generated/schema'
 import { ERC20 as ERC20Contract } from '../generated/templates/Agreement/ERC20'
 import { Staking as StakingContract } from '../generated/templates/Agreement/Staking'
 import { StakingFactory as StakingFactoryContract } from '../generated/templates/Agreement/StakingFactory'
-import { Agreement, Action, Signature, Version, Disputable, Challenge, Dispute, Evidence, Signer, CollateralRequirement, ArbitratorFee, StakingMovement, Staking } from '../generated/schema'
+import {
+  Agreement,
+  Action,
+  Signature,
+  Version,
+  Disputable,
+  Challenge,
+  Dispute,
+  Evidence,
+  Signer,
+  CollateralRequirement,
+  ArbitratorFee,
+  StakingMovement,
+  Staking,
+} from '../generated/schema'
 import {
   Agreement as AgreementContract,
   ActionSubmitted,
@@ -20,7 +34,7 @@ import {
   Signed,
   DisputableAppActivated,
   DisputableAppDeactivated,
-  CollateralRequirementChanged
+  CollateralRequirementChanged,
 } from '../generated/templates/Agreement/Agreement'
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -56,25 +70,49 @@ export function handleSigned(event: Signed): void {
   signature.save()
 }
 
-export function handleDisputableAppActivated(event: DisputableAppActivated): void {
+export function handleDisputableAppActivated(
+  event: DisputableAppActivated
+): void {
   const agreementApp = AgreementContract.bind(event.address)
   const disputableData = agreementApp.getDisputableInfo(event.params.disputable)
-  const disputable = loadOrCreateDisputable(event.address, event.params.disputable)
+  const disputable = loadOrCreateDisputable(
+    event.address,
+    event.params.disputable
+  )
   disputable.activated = true
-  disputable.currentCollateralRequirement = buildCollateralRequirementId(event.address, event.params.disputable, disputableData.value1)
+  disputable.currentCollateralRequirement = buildCollateralRequirementId(
+    event.address,
+    event.params.disputable,
+    disputableData.value1
+  )
   disputable.save()
 
-  updateCollateralRequirement(event.address, event.params.disputable, disputableData.value1)
+  updateCollateralRequirement(
+    event.address,
+    event.params.disputable,
+    disputableData.value1
+  )
 }
 
-export function handleDisputableAppDeactivated(event: DisputableAppDeactivated): void {
-  const disputable = loadOrCreateDisputable(event.address, event.params.disputable)
+export function handleDisputableAppDeactivated(
+  event: DisputableAppDeactivated
+): void {
+  const disputable = loadOrCreateDisputable(
+    event.address,
+    event.params.disputable
+  )
   disputable.activated = false
   disputable.save()
 }
 
-export function handleCollateralRequirementChanged(event: CollateralRequirementChanged): void {
-  updateCollateralRequirement(event.address, event.params.disputable, event.params.collateralRequirementId)
+export function handleCollateralRequirementChanged(
+  event: CollateralRequirementChanged
+): void {
+  updateCollateralRequirement(
+    event.address,
+    event.params.disputable,
+    event.params.collateralRequirementId
+  )
 }
 
 export function handleActionSubmitted(event: ActionSubmitted): void {
@@ -87,7 +125,11 @@ export function handleActionSubmitted(event: ActionSubmitted): void {
   action.actionId = event.params.actionId
   action.disputable = buildDisputableId(event.address, actionData.value0)
   action.disputableActionId = actionData.value1
-  action.collateralRequirement = buildCollateralRequirementId(event.address, actionData.value0, actionData.value2)
+  action.collateralRequirement = buildCollateralRequirementId(
+    event.address,
+    actionData.value0,
+    actionData.value2
+  )
   action.version = buildVersionId(event.address, actionData.value3)
   action.submitter = buildSignerId(event.address, actionData.value4)
   action.closed = actionData.value5
@@ -99,13 +141,15 @@ export function handleActionSubmitted(event: ActionSubmitted): void {
 }
 
 export function handleActionClosed(event: ActionClosed): void {
-  const action = Action.load(buildActionId(event.address, event.params.actionId))!
+  const action = Action.load(
+    buildActionId(event.address, event.params.actionId)
+  )!
   action.closed = true
   action.save()
 
-  const challenge  = Challenge.load(action.lastChallenge)
+  const challenge = Challenge.load(action.lastChallenge)
 
-  if(challenge.state != 'Settled'){
+  if (challenge.state != 'Settled') {
     createStakingMovement(event.address, event.params.actionId, 'closed', event)
   }
 }
@@ -131,12 +175,24 @@ export function handleActionChallenged(event: ActionChallenged): void {
   challenge.createdAt = event.block.timestamp
 
   const challengerArbitratorFeeId = challengeId + 'challenger-arbitrator-fee'
-  const challengeArbitratorFeesData = agreementApp.getChallengeArbitratorFees(event.params.challengeId)
-  createArbitratorFee(event.address, challengerArbitratorFeeId, challengeArbitratorFeesData.value2, challengeArbitratorFeesData.value3)
+  const challengeArbitratorFeesData = agreementApp.getChallengeArbitratorFees(
+    event.params.challengeId
+  )
+  createArbitratorFee(
+    event.address,
+    challengerArbitratorFeeId,
+    challengeArbitratorFeesData.value2,
+    challengeArbitratorFeesData.value3
+  )
   challenge.challengerArbitratorFee = challengerArbitratorFeeId
   challenge.save()
 
-  createStakingMovement(event.address, event.params.actionId, 'challenged', event)
+  createStakingMovement(
+    event.address,
+    event.params.actionId,
+    'challenged',
+    event
+  )
 }
 
 export function handleActionSettled(event: ActionSettled): void {
@@ -147,14 +203,25 @@ export function handleActionSettled(event: ActionSettled): void {
 export function handleActionDisputed(event: ActionDisputed): void {
   updateChallengeState(event.address, event.params.challengeId)
 
-  const dispute = loadOrCreateDispute(event.address, event.params.challengeId, event)
+  const dispute = loadOrCreateDispute(
+    event.address,
+    event.params.challengeId,
+    event
+  )
   dispute.save()
 
   const challengeId = buildChallengeId(event.address, event.params.challengeId)
   const agreementApp = AgreementContract.bind(event.address)
-  const challengeArbitratorFeesData = agreementApp.getChallengeArbitratorFees(event.params.challengeId)
+  const challengeArbitratorFeesData = agreementApp.getChallengeArbitratorFees(
+    event.params.challengeId
+  )
   const submitterArbitratorFeeId = challengeId + 'submitter-arbitrator-fee'
-  createArbitratorFee(event.address, submitterArbitratorFeeId, challengeArbitratorFeesData.value0, challengeArbitratorFeesData.value1)
+  createArbitratorFee(
+    event.address,
+    submitterArbitratorFeeId,
+    challengeArbitratorFeesData.value0,
+    challengeArbitratorFeesData.value1
+  )
 
   const challenge = Challenge.load(challengeId)!
   challenge.submitterArbitratorFee = submitterArbitratorFeeId
@@ -199,7 +266,10 @@ function loadOrCreateAgreement(agreementAddress: Address): Agreement {
   return agreement!
 }
 
-function loadOrCreateSigner(agreement: Address, signerAddress: Address): Signer {
+function loadOrCreateSigner(
+  agreement: Address,
+  signerAddress: Address
+): Signer {
   const signerId = buildSignerId(agreement, signerAddress)
   let signer = Signer.load(signerId)
   if (signer === null) {
@@ -210,7 +280,10 @@ function loadOrCreateSigner(agreement: Address, signerAddress: Address): Signer 
   return signer!
 }
 
-function loadOrCreateDisputable(agreement: Address, disputableAddress: Address): Disputable {
+function loadOrCreateDisputable(
+  agreement: Address,
+  disputableAddress: Address
+): Disputable {
   const disputableId = buildDisputableId(agreement, disputableAddress)
   let disputable = Disputable.load(disputableId)
   if (disputable === null) {
@@ -221,7 +294,11 @@ function loadOrCreateDisputable(agreement: Address, disputableAddress: Address):
   return disputable!
 }
 
-function loadOrCreateDispute(agreement: Address, challengeId: BigInt, event: ethereum.Event): Dispute {
+function loadOrCreateDispute(
+  agreement: Address,
+  challengeId: BigInt,
+  event: ethereum.Event
+): Dispute {
   const agreementApp = AgreementContract.bind(agreement)
   const challengeData = agreementApp.getChallenge(challengeId)
   const disputeId = buildDisputeId(agreement, challengeData.value8)
@@ -249,7 +326,11 @@ function updateChallengeState(agreement: Address, challengeId: BigInt): void {
   challenge.save()
 }
 
-function updateDisputeState(agreement: Address, challengeId: BigInt, event: ethereum.Event): void {
+function updateDisputeState(
+  agreement: Address,
+  challengeId: BigInt,
+  event: ethereum.Event
+): void {
   const agreementApp = AgreementContract.bind(agreement)
   const challengeData = agreementApp.getChallenge(challengeId)
 
@@ -260,12 +341,23 @@ function updateDisputeState(agreement: Address, challengeId: BigInt, event: ethe
   dispute.save()
 }
 
-function updateCollateralRequirement(agreement: Address, disputable: Address, collateralRequirementId: BigInt): void {
+function updateCollateralRequirement(
+  agreement: Address,
+  disputable: Address,
+  collateralRequirementId: BigInt
+): void {
   const agreementApp = AgreementContract.bind(agreement)
-  const requirementId = buildCollateralRequirementId(agreement, disputable, collateralRequirementId)
+  const requirementId = buildCollateralRequirementId(
+    agreement,
+    disputable,
+    collateralRequirementId
+  )
 
   const requirement = new CollateralRequirement(requirementId)
-  const requirementData = agreementApp.getCollateralRequirement(disputable, collateralRequirementId)
+  const requirementData = agreementApp.getCollateralRequirement(
+    disputable,
+    collateralRequirementId
+  )
   requirement.disputable = buildDisputableId(agreement, disputable)
   requirement.token = buildERC20(agreement, requirementData.value0)
   requirement.challengeDuration = requirementData.value1
@@ -274,10 +366,18 @@ function updateCollateralRequirement(agreement: Address, disputable: Address, co
   requirement.save()
 }
 
-function createStakingMovement(agreement: Address, actionId: BigInt, type: string, event: ethereum.Event): void {
+function createStakingMovement(
+  agreement: Address,
+  actionId: BigInt,
+  type: string,
+  event: ethereum.Event
+): void {
   const agreementApp = AgreementContract.bind(agreement)
   const actionData = agreementApp.getAction(actionId)
-  const collateralData = agreementApp.getCollateralRequirement(actionData.value0, actionData.value2)
+  const collateralData = agreementApp.getCollateralRequirement(
+    actionData.value0,
+    actionData.value2
+  )
 
   const user = actionData.value4
   const token = collateralData.value0
@@ -318,7 +418,8 @@ function createStakingMovement(agreement: Address, actionId: BigInt, type: strin
     movement.actionState = 'Cancelled'
     movement.collateralState = 'Slashed'
     staking.challenged = staking.challenged.minus(collateralAmount)
-  } else { // closed
+  } else {
+    // closed
     movement.amount = collateralAmount
     movement.actionState = 'Completed'
     movement.collateralState = 'Available'
@@ -329,7 +430,11 @@ function createStakingMovement(agreement: Address, actionId: BigInt, type: strin
   movement.save()
 }
 
-function updateStaking(stakingAddress: Address, token: Address, user: Address): Staking {
+function updateStaking(
+  stakingAddress: Address,
+  token: Address,
+  user: Address
+): Staking {
   const stakingApp = StakingContract.bind(stakingAddress)
   const balance = stakingApp.getBalancesOf(user)
 
@@ -338,7 +443,7 @@ function updateStaking(stakingAddress: Address, token: Address, user: Address): 
   staking.locked = balance.value1
   staking.available = staking.total.minus(staking.locked)
   staking.save()
-  
+
   return staking
 }
 
@@ -359,7 +464,12 @@ function loadOrCreateStaking(token: Address, user: Address): Staking {
   return staking!
 }
 
-function createArbitratorFee(agreement: Address, id: string, feeToken: Address, feeAmount: BigInt): void {
+function createArbitratorFee(
+  agreement: Address,
+  id: string,
+  feeToken: Address,
+  feeAmount: BigInt
+): void {
   const arbitratorFee = new ArbitratorFee(id)
   arbitratorFee.amount = feeAmount
   arbitratorFee.token = buildERC20(agreement, feeToken)
@@ -383,39 +493,51 @@ export function buildERC20(agreement: Address, address: Address): string {
 }
 
 function buildSignerId(agreement: Address, signer: Address): string {
-  return agreement.toHexString() + "-signer-" + signer.toHexString()
+  return agreement.toHexString() + '-signer-' + signer.toHexString()
 }
 
 function buildDisputableId(agreement: Address, disputable: Address): string {
-  return agreement.toHexString() + "-disputable-" + disputable.toHexString()
+  return agreement.toHexString() + '-disputable-' + disputable.toHexString()
 }
 
 export function buildActionId(agreement: Address, actionId: BigInt): string {
-  return agreement.toHexString() + "-action-" + actionId.toString()
+  return agreement.toHexString() + '-action-' + actionId.toString()
 }
 
 function buildChallengeId(agreement: Address, challengeId: BigInt): string {
-  return agreement.toHexString() + "-challenge-" + challengeId.toString()
+  return agreement.toHexString() + '-challenge-' + challengeId.toString()
 }
 
 function buildDisputeId(agreement: Address, disputeId: BigInt): string {
-  return agreement.toHexString() + "-dispute-" + disputeId.toString()
+  return agreement.toHexString() + '-dispute-' + disputeId.toString()
 }
 
 function buildVersionId(agreement: Address, versionId: BigInt): string {
-  return agreement.toHexString() + "-version-" + versionId.toString()
+  return agreement.toHexString() + '-version-' + versionId.toString()
 }
 
-function buildCollateralRequirementId(agreement: Address, disputable: Address, collateralRequirementId: BigInt): string {
-  return buildDisputableId(agreement, disputable) + "-collateral-requirement-" + collateralRequirementId.toString()
+function buildCollateralRequirementId(
+  agreement: Address,
+  disputable: Address,
+  collateralRequirementId: BigInt
+): string {
+  return (
+    buildDisputableId(agreement, disputable) +
+    '-collateral-requirement-' +
+    collateralRequirementId.toString()
+  )
 }
 
 function buildStakingId(token: Address, user: Address): string {
-  return token.toHexString() + "-staking-" + user.toHexString()
+  return token.toHexString() + '-staking-' + user.toHexString()
 }
 
-function buildStakingMovementId(token: Address, user: Address, id: string): string {
-  return buildStakingId(token, user) + "-movement-" + id
+function buildStakingMovementId(
+  token: Address,
+  user: Address,
+  id: string
+): string {
+  return buildStakingId(token, user) + '-movement-' + id
 }
 
 function buildId(event: ethereum.Event): string {
@@ -424,12 +546,19 @@ function buildId(event: ethereum.Event): string {
 
 function castChallengeState(state: i32): string {
   switch (state) {
-    case 0: return 'Waiting'
-    case 1: return 'Settled'
-    case 2: return 'Disputed'
-    case 3: return 'Rejected'
-    case 4: return 'Accepted'
-    case 5: return 'Voided'
-    default: return 'Unknown'
+    case 0:
+      return 'Waiting'
+    case 1:
+      return 'Settled'
+    case 2:
+      return 'Disputed'
+    case 3:
+      return 'Rejected'
+    case 4:
+      return 'Accepted'
+    case 5:
+      return 'Voided'
+    default:
+      return 'Unknown'
   }
 }

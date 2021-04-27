@@ -21,15 +21,15 @@ export const miniMeAbi = [
 
 export const arbitratorAbi = [
   {
-    "inputs": [],
-    "name": "getDisputeFees",
-    "outputs": [
-      { "name": "recipient", "type": "address" },
-      { "name": "feeToken", "type": "address" },
-      { "name": "feeAmount", "type": "uint256" }
+    inputs: [],
+    name: 'getDisputeFees',
+    outputs: [
+      { name: 'recipient', type: 'address' },
+      { name: 'feeToken', type: 'address' },
+      { name: 'feeAmount', type: 'uint256' },
     ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
   },
 ]

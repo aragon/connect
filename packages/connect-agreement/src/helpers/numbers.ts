@@ -4,7 +4,8 @@ export const PCT_DECIMALS = 16 // 100% = 10^18
 
 export const PCT_BASE = BigNumber.from(`100${'0'.repeat(PCT_DECIMALS)}`)
 
-export const bn = (x: string | number): BigNumber => BigNumber.from(x.toString())
+export const bn = (x: string | number): BigNumber =>
+  BigNumber.from(x.toString())
 
 export const formatBn = (
   number: string | BigNumber,
@@ -30,9 +31,10 @@ export const formatBn = (
     parseInt(decimals) / 10 ** (decimalsLength - formattedDecimals)
   )
 
-  const parsedRoundedDecimals = (roundedDecimals === 0)
-    ? '0'.repeat(formattedDecimals)
-    : roundedDecimals.toString()
+  const parsedRoundedDecimals =
+    roundedDecimals === 0
+      ? '0'.repeat(formattedDecimals)
+      : roundedDecimals.toString()
 
   return `${integer}.${parsedRoundedDecimals}`
 }

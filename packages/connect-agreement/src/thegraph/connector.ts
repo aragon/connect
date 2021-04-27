@@ -266,9 +266,7 @@ export default class AgreementConnectorTheGraph implements IAgreementConnector {
     )
   }
 
-  async staking(
-    stakingId: string
-  ): Promise<Staking | null> {
+  async staking(stakingId: string): Promise<Staking | null> {
     return this.#gql.performQueryWithParser<Staking>(
       queries.GET_STAKING('query'),
       { stakingId },

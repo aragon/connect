@@ -159,7 +159,9 @@ export interface IAgreementConnector {
     skip: number,
     callback: SubscriptionCallback<Signature[]>
   ): SubscriptionHandler
-  collateralRequirement(collateralRequirementId: string): Promise<CollateralRequirement>
+  collateralRequirement(
+    collateralRequirementId: string
+  ): Promise<CollateralRequirement>
   onCollateralRequirement(
     collateralRequirementId: string,
     callback: SubscriptionCallback<CollateralRequirement>

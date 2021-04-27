@@ -2,14 +2,26 @@ import { QueryResult } from '@aragon/connect-thegraph'
 
 import Action from '../../models/Action'
 
-export function parseAction(result: QueryResult, connector: any): Action | null {
+export function parseAction(
+  result: QueryResult,
+  connector: any
+): Action | null {
   const action = result.data.action
 
   if (!action) {
     return null
   }
 
-  const { id, agreement, collateralRequirement, disputable, version, disputableActionId, context, createdAt } = action
+  const {
+    id,
+    agreement,
+    collateralRequirement,
+    disputable,
+    version,
+    disputableActionId,
+    context,
+    createdAt,
+  } = action
 
   return new Action(
     {
@@ -20,7 +32,7 @@ export function parseAction(result: QueryResult, connector: any): Action | null 
       collateralRequirementId: collateralRequirement.id,
       disputableActionId,
       context,
-      createdAt
+      createdAt,
     },
     connector
   )
