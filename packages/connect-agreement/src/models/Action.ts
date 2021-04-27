@@ -50,7 +50,10 @@ export default class Action {
     callback?: SubscriptionCallback<CollateralRequirement>
   ): SubscriptionResult<CollateralRequirement> {
     return subscription<CollateralRequirement>(callback, (callback) =>
-      this.#connector.onCollateralRequirement(this.collateralRequirementId, callback)
+      this.#connector.onCollateralRequirement(
+        this.collateralRequirementId,
+        callback
+      )
     )
   }
 }

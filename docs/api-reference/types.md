@@ -14,9 +14,9 @@ Networkish can be a number, a string or an object.
 
 ### As a string
 
-| Type                              | Description                                                    |
-| --------------------------------- | -------------------------------------------------------------- |
-| `"ethereum" | "rinkeby" | "xdai"` | Name of a network, from a selection (prefer using a chain ID). |
+| Type        | Description |
+| ----------- | ----------- | ------- | -------------------------------------------------------------- |
+| `"ethereum" | "rinkeby"   | "xdai"` | Name of a network, from a selection (prefer using a chain ID). |
 
 ### As an object
 

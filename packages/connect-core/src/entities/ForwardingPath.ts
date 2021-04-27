@@ -13,9 +13,13 @@ import ForwardingPathDescription, {
 import App from './App'
 import Transaction from './Transaction'
 
-const normalizePreTransactions = (preTransactions: (Transaction | TransactionData)[]): Transaction[] => {
+const normalizePreTransactions = (
+  preTransactions: (Transaction | TransactionData)[]
+): Transaction[] => {
   return preTransactions.map((preTransaction: Transaction | TransactionData) =>
-    (preTransaction instanceof Transaction) ? preTransaction : new Transaction(preTransaction)
+    preTransaction instanceof Transaction
+      ? preTransaction
+      : new Transaction(preTransaction)
   )
 }
 
@@ -75,10 +79,12 @@ export default class ForwardingPath {
   }
 
   // Apply a pretransaction to the path
-  applyPreTransactions(preTransactions: (Transaction | TransactionData)[]): void {
+  applyPreTransactions(
+    preTransactions: (Transaction | TransactionData)[]
+  ): void {
     normalizePreTransactions(preTransactions)
       .reverse()
-      .filter(preTransaction => !!preTransaction)
-      .forEach(preTransaction => this.transactions.unshift(preTransaction))
+      .filter((preTransaction) => !!preTransaction)
+      .forEach((preTransaction) => this.transactions.unshift(preTransaction))
   }
 }

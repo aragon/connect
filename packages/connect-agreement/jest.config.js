@@ -11,5 +11,5 @@ module.exports = {
   name: packageName,
   displayName: 'AGREEMENT',
   rootDir: '../..',
-  testTimeout: 10000
+  testTimeout: 10000,
 }

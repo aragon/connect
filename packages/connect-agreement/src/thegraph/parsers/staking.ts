@@ -3,7 +3,10 @@ import { QueryResult } from '@aragon/connect-thegraph'
 import Staking from '../../models/Staking'
 import StakingMovement from '../../models/StakingMovement'
 
-export function parseStaking(result: QueryResult, connector: any): Staking | null {
+export function parseStaking(
+  result: QueryResult,
+  connector: any
+): Staking | null {
   const staking = result.data.staking
 
   if (!staking) {
@@ -39,7 +42,16 @@ export function parseStakingMovements(
   }
 
   return movements.map((movement: any) => {
-    const { id, staking, agreement, action, amount, actionState, collateralState, createdAt } = movement
+    const {
+      id,
+      staking,
+      agreement,
+      action,
+      amount,
+      actionState,
+      collateralState,
+      createdAt,
+    } = movement
 
     return new StakingMovement(
       {
@@ -55,7 +67,7 @@ export function parseStakingMovements(
         actionId: action.id,
         disputableAddress: action.disputable.address,
         disputableActionId: action.disputableActionId,
-        agreementId: agreement.id
+        agreementId: agreement.id,
       },
       connector
     )

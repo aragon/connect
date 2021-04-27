@@ -7,7 +7,6 @@ import Staking from '../models/Staking'
 import { formatBn } from '../helpers'
 import { IAgreementConnector, StakingMovementData } from '../types'
 
-
 export default class StakingMovement {
   #connector: IAgreementConnector
 
@@ -65,7 +64,9 @@ export default class StakingMovement {
     return this.#connector.staking(this.stakingId)
   }
 
-  onStaking(callback?: SubscriptionCallback<Staking | null>): SubscriptionResult<Staking | null> {
+  onStaking(
+    callback?: SubscriptionCallback<Staking | null>
+  ): SubscriptionResult<Staking | null> {
     return subscription<Staking | null>(callback, (callback) =>
       this.#connector.onStaking(this.stakingId, callback)
     )
@@ -83,7 +84,9 @@ export default class StakingMovement {
     return this.#connector.action(this.actionId)
   }
 
-  onAction(callback?: SubscriptionCallback<Action | null>): SubscriptionResult<Action | null> {
+  onAction(
+    callback?: SubscriptionCallback<Action | null>
+  ): SubscriptionResult<Action | null> {
     return subscription<Action | null>(callback, (callback) =>
       this.#connector.onAction(this.actionId || '', callback)
     )

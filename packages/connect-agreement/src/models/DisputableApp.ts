@@ -23,14 +23,19 @@ export default class DisputableApp {
   }
 
   async collateralRequirement(): Promise<CollateralRequirement> {
-    return this.#connector.collateralRequirement(this.currentCollateralRequirementId)
+    return this.#connector.collateralRequirement(
+      this.currentCollateralRequirementId
+    )
   }
 
   onCollateralRequirement(
     callback?: SubscriptionCallback<CollateralRequirement>
   ): SubscriptionResult<CollateralRequirement> {
     return subscription<CollateralRequirement>(callback, (callback) =>
-      this.#connector.onCollateralRequirement(this.currentCollateralRequirementId, callback)
+      this.#connector.onCollateralRequirement(
+        this.currentCollateralRequirementId,
+        callback
+      )
     )
   }
 }

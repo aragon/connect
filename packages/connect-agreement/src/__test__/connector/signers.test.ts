@@ -1,7 +1,8 @@
 import { AgreementConnectorTheGraph, Signer, Signature } from '../../../src'
 
 const AGREEMENT_APP_ADDRESS = '0xe4575381f0c96f58bd93be6978cc0d9638d874a2'
-const AGREEMENT_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-agreement-rinkeby-staging'
+const AGREEMENT_SUBGRAPH_URL =
+  'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-agreement-rinkeby-staging'
 
 describe('Agreement signers', () => {
   const SIGNER_ADDRESS = '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
