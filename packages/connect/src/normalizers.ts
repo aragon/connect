@@ -29,7 +29,7 @@ import {
 import {
   DEFAULT_IPFS_CACHED_ITEMS,
   DEFAULT_IPFS_URL,
-  XDAI_HTTP_ENDPOINT,
+  XDAI_WSS_ENDPOINT,
 } from './constants'
 
 export function isIpfsResolver(
@@ -120,7 +120,7 @@ export function normalizeEthersProvider(
   }
 
   if (network.chainId === 100) {
-    return new JsonRpcProvider(XDAI_HTTP_ENDPOINT, network)
+    return new JsonRpcProvider(XDAI_WSS_ENDPOINT, network)
   }
 
   return getDefaultProvider(network)
