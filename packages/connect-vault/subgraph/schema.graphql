@@ -1,0 +1,42 @@
+type Vault @entity {
+  id: ID!
+  dao: Bytes!
+  createdAt: BigInt!
+}
+
+type TokenBalance @entity {
+  id: ID!
+  vault: Vault!
+  token: ERC20!
+  balance: BigInt!
+}
+
+type Transaction @entity {
+  id: ID!
+  vault: Vault!
+  from: Bytes!
+  to: Bytes!
+  token: ERC20!
+  amount: BigInt!
+  type: Type!
+  createdAt: BigInt!
+}
+
+enum Type {
+  Deposit,
+  Transfer
+}
+
+type ERC20 @entity {
+  id: ID!
+  name: String!
+  symbol: String!
+  decimals: Int!
+}
+
+type AragonInfo @entity {
+  id: ID!
+  orgs: [Bytes!]!
+  apps: [Bytes!]!
+  tokens: [Bytes!]!
+}
