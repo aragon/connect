@@ -15,9 +15,12 @@ function buildERC20(address: Address): string {
   if (token === null) {
     const tokenContract = ERC20Contract.bind(address)
     token = new ERC20Entity(id)
-    token.name = tokenContract.name()
-    token.symbol = tokenContract.symbol()
-    token.decimals = tokenContract.decimals()
+    const optionalName = tokenContract.try_name();
+    token.name = optionalName.reverted ? 'unknown name' : optionalName.value
+    const optionalSymbol = tokenContract.try_symbol();
+    token.symbol = optionalSymbol.reverted ? 'unknown symbol' : optionalSymbol.value
+    const optionalDecimals = tokenContract.try_decimals();
+    token.decimals = optionalDecimals.reverted ? 0 : optionalDecimals.value
     token.save()
   }
 
