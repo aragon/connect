@@ -1,6 +1,6 @@
 {
   "name": "@aragon/connect-agreement",
-  "version": "0.8.0-alpha.6",
+  "version": "0.9.0",
   "private": true,
   "license": "LGPL-3.0-or-later",
   "description": "Access and interact with Aragon Organizations and their apps.",
