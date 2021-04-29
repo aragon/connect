@@ -1,5 +1,5 @@
 import type { Address } from '@1hive/connect-types'
-import { providers as ethersProviders } from 'ethers'
+import { Provider } from '@ethersproject/providers'
 
 import { calculateTransactionPath } from './calculatePath'
 import App from '../../entities/App'
@@ -21,7 +21,7 @@ export async function getForwardingPath(
   methodSignature: string,
   params: any[],
   installedApps: App[],
-  provider: ethersProviders.Provider,
+  provider: Provider,
   finalForwarder?: Address
 ): Promise<ForwardingPath> {
   const { path, transactions } = await calculateTransactionPath(

@@ -1,5 +1,5 @@
 import * as radspec from 'radspec'
-import { providers as ethersProviders } from 'ethers'
+import { Provider } from '@ethersproject/providers'
 
 import { addressesEqual } from '../address'
 import { findAppMethodFromData } from '../app'
@@ -18,7 +18,7 @@ interface FoundMethod {
 export async function tryEvaluatingRadspec(
   intent: StepDecoded,
   installedApps: App[],
-  provider: ethersProviders.Provider // Decorated intent with description, if one could be made
+  provider: Provider // Decorated intent with description, if one could be made
 ): Promise<StepDescribed> {
   const app = installedApps.find((app) =>
     addressesEqual(app.address, intent.to)

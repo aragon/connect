@@ -1,5 +1,6 @@
 import type { Address } from '@1hive/connect-types'
-import { utils as ethersUtils, providers as ethersProvider } from 'ethers'
+import { Result } from '@ethersproject/abi'
+import { Provider } from '@ethersproject/providers'
 
 import { addressesEqual } from './address'
 import {
@@ -18,7 +19,7 @@ export async function appIntent(
   methodSignature: string,
   params: any[],
   installedApps: App[],
-  provider: ethersProvider.Provider
+  provider: Provider
 ): Promise<ForwardingPath> {
   const acl = installedApps.find((app) => app.name === 'acl')
 
@@ -59,7 +60,7 @@ export async function appIntent(
 export function filterAndDecodeAppUpgradeIntents(
   intents: StepDecoded[],
   installedApps: App[]
-): ethersUtils.Result[] {
+): Result[] {
   const kernel = installedApps.find((app) => app.name === 'kernel')
 
   if (!kernel) {
@@ -74,6 +75,7 @@ export function filterAndDecodeAppUpgradeIntents(
       .map((intent) => {
         try {
           return decodeKernelSetAppParameters(intent.data)
+          // eslint-disable-next-line no-empty
         } catch (_) {}
 
         return []

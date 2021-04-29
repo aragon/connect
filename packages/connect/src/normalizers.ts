@@ -1,7 +1,9 @@
 import {
-  getDefaultProvider as getDefaultEthersProvider,
-  providers as ethersProviders,
-} from 'ethers'
+  JsonRpcProvider,
+  getDefaultProvider,
+  Web3Provider,
+  Provider,
+} from '@ethersproject/providers'
 import type { Network } from '@1hive/connect-types'
 import {
   ConnectorJson,
@@ -27,7 +29,7 @@ import {
 import {
   DEFAULT_IPFS_CACHED_ITEMS,
   DEFAULT_IPFS_URL,
-  XDAI_WSS_ENDPOINT,
+  XDAI_HTTP_ENDPOINT,
 } from './constants'
 
 export function isIpfsResolver(
@@ -100,15 +102,18 @@ export function normalizeConnector(
 export function normalizeEthersProvider(
   ethereumProvider: object | undefined,
   network: Network
-): ethersProviders.Provider {
+): Provider {
   // Ethers compatibility: ethereum => homestead
   if (network.name === 'ethereum' && network.chainId === 1) {
     network = { ...network, name: 'homestead' }
   }
 
   if (ethereumProvider) {
+    if (Provider.isProvider(ethereumProvider)) {
+      return ethereumProvider
+    }
     try {
-      return new ethersProviders.Web3Provider(ethereumProvider, network)
+      return new Web3Provider(ethereumProvider, network)
     } catch (err) {
       console.error('Invalid provider:', ethereumProvider, err)
       throw new ErrorInvalidEthereum(
@@ -118,8 +123,8 @@ export function normalizeEthersProvider(
   }
 
   if (network.chainId === 100) {
-    return new ethersProviders.WebSocketProvider(XDAI_WSS_ENDPOINT, network)
+    return new JsonRpcProvider(XDAI_HTTP_ENDPOINT, network)
   }
 
-  return getDefaultEthersProvider(network)
+  return getDefaultProvider(network)
 }

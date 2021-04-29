@@ -1,4 +1,6 @@
-import { providers as ethersProviders } from 'ethers'
+/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable no-empty */
+import { Provider } from '@ethersproject/providers'
 
 import {
   tryEvaluatingRadspec,
@@ -12,7 +14,7 @@ import Transaction from '../../entities/Transaction'
 export async function describeStep(
   step: StepDecoded,
   installedApps: App[],
-  provider: ethersProviders.Provider
+  provider: Provider
 ): Promise<StepDescribed> {
   let decoratedStep
   // TODO: Add intent Basket support
@@ -63,7 +65,7 @@ export async function describeStep(
 export async function describePath(
   path: StepDecoded[],
   installedApps: App[],
-  provider: ethersProviders.Provider
+  provider: Provider
 ): Promise<StepDescribed[]> {
   return Promise.all(
     path.map(async (step) => describeStep(step, installedApps, provider))
@@ -73,7 +75,7 @@ export async function describePath(
 export async function describeTransaction(
   transaction: Transaction,
   installedApps: App[],
-  provider: ethersProviders.Provider
+  provider: Provider
 ): Promise<PostProcessDescription> {
   if (!transaction.to) {
     throw new Error(`Could not describe transaction: missing 'to'`)

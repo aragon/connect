@@ -1,9 +1,7 @@
 import type { Address } from '@1hive/connect-types'
-import {
-  Contract,
-  providers as ethersProviders,
-  utils as ethersUtils,
-} from 'ethers'
+import { Interface, Fragment, FunctionFragment } from '@ethersproject/abi'
+import { Contract } from '@ethersproject/contracts'
+import { Provider } from '@ethersproject/providers'
 import { ErrorInvalid, ErrorUnsufficientBalance } from '../errors'
 import { erc20ABI, forwarderAbi, forwarderFeeAbi } from './abis'
 import { findMethodAbiFragment } from './abi'
@@ -14,7 +12,7 @@ import Transaction from '../entities/Transaction'
 export async function createDirectTransaction(
   sender: Address,
   destination: Address,
-  methodAbiFragment: ethersUtils.Fragment,
+  methodAbiFragment: Fragment,
   params: any[]
 ): Promise<Transaction> {
   if (methodAbiFragment.type === 'fallback' && params.length > 1) {
@@ -27,8 +25,8 @@ export async function createDirectTransaction(
   return new Transaction({
     from: sender,
     to: destination,
-    data: new ethersUtils.Interface([methodAbiFragment]).encodeFunctionData(
-      ethersUtils.FunctionFragment.from(methodAbiFragment),
+    data: new Interface([methodAbiFragment]).encodeFunctionData(
+      FunctionFragment.from(methodAbiFragment),
       params
     ),
   })
@@ -67,7 +65,7 @@ export function createForwarderTransactionBuilder(
   sender: Address,
   directTransaction: Transaction
 ): Function {
-  const forwarder = new ethersUtils.Interface(forwarderAbi)
+  const forwarder = new Interface(forwarderAbi)
 
   return (forwarderAddress: string, script: string): Transaction =>
     new Transaction({
@@ -81,7 +79,7 @@ export function createForwarderTransactionBuilder(
 export async function buildApprovePreTransactions(
   transaction: Transaction,
   tokenData: TokenData,
-  provider: ethersProviders.Provider
+  provider: Provider
 ): Promise<Transaction[]> {
   // Token allowance pre-transaction
   const { from, to } = transaction
@@ -108,7 +106,7 @@ export async function buildApprovePreTransactions(
   }
 
   const transactions: Transaction[] = []
-  const erc20 = new ethersUtils.Interface(erc20ABI)
+  const erc20 = new Interface(erc20ABI)
 
   // If the current allowance is greater than zero, we send a first pre-transaction to set it to zero
   if (allowanceBN > BigInt(0)) {
@@ -135,7 +133,7 @@ export async function buildApprovePreTransactions(
 
 export async function buildForwardingFeePreTransactions(
   forwardingTransaction: Transaction,
-  provider: ethersProviders.Provider
+  provider: Provider
 ): Promise<Transaction[]> {
   const { to: forwarderAddress, from } = forwardingTransaction
 

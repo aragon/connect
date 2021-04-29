@@ -5,6 +5,7 @@ import type {
   SubscriptionCallback,
   SubscriptionResult,
 } from '@1hive/connect-types'
+import { isAddress } from '@ethersproject/address'
 
 import ForwardingPathDescription, {
   decodeForwardingPath,
@@ -13,7 +14,6 @@ import ForwardingPathDescription, {
 } from '../utils/descriptor/index'
 import { ConnectionContext, PostProcessDescription } from '../types'
 import { ErrorInvalidLocation } from '../errors'
-import { isAddress } from '../utils/address'
 import { normalizeFiltersAndCallback, toArrayEntry } from '../utils/misc'
 import { subscription } from '../utils/subscriptions'
 import App from './App'
