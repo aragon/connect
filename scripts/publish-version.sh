@@ -26,12 +26,12 @@ EOF
 }
 
 # Build everything
-# echo "Building packages…"
-# yarn build
+echo "Building packages…"
+yarn build
 
 # Run the tests
-# echo "Testing…"
-# yarn test
+echo "Testing…"
+yarn test
 
 # Copy the README files in each package directory.
 confirm "Generate the README files?"
