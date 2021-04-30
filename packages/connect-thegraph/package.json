@@ -1,6 +1,6 @@
 {
   "name": "@1hive/connect-thegraph",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "license": "LGPL-3.0-or-later",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -35,7 +35,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@1hive/connect-core": "^0.9.0",
+    "@1hive/connect-core": "^0.9.1",
     "@urql/core": "^1.11.7",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",
