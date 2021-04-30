@@ -2,12 +2,7 @@
 
 NETWORK=$1
 
-if [ "$STAGING" ]
-then
-  FILE=$NETWORK'-staging.json'
-else
-  FILE=$NETWORK'.json'
-fi
+FILE=$NETWORK'.json'
 
 DATA=manifest/data/$FILE
 
