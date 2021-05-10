@@ -8,7 +8,9 @@ coverage
 
 # Production subgraph
 generated
+build
 subgraph.yaml
+ens.ts
 
 .yarn/*
 !.yarn/releases

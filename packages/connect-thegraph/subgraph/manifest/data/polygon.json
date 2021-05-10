@@ -1,0 +1,24 @@
+{
+    "network": "matic",
+    "description": "Subgraph for Aragon organizations.",
+    "repository": "https://github.com/1hive/connect",
+    "ens": "0x4E065c622d584Fbe5D9078C3081840155FA69581",
+    "ens_old": "0x0000000000000000000000000000000000000000",
+    "DAOFactoryDataSources": [
+      {
+        "name": "DAOFactory",
+        "address": "0xfCBF0FCAf5851dD9221f2C0FefdFF7f7A14b478a",
+        "startBlock": "14335850"
+      }
+    ],
+    "APMFactoryDataSources": [
+      {
+        "name": "ApmRegistryFactory",
+        "address": "0xb8c830ACebD05537dDDbc45F568aADc5a7cd952D",
+        "startBlock": "14336011"
+      }
+    ],
+    "RegistryDataSources": [],
+    "KernelDataSources": []
+  }
+  
