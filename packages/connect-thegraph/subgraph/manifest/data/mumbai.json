@@ -1,0 +1,24 @@
+{
+    "network": "mumbai",
+    "description": "Subgraph for Aragon organizations.",
+    "repository": "https://github.com/1hive/connect",
+    "ens": "0xB1576a9bE5EC445368740161174f3Dd1034fF8be",
+    "ens_old": "0x0000000000000000000000000000000000000000",
+    "DAOFactoryDataSources": [
+      {
+        "name": "DAOFactory",
+        "address": "0xE97999F411333E3B712104aa04fc06b149BD12eA",
+        "startBlock": "20138067"
+      }
+    ],
+    "APMFactoryDataSources": [
+      {
+        "name": "ApmRegistryFactory",
+        "address": "0x0EA7ac6da7B5D69fBBD32038cE62A9dA1d096A8a",
+        "startBlock": "20138369"
+      }
+    ],
+    "RegistryDataSources": [],
+    "KernelDataSources": []
+  }
+  
