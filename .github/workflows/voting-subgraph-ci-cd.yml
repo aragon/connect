@@ -1,0 +1,47 @@
+name: Connect Voting Subgraph CI/CD
+on:
+  push:
+    paths:
+      - 'packages/connect-voting/subgraph/**'
+    branches:
+      - master
+      - develop
+
+env:
+  GRAPHKEY: ${{secrets.GRAPHKEY}}
+  working-directory: packages/connect-voting/subgraph
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{env.working-directory}}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.15.5
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Cache yarn modules
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: yarn-${{ hashFiles('yarn.lock') }}
+
+      - name: Deploy rinkeby
+        if: github.ref == 'refs/heads/develop'
+        run: yarn deploy-rinkeby
+
+      - name: Deploy rinkeby staging
+        if: github.ref == 'refs/heads/develop'
+        run: yarn deploy-rinkeby-staging
+
+      - name: Deploy mainnet
+        if: github.ref == 'refs/heads/master'
+        run: yarn deploy-mainnet
