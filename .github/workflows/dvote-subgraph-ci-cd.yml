@@ -1,4 +1,4 @@
-name: Connect Voting Subgraph CI/CD
+name: Disputable Voting Subgraph CI/CD
 on:
   push:
     paths:
