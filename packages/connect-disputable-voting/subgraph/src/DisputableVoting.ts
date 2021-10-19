@@ -57,6 +57,7 @@ export function handleStartVote(event: StartVoteEvent): void {
   vote.voting = event.address.toHexString()
   vote.voteId = event.params.voteId
   vote.creator = event.params.creator
+  vote.originalCreator = event.transaction.from
   vote.context = event.params.context.toString()
   vote.yeas = voteData.value0
   vote.nays = voteData.value1

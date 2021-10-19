@@ -21,6 +21,7 @@ export function handleStartVote(event: StartVoteEvent): void {
 
   vote.appAddress = event.address
   vote.creator = event.params.creator
+  vote.originalCreator = event.transaction.from
   vote.metadata = event.params.metadata
   vote.voteNum = event.params.voteId
   vote.startDate = voteData.value2

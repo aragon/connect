@@ -24,6 +24,7 @@ export default class Vote {
   readonly votingId: string
   readonly voteId: string
   readonly creator: string
+  readonly originalCreator: string
   readonly duration: string
   readonly context: string
   readonly voteStatus: string
@@ -69,6 +70,7 @@ export default class Vote {
     this.duration = data.duration
     this.quietEndingExtension = data.quietEndingExtension
     this.creator = data.creator
+    this.originalCreator = data.originalCreator
     this.context = data.context
     this.voteStatus = data.status
     this.actionId = data.actionId

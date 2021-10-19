@@ -25,6 +25,7 @@ export interface VoteData {
   votingId: string
   voteId: string
   creator: string
+  originalCreator: string
   duration: string
   quietEndingExtension: string
   context: string

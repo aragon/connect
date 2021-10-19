@@ -20,6 +20,7 @@ async function main() {
           id
           metadata
           creator
+          originalCreator
         }
       }
     `,

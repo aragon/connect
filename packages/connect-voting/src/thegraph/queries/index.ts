@@ -9,6 +9,7 @@ export const ALL_VOTES = (type: string) => gql`
       appAddress
       orgAddress
       creator
+      originalCreator
       metadata
       executed
       executedAt
@@ -33,6 +34,7 @@ export const CASTS_FOR_VOTE = (type: string) => gql`
         appAddress
         orgAddress
         creator
+        originalCreator
         metadata
         executed
         executedAt
