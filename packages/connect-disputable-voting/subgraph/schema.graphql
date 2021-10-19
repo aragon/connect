@@ -29,6 +29,7 @@ type Vote @entity {
   voting: DisputableVoting!
   voteId: BigInt!
   creator: Bytes!
+  originalCreator: Bytes!
   context: String!
   status: VoteStatus!
   actionId: BigInt!
