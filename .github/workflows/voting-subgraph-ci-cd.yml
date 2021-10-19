@@ -38,6 +38,10 @@ jobs:
         if: github.ref == 'refs/heads/develop'
         run: yarn deploy-rinkeby
 
+      - name: Deploy rinkeby staging
+        if: github.ref == 'refs/heads/develop'
+        run: yarn deploy-rinkeby-staging
+
       - name: Deploy mainnet
         if: github.ref == 'refs/heads/master'
         run: yarn deploy-mainnet
