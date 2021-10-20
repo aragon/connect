@@ -149,7 +149,9 @@ export interface IDisputableVotingConnector {
     skip: number,
     callback: SubscriptionCallback<Setting[]>
   ): SubscriptionHandler
-  currentCollateralRequirement(disputableVoting: string): Promise<CollateralRequirement>
+  currentCollateralRequirement(
+    disputableVoting: string
+  ): Promise<CollateralRequirement>
   onCurrentCollateralRequirement(
     disputableVoting: string,
     callback: SubscriptionCallback<CollateralRequirement>
@@ -183,7 +185,9 @@ export interface IDisputableVotingConnector {
     voterId: string,
     callback: SubscriptionCallback<Voter>
   ): SubscriptionHandler
-  collateralRequirement(collateralRequirementId: string): Promise<CollateralRequirement>
+  collateralRequirement(
+    collateralRequirementId: string
+  ): Promise<CollateralRequirement>
   onCollateralRequirement(
     collateralRequirementId: string,
     callback: SubscriptionCallback<CollateralRequirement>

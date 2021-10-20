@@ -76,14 +76,22 @@ function buildVote(vote: any, connector: any, provider: any): Vote {
     collateralTokenId: collateralRequirement.token.id,
     collateralTokenSymbol: collateralRequirement.token.symbol,
     collateralTokenDecimals: collateralRequirement.token.decimals,
-    submitterArbitratorFeeId: submitterArbitratorFee ? submitterArbitratorFee.id : null,
-    challengerArbitratorFeeId: challengerArbitratorFee ? challengerArbitratorFee.id : null
+    submitterArbitratorFeeId: submitterArbitratorFee
+      ? submitterArbitratorFee.id
+      : null,
+    challengerArbitratorFeeId: challengerArbitratorFee
+      ? challengerArbitratorFee.id
+      : null,
   }
 
   return new Vote(voteData, connector, provider)
 }
 
-export function parseVote(result: QueryResult, connector: any, provider: any): Vote {
+export function parseVote(
+  result: QueryResult,
+  connector: any,
+  provider: any
+): Vote {
   const vote = result.data.vote
 
   if (!vote) {
@@ -93,7 +101,11 @@ export function parseVote(result: QueryResult, connector: any, provider: any): V
   return buildVote(vote, connector, provider)
 }
 
-export function parseVotes(result: QueryResult, connector: any, provider: any): Vote[] {
+export function parseVotes(
+  result: QueryResult,
+  connector: any,
+  provider: any
+): Vote[] {
   const votes = result.data.votes
 
   if (!votes) {

@@ -1,10 +1,7 @@
 import { providers as ethersProviders, utils as ethersUtils } from 'ethers'
 
+import { addressesEqual, includesAddress, ANY_ENTITY } from '../address'
 import { ErrorInvalid } from '../../errors'
-import { TransactionPath } from '../../types'
-import App from '../../entities/App'
-import Transaction from '../../entities/Transaction'
-import { ANY_ENTITY, addressesEqual, includesAddress } from '../address'
 import { findAppMethodFromSignature } from '../app'
 import { encodeCallScript } from '../callScript'
 import { canForward } from '../forwarding'
@@ -13,6 +10,9 @@ import {
   createForwarderTransactionBuilder,
   buildForwardingFeePreTransactions,
 } from '../transactions'
+import { TransactionPath } from '../../types'
+import App from '../../entities/App'
+import Transaction from '../../entities/Transaction'
 
 /**
  * Calculate the forwarding path for a transaction to `destination`
