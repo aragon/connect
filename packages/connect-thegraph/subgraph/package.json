@@ -13,15 +13,17 @@
     "manifest-rinkeby": "scripts/build-manifest.sh rinkeby",
     "manifest-rinkeby-staging": "env STAGING=true scripts/build-manifest.sh rinkeby",
     "manifest-xdai": "scripts/build-manifest.sh xdai",
+    "manifest-xdai-staging": "env STAGING=true scripts/build-manifest.sh xdai",
     "manifest-polygon": "scripts/build-manifest.sh polygon",
-    "manifest-ropsten": "scripts/build-manifest.sh ropsten",
+    "manifest-mumbai": "scripts/build-manifest.sh mumbai",
     "deploy": "scripts/deploy.sh aragon mainnet",
     "deploy-staging": "env STAGING=true scripts/deploy.sh aragon mainnet",
     "deploy-rinkeby": "scripts/deploy.sh aragon rinkeby",
     "deploy-rinkeby-staging": "env STAGING=true scripts/deploy.sh aragon rinkeby",
-    "deploy-ropsten": "scripts/deploy.sh aragon ropsten",
     "deploy-xdai": "scripts/deploy.sh 1hive xdai",
-    "deploy-polygon": "scripts/deploy.sh 1hive polygon"
+    "deploy-xdai-staging": "env STAGING=true scripts/deploy.sh aragon xdai",
+    "deploy-polygon": "scripts/deploy.sh 1hive polygon",
+    "deploy-mumbai": "scripts/deploy.sh 1hive mumbai"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.20.0",
