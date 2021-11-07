@@ -8,6 +8,7 @@ type Vote @entity {
   executed: Boolean!
   executedAt: BigInt!
   startDate: BigInt!
+  endDate: BigInt!
   snapshotBlock: BigInt!
   supportRequiredPct: BigInt!
   minAcceptQuorum: BigInt!

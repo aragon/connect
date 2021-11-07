@@ -25,6 +25,7 @@ export function handleStartVote(event: StartVoteEvent): void {
   vote.metadata = event.params.metadata
   vote.voteNum = event.params.voteId
   vote.startDate = voteData.value2
+  vote.endDate = vote.startDate.plus(voting.voteTime())
   vote.snapshotBlock = voteData.value3
   vote.supportRequiredPct = voteData.value4
   vote.minAcceptQuorum = voteData.value5
@@ -36,7 +37,6 @@ export function handleStartVote(event: StartVoteEvent): void {
   vote.executedAt = BigInt.fromI32(0)
   vote.executed = false
   vote.isAccepted = isAccepted(vote.yea, vote.nay, vote.votingPower, vote.supportRequiredPct, vote.minAcceptQuorum, voting.PCT_BASE())
-
   vote.save()
 }
 
