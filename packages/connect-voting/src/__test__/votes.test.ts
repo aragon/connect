@@ -87,6 +87,18 @@ describe('when connecting to a voting app', () => {
         expect(vote.startDate).toEqual('1599675534')
       })
 
+      test('should have a valid endDate', () => {
+        expect(vote.endDate).toEqual('1600280334')
+      })
+
+      test('should have not be accepted', () => {
+        expect(vote.isAccepted).toBe(false)
+      })
+
+      test('should have a valid status', () => {
+        expect(vote.status).toEqual('Rejected')
+      })
+
       describe('when querying for the casts of a vote', () => {
         let casts: Cast[]
 
