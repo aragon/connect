@@ -13,6 +13,7 @@ export interface VoteData {
   executed: boolean
   executedAt: string
   startDate: string
+  endDate: string
   snapshotBlock: string
   supportRequiredPct: string
   minAcceptQuorum: string
@@ -20,6 +21,7 @@ export interface VoteData {
   nay: string
   votingPower: string
   script: string
+  isAccepted: boolean
 }
 
 export interface CastData {

@@ -2,6 +2,7 @@ import { SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
 import { subscription } from '@aragon/connect-core'
 import { IVotingConnector, VoteData } from '../types'
 import Cast from './Cast'
+import { bn, currentTimestampEvm } from '../helpers'
 
 export default class Vote {
   #connector: IVotingConnector
@@ -13,6 +14,7 @@ export default class Vote {
   readonly executed: boolean
   readonly executedAt: string
   readonly startDate: string
+  readonly endDate: string
   readonly snapshotBlock: string
   readonly supportRequiredPct: string
   readonly minAcceptQuorum: string
@@ -20,6 +22,7 @@ export default class Vote {
   readonly nay: string
   readonly votingPower: string
   readonly script: string
+  readonly isAccepted: boolean
 
   constructor(data: VoteData, connector: IVotingConnector) {
     this.#connector = connector
@@ -31,6 +34,7 @@ export default class Vote {
     this.executed = data.executed
     this.executedAt = data.executedAt
     this.startDate = data.startDate
+    this.endDate = data.endDate
     this.snapshotBlock = data.snapshotBlock
     this.supportRequiredPct = data.supportRequiredPct
     this.minAcceptQuorum = data.minAcceptQuorum
@@ -38,6 +42,21 @@ export default class Vote {
     this.nay = data.nay
     this.votingPower = data.votingPower
     this.script = data.script
+    this.isAccepted = data.isAccepted
+  }
+
+  get status(): string {
+    const currentTimestamp = currentTimestampEvm()
+
+    if (!this.executed) {
+      if (currentTimestamp.gte(bn(this.endDate))) {
+        return this.isAccepted ? "Accepted" : "Rejected"
+      }
+      
+      return "Ongoing"
+    }
+
+    return "Executed"
   }
 
   async casts({ first = 1000, skip = 0 } = {}): Promise<Cast[]> {
