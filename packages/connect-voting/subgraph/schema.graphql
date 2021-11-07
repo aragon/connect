@@ -16,6 +16,7 @@ type Vote @entity {
   votingPower: BigInt!
   script: String!
   voteNum: BigInt!
+  isAccepted: Boolean!
   castVotes: [Cast!] @derivedFrom(field: "vote")
 }
 
