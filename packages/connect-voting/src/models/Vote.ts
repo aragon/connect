@@ -1,6 +1,6 @@
 import { SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
 import { subscription } from '@aragon/connect-core'
-import { IVotingConnector, VoteData } from '../types'
+import { IVotingConnector, VoteData, VoteStatus } from '../types'
 import Cast from './Cast'
 import { bn, currentTimestampEvm } from '../helpers'
 
@@ -45,18 +45,18 @@ export default class Vote {
     this.isAccepted = data.isAccepted
   }
 
-  get status(): string {
+  get status(): VoteStatus {
     const currentTimestamp = currentTimestampEvm()
 
     if (!this.executed) {
       if (currentTimestamp.gte(bn(this.endDate))) {
-        return this.isAccepted ? "Accepted" : "Rejected"
+        return this.isAccepted ? VoteStatus.Accepted : VoteStatus.Rejected
       }
       
-      return "Ongoing"
+      return VoteStatus.Ongoing
     }
 
-    return "Executed"
+    return VoteStatus.Executed
   }
 
   async casts({ first = 1000, skip = 0 } = {}): Promise<Cast[]> {

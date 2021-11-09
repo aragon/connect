@@ -1,4 +1,5 @@
 import { VotingConnectorTheGraph, Vote, Cast } from '../../src'
+import { VoteStatus } from '../types'
 
 const VOTING_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby-staging'
@@ -96,7 +97,7 @@ describe('when connecting to a voting app', () => {
       })
 
       test('should have a valid status', () => {
-        expect(vote.status).toEqual('Rejected')
+        expect(vote.status).toEqual(VoteStatus.Rejected)
       })
 
       describe('when querying for the casts of a vote', () => {

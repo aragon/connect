@@ -5,6 +5,13 @@ import {
 import Vote from './models/Vote'
 import Cast from './models/Cast'
 
+export enum VoteStatus {
+  Accepted = "Accepted",
+  Executed = "Executed",
+  Ongoing = "Ongoing",
+  Rejected = "Rejected",
+}
+
 export interface VoteData {
   id: string
   creator: string
