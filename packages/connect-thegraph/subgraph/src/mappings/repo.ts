@@ -13,6 +13,7 @@ import {
 } from '../../generated/templates/Repo/Repo'
 
 import { ZERO_ADDR } from '../helpers/constants'
+import { getAppMetadata } from '../helpers/ipfs'
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
@@ -62,8 +63,12 @@ function loadOrCreateVersion(
       log.info('get repo version by id reverted', [])
     } else {
       const versionData = callVersionResult.value
+      const contentUri = versionData.value2.toString()
       version.codeAddress = versionData.value1
-      version.contentUri = versionData.value2.toString()
+      version.contentUri = contentUri
+
+      version.artifact = getAppMetadata(contentUri, 'artifact.json')
+      version.manifest = getAppMetadata(contentUri, 'manifest.json')
     }
   }
   return version!

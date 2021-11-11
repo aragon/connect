@@ -7,21 +7,16 @@
   "DAOFactoryDataSources": [],
   "RegistryDataSources": [
     {
-      "name": "aragonpm.eth",
-      "address": "0x3c9fdcf51c3447f629fc61f6aaaf2ac3ea852040",
-      "startBlock": "10076177"
-    },
-    {
-      "name": "1hive.aragonpm.eth",
-      "address": "0x812672c031210b439a5befc8f397d639e97e3738",
-      "startBlock": "10076193"
+      "name": "open.aragonpm.eth",
+      "address": "0xac9ca92d16e8bc0505eda84573d614ffecd8a293",
+      "startBlock": "10076192"
     }
   ],
   "KernelDataSources": [
     {
-      "name": "beehive",
-      "address": "0x6a8b8891c5f6de1fcf1ab889e7a06f6b60431641",
-      "startBlock": "10546308"
+      "name": "brightId",
+      "address": "0x1e2d5fb385e2eae45bd42357e426507a63597397",
+      "startBlock": "17975810"
     }
   ]
 }

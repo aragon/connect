@@ -40,6 +40,10 @@ type Version @entity {
   codeAddress: Bytes!
   "Content URI, ipfs hash or html url"
   contentUri: String!
+  "Artifact.json metadata"
+  artifact: String
+  "Manifest.json metadata"
+  manifest: String
   repo: Repo! @derivedFrom(field: "versions")
   apps: [App!] @derivedFrom(field: "version")
 }
