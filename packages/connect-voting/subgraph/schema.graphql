@@ -14,9 +14,21 @@ type Vote @entity {
   yea: BigInt!
   nay: BigInt!
   votingPower: BigInt!
-  script: String!
+  script: String! @deprecated(reason: "Use spec, contract, calldata fields")
   voteNum: BigInt!
   castVotes: [Cast!] @derivedFrom(field: "vote")
+  spec: BigInt!
+  contract: Bytes!
+  calldata: Bytes!
+  rewards: [Reward!] @derivedFrom(field: "vote")
+}
+
+type Reward @entity {
+  id: ID!
+  token: Bytes!
+  to: Bytes!
+  amount: BigInt!
+  vote: Vote!
 }
 
 type Cast @entity {

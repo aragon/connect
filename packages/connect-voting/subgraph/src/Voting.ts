@@ -1,4 +1,4 @@
-import { Address, BigInt } from '@graphprotocol/graph-ts'
+import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts'
 import {
   StartVote as StartVoteEvent,
   CastVote as CastVoteEvent,
@@ -9,6 +9,7 @@ import {
   Vote as VoteEntity,
   Cast as CastEntity,
   Voter as VoterEntity,
+  Reward as RewardEntity,
 } from '../generated/schema'
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -31,13 +32,17 @@ export function handleStartVote(event: StartVoteEvent): void {
   vote.yea = voteData.value6
   vote.nay = voteData.value7
   vote.votingPower = voteData.value8
-  vote.script = voteData.value9.toHex()
+  vote.script = voteData.value9.toHexString()
   vote.orgAddress = voting.kernel()
   vote.executedAt = BigInt.fromI32(0)
   vote.executed = false
+  vote.spec = new BigInt(voteData.value9.slice(0, 4))
+  vote.contract = new Bytes(voteData.value9.slice(4, 24))
+  vote.calldata = new Bytes(voteData.value9.slice(28))
 
   vote.save()
 }
+
 
 export function handleCastVote(event: CastVoteEvent): void {
   updateVoteState(event.address, event.params.voteId)
@@ -82,6 +87,22 @@ function buildVoterId(voting: Address, voter: Address): string {
 
 function buildCastEntityId(voteId: BigInt, voter: Address): string {
   return voteId.toHexString() + '-voter:' + voter.toHexString()
+}
+
+function buildRewardId(voteId: BigInt, token: Address, to: Address): string {
+  return voteId.toHexString() + '-reward-' + token.toHexString()  + '-' + to.toHexString()
+}
+
+function loadOrCreateReward(voteId: BigInt, token: Address, to: Address, amount: BigInt): RewardEntity {
+  const rewardId = buildRewardId(voteId, token, to)
+  let reward = RewardEntity.load(rewardId)
+  if (reward === null) {
+    reward = new RewardEntity(rewardId)
+    reward.token = token
+    reward.to = to
+    reward.amount = amount
+  }
+  return reward
 }
 
 function loadOrCreateVoter(

@@ -4,6 +4,7 @@ import {
 } from '@aragon/connect-types'
 import Vote from './models/Vote'
 import Cast from './models/Cast'
+import Reward from './models/Reward'
 
 export interface VoteData {
   id: string
@@ -20,6 +21,17 @@ export interface VoteData {
   nay: string
   votingPower: string
   script: string
+  spec: string
+  contract: string
+  calldata: string
+}
+
+export interface RewardData {
+  id: string
+  vote: string
+  token: string
+  to: string
+  amount: string
 }
 
 export interface CastData {
@@ -45,6 +57,8 @@ export interface IVotingConnector {
     skip: number,
     callback: SubscriptionCallback<Vote[]>
   ): SubscriptionHandler
+  rewardsForVote(vote: string, first: number, skip: number): Promise<Reward[]>
+  onRewardsForVote(vote: string, first: number, skip: number, callback: SubscriptionCallback<Reward[]>): SubscriptionHandler
   castsForVote(vote: string, first: number, skip: number): Promise<Cast[]>
   onCastsForVote(
     vote: string,
