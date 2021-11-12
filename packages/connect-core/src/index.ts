@@ -22,6 +22,7 @@ export {
   ConnectionContext,
   IpfsResolver,
   AppData,
+  AppMethod,
   ForwardingPathData,
   PermissionData,
   RepoData,

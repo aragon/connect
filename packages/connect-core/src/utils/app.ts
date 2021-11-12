@@ -1,4 +1,4 @@
-import { utils as ethersUtils } from 'ethers'
+import { utils as ethersUtils, utils } from 'ethers'
 
 import { Abi, AppMethod } from '../types'
 import { ErrorInvalid } from '../errors'
@@ -8,6 +8,10 @@ export const apmAppId = (appName: string): string =>
   ethersUtils.namehash(`${appName}.aragonpm.eth`)
 
 function signatureFromAbi(signature: string, abi: Abi): string {
+  if (signature === 'fallback') {
+    return '()'
+  }
+
   const matches = signature.match(/(.*)\((.*)\)/m)
 
   if (!matches) {
@@ -44,7 +48,7 @@ function findAppMethod(
   if (Array.isArray(functions)) {
     method = functions
       .map((f) => {
-        return { ...f, sig: signatureFromAbi(f.sig, app.abi) }
+        return { ...f, sig: signatureFromAbi(f.sig, app.abi), params: [] }
       })
       .find(methodTestFn)
   }
@@ -79,12 +83,21 @@ export function findAppMethodFromData(
   { allowDeprecated = true } = {}
 ): AppMethod | undefined {
   const methodId = data.substring(0, 10)
-  return findAppMethod(
+  const appMethod = findAppMethod(
     app,
     (method: AppMethod) =>
       ethersUtils.id(method.sig).substring(0, 10) === methodId,
     { allowDeprecated }
   )
+
+  // Decode method's parameters
+  if (appMethod?.abi) {
+    const inputTypes = appMethod.abi?.inputs.map(({ type }) => type)
+
+    appMethod.params = [...utils.defaultAbiCoder.decode(inputTypes, `0x${data.slice(10)}`)]
+  }
+
+  return appMethod
 }
 
 /**
