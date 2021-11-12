@@ -1,4 +1,6 @@
+import { AppMethod } from '@aragon/connect-core'
 import {
+  Address,
   SubscriptionCallback,
   SubscriptionHandler,
 } from '@aragon/connect-types'
@@ -43,6 +45,18 @@ export interface CastData {
 export interface VoterData {
   id: string
   address: string
+}
+
+export interface Reward {
+  receiver: Address
+  token: Address
+  amount: string
+}
+
+export interface Action {
+  to: Address
+  fnData?: AppMethod
+  rewards?: Reward[]
 }
 
 export interface IVotingConnector {

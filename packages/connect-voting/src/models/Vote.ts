@@ -1,8 +1,9 @@
+import { decodeCallScript, findAppMethodFromData, App } from '@aragon/connect'
+import { addressesEqual, subscription } from '@aragon/connect-core'
 import { SubscriptionCallback, SubscriptionResult } from '@aragon/connect-types'
-import { subscription } from '@aragon/connect-core'
-import { IVotingConnector, VoteData, VoteStatus } from '../types'
 import Cast from './Cast'
-import { bn, currentTimestampEvm } from '../helpers'
+import { Action, IVotingConnector, VoteData, VoteStatus } from '../types'
+import { bn, currentTimestampEvm, getRewards } from '../helpers'
 
 export default class Vote {
   #connector: IVotingConnector
@@ -23,6 +24,7 @@ export default class Vote {
   readonly votingPower: string
   readonly script: string
   readonly isAccepted: boolean
+
 
   constructor(data: VoteData, connector: IVotingConnector) {
     this.#connector = connector
@@ -57,6 +59,28 @@ export default class Vote {
     }
 
     return VoteStatus.Executed
+  }
+
+  getActions(installedApps: App[]): Action[] {
+    const rawActions = decodeCallScript(this.script)
+
+    return rawActions.map(({ to, data}): Action => {
+      const targetApp = installedApps.find(app => addressesEqual(app.address, to))
+      const fnData = targetApp ? findAppMethodFromData(targetApp, data) : undefined
+
+      // Check targetApp again to avoid typescript undefined warnings below
+      if (!targetApp || !fnData) {
+        return {
+          to
+        }
+      }
+
+      return {
+        to,
+        fnData: findAppMethodFromData(targetApp, data),
+        rewards: getRewards(targetApp.appId, fnData)
+      }
+    })
   }
 
   async casts({ first = 1000, skip = 0 } = {}): Promise<Cast[]> {
