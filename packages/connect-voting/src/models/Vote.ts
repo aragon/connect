@@ -71,7 +71,8 @@ export default class Vote {
       // Check targetApp again to avoid typescript undefined warnings below
       if (!targetApp || !fnData) {
         return {
-          to
+          to,
+          rewards: []
         }
       }
 

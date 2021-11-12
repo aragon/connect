@@ -56,7 +56,7 @@ export interface Reward {
 export interface Action {
   to: Address
   fnData?: AppMethod
-  rewards?: Reward[]
+  rewards: Reward[]
 }
 
 export interface IVotingConnector {

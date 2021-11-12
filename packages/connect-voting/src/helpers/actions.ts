@@ -2,11 +2,11 @@ import { utils } from 'ethers'
 import { AppMethod } from "@aragon/connect"
 import { Reward } from '../types'
 
-export const getRewards = (appId: string, fnData: AppMethod): Reward[] | undefined => {
+export const getRewards = (appId: string, fnData: AppMethod): Reward[] => {
   const {params, sig } = fnData
 
   if (!params || !params.length) {
-    return
+    return []
   }
 
   const sigHash = utils.id(sig).substring(0, 10)
@@ -41,4 +41,6 @@ export const getRewards = (appId: string, fnData: AppMethod): Reward[] | undefin
       }
       break
   }
+
+  return []
 }
