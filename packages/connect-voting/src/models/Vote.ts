@@ -22,8 +22,6 @@ export default class Vote {
   readonly votingPower: string
   readonly script: string
   readonly spec: string
-  readonly contract: string
-  readonly calldata: string
 
   constructor(data: VoteData, connector: IVotingConnector) {
     this.#connector = connector
@@ -43,12 +41,6 @@ export default class Vote {
     this.votingPower = data.votingPower
     this.script = data.script
     this.spec = data.spec
-    this.contract = data.contract
-    this.calldata = data.calldata
-  }
-
-  async rewards({ first = 1000, skip = 0 } = {}): Promise<Reward[]> {
-    return this.#connector.rewardsForVote(this.id, first , skip)
   }
 
   async casts({ first = 1000, skip = 0 } = {}): Promise<Cast[]> {

@@ -22,8 +22,6 @@ export interface VoteData {
   votingPower: string
   script: string
   spec: string
-  contract: string
-  calldata: string
 }
 
 export interface RewardData {
@@ -32,6 +30,14 @@ export interface RewardData {
   token: string
   to: string
   amount: string
+}
+
+export interface EvmScriptData {
+  id: string
+  vote: string
+  contract: string
+  calldataLength: string
+  calldata: string
 }
 
 export interface CastData {
