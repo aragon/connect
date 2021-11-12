@@ -1,4 +1,4 @@
-import { utils as ethersUtils, utils } from 'ethers'
+import { utils as ethersUtils } from 'ethers'
 
 import { Abi, AppMethod } from '../types'
 import { ErrorInvalid } from '../errors'
@@ -94,7 +94,7 @@ export function findAppMethodFromData(
   if (appMethod?.abi) {
     const inputTypes = appMethod.abi?.inputs.map(({ type }) => type)
 
-    appMethod.params = [...utils.defaultAbiCoder.decode(inputTypes, `0x${data.slice(10)}`)]
+    appMethod.params = [...ethersUtils.defaultAbiCoder.decode(inputTypes, `0x${data.slice(10)}`)]
   }
 
   return appMethod
