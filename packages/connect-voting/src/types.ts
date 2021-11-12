@@ -63,8 +63,6 @@ export interface IVotingConnector {
     skip: number,
     callback: SubscriptionCallback<Vote[]>
   ): SubscriptionHandler
-  rewardsForVote(vote: string, first: number, skip: number): Promise<Reward[]>
-  onRewardsForVote(vote: string, first: number, skip: number, callback: SubscriptionCallback<Reward[]>): SubscriptionHandler
   castsForVote(vote: string, first: number, skip: number): Promise<Cast[]>
   onCastsForVote(
     vote: string,

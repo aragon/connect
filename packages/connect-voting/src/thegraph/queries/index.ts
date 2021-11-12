@@ -28,38 +28,6 @@ export const ALL_VOTES = (type: string) => gql`
   }
 `
 
-export const REWARDS_FOR_VOTE = (type: string) => gql`
-  ${type} Rewards($vote: ID!, $first: Int!, $skip: Int!) {
-    rewards(where: { vote: $vote }, first: $first, skip: $skip) {
-      id
-      token
-      to
-      amount
-      vote {
-        id
-        appAddress
-        orgAddress
-        creator
-        originalCreator
-        metadata
-        executed
-        executedAt
-        startDate
-        snapshotBlock
-        supportRequiredPct
-        minAcceptQuorum
-        yea
-        nay
-        votingPower
-        script
-        spec
-        contract
-        calldata
-      }
-    }
-  }
-`
-
 export const CASTS_FOR_VOTE = (type: string) => gql`
   ${type} Casts($vote: ID!, $first: Int!, $skip: Int!) {
     casts(where: { vote: $vote }, first: $first, skip: $skip) {

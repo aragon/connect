@@ -74,32 +74,6 @@ export default class VotingConnectorTheGraph implements IVotingConnector {
     )
   }
 
-  async rewardsForVote(
-    vote: string,
-    first: number,
-    skip: number
-  ): Promise<Reward[]> {
-    return this.#gql.performQueryWithParser(
-      queries.REWARDS_FOR_VOTE('query'),
-      { vote, first, skip },
-      (result: QueryResult) => parseRewards(result)
-    )
-  }
-
-  onRewardsForVote(
-    vote: string,
-    first: number,
-    skip: number,
-    callback: SubscriptionCallback<Reward[]>
-  ): SubscriptionHandler {
-    return this.#gql.subscribeToQueryWithParser<Reward[]>(
-      queries.REWARDS_FOR_VOTE('subscription'),
-      { vote, first, skip },
-      callback,
-      (result: QueryResult) => parseRewards(result)
-    )
-  }
-
   async castsForVote(
     vote: string,
     first: number,
