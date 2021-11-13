@@ -14,12 +14,14 @@ export const ALL_VOTES = (type: string) => gql`
       executed
       executedAt
       startDate
+      endDate
       snapshotBlock
       supportRequiredPct
       minAcceptQuorum
       yea
       nay
       votingPower
+      isAccepted
       script
     }
   }
@@ -39,12 +41,14 @@ export const CASTS_FOR_VOTE = (type: string) => gql`
         executed
         executedAt
         startDate
+        endDate
         snapshotBlock
         supportRequiredPct
         minAcceptQuorum
         yea
         nay
         votingPower
+        isAccepted
         script
       }
       voter {

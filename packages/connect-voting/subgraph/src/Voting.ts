@@ -25,6 +25,7 @@ export function handleStartVote(event: StartVoteEvent): void {
   vote.metadata = event.params.metadata
   vote.voteNum = event.params.voteId
   vote.startDate = voteData.value2
+  vote.endDate = vote.startDate.plus(voting.voteTime())
   vote.snapshotBlock = voteData.value3
   vote.supportRequiredPct = voteData.value4
   vote.minAcceptQuorum = voteData.value5
@@ -35,7 +36,7 @@ export function handleStartVote(event: StartVoteEvent): void {
   vote.orgAddress = voting.kernel()
   vote.executedAt = BigInt.fromI32(0)
   vote.executed = false
-
+  vote.isAccepted = isAccepted(vote.yea, vote.nay, vote.votingPower, vote.supportRequiredPct, vote.minAcceptQuorum, voting.PCT_BASE())
   vote.save()
 }
 
@@ -118,6 +119,16 @@ export function updateVoteState(votingAddress: Address, voteId: BigInt): void {
   const vote = VoteEntity.load(buildVoteEntityId(votingAddress, voteId))!
   vote.yea = voteData.value6
   vote.nay = voteData.value7
+  vote.isAccepted = isAccepted(vote.yea, vote.nay, vote.votingPower, vote.supportRequiredPct, vote.minAcceptQuorum, votingApp.PCT_BASE())
 
   vote.save()
+}
+
+function isAccepted(yeas: BigInt, nays: BigInt, votingPower: BigInt, supportRequiredPct: BigInt, minimumAcceptanceQuorumPct: BigInt, pctBase: BigInt): boolean {
+  return hasReachedValuePct(yeas, yeas.plus(nays), supportRequiredPct, pctBase) &&
+         hasReachedValuePct(yeas, votingPower, minimumAcceptanceQuorumPct, pctBase)
+}
+
+function hasReachedValuePct(value: BigInt, total: BigInt, pct: BigInt, pctBase: BigInt): boolean {
+  return total.notEqual(BigInt.fromI32(0)) && (value.times(pctBase).div(total)).gt(pct)
 }

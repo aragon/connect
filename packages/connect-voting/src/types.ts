@@ -1,9 +1,18 @@
+import { AppMethod } from '@aragon/connect-core'
 import {
+  Address,
   SubscriptionCallback,
   SubscriptionHandler,
 } from '@aragon/connect-types'
 import Vote from './models/Vote'
 import Cast from './models/Cast'
+
+export enum VoteStatus {
+  Accepted = "Accepted",
+  Executed = "Executed",
+  Ongoing = "Ongoing",
+  Rejected = "Rejected",
+}
 
 export interface VoteData {
   id: string
@@ -13,6 +22,7 @@ export interface VoteData {
   executed: boolean
   executedAt: string
   startDate: string
+  endDate: string
   snapshotBlock: string
   supportRequiredPct: string
   minAcceptQuorum: string
@@ -20,6 +30,7 @@ export interface VoteData {
   nay: string
   votingPower: string
   script: string
+  isAccepted: boolean
 }
 
 export interface CastData {
@@ -34,6 +45,18 @@ export interface CastData {
 export interface VoterData {
   id: string
   address: string
+}
+
+export interface Reward {
+  receiver: Address
+  token: Address
+  amount: string
+}
+
+export interface Action {
+  to: Address
+  fnData?: AppMethod
+  rewards: Reward[]
 }
 
 export interface IVotingConnector {

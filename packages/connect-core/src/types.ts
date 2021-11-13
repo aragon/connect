@@ -137,6 +137,7 @@ export type Metadata = (AragonArtifact | AragonManifest)[]
 export interface AppMethod {
   roles: string[]
   sig: string
+  params?: any[]
   /**
    * This field might not be able if the contract does not use
    * conventional solidity syntax and Aragon naming standards
