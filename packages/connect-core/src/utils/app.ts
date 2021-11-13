@@ -9,7 +9,7 @@ export const apmAppId = (appName: string): string =>
 
 function signatureFromAbi(signature: string, abi: Abi): string {
   if (signature === 'fallback') {
-    return '()'
+    return 'fallback()'
   }
 
   const matches = signature.match(/(.*)\((.*)\)/m)
