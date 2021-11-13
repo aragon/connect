@@ -92,7 +92,7 @@ export function findAppMethodFromData(
 
   // Decode method's parameters
   if (appMethod?.abi) {
-    const inputTypes = appMethod.abi?.inputs.map(({ type }) => type)
+    const inputTypes = appMethod.abi.inputs.map(({ type }) => type)
 
     appMethod.params = [...ethersUtils.defaultAbiCoder.decode(inputTypes, `0x${data.slice(10)}`)]
   }

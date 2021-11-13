@@ -7,7 +7,7 @@ const VOTING_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby'
 
 const VOTING_APP_ADDRESS = '0x37187b0f2089b028482809308e776f92eeb7334e'
-// For testing action-fetching functionality
+// For testing vote action functionality
 const ACTIONS_ORG_ADDRESS = "0x63210F64Ef6F4EBB9727F6c5665CB8bbeDf20480"
 const ACTIONS_VOTING_APP_ADDRESS = '0x9943c2f55d91308b8ddbc58b6e70d1774ace125e'
 
@@ -119,10 +119,10 @@ describe('when connecting to a voting app', () => {
     })
   })
 
-  describe("when looking at the vote's actions of a voting app", () => {
+  describe("when looking at the votes actions of a voting app", () => {
     let installedApps: App[]
     let signallingVoteActions: Action[]
-    let onlyCodeExecutionActions: Action[]
+    let codeExecutionVoteActions: Action[]
     let voteActions: Action[]
 
     beforeAll(async () => {
@@ -133,7 +133,7 @@ describe('when connecting to a voting app', () => {
       })
       votes = await connector.votesForApp(ACTIONS_VOTING_APP_ADDRESS, 1000, 0)
 
-      onlyCodeExecutionActions = votes[0].getActions(installedApps)
+      codeExecutionVoteActions = votes[0].getActions(installedApps)
       signallingVoteActions = votes[1].getActions(installedApps)
       voteActions = votes[4].getActions(installedApps)
     })
@@ -147,7 +147,7 @@ describe('when connecting to a voting app', () => {
     })
 
     test("shouldn't return rewards when getting actions from a vote that only executes code", () => {
-      const action = onlyCodeExecutionActions[0]
+      const action = codeExecutionVoteActions[0]
       expect(action.rewards).toEqual([])
     })
 
