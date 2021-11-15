@@ -37,10 +37,10 @@ export function subgraphUrlFromChainId(chainId: number) {
     return 'https://api.thegraph.com/subgraphs/name/aragon/aragon-agreement-mainnet'
   }
   if (chainId === 4) {
-    return 'https://api.thegraph.com/subgraphs/name/aragon/aragon-agreement-rinkeby'
+    return 'https://api.thegraph.com/subgraphs/name/1hive/agreement-rinkeby'
   }
   if (chainId === 100) {
-    return 'https://api.thegraph.com/subgraphs/name/aragon/aragon-agreement-xdai'
+    return 'https://api.thegraph.com/subgraphs/name/1hive/agreement-xdai'
   }
   return null
 }
