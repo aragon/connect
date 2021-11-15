@@ -14,13 +14,13 @@ async function _parseApp(app: any, organization: Organization): Promise<App> {
         parseInt(v2.semanticVersion.replace(/,/g, '')) -
         parseInt(v1.semanticVersion.replace(/,/g, ''))
     )
-    .find((version: any) => version.codeAddress === app.version?.address)
+    .find((version: any) => version.codeAddress === app.version?.codeAddress)
 
   const data: AppData = {
     address: app.address,
     appId: app.appId,
     artifact: version?.artifact,
-    codeAddress: app.version?.address,
+    codeAddress: app.version?.codeAddress,
     contentUri: version?.contentUri,
     isForwarder: app.isForwarder,
     isUpgradeable: app.isUpgradeable,
