@@ -1,4 +1,4 @@
-import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts'
+import { Address, BigInt, ByteArray, Bytes } from '@graphprotocol/graph-ts'
 import {
   StartVote as StartVoteEvent,
   CastVote as CastVoteEvent,
@@ -15,14 +15,14 @@ import {
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
-const REWARDS_SCRIPT_ID = BigInt.fromI32(0x00000000)
-const EVM_SCRIPT_ID = BigInt.fromI32(0x00000001)
+let REWARDS_SCRIPT_ID = 0x00000000
+let EVM_SCRIPT_ID = 0x00000001
 
 export function handleStartVote(event: StartVoteEvent): void {
-  const voteEntityId = buildVoteEntityId(event.address, event.params.voteId)
-  const vote = new VoteEntity(voteEntityId)
-  const voting = VotingContract.bind(event.address)
-  const voteData = voting.getVote(event.params.voteId)
+  let voteEntityId = buildVoteEntityId(event.address, event.params.voteId)
+  let vote = new VoteEntity(voteEntityId)
+  let voting = VotingContract.bind(event.address)
+  let voteData = voting.getVote(event.params.voteId)
 
   vote.appAddress = event.address
   vote.creator = event.params.creator
@@ -40,11 +40,11 @@ export function handleStartVote(event: StartVoteEvent): void {
   vote.orgAddress = voting.kernel()
   vote.executedAt = BigInt.fromI32(0)
   vote.executed = false
-  vote.spec = new BigInt(voteData.value9.slice(0, 4))
+  vote.spec = BigInt.fromI32(Bytes.fromHexString(vote.script.substr(0, 10)).toI32())
 
   vote.save()
 
-  switch(vote.spec) {
+  switch(vote.spec.toI32()) {
     case REWARDS_SCRIPT_ID:
       saveRewards(vote.id, vote.script)
       break;
@@ -55,32 +55,28 @@ export function handleStartVote(event: StartVoteEvent): void {
 }
 
 export function saveScripts(voteId: string, script: string): void {
-  const scriptBytes = Bytes.fromHexString(script)
+  let location = 10
 
-  let location = 4
+  while (location < script.length) {
+    let contract = Bytes.fromHexString(script.substr(location, location + 40)) as Address
+    let calldataLength = Bytes.fromHexString(script.substr(location + 40, location + 48)).toU32()
+    let calldata = Bytes.fromHexString(script.substr(location + 48, location + 48 + calldataLength * 2 )) as Bytes
 
-  while (location < scriptBytes.length) {
-    const contract = new Address(scriptBytes.slice(location, location + 20))
-    const calldataLength = new BigInt(scriptBytes.slice(location + 20, location + 24))
-    const calldata = new Bytes(scriptBytes.slice(location + 24, location + 24 + calldataLength.toI32()))
-
-    let evmScript = new EvmScriptEntity(buildEvmScriptEntityId(voteId, new Bytes(scriptBytes.slice(location, location + 24 + calldataLength.toI32())).toHexString()))
+    let evmScript = new EvmScriptEntity(buildEvmScriptEntityId(voteId, Bytes.fromHexString(script.substr(location, location  + 48 + calldataLength * 2)).toHexString()))
     evmScript.contract = contract
-    evmScript.calldataLength = calldataLength
+    evmScript.calldataLength = new BigInt(calldataLength)
     evmScript.calldata = calldata
-    location =  location + 24 + calldataLength.toI32()
+    location =  location + 48 + calldataLength * 2
   }
 }
 
-export function saveRewards(voteId: string, script: string): void {  
-  const scriptBytes = Bytes.fromHexString(script)
- 
-  let location = 4
+export function saveRewards(voteId: string, script: string): void {   
+  let location = 10
 
   while (location < script.length) {
-    const token = new Address(scriptBytes.slice(location, location + 20))
-    const to = new Address(scriptBytes.slice(location + 20, location + 40))
-    const amount = new BigInt(scriptBytes.slice(location + 40, location + 72))
+    let token = Address.fromHexString(script.substr(location, location + 40)) as Address
+    let to = Address.fromHexString(script.substr(location + 40, location + 80)) as Address
+    let amount = BigInt.fromUnsignedBytes(Bytes.fromHexString(script.substr(location + 80, location + 144)) as Bytes)
 
     let reward = new RewardEntity(buildRewardId(voteId, token, to))
     reward.amount = amount
@@ -93,10 +89,10 @@ export function saveRewards(voteId: string, script: string): void {
 export function handleCastVote(event: CastVoteEvent): void {
   updateVoteState(event.address, event.params.voteId)
 
-  const voter = loadOrCreateVoter(event.address, event.params.voter)
+  let voter = loadOrCreateVoter(event.address, event.params.voter)
   voter.save()
 
-  const castVote = loadOrCreateCastVote(
+  let castVote = loadOrCreateCastVote(
     event.address,
     event.params.voteId,
     event.params.voter
@@ -113,7 +109,7 @@ export function handleCastVote(event: CastVoteEvent): void {
 export function handleExecuteVote(event: ExecuteVoteEvent): void {
   updateVoteState(event.address, event.params.voteId)
 
-  const vote = VoteEntity.load(
+  let vote = VoteEntity.load(
     buildVoteEntityId(event.address, event.params.voteId)
   )!
   vote.executed = true
@@ -149,7 +145,7 @@ function loadOrCreateVoter(
   votingAddress: Address,
   voterAddress: Address
 ): VoterEntity {
-  const voterId = buildVoterId(votingAddress, voterAddress)
+  let voterId = buildVoterId(votingAddress, voterAddress)
   let voter = VoterEntity.load(voterId)
   if (voter === null) {
     voter = new VoterEntity(voterId)
@@ -163,7 +159,7 @@ function loadOrCreateCastVote(
   voteId: BigInt,
   voterAddress: Address
 ): CastEntity {
-  const castVoteId = buildCastEntityId(voteId, voterAddress)
+  let castVoteId = buildCastEntityId(voteId, voterAddress)
   let castVote = CastEntity.load(castVoteId)
   if (castVote === null) {
     castVote = new CastEntity(castVoteId)
@@ -173,10 +169,10 @@ function loadOrCreateCastVote(
 }
 
 export function updateVoteState(votingAddress: Address, voteId: BigInt): void {
-  const votingApp = VotingContract.bind(votingAddress)
-  const voteData = votingApp.getVote(voteId)
+  let votingApp = VotingContract.bind(votingAddress)
+  let voteData = votingApp.getVote(voteId)
 
-  const vote = VoteEntity.load(buildVoteEntityId(votingAddress, voteId))!
+  let vote = VoteEntity.load(buildVoteEntityId(votingAddress, voteId))!
   vote.yea = voteData.value6
   vote.nay = voteData.value7
 
