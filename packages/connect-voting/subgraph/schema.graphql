@@ -18,6 +18,8 @@ type Vote @entity {
   voteNum: BigInt!
   castVotes: [Cast!] @derivedFrom(field: "vote")
   spec: BigInt!
+  rewards: [Reward!] @derivedFrom(field: "vote")
+  evmScripts: [EvmScript!] @derivedFrom(field: "vote")
 }
 
 type Reward @entity {
