@@ -46,6 +46,12 @@ function getOrgSubgraphUrl(network: Network): string | null {
   if (network.chainId === 100) {
     return 'https://api.thegraph.com/subgraphs/name/1hive/aragon-xdai'
   }
+  if (network.chainId === 137) {
+    return 'https://api.thegraph.com/subgraphs/name/1hive/aragon-polygon'
+  }
+  if (network.chainId === 80001) {
+    return 'https://api.thegraph.com/subgraphs/name/1hive/aragon-mumbai'
+  }
   return null
 }
 
