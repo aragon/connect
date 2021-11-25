@@ -2,27 +2,6 @@
 # yarn lockfile v1
 
 
-"@aragon/connect-core@^0.8.0-alpha.6":
-  version "0.8.0-alpha.7"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-core/-/connect-core-0.8.0-alpha.7.tgz#a831191b3bf41af7330ea852145a5fb85a7b5517"
-  integrity sha512-Xjqm82O7SYddmqfXx34OquFtZDIEsTk/vONjOx7il1zwb4MMoQtzdnrIJSJjmSlPBnINAohUAjSbG4Jcm/nDmw==
-  dependencies:
-    ethers "^5.0.7"
-    radspec "^2.0.0-rc.2"
-
-"@aragon/connect-thegraph@^0.8.0-alpha.6":
-  version "0.8.0-alpha.7"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-thegraph/-/connect-thegraph-0.8.0-alpha.7.tgz#1fdf2e73818ef400794a2a98c6fedca7b4b7c0cb"
-  integrity sha512-kec4CjMyXAPWcUOU+YNpUu4GcIvgSTPlozSuJ50LdfpuaSgDvdjF4BK9g+lrHiBn90Um2T/pAq7vST6uJHBjOw==
-  dependencies:
-    "@aragon/connect-core" "^0.8.0-alpha.6"
-    "@urql/core" "^1.11.7"
-    graphql "^15.0.0"
-    graphql-tag "^2.10.3"
-    isomorphic-unfetch "^3.0.0"
-    isomorphic-ws "^4.0.1"
-    subscriptions-transport-ws "^0.9.16"
-
 "@babel/code-frame@7.12.11":
   version "7.12.11"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.12.11.tgz#f4ad435aa263db935b8f10f2c552d23fb716a63f"
@@ -2205,7 +2184,7 @@ esutils@^2.0.2:
   resolved "https://registry.yarnpkg.com/esutils/-/esutils-2.0.3.tgz#74d2eb4de0b8da1293711910d50775b9b710ef64"
   integrity sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==
 
-ethers@^5.0.0, ethers@^5.0.7:
+ethers@^5.0.0:
   version "5.1.4"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.1.4.tgz#8ae973705ed962f8f41dc59693704002a38dd18b"
   integrity sha512-EAPQ/fgGRu0PoR/VNFnHTMOtG/IZ0AItdW55C9T8ffmVu0rnyllZL404eBF66elJehOLz2kxnUrhXpE7TCpW7g==
