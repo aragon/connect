@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "outDir": "dist",
+    "sourceMap": true
+  },
+  "include": ["src", "./src/**/*.json"],
+  "references": [
+    { "path": "../../packages/connect" },
+    { "path": "../../packages/connect-thegraph" },
+  ]
+}

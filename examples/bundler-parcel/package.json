@@ -1,0 +1,20 @@
+{
+  "name": "bundler-parcel",
+  "private": true,
+  "version": "0.9.4",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html"
+  },
+  "dependencies": {
+    "@1hive/connect-react": "^0.9.4",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "string.ify": "^1.0.64"
+  },
+  "devDependencies": {
+    "parcel": "^1.12.4"
+  }
+}
