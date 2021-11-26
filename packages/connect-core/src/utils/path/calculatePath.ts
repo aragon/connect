@@ -1,5 +1,6 @@
-import { Provider } from '@ethersproject/providers'
 import { isAddress } from '@ethersproject/address'
+import { id } from '@ethersproject/hash'
+import { Provider } from '@ethersproject/providers'
 
 import { ErrorInvalid } from '../../errors'
 import { TransactionPath } from '../../types'
@@ -48,10 +49,8 @@ async function calculateForwardingPath(
     // Only apply pretransactions to the first transaction in the path
     // as it's the only one that will be executed by the user
     try {
-      const forwardingFeePreTransactions = await buildForwardingFeePreTransactions(
-        transaction,
-        provider
-      )
+      const forwardingFeePreTransactions =
+        await buildForwardingFeePreTransactions(transaction, provider)
       // If that happens, we give up as we should've been able to perform the action with this
       // forwarding path
       return {
@@ -216,7 +215,7 @@ export async function calculateTransactionPath(
   } else {
     // Find entities with the required permissions
     const role = (await destinationApp.roles()).find(
-      (role) => role.name === method.roles[0]
+      (role) => role.hash === id(method.roles[0])
     )
 
     const allowedEntities =

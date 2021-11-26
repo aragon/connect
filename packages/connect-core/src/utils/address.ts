@@ -27,13 +27,13 @@ export async function resolveAddress(
     ? location
     : await ethersProvider.resolveName(location)
 
-  if (!isAddress(address)) {
-    throw new ErrorInvalidLocation(
-      isLocationAddress
-        ? `The address (${address}) is not valid.`
-        : `The ENS domain (${location}) doesn’t seem to resolve to an address.`
-    )
+  if (address && isAddress(address)) {
+    return address
   }
 
-  return address
+  throw new ErrorInvalidLocation(
+    isLocationAddress
+      ? `The address (${address}) is not valid.`
+      : `The ENS domain (${location}) doesn’t seem to resolve to an address.`
+  )
 }
