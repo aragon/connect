@@ -9,6 +9,6 @@
   "include": ["src", "./src/**/*.json"],
   "references": [
     { "path": "../../packages/connect" },
-    { "path": "../../packages/connect-thegraph" },
+    { "path": "../../packages/connect-thegraph" }
   ]
 }

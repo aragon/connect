@@ -1,6 +1,6 @@
 # Aragon Connect NodeJs examples
 
-This folder contains basic examples of the different Aragon Connect libraries. 
+This folder contains basic examples of the different Aragon Connect libraries.
 
 ## How to run
 
@@ -10,7 +10,7 @@ This folder contains basic examples of the different Aragon Connect libraries.
 yarn run start-organization
 ```
 
-### Organization subscriptions 
+### Organization subscriptions
 
 ```
 yarn run start-subscriptions-org
@@ -22,31 +22,31 @@ yarn run start-subscriptions-org
 yarn run start-tokens
 ```
 
-### Token Manager subscriptions 
+### Token Manager subscriptions
 
 ```
 yarn run start-subscriptions-tokens
 ```
 
-### Voting 
+### Voting
 
 ```
 yarn run start-voting
 ```
 
-### Voting (low-level) 
+### Voting (low-level)
 
 ```
 yarn run start-voting-low-level
 ```
 
-### Voting subscriptions 
+### Voting subscriptions
 
 ```
 yarn run start-subscriptions-voting
 ```
 
-### Transaction paths 
+### Transaction paths
 
 ```
 yarn run start-transaction-path
@@ -58,13 +58,13 @@ yarn run start-transaction-path
 yarn run start-describe-script
 ```
 
-### Low-level subscriptions 
+### Low-level subscriptions
 
 ```
 yarn run start-subscriptions-low-level
 ```
 
-### Create Organization 
+### Create Organization
 
 ```
 yarn run start-create-org
