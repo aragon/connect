@@ -17,7 +17,8 @@
   "private": true,
   "workspaces": {
     "packages": [
-      "packages/*"
+      "packages/*",
+      "examples/*"
     ],
     "nohoist": [
       "**/@graphprotocol/graph-ts",
@@ -39,6 +40,7 @@
     "test:debug": "node --inspect-brk node_modules/jest/bin/jest.js --runInBand --watch",
     "clean": "oao run-script --ignore-src !packages/* clean && oao clean",
     "build": "MODE=libs-only ./scripts/rebuild-packages.sh",
+    "build:examples": "MODE=all ./scripts/rebuild-packages.sh",
     "status": "oao status",
     "publish-version": "./scripts/publish-version.sh",
     "postinstall": "yarn build",
