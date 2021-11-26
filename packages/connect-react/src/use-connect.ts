@@ -118,9 +118,8 @@ export function useConnect<T>(callback?: any, dependencies?: unknown[]): any {
     }
   }, [org, ...(dependencies || [])])
 
-  return useMemo(() => [result, { error, loading, retry: () => null }], [
-    result,
-    error,
-    loading,
-  ])
+  return useMemo(
+    () => [result, { error, loading, retry: () => null }],
+    [result, error, loading]
+  )
 }

@@ -19,9 +19,10 @@ export function useApp(
     'useApp() is going to be deprecated in the next version. ' +
       'Please use useConnect() instead.'
   )
-  return useConnect<App | null>((org) => org.onApp(appsFilter), [
-    hash(appsFilter),
-  ])
+  return useConnect<App | null>(
+    (org) => org.onApp(appsFilter),
+    [hash(appsFilter)]
+  )
 }
 
 export function useApps(appsFilter?: AppFiltersParam): UseConnectResult<App[]> {

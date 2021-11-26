@@ -35,13 +35,11 @@ export async function describeStep(
   // Annotate the description, if one was found
   if (decoratedStep?.description) {
     try {
-      const {
-        description,
-        annotatedDescription,
-      } = await postprocessRadspecDescription(
-        decoratedStep.description,
-        installedApps
-      )
+      const { description, annotatedDescription } =
+        await postprocessRadspecDescription(
+          decoratedStep.description,
+          installedApps
+        )
       decoratedStep.description = description
       decoratedStep.annotatedDescription = annotatedDescription ?? []
     } catch (err) {}
