@@ -49,8 +49,10 @@ async function calculateForwardingPath(
     // Only apply pretransactions to the first transaction in the path
     // as it's the only one that will be executed by the user
     try {
-      const forwardingFeePreTransactions =
-        await buildForwardingFeePreTransactions(transaction, provider)
+      const forwardingFeePreTransactions = await buildForwardingFeePreTransactions(
+        transaction,
+        provider
+      )
       // If that happens, we give up as we should've been able to perform the action with this
       // forwarding path
       return {
