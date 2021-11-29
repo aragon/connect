@@ -3,6 +3,7 @@ import { subscription } from '@aragon/connect-core'
 import { IVotingConnector, VoteData, RewardData } from '../types'
 import Cast from './Cast'
 import Reward from './Reward'
+import Call from './Call'
 
 export default class Vote {
   #connector: IVotingConnector
@@ -53,6 +54,31 @@ export default class Vote {
   ): SubscriptionResult<Cast[]> {
     return subscription<Cast[]>(callback, (callback) =>
       this.#connector.onCastsForVote(this.id, first, skip, callback)
+    )
+  }
+
+  async rewards({ first = 1000, skip = 0 } = {}): Promise<Reward[]> {
+    return this.#connector.rewardsForVote(this.id, first, skip)
+  }
+
+  onRewards(
+    { first = 1000, skip = 0 } = {},
+    callback?: SubscriptionCallback<Reward[]>
+  ): SubscriptionResult<Reward[]> {
+    return subscription<Reward[]>(callback, (callback) =>
+      this.#connector.onRewardsForVote(this.id, first, skip, callback)
+    )
+  }
+  async calls({ first = 1000, skip = 0 } = {}): Promise<Call[]> {
+    return this.#connector.callsForVote(this.id, first, skip)
+  }
+
+  onCalls(
+    { first = 1000, skip = 0 } = {},
+    callback?: SubscriptionCallback<Call[]>
+  ): SubscriptionResult<Call[]> {
+    return subscription<Call[]>(callback, (callback) =>
+      this.#connector.onCallsForVote(this.id, first, skip, callback)
     )
   }
 }

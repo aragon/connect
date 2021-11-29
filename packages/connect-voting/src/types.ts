@@ -5,6 +5,7 @@ import {
 import Vote from './models/Vote'
 import Cast from './models/Cast'
 import Reward from './models/Reward'
+import Call from './models/Call'
 
 export interface VoteData {
   id: string
@@ -32,7 +33,7 @@ export interface RewardData {
   amount: string
 }
 
-export interface EvmScriptData {
+export interface CallData {
   id: string
   vote: string
   contract: string
@@ -69,5 +70,19 @@ export interface IVotingConnector {
     first: number,
     skip: number,
     callback: SubscriptionCallback<Cast[]>
+  ): SubscriptionHandler
+  rewardsForVote(vote: string, first: number, skip: number): Promise<Reward[]>
+  onRewardsForVote(
+    vote: string,
+    first: number,
+    skip: number,
+    callback: SubscriptionCallback<Reward[]>
+  ): SubscriptionHandler
+  callsForVote(vote: string, first: number, skip: number): Promise<Call[]>
+  onCallsForVote(
+    vote: string,
+    first: number,
+    skip: number,
+    callback: SubscriptionCallback<Call[]>
   ): SubscriptionHandler
 }

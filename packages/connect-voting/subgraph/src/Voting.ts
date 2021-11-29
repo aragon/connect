@@ -10,13 +10,8 @@ import {
   Cast as CastEntity,
   Voter as VoterEntity,
   Reward as RewardEntity,
-  EvmScript as EvmScriptEntity
+  Call as CallEntity,
 } from '../generated/schema'
-
-/* eslint-disable @typescript-eslint/no-use-before-define */
-
-let REWARDS_SCRIPT_ID = 0x00000000
-let EVM_SCRIPT_ID = 0x00000001
 
 export function handleStartVote(event: StartVoteEvent): void {
   let voteEntityId = buildVoteEntityId(event.address, event.params.voteId)
@@ -40,49 +35,72 @@ export function handleStartVote(event: StartVoteEvent): void {
   vote.orgAddress = voting.kernel()
   vote.executedAt = BigInt.fromI32(0)
   vote.executed = false
-  vote.spec = BigInt.fromI32(Bytes.fromHexString(vote.script.substr(0, 10)).toI32())
+  vote.spec = BigInt.fromI32(
+    Bytes.fromHexString(vote.script.substr(0, 10)).toI32()
+  )
 
   vote.save()
 
-  switch(vote.spec.toI32()) {
-    case REWARDS_SCRIPT_ID:
+  let REWARD_SPEC_ID = 0x00000000
+  let CALL_SPEC_ID = 0x00000001
+
+  switch (vote.spec.toI32()) {
+    case REWARD_SPEC_ID:
       saveRewards(vote.id, vote.script)
-      break;
-    case EVM_SCRIPT_ID:
-      saveScripts(vote.id, vote.script)
-      break;
+      break
+    case CALL_SPEC_ID:
+      saveCalls(vote.id, vote.script)
+      break
   }
 }
 
-export function saveScripts(voteId: string, script: string): void {
+export function saveCalls(voteId: string, script: string): void {
   let location = 10
 
   while (location < script.length) {
-    let contract = Bytes.fromHexString(script.substr(location, location + 40)) as Address
-    let calldataLength = Bytes.fromHexString(script.substr(location + 40, location + 48)).toU32()
-    let calldata = Bytes.fromHexString(script.substr(location + 48, location + 48 + calldataLength * 2 )) as Bytes
+    let contract = Address.fromHexString(script.substr(location, 40)) as Address
+    let calldataLength = BigInt.fromUnsignedBytes(
+      Bytes.fromHexString(script.substr(location + 40, 8)) as Bytes
+    )
+    let calldataLengthNumber = calldataLength.toI32()
+    let calldata = Bytes.fromHexString(
+      script.substr(location + 48, calldataLengthNumber * 2)
+    ) as Bytes
 
-    let evmScript = new EvmScriptEntity(buildEvmScriptEntityId(voteId, Bytes.fromHexString(script.substr(location, location  + 48 + calldataLength * 2)).toHexString()))
-    evmScript.contract = contract
-    evmScript.calldataLength = new BigInt(calldataLength)
-    evmScript.calldata = calldata
-    location =  location + 48 + calldataLength * 2
+    let call = new CallEntity(
+      buildCallEntityId(
+        voteId,
+        Bytes.fromHexString(
+          script.substr(location, calldataLengthNumber * 2) + `-${location}`
+        ).toHexString()
+      )
+    )
+
+    call.contract = contract
+    call.calldata = calldata
+    call.vote = voteId
+    call.save()
+    location = location + 48 + calldataLengthNumber * 2
   }
 }
 
-export function saveRewards(voteId: string, script: string): void {   
+export function saveRewards(voteId: string, script: string): void {
   let location = 10
 
   while (location < script.length) {
-    let token = Address.fromHexString(script.substr(location, location + 40)) as Address
-    let to = Address.fromHexString(script.substr(location + 40, location + 80)) as Address
-    let amount = BigInt.fromUnsignedBytes(Bytes.fromHexString(script.substr(location + 80, location + 144)) as Bytes)
+    let token = Address.fromHexString(script.substr(location, 40)) as Address
+    let to = Address.fromHexString(script.substr(location + 40, 40)) as Address
+    let amount = BigInt.fromUnsignedBytes(
+      Bytes.fromHexString(script.substr(location + 80, 64)) as Bytes
+    )
 
     let reward = new RewardEntity(buildRewardId(voteId, token, to))
+    reward.token = token
     reward.amount = amount
+    reward.to = to
     reward.vote = voteId
     reward.save()
-    location = location + 72
+    location = location + 144
   }
 }
 
@@ -117,10 +135,8 @@ export function handleExecuteVote(event: ExecuteVoteEvent): void {
   vote.save()
 }
 
-function buildEvmScriptEntityId(voteId: string, data: string): string {
-  return (
-    voteId + '-evmScript:' + data
-  )
+function buildCallEntityId(voteId: string, data: string): string {
+  return voteId + '-call:' + data
 }
 
 function buildVoteEntityId(appAddress: Address, voteNum: BigInt): string {
@@ -138,7 +154,7 @@ function buildCastEntityId(voteId: BigInt, voter: Address): string {
 }
 
 function buildRewardId(voteId: string, token: Address, to: Address): string {
-  return voteId + '-reward-' + token.toHexString()  + '-' + to.toHexString()
+  return voteId + '-reward-' + token.toHexString() + '-' + to.toHexString()
 }
 
 function loadOrCreateVoter(

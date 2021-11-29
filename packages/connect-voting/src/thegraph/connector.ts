@@ -8,7 +8,8 @@ import Vote from '../models/Vote'
 import Cast from '../models/Cast'
 import Reward from '../models/Reward'
 import * as queries from './queries'
-import { parseVotes, parseCasts, parseRewards } from './parsers'
+import { parseVotes, parseCasts, parseRewards, parseCalls } from './parsers'
+import Call from '../models/Call'
 
 export function subgraphUrlFromChainId(chainId: number) {
   if (chainId === 1) {
@@ -97,6 +98,58 @@ export default class VotingConnectorTheGraph implements IVotingConnector {
       { vote, first, skip },
       callback,
       (result: QueryResult) => parseCasts(result)
+    )
+  }
+
+  async rewardsForVote(
+    vote: string,
+    first: number,
+    skip: number
+  ): Promise<Reward[]> {
+    return this.#gql.performQueryWithParser(
+      queries.REWARDS_FOR_VOTE('query'),
+      { vote, first, skip },
+      (result: QueryResult) => parseRewards(result)
+    )
+  }
+
+  onRewardsForVote(
+    vote: string,
+    first: number,
+    skip: number,
+    callback: SubscriptionCallback<Reward[]>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<Reward[]>(
+      queries.REWARDS_FOR_VOTE('subscription'),
+      { vote, first, skip },
+      callback,
+      (result: QueryResult) => parseRewards(result)
+    )
+  }
+
+  async callsForVote(
+    vote: string,
+    first: number,
+    skip: number
+  ): Promise<Call[]> {
+    return this.#gql.performQueryWithParser(
+      queries.CALLS_FOR_VOTE('query'),
+      { vote, first, skip },
+      (result: QueryResult) => parseCalls(result)
+    )
+  }
+
+  onCallsForVote(
+    vote: string,
+    first: number,
+    skip: number,
+    callback: SubscriptionCallback<Call[]>
+  ): SubscriptionHandler {
+    return this.#gql.subscribeToQueryWithParser<Call[]>(
+      queries.CALLS_FOR_VOTE('subscription'),
+      { vote, first, skip },
+      callback,
+      (result: QueryResult) => parseCalls(result)
     )
   }
 }

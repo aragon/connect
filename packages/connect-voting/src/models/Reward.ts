@@ -9,7 +9,7 @@ export default class Reward {
 
   constructor(data: RewardData) {
     this.id = data.id
-    this.vote = data.vote
+    this.vote = data.vote.id
     this.token = data.token
     this.to = data.to
     this.amount = data.amount

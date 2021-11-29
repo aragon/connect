@@ -16,26 +16,25 @@ type Vote @entity {
   votingPower: BigInt!
   script: String!
   voteNum: BigInt!
-  castVotes: [Cast!] @derivedFrom(field: "vote")
   spec: BigInt!
+  castVotes: [Cast!] @derivedFrom(field: "vote")
   rewards: [Reward!] @derivedFrom(field: "vote")
-  evmScripts: [EvmScript!] @derivedFrom(field: "vote")
+  calls: [Call!] @derivedFrom(field: "vote")
 }
 
 type Reward @entity {
   id: ID!
-  token: Bytes!
-  to: Bytes!
-  amount: BigInt!
   vote: Vote!
+  token: Bytes!
+  amount: BigInt!
+  to: Bytes!
 }
 
-type EvmScript @entity {
+type Call @entity {
   id: ID!
-  contract: Bytes!
-  calldataLength: BigInt!
-  calldata: Bytes!
   vote: Vote!
+  contract: Bytes!
+  calldata: Bytes!
 }
 
 type Cast @entity {
