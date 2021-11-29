@@ -1,7 +1,7 @@
 {
   "name": "bundler-webpack-ts-loader",
   "main": "dist/index.js",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "private": true,
   "sideEffects": false,
   "scripts": {
@@ -10,7 +10,7 @@
     "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@1hive/connect": "^0.9.6",
+    "@1hive/connect": "^0.9.7",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },

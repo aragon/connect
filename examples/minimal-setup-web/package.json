@@ -1,7 +1,7 @@
 {
   "name": "minimal-setup-web",
   "private": true,
-  "version": "0.9.6",
+  "version": "0.9.7",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
@@ -9,7 +9,7 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "@1hive/connect-react": "^0.9.6",
+    "@1hive/connect-react": "^0.9.7",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },

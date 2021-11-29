@@ -1,6 +1,6 @@
 {
   "name": "@1hive/connect",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "description": "Access and interact with Aragon Organizations and their apps.",
   "keywords": [
     "ethereum",
