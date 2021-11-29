@@ -34,14 +34,14 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "@1hive/radspec": "^2.0.0",
     "@ethersproject/abi": "^5.1.2",
     "@ethersproject/address": "^5.1.0",
     "@ethersproject/bignumber": "^5.1.1",
     "@ethersproject/contracts": "^5.1.1",
     "@ethersproject/hash": "^5.1.0",
     "@ethersproject/providers": "^5.1.2",
-    "@ethersproject/solidity": "^5.1.0",
-    "radspec": "^2.0.0-rc.2"
+    "@ethersproject/solidity": "^5.1.0"
   },
   "description": "Access and interact with Aragon Organizations and their apps.",
   "keywords": [

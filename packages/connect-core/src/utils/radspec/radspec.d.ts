@@ -1,1 +1,1 @@
-declare module 'radspec'
+declare module '@1hive/radspec'
