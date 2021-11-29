@@ -1,4 +1,4 @@
-import * as radspec from 'radspec'
+import * as radspec from '@1hive/radspec'
 import { Provider } from '@ethersproject/providers'
 
 import { addressesEqual } from '../address'
