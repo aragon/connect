@@ -14,7 +14,7 @@ export function parseCalls(result: QueryResult): Call[] {
     (call: any): CallData => {
       return {
         id: call.id,
-        vote: call.vote,
+        vote: call.vote.id,
         contract: call.contract,
         calldata: call.calldata,
       }

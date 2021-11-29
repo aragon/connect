@@ -27,7 +27,7 @@ export interface VoteData {
 
 export interface RewardData {
   id: string
-  vote: string
+  vote: VoteData
   token: string
   to: string
   amount: string
@@ -35,9 +35,8 @@ export interface RewardData {
 
 export interface CallData {
   id: string
-  vote: string
+  vote: VoteData
   contract: string
-  calldataLength: string
   calldata: string
 }
 
