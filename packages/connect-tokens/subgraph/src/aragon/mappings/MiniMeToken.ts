@@ -21,10 +21,11 @@ export function handleTransfer(event: TransferEvent): void {
   let sendingHolder = _getTokenHolder(previousBlock, miniMeTokenEntity, sendingHolderAddress)
   if (sendingHolder) {
     sendingHolder.balance = sendingHolder.balance.minus(transferedAmount)
-
+    sendingHolder.lastUpdateAt = event.block.timestamp
     sendingHolder.save()
   } else {
     miniMeTokenEntity.totalSupply = miniMeTokenEntity.totalSupply.plus(transferedAmount)
+    miniMeTokenEntity.lastUpdateAt = event.block.timestamp
     miniMeTokenEntity.save()
   }
 
@@ -32,10 +33,11 @@ export function handleTransfer(event: TransferEvent): void {
   let receivingHolder = _getTokenHolder(previousBlock, miniMeTokenEntity, receivingHolderAddress)
   if (receivingHolder) {
     receivingHolder.balance = receivingHolder.balance.plus(transferedAmount)
-
+    receivingHolder.lastUpdateAt = event.block.timestamp
     receivingHolder.save()
   } else {
     miniMeTokenEntity.totalSupply = miniMeTokenEntity.totalSupply.minus(transferedAmount)
+    miniMeTokenEntity.lastUpdateAt = event.block.timestamp
     miniMeTokenEntity.save()
   }
 }
@@ -58,7 +60,10 @@ function _getMiniMeTokenEntity(previousBlock: BigInt, tokenAddress: Address): Mi
     miniMeTokenEntity.name = tokenContract.name()
     miniMeTokenEntity.address = tokenAddress
     miniMeTokenEntity.symbol = tokenContract.symbol()
+
     miniMeTokenEntity.totalSupply = _getTotalSupplyAt(tokenContract, previousBlock)
+    miniMeTokenEntity.lastUpdateAt = BigInt.fromI32(0)
+
     miniMeTokenEntity.transferable = tokenContract.transfersEnabled()
     miniMeTokenEntity.holders = new Array<string>()
 
@@ -98,6 +103,7 @@ function _getTokenHolder(previousBlock: BigInt, miniMeTokenEntity: MiniMeTokenEn
 
     let tokenContract = MiniMeTokenContract.bind(tokenAddress)
     tokenHolder.balance = _getBalanceOfAt(tokenContract, holderAddress, previousBlock)
+    tokenHolder.lastUpdateAt = BigInt.fromI32(0)
 
     let holders = miniMeTokenEntity.holders
     holders.push(tokenHolder.id)

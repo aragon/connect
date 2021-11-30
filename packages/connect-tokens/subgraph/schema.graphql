@@ -16,6 +16,7 @@ type MiniMeToken @entity {
   appAddress: Bytes
   tokenManager: TokenManager
   holders: [TokenHolder!]!
+  lastUpdateAt: BigInt!
 }
 
 type TokenHolder @entity {
@@ -23,6 +24,7 @@ type TokenHolder @entity {
   address: Bytes!
   tokenAddress: Bytes!
   balance: BigInt!
+  lastUpdateAt: BigInt!
 }
 
 type OrphanTokenManagers @entity {
