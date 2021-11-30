@@ -8,6 +8,7 @@ import Cast from './models/Cast'
 export interface VoteData {
   id: string
   creator: string
+  originalCreator: string
   metadata: string
   executed: boolean
   executedAt: string
