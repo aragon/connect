@@ -5,7 +5,7 @@ type CacheStoreCached<T> = (
 ) => Promise<T>
 
 export function createCacheStore<T = string>(
-  limit: number = 10
+  limit = 10
 ): {
   cachedIndex: (id: string) => number
   clear: () => void
@@ -28,7 +28,7 @@ export function createCacheStore<T = string>(
       let cachedIndex = this.cachedIndex(id)
       if (cachedIndex > -1) {
         this.touch(cachedIndex)
-        return cache[cachedIndex][1]
+        return cache[0][1]
       }
 
       const data = await callback()
@@ -38,7 +38,7 @@ export function createCacheStore<T = string>(
       cachedIndex = this.cachedIndex(id)
       if (cachedIndex > -1) {
         this.touch(cachedIndex)
-        return cache[cachedIndex][1]
+        return cache[0][1]
       }
 
       cache.unshift([id, data])
