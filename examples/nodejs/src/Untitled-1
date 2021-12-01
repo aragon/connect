@@ -1,0 +1,362 @@
+[
+  {
+    "address": "0x2ec8db0b2f2ed44b75c481b864f9dd1c611699c0",
+    "appId": "0x3b4bf6bf3ad5000ecf0f989d5befde585c6860fea3e574a4fab4c49d1c177d9c",
+    "artifact": {
+      "abi": [
+        {
+          "constant": true,
+          "inputs": [],
+          "name": "hasInitialized",
+          "outputs": [
+            {
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "payable": false,
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "constant": true,
+          "inputs": [
+            {
+              "name": "",
+              "type": "bytes32"
+            },
+            {
+              "name": "",
+              "type": "bytes32"
+            }
+          ],
+          "name": "apps",
+          "outputs": [
+            {
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "payable": false,
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "constant": true,
+          "inputs": [
+            {
+              "name": "token",
+              "type": "address"
+            }
+          ],
+          "name": "allowRecoverability",
+          "outputs": [
+            {
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "payable": false,
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "constant": true,
+          "inputs": [],
+          "name": "recoveryVaultAppId",
+          "outputs": [
+            {
+              "name": "",
+              "type": "bytes32"
+            }
+          ],
+          "payable": false,
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "constant": true,
+          "inputs": [],
+          "name": "getInitializationBlock",
+          "outputs": [
+            {
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "payable": false,
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "constant": true,
+          "inputs": [],
+          "name": "APP_MANAGER_ROLE",
+          "outputs": [
+            {
+              "name": "",
+              "type": "bytes32"
+            }
+          ],
+          "payable": false,
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "constant": false,
+          "inputs": [
+            {
+              "name": "_token",
+              "type": "address"
+            }
+          ],
+          "name": "transferToVault",
+          "outputs": [],
+          "payable": false,
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "constant": false,
+          "inputs": [
+            {
+              "name": "_kernel",
+              "type": "address"
+            },
+            {
+              "name": "_appId",
+              "type": "bytes32"
+            },
+            {
+              "name": "_initializePayload",
+              "type": "bytes"
+            }
+          ],
+          "name": "newAppProxyPinned",
+          "outputs": [
+            {
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "payable": false,
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "constant": true,
+          "inputs": [],
+          "name": "isPetrified",
+          "outputs": [
+            {
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "payable": false,
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "constant": false,
+          "inputs": [
+            {
+              "name": "_kernel",
+              "type": "address"
+            },
+            {
+              "name": "_appId",
+              "type": "bytes32"
+            }
+          ],
+          "name": "newAppProxy",
+          "outputs": [
+            {
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "payable": false,
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "constant": false,
+          "inputs": [
+            {
+              "name": "_kernel",
+              "type": "address"
+            },
+            {
+              "name": "_appId",
+              "type": "bytes32"
+            },
+            {
+              "name": "_initializePayload",
+              "type": "bytes"
+            }
+          ],
+          "name": "newAppProxy",
+          "outputs": [
+            {
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "payable": false,
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "constant": false,
+          "inputs": [
+            {
+              "name": "_kernel",
+              "type":…,
+          "payable": false,
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "constant": true,
+          "inputs": [
+            {
+              "name": "_paramsHash",
+              "type": "bytes32"
+            },
+            {
+              "name": "_who",
+              "type": "address"
+            },
+            {
+              "name": "_where",
+              "type": "address"
+            },
+            {
+              "name": "_what",
+              "type": "bytes32"
+            },
+            {
+              "name": "_how",
+              "type": "uint256[]"
+            }
+          ],
+          "name": "evalParams",
+          "outputs": [
+            {
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "payable": false,
+          "stateMutability": "view",
+          "type": "function"
+        }
+      ],
+      "appName": "acl.aragonpm.eth",
+      "roles": [
+        {
+          "name": "Create permissions",
+          "id": "CREATE_PERMISSIONS_ROLE",
+          "bytes": "0x0b719b33c83b8e5d300c521cb8b54ae9bd933996a14bef8c2f4e0285d2d2400a"
+        }
+      ],
+      "functions": [
+        {
+          "sig": "initialize(address)",
+          "roles": [],
+          "notice": "Initializes an ACL instance and sets `_permissionsCreator` as the entity that can create other permissions"
+        },
+        {
+          "sig": "createPermission(address,address,bytes32,address)",
+          "roles": [
+            "CREATE_PERMISSIONS_ROLE"
+          ],
+          "notice": "Create a new permission granting `_entity` the ability to perform actions of role `_role` on `_app` (setting `_manager` as the permission manager)"
+        },
+        {
+          "sig": "grantPermission(address,address,bytes32)",
+          "roles": [],
+          "notice": "Grants `_entity` the ability to perform actions of role `_role` on `_app`"
+        },
+        {
+          "sig": "grantPermissionP(address,address,bytes32,uint256[])",
+          "roles": [],
+          "notice": "Grants `_entity` the ability to perform actions of role `_role` on `_app`"
+        },
+        {
+          "sig": "revokePermission(address,address,bytes32)",
+          "roles": [],
+          "notice": "Revokes `_entity` the ability to perform actions of role `_role` on `_app`"
+        },
+        {
+          "sig": "setPermissionManager(address,address,bytes32)",
+          "roles": [],
+          "notice": "Sets `_newManager` as the manager of the permission `_role` in `_app`"
+        },
+        {
+          "sig": "removePermissionManager(address,bytes32)",
+          "roles": [],
+          "notice": "Removes the manager of the permission `_role` in `_app`"
+        },
+        {
+          "sig": "getPermissionParam(address,address,address)",
+          "roles": [],
+          "notice": "Get parameter for permission"
+        },
+        {
+          "sig": "_evalLogic(address,bytes32,address,address,bytes32,uint256[])",
+          "roles": [],
+          "notice": null
+        },
+        {
+          "sig": "transferToVault(address)",
+          "roles": [],
+          "notice": "Send funds to recovery Vault. This contract should never receive funds, but in case it does, this function allows one to recover them."
+        }
+      ]
+    },
+    "isForwarder": false,
+    "isUpgradeable": true,
+    "kernelAddress": "0x2ec8db0b2f2ed44b75c481b864f9dd1c611699c0",
+    "name": "acl",
+    "organization": null,
+    "repo": null,
+    "roles": [
+      {
+        "appId": "0xe3262375f45a6e2026b7e7b18c2b807434f2508fe1a2a3dfb493c7df8f4aad6a",
+        "manager": "0xd364bfedb4b337cb310922d79751ea408a0a4a64",
+        "permissions": [
+          {
+            "allowed": false,
+            "appAddress": "0xf8de3027b03b61865cff5fca3bdaed74f81c3c99",
+            "granteeAddress": "0x4037f97fcc94287257e50bd14c7da9cb4df18250",
+            "params": [],
+            "roleHash": "0x0b719b33c83b8e5d300c521cb8b54ae9bd933996a14bef8c2f4e0285d2d2400a"
+          },
+          {
+            "allowed": false,
+            "appAddress": "0xf8de3027b03b61865cff5fca3bdaed74f81c3c99",
+            "granteeAddress": "0x5507a6365c47d5b201af3c1cb18c7fd4a889321b",
+            "params": [],
+            "roleHash": "0x0b719b33c83b8e5d300c521cb8b54ae9bd933996a14bef8c2f4e0285d2d2400a"
+          },
+          {
+            "allowed": true,
+            "appAddress": "0xf8de3027b03b61865cff5fca3bdaed74f81c3c99",
+            "granteeAddress": "0xd364bfedb4b337cb310922d79751ea408a0a4a64",
+            "params": [],
+            "roleHash": "0x0b719b33c83b8e5d300c521cb8b54ae9bd933996a14bef8c2f4e0285d2d2400a"
+          },
+          {
+            "allowed": false,
+            "appAddress": "0xf8de3027b03b61865cff5fca3bdaed74f81c3c99",
+            "granteeAddress": "0xeac7fbf38a6e1b7e38bd11cea16850cded67817e",
+            "params": [],
+            "roleHash": "0x0b719b33c83b8e5d300c521cb8b54ae9bd933996a14bef8c2f4e0285d2d2400a"
+          }
+        ]
+      }
+    ]
+  }
+]
