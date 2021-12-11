@@ -17,7 +17,7 @@ export function getTokenManagerEntity(proxyAddress: Address): TokenManagerEntity
 
   let tokenManagerEntity = TokenManagerEntity.load(tokenManagerId)
   if (!tokenManagerEntity) {
-    let tokenManagerEntity = new TokenManagerEntity(tokenManagerId)
+    tokenManagerEntity = new TokenManagerEntity(tokenManagerId)
 
     let tokenManagerContract = TokenManagerContract.bind(proxyAddress)
 
@@ -36,7 +36,7 @@ export function getTokenManagerEntity(proxyAddress: Address): TokenManagerEntity
     tokenManagerEntity.save()
   }
 
-  return tokenManagerEntity!
+  return tokenManagerEntity
 }
 
 export function processOrphanTokenManagers(): void {
@@ -45,7 +45,7 @@ export function processOrphanTokenManagers(): void {
   let apps = registry.apps
   if (apps.length > 0) {
     for (let i = 0; i < apps.length; i++) {
-      let proxyAddress = apps[i] as Address
+      let proxyAddress = changetype<Address>(apps[i])
 
       let tokenManagerContract = TokenManagerContract.bind(proxyAddress)
 
@@ -98,7 +98,7 @@ function _getOrphanTokenManagersEntity(): OrphanTokenManagersEntity {
     registry.save()
   }
 
-  return registry!
+  return registry
 }
 
 // These are commented out to improve sync performance

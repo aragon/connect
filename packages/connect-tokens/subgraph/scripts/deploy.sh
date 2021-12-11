@@ -6,7 +6,7 @@ NAME=$2
 NETWORK=$3
 
 # Require $GRAPHKEY to be set
-if [[ -z "${GRAPHKEY}" ]]; then
+if [[ ! "$LOCAL" -eq 1 ]] && [[ -z "${GRAPHKEY}" ]]; then
 >&2 echo "Please set \$GRAPHKEY to your The Graph access token to run this command."
 exit 1
 fi
@@ -29,8 +29,16 @@ fi
 echo ''
 echo '> Deploying subgraph: '$FULLNAME
 
+ipfs="https://api.thegraph.com/ipfs/"
+node="https://api.thegraph.com/deploy/"
+
+if [[ "$LOCAL" -eq 1 ]]; then
+  ipfs="http://localhost:5001"
+  node="http://localhost:8020"
+fi
+
 # Deploy subgraph
 graph deploy $FULLNAME \
-  --ipfs https://api.thegraph.com/ipfs/ \
-  --node https://api.thegraph.com/deploy/ \
+  --ipfs $ipfs \
+  --node $node \
   --access-token $GRAPHKEY

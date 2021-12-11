@@ -84,7 +84,7 @@ function _getMiniMeTokenEntity(previousBlock: BigInt, tokenAddress: Address): Mi
     miniMeTokenEntity.save()
   }
 
-  return miniMeTokenEntity!
+  return miniMeTokenEntity
 }
 
 function _getTokenHolder(previousBlock: BigInt, miniMeTokenEntity: MiniMeTokenEntity, holderAddress: Address): TokenHolderEntity | null {
@@ -92,14 +92,14 @@ function _getTokenHolder(previousBlock: BigInt, miniMeTokenEntity: MiniMeTokenEn
     return null
   }
 
-  let tokenAddress = miniMeTokenEntity.address as Address
+  let tokenAddress = changetype<Address>(miniMeTokenEntity.address)
   let tokenHolderId = 'tokenAddress-' + tokenAddress.toHexString() + '-holderAddress-' + holderAddress.toHexString()
   let tokenHolder = TokenHolderEntity.load(tokenHolderId)
 
   if (!tokenHolder) {
     tokenHolder = new TokenHolderEntity(tokenHolderId)
     tokenHolder.address = holderAddress
-    tokenHolder.tokenAddress = tokenAddress as Address
+    tokenHolder.tokenAddress = changetype<Address>(tokenAddress)
 
     let tokenContract = MiniMeTokenContract.bind(tokenAddress)
     tokenHolder.balance = _getBalanceOfAt(tokenContract, holderAddress, previousBlock)

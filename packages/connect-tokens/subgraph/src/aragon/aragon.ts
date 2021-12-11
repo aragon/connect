@@ -41,11 +41,11 @@ function _isRegistered(address: Address, type: string): boolean {
 
   let entities: Address[]
   if (type == 'org') {
-    entities = aragon.orgs as Address[]
+    entities = changetype<Address[]>(aragon.orgs)
   } else if (type == 'app') {
-    entities = aragon.apps as Address[]
+    entities = changetype<Address[]>(aragon.apps)
   } else if (type == 'token') {
-    entities = aragon.tokens as Address[]
+    entities = changetype<Address[]>(aragon.tokens)
   } else {
     throw new Error('Invalid entity type ' + type)
   }
@@ -90,5 +90,5 @@ function _getAragonInfo(): AragonInfoEntity {
     aragon.save()
   }
 
-  return aragon!
+  return aragon
 }
