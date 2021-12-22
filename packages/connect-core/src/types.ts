@@ -146,11 +146,6 @@ export interface AppMethod {
    * null if there in no notice
    */
   notice: string | null
-  /**
-   * The function's ABI element is included for convenience of the client
-   * null if ABI is not found for this signature
-   */
-  abi: FunctionFragment | null
 }
 
 // The aragon manifest requires the use of camelcase for some names
