@@ -29,6 +29,7 @@ import {
 import {
   DEFAULT_IPFS_CACHED_ITEMS,
   DEFAULT_IPFS_URL,
+  MUMBAI_HTTP_ENDPOINT,
   POLYGON_HTTP_ENDPOINT,
   XDAI_HTTP_ENDPOINT,
 } from './constants'
@@ -129,6 +130,10 @@ export function normalizeEthersProvider(
 
   if (network.chainId === 137) {
     return new JsonRpcProvider(POLYGON_HTTP_ENDPOINT, network)
+  }
+
+  if (network.chainId === 80001) {
+    return new JsonRpcProvider(MUMBAI_HTTP_ENDPOINT, network)
   }
 
   return getDefaultProvider(network)
