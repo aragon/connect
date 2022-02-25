@@ -19,6 +19,7 @@ import { subscription } from '../utils/subscriptions'
 import App from './App'
 import Permission from './Permission'
 import Transaction from './Transaction'
+import Role from './Role'
 
 // TODO
 // Organization#addApp(repoName, options)
@@ -159,6 +160,13 @@ export default class Organization {
       this.connection.orgConnector.onPermissionsForOrg(this, callback)
     )
   }
+
+  ///////// ROLES ///////////
+
+  async roles(appAddress: Address): Promise<Role[]> {
+    return this.connection.orgConnector.rolesForAddress(this, appAddress)
+  }
+
 
   //////// DESCRIPTIONS /////////
 
