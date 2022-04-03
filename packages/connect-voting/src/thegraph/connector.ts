@@ -1,7 +1,4 @@
-import {
-  SubscriptionCallback,
-  SubscriptionHandler,
-} from '@1hive/connect-types'
+import { SubscriptionCallback, SubscriptionHandler } from '@1hive/connect-types'
 import { GraphQLWrapper, QueryResult } from '@1hive/connect-thegraph'
 import { IVotingConnector } from '../types'
 import Vote from '../models/Vote'

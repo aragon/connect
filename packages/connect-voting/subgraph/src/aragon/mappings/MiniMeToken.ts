@@ -1,4 +1,8 @@
-import { ClaimedTokens as ClaimedTokensEvent, NewCloneToken, Approval } from '../../../generated/templates/MiniMeToken/MiniMeToken'
+import {
+  ClaimedTokens as ClaimedTokensEvent,
+  NewCloneToken,
+  Approval,
+} from '../../../generated/templates/MiniMeToken/MiniMeToken'
 import { Transfer as TransferEvent } from '../../../generated/templates/MiniMeToken/MiniMeToken'
 import { NewCloneToken as NewCloneTokenEvent } from '../../../generated/templates/MiniMeToken/MiniMeToken'
 import { Approval as ApprovalEvent } from '../../../generated/templates/MiniMeToken/MiniMeToken'

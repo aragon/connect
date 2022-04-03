@@ -1,7 +1,4 @@
-import {
-  SubscriptionCallback,
-  SubscriptionHandler,
-} from '@1hive/connect-types'
+import { SubscriptionCallback, SubscriptionHandler } from '@1hive/connect-types'
 import Vote from './models/Vote'
 import Cast from './models/Cast'
 

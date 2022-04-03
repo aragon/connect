@@ -60,7 +60,9 @@ describe('when connecting to a voting app', () => {
       })
 
       test('should have a valid original creator', () => {
-        expect(vote.originalCreator).toBe('0x8cff6832174091dae86f0244e3fd92d4ced2fe07')
+        expect(vote.originalCreator).toBe(
+          '0x8cff6832174091dae86f0244e3fd92d4ced2fe07'
+        )
       })
 
       test('should have valid metadata', () => {
