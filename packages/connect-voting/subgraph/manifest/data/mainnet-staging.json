@@ -1,0 +1,17 @@
+{
+  "network": "mainnet",
+  "dataSources": {
+    "Organizations": [
+      {
+        "name": "decentraland",
+        "address": "0xf47917b108ca4b820ccea2587546fbb9f7564b56",
+        "startBlock": "9351139"
+      }
+    ],
+    "OrganizationFactories": [],
+    "OrganizationTemplates": [],
+    "LegacyOrganizationTemplates": [],
+    "TokenFactories": [],
+    "Tokens": []
+  }
+}
