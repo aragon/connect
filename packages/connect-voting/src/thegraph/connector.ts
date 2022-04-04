@@ -8,13 +8,13 @@ import { parseVotes, parseCasts } from './parsers'
 
 export function subgraphUrlFromChainId(chainId: number) {
   if (chainId === 1) {
-    return 'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'
+    return 'https://api.thegraph.com/subgraphs/name/1hive/aragon-voting-mainnet'
   }
   if (chainId === 4) {
-    return 'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby'
+    return 'https://api.thegraph.com/subgraphs/name/1hive/aragon-voting-rinkeby'
   }
   if (chainId === 100) {
-    return 'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-xdai'
+    return 'https://api.thegraph.com/subgraphs/name/1hive/aragon-voting-xdai'
   }
   return null
 }
