@@ -24,7 +24,7 @@ export default createAppConnector<Voting, Config>(
 
     if (app.name !== 'voting') {
       throw new ErrorInvalidApp(
-        `This app (${app.name}) is not compatible with @aragon/connect-voting. ` +
+        `This app (${app.name}) is not compatible with @1hive/connect-voting. ` +
           `Please use an app instance of the voting.aragonpm.eth repo.`
       )
     }
