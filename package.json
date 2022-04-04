@@ -33,6 +33,7 @@
     "connect-react": "yarn workspace @1hive/connect-react",
     "connect-ethereum": "yarn workspace @1hive/connect-ethereum",
     "connect-thegraph": "yarn workspace @1hive/connect-thegraph",
+    "connect-voting": "yarn workspace @1hive/connect-voting",
     "connect-types": "yarn workspace @1hive/connect-types",
     "test": "is-ci \"test:coverage\" \"jest\"",
     "test:coverage": "jest --coverage",
