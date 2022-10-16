@@ -1,6 +1,6 @@
 {
   "name": "@1hive/connect",
-  "version": "0.9.11",
+  "version": "0.9.12",
   "license": "LGPL-3.0-or-later",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -34,9 +34,9 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@1hive/connect-core": "^0.9.11",
-    "@1hive/connect-ethereum": "^0.9.11",
-    "@1hive/connect-thegraph": "^0.9.11"
+    "@1hive/connect-core": "^0.9.12",
+    "@1hive/connect-ethereum": "^0.9.12",
+    "@1hive/connect-thegraph": "^0.9.12"
   },
   "description": "Access and interact with Aragon Organizations and their apps.",
   "keywords": [

@@ -1,6 +1,6 @@
 {
   "name": "org-viewer-react",
-  "version": "0.9.10",
+  "version": "0.9.12",
   "private": true,
   "scripts": {
     "start": "yarn clean && webpack-dev-server",
@@ -9,7 +9,7 @@
     "clean": "rm -rf ./dist ./tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@1hive/connect-react": "^0.9.10",
+    "@1hive/connect-react": "^0.9.12",
     "@emotion/core": "^10.0.28",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"

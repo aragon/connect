@@ -1,6 +1,6 @@
 {
   "name": "nodejs",
-  "version": "0.9.10",
+  "version": "0.9.12",
   "private": true,
   "scripts": {
     "build": "yarn clean && yarn compile",
@@ -21,8 +21,8 @@
     "start-create-karma-template": "yarn build; node dist/src/create-karma-template.js"
   },
   "dependencies": {
-    "@1hive/connect": "^0.9.10",
-    "@1hive/connect-thegraph": "^0.9.10",
+    "@1hive/connect": "^0.9.12",
+    "@1hive/connect-thegraph": "^0.9.12",
     "ethers": "^5.0.0",
     "graphql-tag": "^2.10.3"
   },
