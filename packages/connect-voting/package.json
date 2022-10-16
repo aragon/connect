@@ -34,8 +34,8 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@1hive/connect-core": "^0.9.10",
-    "@1hive/connect-thegraph": "^0.9.10",
+    "@1hive/connect-core": "^0.9.11",
+    "@1hive/connect-thegraph": "^0.9.11",
     "graphql-tag": "^2.10.3"
   },
   "description": "Access and interact with Aragon Organizations and their apps.",
