@@ -68,7 +68,7 @@ export default class Organization {
     this.connection = connection
   }
 
-  get location() {
+  get location(): string {
     return this.connection.orgLocation
   }
 
