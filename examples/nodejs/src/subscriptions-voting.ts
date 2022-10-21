@@ -31,7 +31,7 @@ async function main() {
         })
 
       console.log(
-        `\nTry creating a new vote at https://rinkeby.aragon.org/#/${ORG_ADDRESS}/${VOTING_APP_ADDRESS}/\n`
+        `\nTry creating a new vote at https://goerli.aragon.org/#/${ORG_ADDRESS}/${VOTING_APP_ADDRESS}/\n`
       )
     }
   )
@@ -52,7 +52,7 @@ async function main() {
         console.log(cast)
       }
       console.log(
-        `\nTry casting a vote on https://rinkeby.aragon.org/#/${ORG_ADDRESS}/${VOTING_APP_ADDRESS}/vote/1 (You must first mint yourself a token in the Token Manager)\n`
+        `\nTry casting a vote on https://goerli.aragon.org/#/${ORG_ADDRESS}/${VOTING_APP_ADDRESS}/vote/1 (You must first mint yourself a token in the Token Manager)\n`
       )
     }
   )

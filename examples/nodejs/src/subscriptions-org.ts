@@ -18,7 +18,7 @@ async function main() {
         console.log(permission)
       }
       console.log(
-        `\nTry creating or granting new permissions at https://rinkeby.aragon.org/#/${ORG_ADDRESS}/permissions/`
+        `\nTry creating or granting new permissions at https://goerli.aragon.org/#/${ORG_ADDRESS}/permissions/`
       )
     }
   )
