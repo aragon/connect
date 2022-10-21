@@ -34,13 +34,13 @@ jobs:
           path: '**/node_modules'
           key: yarn-${{ hashFiles('yarn.lock') }}
 
-      - name: Deploy rinkeby
+      - name: Deploy goerli
         if: github.ref == 'refs/heads/develop'
-        run: yarn deploy-rinkeby
+        run: yarn deploy-goerli
 
-      - name: Deploy rinkeby staging
+      - name: Deploy goerli staging
         if: github.ref == 'refs/heads/develop'
-        run: yarn deploy-rinkeby-staging
+        run: yarn deploy-goerli-staging
 
       - name: Deploy mainnet
         if: github.ref == 'refs/heads/master'
