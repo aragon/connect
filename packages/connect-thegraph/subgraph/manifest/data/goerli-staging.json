@@ -1,5 +1,5 @@
 {
-  "network": "goelri",
+  "network": "goerli",
   "description": "Development subgraph for Aragon organizations.",
   "repository": "https://github.com/aragon/connect",
   "ens": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
