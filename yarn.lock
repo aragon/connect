@@ -2,45 +2,6 @@
 # yarn lockfile v1
 
 
-"@aragon/connect-core@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-core/-/connect-core-0.7.0.tgz#2464a1ce136fb1166d0de32fcada5a8c5da6e2dc"
-  integrity sha512-Edt42nVzuuQ1weVIVILIZts8k8//40AYzmikROH9WtWxGQyR41PPf3rLTkVtFnuekfVk/3qr1NSeRXuEJBXzXQ==
-  dependencies:
-    ethers "^5.0.7"
-    radspec "^2.0.0-rc.2"
-
-"@aragon/connect-thegraph@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-thegraph/-/connect-thegraph-0.7.0.tgz#f4331d19ab78f33047b852adbd970efd6cd547b1"
-  integrity sha512-2s7uqMdoMEqr3M4r6tAoNAlOo3+yQRoRwxRy0i8r3mBhmo5kjU/jkfnLQO1SpS3HRHZrMZcc9Tkrj0zlijurDw==
-  dependencies:
-    "@aragon/connect-core" "^0.7.0"
-    "@urql/core" "^1.11.7"
-    graphql "^15.0.0"
-    graphql-tag "^2.10.3"
-    isomorphic-unfetch "^3.0.0"
-    isomorphic-ws "^4.0.1"
-    subscriptions-transport-ws "^0.9.16"
-
-"@aragon/connect-tokens@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-tokens/-/connect-tokens-0.7.0.tgz#958832e4e396fc8dce5ec2f8117ad002003e39ea"
-  integrity sha512-UjyEEUyfgYLCrxGTbdRXSfBca5CflM4n7rULU+Dgi+qMoZKn1RbibRa0ZqtS23ccOJ6hT0I/mcRMzlX+wFAwqQ==
-  dependencies:
-    "@aragon/connect-core" "^0.7.0"
-    "@aragon/connect-thegraph" "^0.7.0"
-    graphql-tag "^2.10.3"
-
-"@aragon/connect-voting@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-voting/-/connect-voting-0.7.0.tgz#3997716bffcadccea55227cfb4e400960e72f09a"
-  integrity sha512-TIPJJP4ZojIU0EEOFwHGwGbBgLXIL7BZU0AYRb93qbgsKknspzC5F3O35CCwwWqeoe2gnfBW8gf7zQX+7A2UYQ==
-  dependencies:
-    "@aragon/connect-core" "^0.7.0"
-    "@aragon/connect-thegraph" "^0.7.0"
-    graphql-tag "^2.10.3"
-
 "@aragon/provided-connector@^6.0.7":
   version "6.0.8"
   resolved "https://registry.yarnpkg.com/@aragon/provided-connector/-/provided-connector-6.0.8.tgz#5d22ccb2a0ff599fbe6c23fdf96cb06d59ff2716"
