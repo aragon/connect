@@ -18,9 +18,9 @@ const ENVIRONMENTS = new Map([
     },
   ],
   [
-    'rinkeby',
+    'goerli',
     {
-      chainId: 4,
+      chainId: 5,
       addresses: ['gardens.aragonid.eth'],
     },
   ],

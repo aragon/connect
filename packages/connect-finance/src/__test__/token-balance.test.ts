@@ -1,11 +1,11 @@
 import { TokenBalance, FinanceConnectorTheGraph } from '..'
 
 const FINANCE_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-finance-rinkeby'
+  'https://api.thegraph.com/subgraphs/name/aragon/aragon-finance-goerli'
 
-const FINANCE_APP_ADDRESS = '0x00696c6ab99c1fd7aa69539c7abe50f9bf972934'
+const FINANCE_APP_ADDRESS = '0x777803a933f26ed3f2a8897e08d0f29a7fdf40c9'
 
-const TOKEN_ADDRESS = '0x5b2fdbba47e8ae35b9d6f8e1480703334f48b96c'
+const TOKEN_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 describe('when connecting to a finance app', () => {
   let connector: FinanceConnectorTheGraph
@@ -34,12 +34,12 @@ describe('when connecting to a finance app', () => {
 
     test('should have a token address', () => {
       expect(tokenBalance.token).toBe(
-        '0x5b2fdbba47e8ae35b9d6f8e1480703334f48b96c'
+        '0x0000000000000000000000000000000000000000'
       )
     })
 
     test('should have a balance', () => {
-      expect(tokenBalance.balance).toBe('876000000000000000000')
+      expect(tokenBalance.balance).toBe('50000000000000000')
     })
   })
 })

@@ -1,7 +1,7 @@
-import { DeployDao as DeployDaoEvent } from '../../../generated/bare-template.aragonpm.eth@1.0.0/DAOTemplate'
-import { SetupDao as SetupDaoEvent } from '../../../generated/bare-template.aragonpm.eth@1.0.0/DAOTemplate'
-import { DeployToken as DeployTokenEvent } from '../../../generated/bare-template.aragonpm.eth@1.0.0/DAOTemplate'
-import { InstalledApp as InstalledAppEvent } from '../../../generated/bare-template.aragonpm.eth@1.0.0/DAOTemplate'
+import { DeployDao as DeployDaoEvent } from '../../../generated/membership-template.aragonpm.eth@2.0.0/DAOTemplate'
+import { SetupDao as SetupDaoEvent } from '../../../generated/membership-template.aragonpm.eth@2.0.0/DAOTemplate'
+import { DeployToken as DeployTokenEvent } from '../../../generated/membership-template.aragonpm.eth@2.0.0/DAOTemplate'
+import { InstalledApp as InstalledAppEvent } from '../../../generated/membership-template.aragonpm.eth@2.0.0/DAOTemplate'
 import * as aragon from '../aragon'
 
 export function handleDeployDao(event: DeployDaoEvent): void {

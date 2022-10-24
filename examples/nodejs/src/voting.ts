@@ -5,11 +5,11 @@ type Env = { network: number; org: string; votingSubgraphUrl: string }
 
 const envs = new Map(
   Object.entries({
-    rinkeby: {
-      network: 4,
+    goerli: {
+      network: 5,
       org: 'gardens.aragonid.eth',
       votingSubgraphUrl:
-        'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby',
+        'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-goerli',
     },
     mainnet: {
       network: 1,

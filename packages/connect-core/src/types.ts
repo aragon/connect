@@ -224,7 +224,7 @@ export interface AragonAppJson {
    * If the appName is different per network use environments
    * ```ts
    * environments: {
-   *   rinkeby: {
+   *   goerli: {
    *     appName: "myapp.open.aragonpm.eth"
    *   }
    * }
