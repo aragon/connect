@@ -21,7 +21,7 @@
   "APMFactoryDataSources": [
     {
       "name": "ApmRegistryFactory",
-      "address": "0x2a4b34fb0c2064c4784d98b48ad5f594dd8191f3",
+      "address": "0xba48ce7e1a29c3e43ad2c46d2defd4ef6bb8cd88",
       "startBlock": "7745920"
     }
   ],
