@@ -91,11 +91,11 @@ Aragon Connect connects to the Ethereum mainnet by default, but other networks a
 To do so, use the [Chain ID](https://chainid.network/) assigned to the network:
 
 ```javascript
-// Connect to the Rinkeby test network
-const org = await connect('example.aragonid.eth', 'thegraph', { network: 4 })
+// Connect to the Goerli test network
+const org = await connect('example.aragonid.eth', 'thegraph', { network: 5 })
 ```
 
-Note: other than the Ethereum main network \(default\), only [Rinkeby](https://docs.ethhub.io/using-ethereum/test-networks/#rinkeby) and [xDAI](https://www.xdaichain.com/) are supported by the `thegraph` connector at the moment.
+Note: other than the Ethereum main network \(default\), only [Goerli](https://docs.ethhub.io/using-ethereum/test-networks/#goerli) and [xDAI](https://www.xdaichain.com/) are supported by the `thegraph` connector at the moment.
 
 ## Fetching an app’s state
 

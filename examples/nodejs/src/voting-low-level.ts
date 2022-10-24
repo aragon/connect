@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 import { GraphQLWrapper } from '@aragon/connect-thegraph'
 
-const VOTING_APP_ADDRESS = '0xc73e86aab9d232495399d62fc80a36ae52952b81'
+const VOTING_APP_ADDRESS = '0xeba3dad2d34d29208e6404ec3ab54979ef5a6cbb'
 const ALL_VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby'
+  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-goerli'
 
 const QUERY = `
 query {

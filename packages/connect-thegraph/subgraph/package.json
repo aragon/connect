@@ -11,13 +11,11 @@
     "manifest": "scripts/build-manifest.sh mainnet",
     "manifest-staging": "env STAGING=true scripts/build-manifest.sh mainnet",
     "manifest-goerli": "scripts/build-manifest.sh goerli",
-    "manifest-goerli-staging": "env STAGING=true scripts/build-manifest.sh goerli",
     "manifest-xdai": "scripts/build-manifest.sh xdai",
     "manifest-ropsten": "scripts/build-manifest.sh ropsten",
     "deploy": "scripts/deploy.sh aragon mainnet",
     "deploy-staging": "env STAGING=true scripts/deploy.sh aragon mainnet",
     "deploy-goerli": "scripts/deploy.sh aragon goerli",
-    "deploy-goerli-staging": "env STAGING=true scripts/deploy.sh aragon goerli",
     "deploy-ropsten": "scripts/deploy.sh aragon ropsten",
     "deploy-xdai": "scripts/deploy.sh 1hive xdai"
   },

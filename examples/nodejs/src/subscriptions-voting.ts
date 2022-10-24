@@ -30,9 +30,6 @@ async function main() {
           console.log(vote)
         })
 
-      console.log(
-        `\nTry creating a new vote at https://rinkeby.aragon.org/#/${ORG_ADDRESS}/${VOTING_APP_ADDRESS}/\n`
-      )
     }
   )
 
@@ -51,9 +48,6 @@ async function main() {
       for (const cast of casts as Cast[]) {
         console.log(cast)
       }
-      console.log(
-        `\nTry casting a vote on https://rinkeby.aragon.org/#/${ORG_ADDRESS}/${VOTING_APP_ADDRESS}/vote/1 (You must first mint yourself a token in the Token Manager)\n`
-      )
     }
   )
 }

@@ -17,9 +17,6 @@ async function main() {
       for (const permission of permissions as Permission[]) {
         console.log(permission)
       }
-      console.log(
-        `\nTry creating or granting new permissions at https://rinkeby.aragon.org/#/${ORG_ADDRESS}/permissions/`
-      )
     }
   )
 

@@ -1,8 +1,8 @@
 import { VotingConnectorTheGraph, Vote, Cast } from '../../src'
 
 const VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby-staging'
-const VOTING_APP_ADDRESS = '0x37187b0f2089b028482809308e776f92eeb7334e'
+  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-goerli'
+const VOTING_APP_ADDRESS = '0xeba3dad2d34d29208e6404ec3ab54979ef5a6cbb'
 
 describe('when connecting to a voting app', () => {
   let connector: VotingConnectorTheGraph

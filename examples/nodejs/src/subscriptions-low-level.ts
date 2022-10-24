@@ -3,9 +3,9 @@ import { GraphQLWrapper } from '@aragon/connect-thegraph'
 import { keepRunning } from './helpers'
 
 const DAO_ADDRESS = '0x059bcfbc477c46ab39d76c05b7b40f3a42e7de3b'
-const VOTING_APP_ADDRESS = '0xc73e86aab9d232495399d62fc80a36ae52952b81'
+const VOTING_APP_ADDRESS = '0xeba3dad2d34d29208e6404ec3ab54979ef5a6cbb'
 const ALL_VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-rinkeby'
+  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-goerli'
 
 async function main() {
   console.log('\nLow-level inspection of a voting app using subscriptions:')
@@ -31,9 +31,6 @@ async function main() {
         return
       }
       console.log(JSON.stringify(results.data, null, 2))
-      console.log(
-        `\nTry creating a new vote at https://rinkeby.aragon.org/#/${DAO_ADDRESS}/${VOTING_APP_ADDRESS}/`
-      )
     }
   )
 
