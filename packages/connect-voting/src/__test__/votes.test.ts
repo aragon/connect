@@ -32,7 +32,7 @@ describe('when connecting to a voting app', () => {
       let vote: Vote
 
       beforeAll(() => {
-        vote = votes[13]
+        vote = votes[2]
       })
 
       test('should not be executed', () => {
@@ -40,27 +40,27 @@ describe('when connecting to a voting app', () => {
       })
 
       test('should have nays', () => {
-        expect(vote.nay).toBe('18000000000000000000000')
+        expect(vote.nay).toBe('1')
       })
 
       test('should have yeas', () => {
-        expect(vote.yea).toBe('5400000000000000000000')
+        expect(vote.yea).toBe('0')
       })
 
       test('has the expected script', () => {
         expect(vote.script).toEqual(
-          '0x0000000138daca8c123145ead833c42590f4e359fd6bfa0c00000124d948d468000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000e0000000015616500b003475136ee6b0844896a2e1ccc68140000000c4d948d46800000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000080000000018b8fc0e17c2900d669cc883e3b067e413536240200000064b0c8f9dc000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000076e65776e616d6500000000000000000000000000000000000000000000000000'
+          '0x000000015149e6f6835516b3c7f6919acb1e325d8457decd000000a4f636484600000000000000000000000000000000000000000000000000000000000000000000000000000000000000006306d7bed25e0d75a96e975e229a0dac424fd61100000000000000000000000000000000000000000000000000354a6ba7a1800000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000'
         )
       })
 
       test('should have a valid creator', () => {
         expect(vote.creator).toEqual(
-          '0xadb56e6b6a10c8a1b7fe859b1284cfd74a7bcd1f'
+          '0x29d8027490f66104007e83d8c4f1901e43d8365f'
         )
       })
 
       test('should have a valid original creator', () => {
-        expect(vote.originalCreator).toBe('0x8cff6832174091dae86f0244e3fd92d4ced2fe07')
+        expect(vote.originalCreator).toBe('0x4138f6d0cb2c35e3cd92e96569e6e3cd065a9990')
       })
 
       test('should have valid metadata', () => {
@@ -68,23 +68,23 @@ describe('when connecting to a voting app', () => {
       })
 
       test('should have a valid minAcceptQuorum', () => {
-        expect(vote.minAcceptQuorum).toEqual('10000000000000000')
+        expect(vote.minAcceptQuorum).toEqual('310000000000000000')
       })
 
       test('should have a valid supportRequiredPct', () => {
-        expect(vote.supportRequiredPct).toEqual('250000000000000000')
+        expect(vote.supportRequiredPct).toEqual('500000000000000000')
       })
 
       test('should have a valid votingPower', () => {
-        expect(vote.votingPower).toEqual('29531000000000000000000')
+        expect(vote.votingPower).toEqual('3')
       })
 
       test('should have a valid snapshotBlock', () => {
-        expect(vote.snapshotBlock).toEqual('7167970')
+        expect(vote.snapshotBlock).toEqual('7784328')
       })
 
       test('should have a valid startDate', () => {
-        expect(vote.startDate).toEqual('1599675534')
+        expect(vote.startDate).toEqual('1665996744')
       })
 
       describe('when querying for the casts of a vote', () => {
@@ -95,7 +95,7 @@ describe('when connecting to a voting app', () => {
         })
 
         test('retrieves casts', () => {
-          expect(casts.length).toBeGreaterThan(0)
+          expect(casts.length).toBe(0)
         })
       })
     })
