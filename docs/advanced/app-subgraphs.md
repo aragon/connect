@@ -89,7 +89,3 @@ There may also be bugs in how a template scans the data sources. If you find mis
 When a reducer is run, it’s run in the context of the data source that defined it. For example, hooks are triggered by `src/base/Kernel.ts` when the `NewAppProxy` event is detected in an Organization. You need to include the missing ABI in `manifest/templates/contracts/Kernel.template.yaml` for it to be available in this reducer.
 
 As a rule of thumb, if your data source will be triggered by a base Aragon data source \(organization templates, organization factories, etc\), include its ABI in the `manifest/templates/contracts` files.
-
-### My `callHandlers` aren’t working
-
-Unfortunately, [The Graph does not support callHandlers in Rinkeby](https://thegraph.com/docs/define-a-subgraph#call-handlers). For this reason, our templates avoid them altogether. In general, we prefer to code Subgraphs in a way that is compatible with all networks. Alternatively, if you have no other choice than to use this feature, consider hosting your own Subgraph.

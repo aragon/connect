@@ -6,13 +6,13 @@
     "build": "rm -rf build; graph build",
     "manifest-mainnet": "scripts/build-manifest.sh mainnet",
     "manifest-mainnet-staging": "env STAGING=true scripts/build-manifest.sh mainnet",
-    "manifest-rinkeby": "scripts/build-manifest.sh rinkeby",
-    "manifest-rinkeby-staging": "env STAGING=true scripts/build-manifest.sh rinkeby",
+    "manifest-goerli": "scripts/build-manifest.sh goerli",
+    "manifest-goerli-staging": "env STAGING=true scripts/build-manifest.sh goerli",
     "manifest-xdai": "scripts/build-manifest.sh xdai",
     "deploy-mainnet": "scripts/deploy.sh aragon tokens mainnet",
     "deploy-mainnet-staging": "env STAGING=true scripts/deploy.sh aragon tokens mainnet",
-    "deploy-rinkeby": "scripts/deploy.sh aragon tokens rinkeby",
-    "deploy-rinkeby-staging": "env STAGING=true scripts/deploy.sh aragon tokens rinkeby",
+    "deploy-goerli": "scripts/deploy.sh aragon tokens goerli",
+    "deploy-goerli-staging": "env STAGING=true scripts/deploy.sh aragon tokens goerli",
     "deploy-xdai": "scripts/deploy.sh aragon tokens xdai"
   },
   "devDependencies": {

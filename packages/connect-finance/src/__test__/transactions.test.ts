@@ -1,9 +1,9 @@
 import { Transaction, FinanceConnectorTheGraph } from '..'
 
 const FINANCE_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-finance-rinkeby'
+  'https://api.thegraph.com/subgraphs/name/aragon/aragon-finance-goerli'
 
-const FINANCE_APP_ADDRESS = '0x00696c6ab99c1fd7aa69539c7abe50f9bf972934'
+const FINANCE_APP_ADDRESS = '0x777803a933f26ed3f2a8897e08d0f29a7fdf40c9'
 
 describe('when connecting to a finance app', () => {
   let connector: FinanceConnectorTheGraph
@@ -41,16 +41,16 @@ describe('when connecting to a finance app', () => {
       })
 
       test('should have an amount', () => {
-        expect(transaction.amount).toBe('878000000000000000000')
+        expect(transaction.amount).toBe('100000000000000000')
       })
 
       test('should have a date', () => {
-        expect(transaction.date).toBe('1569335499')
+        expect(transaction.date).toBe('1666590816')
       })
 
       test('should have an entity', () => {
         expect(transaction.entity).toBe(
-          '0x39a4d265db942361d92e2b0039cae73ea72a2ff9'
+          '0x87c4554a0669efed8811c15d23a20a88d23ad735'
         )
       })
 
@@ -59,12 +59,12 @@ describe('when connecting to a finance app', () => {
       })
 
       test('should have a reference', () => {
-        expect(transaction.reference).toEqual('Requested airdrop (test tokens)')
+        expect(transaction.reference).toEqual('')
       })
 
       test('should have a token address', () => {
         expect(transaction.token).toEqual(
-          '0x5b2fdbba47e8ae35b9d6f8e1480703334f48b96c'
+          '0x0000000000000000000000000000000000000000'
         )
       })
     })

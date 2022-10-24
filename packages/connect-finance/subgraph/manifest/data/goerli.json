@@ -1,0 +1,33 @@
+{
+  "network": "goerli",
+  "dataSources": {
+    "Organizations": [],
+    "OrganizationFactories": [
+      {
+        "name": "DaoFactory",
+        "address": "0x009e285a017f5cd0382dcd58a70fe5f255cc785c",
+        "startBlock": "7745920"
+      }
+    ],
+    "OrganizationTemplates": [
+      {
+        "name": "company-template.aragonpm.eth@2.0.0",
+        "address": "0x72a440f0744014ba69fc57ad7dfaaa1692bd6a54",
+        "startBlock": "7745920"
+      },
+      {
+        "name": "reputation-template.aragonpm.eth@2.0.0",
+        "address": "0xabb9f4df9f46243d4c5e435a9a18df12fda95dcd",
+        "startBlock": "7745920"
+      },
+      {
+        "name": "membership-template.aragonpm.eth@2.0.0",
+        "address": "0xca649a2f4ca56dd97844ccbab982b5fdae312c63",
+        "startBlock": "7745920"
+      }
+    ],
+    "LegacyOrganizationTemplates": [],
+    "TokenFactories": [],
+    "Tokens": []
+  }
+}

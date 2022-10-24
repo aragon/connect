@@ -4,19 +4,19 @@ import { fetchRepo, getOrgAddress } from './helpers'
 const ARAGON_MNEMONIC =
   'explain tackle mirror kit van hammer degree position ginger unfair soup bonus'
 
-const MAIN_SUBGRAPH_RINKEBY =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-rinkeby'
+const MAIN_SUBGRAPH_GOERLI =
+  'https://api.thegraph.com/subgraphs/name/aragon/aragon-goerli'
 
 const TEMPLATE_NAME = 'bare-template'
 
 async function main() {
   // fetch repo
-  const { lastVersion } = await fetchRepo(TEMPLATE_NAME, MAIN_SUBGRAPH_RINKEBY)
+  const { lastVersion } = await fetchRepo(TEMPLATE_NAME, MAIN_SUBGRAPH_GOERLI)
   const templateAddress = lastVersion.codeAddress
   const templateArtifact = JSON.parse(lastVersion.artifact)
 
   // create signer
-  const provider = ethers.getDefaultProvider('rinkeby')
+  const provider = ethers.getDefaultProvider('goerli')
   const wallet = ethers.Wallet.fromMnemonic(ARAGON_MNEMONIC)
   const signer = wallet.connect(provider)
 
