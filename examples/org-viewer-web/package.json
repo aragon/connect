@@ -1,7 +1,7 @@
 {
   "name": "org-viewer-web",
   "main": "dist/index.js",
-  "version": "0.8.0-alpha.6",
+  "version": "0.9.0-alpha.1",
   "private": true,
   "sideEffects": false,
   "scripts": {
@@ -12,7 +12,7 @@
     "compile": "tsc"
   },
   "dependencies": {
-    "@aragon/connect": "^0.8.0-alpha.6",
+    "@aragon/connect": "^0.9.0-alpha.1",
     "@emotion/core": "^10.0.28",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
