@@ -5,6 +5,13 @@ import {
 import Vote from './models/Vote'
 import Cast from './models/Cast'
 
+export enum VoteStatus {
+  Accepted = "Accepted",
+  Executed = "Executed",
+  Ongoing = "Ongoing",
+  Rejected = "Rejected",
+}
+
 export interface VoteData {
   id: string
   creator: string
@@ -13,6 +20,7 @@ export interface VoteData {
   executed: boolean
   executedAt: string
   startDate: string
+  endDate: string
   snapshotBlock: string
   supportRequiredPct: string
   minAcceptQuorum: string
@@ -20,6 +28,7 @@ export interface VoteData {
   nay: string
   votingPower: string
   script: string
+  isAccepted: boolean
 }
 
 export interface CastData {
