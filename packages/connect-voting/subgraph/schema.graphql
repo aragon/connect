@@ -16,7 +16,25 @@ type Vote @entity {
   votingPower: BigInt!
   script: String!
   voteNum: BigInt!
+  spec: BigInt!
   castVotes: [Cast!] @derivedFrom(field: "vote")
+  rewards: [Reward!] @derivedFrom(field: "vote")
+  calls: [Call!] @derivedFrom(field: "vote")
+}
+
+type Reward @entity {
+  id: ID!
+  vote: Vote!
+  token: Bytes!
+  amount: BigInt!
+  to: Bytes!
+}
+
+type Call @entity {
+  id: ID!
+  vote: Vote!
+  contract: Bytes!
+  calldata: Bytes!
 }
 
 type Cast @entity {

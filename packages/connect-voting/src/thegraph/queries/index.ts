@@ -21,6 +21,9 @@ export const ALL_VOTES = (type: string) => gql`
       nay
       votingPower
       script
+      spec
+      contract
+      calldata
     }
   }
 `
@@ -46,6 +49,7 @@ export const CASTS_FOR_VOTE = (type: string) => gql`
         nay
         votingPower
         script
+        spec
       }
       voter {
         id
@@ -54,6 +58,33 @@ export const CASTS_FOR_VOTE = (type: string) => gql`
       supports
       stake
       createdAt
+    }
+  }
+`
+
+export const REWARDS_FOR_VOTE = (type: string) => gql`
+  ${type} Rewards($vote: ID!, $first: Int!, $skip: Int!) {
+    rewards(where: { vote: $vote }, first: $first, skip: $skip) {
+      id
+      vote {
+        id
+      }
+      token
+      amount
+      to
+    }
+  }
+`
+
+export const CALLS_FOR_VOTE = (type: string) => gql`
+  ${type} Calls($vote: ID!, $first: Int!, $skip: Int!) {
+    calls(where: { vote: $vote }, first: $first, skip: $skip) {
+      id
+      vote {
+        id
+      }
+      contract
+      calldata
     }
   }
 `
