@@ -3,6 +3,19 @@ import { subscription } from '@aragon/connect-core'
 import { IVotingConnector, VoteData } from '../types'
 import Cast from './Cast'
 
+export enum EVotingStatus {
+  Created = 'Created',
+  // TODO: no difference between started and ongoing.
+  Started = 'Started',
+  Ongoing = 'Ongoing',
+  // TODO: when would a voting status ever be ended, but not concluded?
+  // seems never? it should either be accepted / rejected / executed.
+  Ended = 'Ended',
+  Accepted = 'Accepted',
+  Rejected = 'Rejected',
+  Executed = 'Executed',
+}
+
 export default class Vote {
   #connector: IVotingConnector
 
@@ -38,6 +51,73 @@ export default class Vote {
     this.nay = data.nay
     this.votingPower = data.votingPower
     this.script = data.script
+  }
+
+  hasQuorumReached() {
+    // Assuming heavily this won't overflow. We should really type our data so everyone
+    // using / consuming the api knows what's what.
+    const yea = parseInt(this.yea);
+    const total = parseInt(this.votingPower);
+    // What format will it be in? like 10 to indicate 10% or 0.10 to indicate 10%?
+    // Assuming 0.10 = 10% for now.
+    const requiredMin = parseFloat(this.minAcceptQuorum);
+    const currentPositives = yea / total;
+    return currentPositives > requiredMin;
+  }
+
+  hasStarted() {
+    const startDate = parseInt(this.startDate) * 1000;
+    return new Date().getTime() >= startDate;
+  }
+
+  hasExecuted() {
+    return this.executed;
+  }
+
+  hasEnded() {
+    // TODO: Need to add a new field for ending date, seems to be missing right now
+    // and no way to determine when the vote ends for conclusion.
+    return this.executed;
+  }
+
+  isCreated() {
+    // If the object exists, its created.
+    return true;
+  }
+
+  isOngoing() {
+    return this.hasStarted() && (!this.hasEnded());
+  }
+
+  isAccepted() {
+    // Assuming heavily this won't overflow. We should really type our data so everyone
+    // using / consuming the api knows what's what.
+    const positives = parseInt(this.yea);
+    const total = parseInt(this.votingPower);
+
+    const positivePercent = positives / total;
+    const minSupport = parseFloat(this.supportRequiredPct);
+
+    const acceptable = positivePercent > minSupport;
+    return acceptable && this.hasQuorumReached();
+  }
+
+  isRejected() {
+    return !this.isAccepted();
+  }
+
+  get status(): EVotingStatus {
+    if (this.executed) {
+      return EVotingStatus.Executed
+    } else if (this.isAccepted()) {
+      return EVotingStatus.Accepted;
+    } else if (this.isRejected()) {
+      return EVotingStatus.Rejected;
+    } else if (this.hasStarted()) {
+      return EVotingStatus.Started;
+    } else {
+      return EVotingStatus.Created;
+    }
   }
 
   async casts({ first = 1000, skip = 0 } = {}): Promise<Cast[]> {
