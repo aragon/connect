@@ -1,5 +1,5 @@
 {
-  "network": "xdai",
+  "network": "gnosis",
   "dataSources": {
     "Organizations": [],
     "OrganizationFactories": [

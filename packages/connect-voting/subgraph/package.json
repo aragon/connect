@@ -6,18 +6,18 @@
     "build": "rm -rf build; graph build",
     "manifest-mainnet": "scripts/build-manifest.sh mainnet",
     "manifest-mainnet-staging": "env STAGING=true scripts/build-manifest.sh mainnet",
-    "manifest-rinkeby": "scripts/build-manifest.sh rinkeby",
-    "manifest-rinkeby-staging": "env STAGING=true scripts/build-manifest.sh rinkeby",
-    "manifest-xdai": "scripts/build-manifest.sh xdai",
+    "manifest-goerli": "scripts/build-manifest.sh goerli",
+    "manifest-goerli-staging": "env STAGING=true scripts/build-manifest.sh goerli",
+    "manifest-gnosis": "scripts/build-manifest.sh gnosis",
     "deploy-mainnet": "scripts/deploy.sh 1hive voting mainnet",
     "deploy-mainnet-staging": "env STAGING=true scripts/deploy.sh 1hive voting mainnet",
-    "deploy-rinkeby": "scripts/deploy.sh 1hive voting rinkeby",
-    "deploy-rinkeby-staging": "env STAGING=true scripts/deploy.sh 1hive voting rinkeby",
-    "deploy-xdai": "scripts/deploy.sh 1hive voting xdai"
+    "deploy-goerli": "scripts/deploy.sh 1hive voting goerli",
+    "deploy-goerli-staging": "env STAGING=true scripts/deploy.sh 1hive voting goerli",
+    "deploy-gnosis": "scripts/deploy.sh 1hive voting gnosis"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.20.0",
-    "@graphprotocol/graph-ts": "^0.20.0",
+    "@graphprotocol/graph-cli": "^0.39.0",
+    "@graphprotocol/graph-ts": "^0.29.3",
     "mustache": "^4.0.1"
   },
   "dependencies": {

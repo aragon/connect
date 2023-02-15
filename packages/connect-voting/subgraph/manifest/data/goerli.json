@@ -1,0 +1,17 @@
+{
+  "network": "goerli",
+  "dataSources": {
+    "Organizations": [
+      {
+        "name": "DAOFactory",
+        "address": "0x0c514a00401666780fca29d4cd6943085818f049",
+        "startBlock": "7929347"
+      }
+    ],
+    "OrganizationFactories": [],
+    "OrganizationTemplates": [],
+    "LegacyOrganizationTemplates": [],
+    "TokenFactories": [],
+    "Tokens": []
+  }
+}
