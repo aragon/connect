@@ -1,7 +1,7 @@
 import { Address } from '@graphprotocol/graph-ts'
 
 // Import event types from the contract ABI
-import { DeployDAO as DeployDAOEvent } from '../../generated/DaoFactory/DAOFactory'
+import { DeployDAO as DeployDAOEvent } from '../../generated/DAOFactory/DAOFactory'
 
 // Import entity types from the schema
 import { OrgFactory as FactoryEntity } from '../../generated/schema'

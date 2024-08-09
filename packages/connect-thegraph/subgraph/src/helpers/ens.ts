@@ -6,7 +6,7 @@ import { ZERO_ADDR } from './constants'
 
 const ENS_ADDRESS = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e'
 
-const OLD_ENS_ADDRESS = '0x112234455C3a32FD11230C42E7Bccd4A84e02010'
+const OLD_ENS_ADDRESS = '0x314159265dD8dbb310642f98f50C066173C1259b'
 
 export function resolveRepo(appId: Bytes): Address {
   let ens = ENS.bind(Address.fromString(ENS_ADDRESS))

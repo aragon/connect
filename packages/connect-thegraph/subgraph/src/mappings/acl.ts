@@ -41,14 +41,16 @@ export function handleSetPermission(event: SetPermissionEvent): void {
   // update permission
   permission.allowed = event.params.allowed
 
-  // update org permissions
-  const orgPermissions = org.permissions
-  orgPermissions.push(permission.id)
-  org.permissions = orgPermissions
+  if(org) {
+    // update org permissions
+    const orgPermissions = org.permissions
+    orgPermissions.push(permission.id)
+    org.permissions = orgPermissions
 
-  org.save()
-  permission.save()
-  role.save()
+    org.save()
+    permission.save()
+    role.save()
+  }
 }
 
 export function handleChangePermissionManager(
