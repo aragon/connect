@@ -44,5 +44,5 @@ function loadOrCreateApmFactory(
     factory.registryCount = 0
     factory.registries = []
   }
-  return factory!
+  return factory
 }

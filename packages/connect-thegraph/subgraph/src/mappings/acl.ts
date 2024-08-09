@@ -41,14 +41,16 @@ export function handleSetPermission(event: SetPermissionEvent): void {
   // update permission
   permission.allowed = event.params.allowed
 
-  // update org permissions
-  const orgPermissions = org.permissions
-  orgPermissions.push(permission.id)
-  org.permissions = orgPermissions
+  if(org) {
+    // update org permissions
+    const orgPermissions = org.permissions
+    orgPermissions.push(permission.id)
+    org.permissions = orgPermissions
 
-  org.save()
-  permission.save()
-  role.save()
+    org.save()
+    permission.save()
+    role.save()
+  }
 }
 
 export function handleChangePermissionManager(
@@ -121,7 +123,7 @@ function loadOrCreateRole(appAddress: Address, roleHash: Bytes): RoleEntity {
     role.app = appAddress.toHexString()
     role.manager = Bytes.fromHexString(ZERO_ADDR) as Bytes
   }
-  return role!
+  return role
 }
 
 function buildPermissionId(
@@ -152,7 +154,7 @@ function loadOrCreatePermission(
     permission.app = appAddress.toHexString()
     permission.role = buildRoleId(appAddress, roleHash)
   }
-  return permission!
+  return permission
 }
 
 function buildParamId(paramHash: Bytes, index: number): string {
@@ -183,5 +185,5 @@ function loadOrCreateParam(
     param.operationType = paramData.value1
     param.argumentValue = paramData.value2
   }
-  return param!
+  return param
 }

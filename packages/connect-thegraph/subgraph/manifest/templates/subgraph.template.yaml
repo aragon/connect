@@ -26,7 +26,7 @@ templates:
       abi: ACL
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.1
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Organization
@@ -51,7 +51,7 @@ templates:
       abi: Repo
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.1
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Repo
