@@ -107,7 +107,7 @@ export function loadOrCreateOrg(
     org.permissions = []
     org.createdAt = createAt
   }
-  return org!
+  return org
 }
 
 function loadOrCreateApp(
@@ -131,7 +131,7 @@ function loadOrCreateApp(
     app.isForwarder = isForwarder(proxyAddress)
     app.isUpgradeable = isUpgradeable
   }
-  return app!
+  return app
 }
 
 function addKernelApp(kernelProxy: Address, org: OrganizationEntity): void {
@@ -178,5 +178,5 @@ function loadOrCreateImplementation(
   if (implementation === null) {
     implementation = new ImplementationEntity(implementationId)
   }
-  return implementation!
+  return implementation
 }

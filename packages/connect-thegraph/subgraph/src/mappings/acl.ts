@@ -123,7 +123,7 @@ function loadOrCreateRole(appAddress: Address, roleHash: Bytes): RoleEntity {
     role.app = appAddress.toHexString()
     role.manager = Bytes.fromHexString(ZERO_ADDR) as Bytes
   }
-  return role!
+  return role
 }
 
 function buildPermissionId(
@@ -154,7 +154,7 @@ function loadOrCreatePermission(
     permission.app = appAddress.toHexString()
     permission.role = buildRoleId(appAddress, roleHash)
   }
-  return permission!
+  return permission
 }
 
 function buildParamId(paramHash: Bytes, index: number): string {
@@ -185,5 +185,5 @@ function loadOrCreateParam(
     param.operationType = paramData.value1
     param.argumentValue = paramData.value2
   }
-  return param!
+  return param
 }

@@ -2,6 +2,7 @@ node_modules/
 
 # Compilation output
 dist/
+build/
 
 # Tests
 coverage

@@ -43,5 +43,5 @@ function loadOrCreateOrgFactory(factoryAddress: Address): FactoryEntity {
     factory.orgCount = 0
     factory.organizations = []
   }
-  return factory!
+  return factory
 }

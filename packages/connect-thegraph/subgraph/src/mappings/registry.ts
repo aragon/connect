@@ -72,7 +72,7 @@ export function loadOrCreateRegistry(
     registry.repoCount = 0
     registry.repos = []
   }
-  return registry!
+  return registry
 }
 
 export function loadOrCreateRepo(
@@ -90,5 +90,5 @@ export function loadOrCreateRepo(
     repo.versions = []
     repo.appCount = 0
   }
-  return repo!
+  return repo
 }

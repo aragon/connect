@@ -66,5 +66,5 @@ function loadOrCreateVersion(
       version.contentUri = versionData.value2.toString()
     }
   }
-  return version!
+  return version
 }
