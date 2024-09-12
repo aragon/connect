@@ -1,4 +1,5 @@
 import { VotingConnectorTheGraph, Vote, Cast } from '../../src'
+import { VoteStatus } from '../types'
 
 const VOTING_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-goerli'
@@ -85,6 +86,18 @@ describe('when connecting to a voting app', () => {
 
       test('should have a valid startDate', () => {
         expect(vote.startDate).toEqual('1665996744')
+      })
+
+      test('should have a valid endDate', () => {
+        expect(vote.endDate).toEqual('1600280334')
+      })
+
+      test('should have not be accepted', () => {
+        expect(vote.isAccepted).toBe(false)
+      })
+
+      test('should have a valid status', () => {
+        expect(vote.status).toEqual(VoteStatus.Rejected)
       })
 
       describe('when querying for the casts of a vote', () => {
